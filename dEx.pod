@@ -28,7 +28,7 @@ program produces a true value if the master expression evalutes to
 true, otherwise the result of the program is false. An empty program
 is considered true.
 
-In addition to returning true or false. Evaluation produces detailed
+In addition to returning true or false, evaluation produces detailed
 information about what conditions were satisfied and, more
 importantly, which ones were not.
 
@@ -48,7 +48,7 @@ incompatible with the current OS.]
 
 Checking for the presence of a module (any version).
 
-The simplest expresion is one that simply checks for the presence of a
+The simplest expression is one that simply checks for the presence of a
 module, regardless of version:
 
   File::Spec
@@ -116,14 +116,17 @@ it.
 
 Checking for features
 
-Some modules provide optional features that may or may not be present
+Some modules provide optional 'features' that may or may not be present
 or enabled. You can check for the presence of features:
 
   Module::Build#(yaml_support && c_support)
 
 Features are specified by following a module name with a hash and one
 or more feature names in parenthesis separated by the logical and
-operator C<&&>. [???allow all logical operators???]
+operator C<&&>.  Each feature will be checked by using the 
+C<< ...::ConfigData->feature($name) >> method, as described in the
+documentation for C<Module::Build>.  [???allow all logical
+operators???]
 
 [Does it make sense to allow something like:
 Module::Build#(yaml_support) in [0.20- !0.23] where we check for
@@ -162,9 +165,7 @@ comparison???]
 
 =over 4
 
-=item *
-
-B<{OSNAME}>
+=item B<{OSNAME}>
 
 Evaluates to a string containing the name of the current operating
 system.
@@ -177,9 +178,7 @@ It can also be used with the set operator:
 
   {OSNAME} in ['Linux' 'BSD' 'MacOSX']
 
-=item *
-
-B<{ITHREADS}>
+=item B<{ITHREADS}>
 
 Evaluates to true if ithreads are enabled.
 
@@ -189,25 +188,19 @@ Evaluates to true if ithreads are enabled.
 
 =over 4
 
-=item *
-
-B<HAS_INCLUDE()>
+=item B<HAS_INCLUDE()>
 
 Takes a list of one or more strings that are the names of include
 files, and it returns true if all of the named files are present in
 the include path.
 
-=item *
-
-B<HAS_LIB()>
+=item B<HAS_LIB()>
 
 Takes a list of one or more strings that are the names of libraries,
 and it returns true if all of the named libraries are present in the
 library path.
 
-=item *
-
-B<HAS_PROGRAM()>
+=item B<HAS_PROGRAM()>
 
 Takes a list of one or more strings that are the names of programs,
 and it returns true if all of the named programs are present in the
@@ -240,7 +233,7 @@ to check the expression in {dbd}.
 
 =head2 Making Choices
 
-Sometimes it's desirable to allow the use to specify constraints on
+Sometimes it's desirable to allow the user to specify constraints on
 certain expressions. For example, the {dbd} macro we used above:
 
   define dbd = DBD::pg || DBD::mysql;
@@ -289,29 +282,17 @@ use version.pm if present or only if included in core (perl 5.8+)?
 
 =over
 
-=item *
+=item Package Name
 
-Package Name
+=item Version
 
-=item *
+=item Range
 
-Version
+=item String
 
-=item *
+=item Set
 
-Range
-
-=item *
-
-String
-
-=item *
-
-Set
-
-=item *
-
-Tag
+=item Tag
 
 =back
 
@@ -319,29 +300,17 @@ Tag
 
 =over
 
-=item *
+=item Relational operators
 
-Relational operators
+=item Equality operators
 
-=item *
+=item Set operator
 
-Equality operators
+=item Tag operator
 
-=item *
+=item Logical operators
 
-Set operator
-
-=item *
-
-Tag operator
-
-=item *
-
-Logical operators
-
-=item *
-
-Assignment operator
+=item Assignment operator
 
 =back
 
