@@ -68,16 +68,47 @@ distribution.
 Example: <b>0.16</b>
 <p>
 The version of the distribution to which the META.yml file refers.
+This is a mandatory field.
 </p>
+
+<p>
+ The version is essentially an arbitrary string, but <i>must</i> be
+ only ASCII characters, and <i>strongly should</i> be of the format
+ integer-dot-digit-digit, i.e. <tt>25.57</tt>, optionally followed by
+ underscore-digit-digit, i.e. <tt>25.57_04</tt>.
+</p>
+
+<p>
+ The standard tools that deal with module distribution (PAUSE, CPAN,
+ etc.) form an identifier for each distribution by joining the 'name'
+ and 'version' attributes with a dash (<tt>-</tt>) character.  Tools
+ who are prepared to deal with distributions that have no version
+ numbers generally omit the dash as well.
+</p>
+
 
 <li><b>license</b><br>
 Example: <b>perl</b>
+
+<p>
+ a descriptive term for the licenses ... not authoritative, but must
+ be consistent with licensure statements in the READMEs, documentation, etc.
+</p>
+
 <p>
 The license under which this distribution may be used and
 redistributed.  See <a
 href="http://search.cpan.org/author/KWILLIAMS/Module-Build/">Module::Build</a>
 for the list of valid options.
 </p>
+
+<li><b>license_uri</b><br>
+<p>
+ This should contain a URI where the exact terms of the license may be found.
+</p>
+
+(change "unrestricted" to "redistributable"?)
+
 
 <li><b>distribution_type</b><br>
 Example: <b>module</b>
@@ -86,6 +117,18 @@ What kind of stuff is contained in this distribution.  Most things on
 CPAN are <code>module</code>s (which can also mean a collection of
 modules), but some things are <code>script</code>s.
 </p>
+
+This field is basically meaningless, and tools (like Module::Build or
+MakeMaker) will likely stop generating it in the future.
+
+
+<li><b>private</b><br>
+WTF is going on here?
+
+index_ignore: any application that indexes the contents of
+distributions (PAUSE, search.cpan.org) ought to ignore the items
+(packages, files, directories, namespace hierarchies).
+
 
 <li><b>requires</b><br>
 Example:<br>
@@ -149,6 +192,14 @@ indicating the Perl modules that cannot be installed while this
 distribution is installed.  This is a pretty uncommon situation.
 </p>
 
+- possibly separate out test-time prereqs, complications include: can
+tests be meaningfully preserved for later running?  are test-time
+prereqs in addition to build-time, or exclusive?
+
+- make official location for installed *distributions*, which can
+contain tests, etc.
+
+
 <li><b>dynamic_config</b><br>
 Example: <b>0</b>
 <p>
@@ -175,15 +226,21 @@ good form to include both the name of the tool and its version, but
 this field is essentially opaque, at least for the moment.
 </p>
 
+* Ingy's suggestions
+short_description: (add as field, containing abstract, maximum 80 characters, suggested minimum 40 characters)
+description: (long version of abstract, should add?)
+maturity: alpha, beta, gamma, mature, stable
+author_id, owner_id: 
+categorization, keyword, chapter_id: 
+URL for further information: (could default to search.cpan.org on PAUSE)
+
+
+namespaces: can be specified for single elements by prepending
+dotted-form, i.e. "com.example.my_application.my_property".  Default
+namespace for META.yml is probably "org.cpan.meta_author" or
+something.  Precedent for this is Apple's Carbon namespaces, I think.
+
 </ul>
-
-<h3>Related Projects</h3>
-<dl>
- <dt>DOAP</dt>
-
- <dd>An RDF vocabulary to describe software projects. <a
- href="http://usefulinc.com/doap">http://usefulinc.com/doap</a>.</dd>
-</dl>
 
 <h3>History</h3>
 
