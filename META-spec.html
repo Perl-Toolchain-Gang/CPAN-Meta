@@ -1,254 +1,672 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
- <title>Specification for META.yml</title>
+<title>CPAN::META::Specification - Specification for F&lt;META.yml&gt;</title>
+<link rev="made" href="mailto:" />
 </head>
 
-<body>
-<h2 align=center>Specification for the META.yml file</h2>
+<body style="background-color: white">
 
-<p>This document describes version 1.0 of the META.yml specification.</p>
-
-<p>
-The META.yml file describes important properties of contributed Perl
-distributions such as the ones found on <a
-href="http://www.cpan.org">CPAN</a>.  It is typically created by tools
-like <a
-href="http://search.cpan.org/author/KWILLIAMS/Module-Build/">Module::Build</a>
-and <a
-href="http://search.cpan.org/author/MSCHWERN/ExtUtils-MakeMaker/">ExtUtils::MakeMaker</a>.
-</p>
-
-<p>
-The fields in the META.yml file are meant to be helpful to people
-maintaining module collections (like CPAN), for people writing
-installation tools (like <a
-href="http://search.cpan.org/author/ANDK/CPAN/">CPAN.pm</a> or <a
-href="http://search.cpan.org/author/KANE/CPANPLUS/">CPANPLUS</a>), or
-just people who want to know some stuff about a distribution before
-downloading it and starting to install it.
-</p>
-
-<h3>Format</h3>
-
-<p>
-META.yml files are written in the <a
-href="http://www.yaml.org/">YAML</a> format.  The reasons we chose
-YAML instead of, say, XML or Data::Dumper are discussed in <a
-href="http://archive.develooper.com/makemaker@perl.org/msg00405.html">this
-thread</a> on the MakeMaker mailing list.
-</p>
-
-<p>
-The first line of a META.yml file should be a valid <a
-href="http://www.yaml.org/spec/#.Document">YAML document header</a>
-like <nobr><tt>"--- #YAML:1.0"</tt></nobr>.
-</p>
-
-<h3>Fields</h3>
-
-<p>
-The rest of the META.yml file is one big YAML <a
-href="http://www.yaml.org/spec/#.-syntax-mapping-Mapping-">mapping</a>,
-whose keys are described here.
-</p>
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
 
 <ul>
 
-<li><b>name</b><br>
-Example: <b>Module-Build</b>
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#format">FORMAT</a></li>
+	<li><a href="#terminology">TERMINOLOGY</a></li>
+	<li><a href="#version_specifications">VERSION SPECIFICATIONS</a></li>
+	<li><a href="#header">HEADER</a></li>
+	<li><a href="#fields">FIELDS</a></li>
+	<ul>
+
+		<li><a href="#metaspec">meta-spec</a></li>
+		<li><a href="#name">name</a></li>
+		<li><a href="#version">version</a></li>
+		<li><a href="#generation">generation</a></li>
+		<li><a href="#abstract">abstract</a></li>
+		<li><a href="#authored_by">authored_by</a></li>
+		<li><a href="#license">license</a></li>
+		<li><a href="#distribution_type">distribution_type</a></li>
+		<li><a href="#requires">requires</a></li>
+		<li><a href="#recommends">recommends</a></li>
+		<li><a href="#build_requires">build_requires</a></li>
+		<li><a href="#conflicts">conflicts</a></li>
+		<li><a href="#requires_build_tools">requires_build_tools</a></li>
+		<li><a href="#requires_packages">requires_packages</a></li>
+		<ul>
+
+			<li><a href="#version">version</a></li>
+			<li><a href="#has_library">has_library</a></li>
+			<li><a href="#has_program">has_program</a></li>
+		</ul>
+
+		<li><a href="#dynamic_config">dynamic_config</a></li>
+		<li><a href="#configure">configure</a></li>
+		<li><a href="#requires_os">requires_os</a></li>
+		<li><a href="#excludes_os">excludes_os</a></li>
+		<li><a href="#private">private</a></li>
+		<li><a href="#index">index</a></li>
+		<ul>
+
+			<li><a href="#file">file</a></li>
+			<li><a href="#dir">dir</a></li>
+			<li><a href="#package">package</a></li>
+			<li><a href="#namespace">namespace</a></li>
+		</ul>
+
+		<li><a href="#no_index">no_index</a></li>
+		<ul>
+
+			<li><a href="#file">file</a></li>
+			<li><a href="#dir">dir</a></li>
+			<li><a href="#package">package</a></li>
+			<li><a href="#namespace">namespace</a></li>
+		</ul>
+
+		<li><a href="#keywords">keywords</a></li>
+		<li><a href="#generated_by">generated_by</a></li>
+		<li><a href="#auto_regenerate">auto_regenerate</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
 <p>
-The name of the distribution.  Often created by taking the "main
-module" in the distribution and changing "::" to "-".  Sometimes it's
-completely different, however, as in the case of the <a
-href="http://search.cpan.org/author/GAAS/libwww-perl/">libwww-perl</a>
-distribution.
 </p>
-
-<li><b>version</b><br>
-Example: <b>0.16</b>
+<h1><a name="name">NAME</a></h1>
+<p>CPAN::META::Specification - Specification for <em>META.yml</em></p>
 <p>
-The version of the distribution to which the META.yml file refers.
-This is a mandatory field.
 </p>
-
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ --- #YAML:1.0
+ name: Module-Build
+ abstract: Build and install Perl modules
+ version: 0.20
+ authored_by:
+   - Ken Williams &lt;ken@mathforum.org&gt;
+ license: perl
+ distribution_type: module
+ requires:
+   Config: 0
+   Cwd: 0
+   Data::Dumper: 0
+   ExtUtils::Install: 0
+   File::Basename: 0
+   File::Compare: 0
+   File::Copy: 0
+   File::Find: 0
+   File::Path: 0
+   File::Spec: 0
+   IO::File: 0
+   perl: 5.005_03
+ recommends:
+   Archive::Tar: 1.00
+   ExtUtils::Install: 0.3
+   ExtUtils::ParseXS: 2.02
+   Pod::Text: 0
+   YAML: 0.35
+ build_requires:
+   Test: 0
+ meta-spec:
+   version: 1.1
+   url: &lt;<a href="http://search.cpan.org/dist/CPAN-META-Specification-1.1/&gt">http://search.cpan.org/dist/CPAN-META-Specification-1.1/&gt</a>;
+ generated_by: Module::Build version 0.20</pre>
 <p>
- The version is essentially an arbitrary string, but <i>must</i> be
- only ASCII characters, and <i>strongly should</i> be of the format
- integer-dot-digit-digit, i.e. <tt>25.57</tt>, optionally followed by
- underscore-digit-digit, i.e. <tt>25.57_04</tt>.
 </p>
-
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This document describes version 1.1 of the <em>META.yml</em> specification.</p>
+<p>The <em>META.yml</em> file describes important properties of contributed
+Perl distributions such as the ones found on CPAN.  It is typically
+created by tools like Module::Build, Module::Install, and
+ExtUtils::MakeMaker.</p>
+<p>The fields in the <em>META.yml</em> file are meant to be helpful for people
+maintaining module collections (like CPAN), for people writing
+installation tools (like CPAN.pm or CPANPLUS), or just for people who
+want to know some stuff about a distribution before downloading it and
+starting to install it.</p>
+<p><em>Note: The latest version of this specification can always be found
+at <a href="http://search.cpan.org/dist/CPAN-META-Specification/">http://search.cpan.org/dist/CPAN-META-Specification/</a>.</em></p>
 <p>
- The standard tools that deal with module distribution (PAUSE, CPAN,
- etc.) form an identifier for each distribution by joining the 'name'
- and 'version' attributes with a dash (<tt>-</tt>) character.  Tools
- who are prepared to deal with distributions that have no version
- numbers generally omit the dash as well.
 </p>
-
-
-<li><b>license</b><br>
-Example: <b>perl</b>
-
+<hr />
+<h1><a name="format">FORMAT</a></h1>
+<p><em>META.yml</em> files are written in the YAML format (see
+<a href="http://www.yaml.org/">http://www.yaml.org/</a>).</p>
+<p>See the following links to learn why we chose YAML instead of, say,
+XML or Data::Dumper:</p>
+<ul>
+<li></li>
+Module::Build design plans
+<p><a href="http://nntp.x.perl.org/group/perl.makemaker/406">http://nntp.x.perl.org/group/perl.makemaker/406</a></p>
+<p></p>
+<li></li>
+Not keen on YAML
+<p><a href="http://nntp.x.perl.org/group/perl.module-authors/1353">http://nntp.x.perl.org/group/perl.module-authors/1353</a></p>
+<p></p>
+<li></li>
+META Concerns
+<p><a href="http://nntp.x.perl.org/group/perl.module-authors/1385">http://nntp.x.perl.org/group/perl.module-authors/1385</a></p>
+<p></p></ul>
 <p>
- a descriptive term for the licenses ... not authoritative, but must
- be consistent with licensure statements in the READMEs, documentation, etc.
 </p>
-
+<hr />
+<h1><a name="terminology">TERMINOLOGY</a></h1>
+<dl>
+<dt><strong><a name="item_distribution">distribution</a></strong><br />
+</dt>
+<dd>
+This is the primary object described by the <em>META.yml</em>
+specification. In the context of this document it usually refers to a
+collection of modules, scripts, and/or documents that are distributed
+for other developers to use.
+</dd>
+<p></p>
+<dt><strong><a name="item_module">module</a></strong><br />
+</dt>
+<dd>
+This refers to a reusable library of code typically contained in a
+single file. Currently, we primarily talk of perl modules, but this
+specification should be open enough to apply to other languages as
+well (ex. python, ruby).
+</dd>
+<p></p></dl>
 <p>
-The license under which this distribution may be used and
-redistributed.  See <a
-href="http://search.cpan.org/author/KWILLIAMS/Module-Build/">Module::Build</a>
-for the list of valid options.
 </p>
-
-<li><b>license_uri</b><br>
+<hr />
+<h1><a name="version_specifications">VERSION SPECIFICATIONS</a></h1>
+<p>Some fields require a version specification (ex. <a href="#requires">requires</a>,
+<a href="#recommends">recommends</a>, <a href="#build_requires">build_requires</a>, etc.).  This section details the
+version specications that are currently supported.</p>
+<p>If a single version is listed, then that version is considered to be
+the minimum version supported.</p>
+<p>If 0 is given as the version number, then any version is supported.</p>
+<p>Additionally, for more complicated requirements, the specification
+supports a list of versions, each of which may be optionally preceeded
+by a relational operator.</p>
+<p>Supported operators include &lt; (less than), &lt;= (less than or
+equal), &gt; (greater than), &gt;= (greater than or equal), and !=
+(not equal).</p>
+<p>If a list is given then it is evaluated from left to right so that any
+specifications in the list that conflict with a previous specification
+are overriden by the later.</p>
+<p>Examples:</p>
+<pre>
+ &gt;= 1.2, != 1.5, &lt; 2.0</pre>
+<p>Any version from version 1.2 onward, except version 1.5, that also
+preceeds version 2.0.</p>
 <p>
- This should contain a URI where the exact terms of the license may be found.
 </p>
-
-(change "unrestricted" to "redistributable"?)
-
-
-<li><b>distribution_type</b><br>
-Example: <b>module</b>
+<hr />
+<h1><a name="header">HEADER</a></h1>
+<p>The first line of a <em>META.yml</em> file should be a valid YAML document
+header like <code>&quot;--- #YAML:1.0&quot;</code>.</p>
 <p>
-What kind of stuff is contained in this distribution.  Most things on
-CPAN are <code>module</code>s (which can also mean a collection of
-modules), but some things are <code>script</code>s.
 </p>
-
-This field is basically meaningless, and tools (like Module::Build or
-MakeMaker) will likely stop generating it in the future.
-
-
-<li><b>private</b><br>
-WTF is going on here?
-
-index_ignore: any application that indexes the contents of
-distributions (PAUSE, search.cpan.org) ought to ignore the items
-(packages, files, directories, namespace hierarchies).
-
-
-<li><b>requires</b><br>
-Example:<br>
-<b>
-&nbsp;&nbsp;Data::Dumper: 0<br>
-&nbsp;&nbsp;File::Find: 1.03<br>
-</b>   
+<hr />
+<h1><a name="fields">FIELDS</a></h1>
+<p>The rest of the <em>META.yml</em> file is one big YAML mapping whose keys
+are described here.</p>
 <p>
-A YAML <a
-href="http://www.yaml.org/spec/#.-syntax-mapping-Mapping-">mapping</a>
-indicating the Perl modules this distribution requires for proper
-operation.  The keys are the module names, and the values are version
-specifications as described in the <a
-href="http://search.cpan.org/author/KWILLIAMS/Module-Build/lib/Module/Build.pm">
-documentation for Module::Build's "requires" parameter</a>.
 </p>
-
-<p><i>Note: the exact nature of the fancy specifications like
-<nobr><tt>"&gt;= 1.2, != 1.5, &lt 2.0"</tt></nobr> is subject to
-change.  Advance notice will be given here.  The simple specifications
-like <tt>"1.2"</tt> will not change in format.</i>
-</p>
-
-<li><b>recommends</b><br>
-Example:<br>
-<b>
-&nbsp;&nbsp;Data::Dumper: 0<br>
-&nbsp;&nbsp;File::Find: 1.03<br>
-</b>   
+<h2><a name="metaspec">meta-spec</a></h2>
+<p>Example:</p>
+<pre>
+  meta-spec:
+    url: &lt;<a href="http://search.cpan.org/dist/CPAN-META-Specification-1.1/&gt">http://search.cpan.org/dist/CPAN-META-Specification-1.1/&gt</a>;
+    version: 1.1</pre>
+<p>(Spec 1.1) [required] This mapping indicates the location of the
+version of the META.yml specification used along with the version
+number of that specification.</p>
 <p>
-A YAML <a
-href="http://www.yaml.org/spec/#.-syntax-mapping-Mapping-">mapping</a>
-indicating the Perl modules this distribution recommends for enhanced
-operation.
 </p>
-
-<li><b>build_requires</b><br>
-Example:<br>
-<b>
-&nbsp;&nbsp;Data::Dumper: 0<br>
-&nbsp;&nbsp;File::Find: 1.03<br>
-</b>   
+<h2><a name="name">name</a></h2>
+<p>Example:</p>
+<pre>
+  name: Module-Build</pre>
+<p>(Spec 1.0) [required] The name of the distribution which is often
+created by taking the ``main module'' in the distribution and changing
+``::'' to ``-''.  Sometimes it's completely different, however, as in the
+case of the libww-perl distribution (see
+<a href="http://search.cpan.org/author/GAAS/libwww-perl/">http://search.cpan.org/author/GAAS/libwww-perl/</a>).</p>
 <p>
-A YAML <a
-href="http://www.yaml.org/spec/#.-syntax-mapping-Mapping-">mapping</a>
-indicating the Perl modules required for building and/or testing of
-this distribution.  These dependencies are not required after the
-module is installed.
 </p>
-
-<li><b>conflicts</b><br>
-Example:<br>
-<b>
-&nbsp;&nbsp;Data::Dumper: 0<br>
-&nbsp;&nbsp;File::Find: 1.03<br>
-</b>   
+<h2><a name="version">version</a></h2>
+<p>Example:</p>
+<pre>
+  version: 0.20</pre>
+<p>(Spec 1.0) [required] The version of the distribution to which the
+<em>META.yml</em> file refers.</p>
 <p>
-A YAML <a
-href="http://www.yaml.org/spec/#.-syntax-mapping-Mapping-">mapping</a>
-indicating the Perl modules that cannot be installed while this
-distribution is installed.  This is a pretty uncommon situation.
 </p>
-
-- possibly separate out test-time prereqs, complications include: can
-tests be meaningfully preserved for later running?  are test-time
-prereqs in addition to build-time, or exclusive?
-
-- make official location for installed *distributions*, which can
-contain tests, etc.
-
-
-<li><b>dynamic_config</b><br>
-Example: <b>0</b>
+<h2><a name="generation">generation</a></h2>
+<p>Example:</p>
+<pre>
+  generation: 2</pre>
+<p>(Spec 1.1) [optional] Indicates which generation this version belongs
+to. A generation is a way of indicating that a collection of versions
+are all compatible with each other, whereas a version from a different
+generation may include incompatibilities or other major
+differences. This allows tools like CPAN and CPANPLUS to present to
+its users the greatest version in each generation to choose from when
+the user queries a package instead of only presenting a single highest
+version.</p>
 <p>
-A boolean flag indicating whether a <tt>Build.PL</tt> or
-<tt>Makefile.PL</tt> (or similar) must be executed, or whether this
+</p>
+<h2><a name="abstract">abstract</a></h2>
+<p>Example:</p>
+<pre>
+  abstract: Build and install Perl modules.</pre>
+<p>(Spec 1.1) [required] A short description of the purpose of the
+distribution.</p>
+<p>
+</p>
+<h2><a name="authored_by">authored_by</a></h2>
+<p>Example:</p>
+<pre>
+  authored_by:
+    - Ken Williams &lt;ken@mathforum.org&gt;</pre>
+<p>(Spec 1.1) [required] A YAML sequence indicating the <code>author(s)</code> of the
+distribution. The prefered form is author-name &lt;email-address&gt;.</p>
+<p>
+</p>
+<h2><a name="license">license</a></h2>
+<p>Example:</p>
+<pre>
+  license: perl</pre>
+<p>(Spec 1.0) [required] The license under which this distribution may be
+used and redistributed.  See <a href="/Module/Build.html">the Module::Build manpage</a> for the list of valid
+options.</p>
+<p>
+</p>
+<h2><a name="distribution_type">distribution_type</a></h2>
+<p>Example:</p>
+<pre>
+  distribution_type: module</pre>
+<p>(Spec 1.0) [optional] What kind of stuff is contained in this
+distribution.  Most things on CPAN are <a href="#item_module"><code>module</code></a>s (which can also mean
+a collection of modules), but some things are <code>script</code>s.</p>
+<p>
+</p>
+<h2><a name="requires">requires</a></h2>
+<p>Example:</p>
+<pre>
+  requires:
+    Data::Dumper: 0
+    File::Find: 1.03</pre>
+<p>(Spec 1.0) [optional] A YAML mapping indicating the Perl modules this
+distribution requires for proper operation.  The keys are the module
+names, and the values are version specifications as described in
+<a href="/Module/Build.html">the Module::Build manpage</a> for the ``requires'' parameter.</p>
+<p>
+</p>
+<h2><a name="recommends">recommends</a></h2>
+<p>Example:</p>
+<pre>
+  recommends:
+    Data::Dumper: 0
+    File::Find: 1.03</pre>
+<p>(Spec 1.0) [optional] A YAML mapping indicating the Perl modules this
+distribution recommends for enhanced operation.</p>
+<p><em>ALTERNATIVE: It may be desirable to present to the user which
+features are dependant on which modules so they can make an informed
+decision about which recommended modules to install.</em></p>
+<p>Example:</p>
+<pre>
+  optional_features:
+  - foo:
+      description: Provides the ability to blah.
+      requires:
+        Data::Dumper: 0
+        File::Find: 1.03
+  - bar:
+      description: This feature is not available on this platform.
+      excludes_os: MSWin32</pre>
+<p><em>(Spec 1.1) [optional] A YAML sequence of names for optional features
+which are made available when its requirements are met. For each
+feature a description is provided along with any of <a href="#requires">requires</a>,
+<a href="#build_requires">build_requires</a>, <a href="#conflicts">conflicts</a>, <a href="#requires_packages">requires_packages</a>,
+<a href="#requires_os">requires_os</a>, and <a href="#excludes_os">excludes_os</a> which have the same meaning in
+this subcontext as described elsewhere in this document.</em></p>
+<p>
+</p>
+<h2><a name="build_requires">build_requires</a></h2>
+<p>Example:</p>
+<pre>
+  build_requires:
+    Data::Dumper: 0
+    File::Find: 1.03</pre>
+<p>(Spec 1.0) [optional] A YAML mapping indicating the Perl modules
+required for building and/or testing of this distribution.  These
+dependencies are not required after the module is installed.</p>
+<p>
+</p>
+<h2><a name="conflicts">conflicts</a></h2>
+<p>Example:</p>
+<pre>
+  conflicts:
+    Data::Dumper: 0
+    File::Find: 1.03</pre>
+<p>(Spec 1.0) [optional] A YAML mapping indicating the Perl modules that
+cannot be installed while this distribution is installed.  This is a
+pretty uncommon situation.</p>
+<p>
+</p>
+<h2><a name="requires_build_tools">requires_build_tools</a></h2>
+<p>Example:</p>
+<pre>
+  requires_build_tools: 1</pre>
+<p>(Spec 1.1) [optional] A boolean that indicates external build tools
+(i.e. compiler, linker, etc.) are required to build this package. If
+not present it is assumed to be false.</p>
+<p>
+</p>
+<h2><a name="requires_packages">requires_packages</a></h2>
+<p>Example:</p>
+<pre>
+  requires_packages:
+  - libiconv:
+      version: 1.9
+      has_library:
+        - iconv
+        - charset
+      has_program:
+        - iconv
+  - zlib
+      has_library:
+        - z</pre>
+<p>(Spec 1.1) [optional] A YAML sequence of fields whose names are the
+names of non-perl distributions which are required by this
+distribution.  Each field is a YAML mapping that more specifically
+describes the requirement.</p>
+<p>
+</p>
+<h3><a name="version">version</a></h3>
+<p>(Spec 1.1) [optional] A version specification indicating the required
+<code>version(s)</code> of the required distribution.</p>
+<p>
+</p>
+<h3><a name="has_library">has_library</a></h3>
+<p>(Spec 1.1) [optional] A sequence of names of loadable or linkable
+libraries provided by this distribution which must be present for the
+distribution to be considered present.</p>
+<p>
+</p>
+<h3><a name="has_program">has_program</a></h3>
+<p>(Spec 1.1) [optional] A sequence of names of executable programs
+provided by this distribution which must be present for the
+distribution to be considered present.</p>
+<p>
+</p>
+<h2><a name="dynamic_config">dynamic_config</a></h2>
+<p>Example:</p>
+<pre>
+  dynamic_config: 0</pre>
+<p>(Spec 1.0) [optional] A boolean flag indicating whether a <em>Build.PL</em>
+or <em>Makefile.PL</em> (or similar) must be executed, or whether this
 module can be built, tested and installed solely from consulting its
 metadata file.  The main reason to set this to a true value if that
 your module performs some dynamic configuration (asking questions,
-sensing the environment, etc.) as part of its build/install process.
-</p>
-
+sensing the environment, etc.) as part of its build/install process.</p>
+<p>Currently Module::Build doesn't actually do anything with this flag
+- it's probably going to be up to higher-level tools like CPAN
+to do something useful with it.  It can potentially bring lots of
+security, packaging, and convenience improvements.</p>
 <p>
-Currently <tt>Module::Build</tt> doesn't actually do anything with
-this flag - it's probably going to be up to higher-level tools like
-<tt>CPAN.pm</tt> to do something useful with it.  It can potentially
-bring lots of security, packaging, and convenience improvements.
 </p>
-
-<li><b>generated_by</b><br>
-Example: <b>Module::Build version 0.16</b>
+<h2><a name="configure">configure</a></h2>
+<p>Example:</p>
+<pre>
+  configure: auto</pre>
+<p>(Spec 1.1) [optional] If the distribution requires configuration, this
+field indicates whether the configuration process is <code>interactive</code>
+and requires user intervention, <code>scriptable</code> and requires
+intervention or an answer script, or <code>auto</code> and can configure its
+self automatically.</p>
 <p>
-Indicates the tool that was used to create this META.yml file.  It's
-good form to include both the name of the tool and its version, but
-this field is essentially opaque, at least for the moment.
 </p>
-
-* Ingy's suggestions
-short_description: (add as field, containing abstract, maximum 80 characters, suggested minimum 40 characters)
-description: (long version of abstract, should add?)
-maturity: alpha, beta, gamma, mature, stable
-author_id, owner_id: 
-categorization, keyword, chapter_id: 
-URL for further information: (could default to search.cpan.org on PAUSE)
-
-
-namespaces: can be specified for single elements by prepending
-dotted-form, i.e. "com.example.my_application.my_property".  Default
-namespace for META.yml is probably "org.cpan.meta_author" or
-something.  Precedent for this is Apple's Carbon namespaces, I think.
-
-</ul>
-
-<h3>History</h3>
-
+<h2><a name="requires_os">requires_os</a></h2>
+<p>Example:</p>
+<pre>
+  requires_os: darwin</pre>
+<p>(Spec 1.1) [optional] This field contains a sequence of operating
+system names (ex. <code>$^O</code> in perl) that are required for this
+distribution.  This is an implied white list such that this
+distribution will not run on any operating system unless it is listed
+in this field.  For an alternative way to manage operating system
+dependencies see <a href="#excludes_os">excludes_os</a> below.</p>
+<p><em>Note: If this field is specified, then <a href="#excludes_os">excludes_os</a> must not
+be specified.</em></p>
+<p>
+</p>
+<h2><a name="excludes_os">excludes_os</a></h2>
+<p>Example:</p>
+<pre>
+  excludes_os: MSWin32</pre>
+<p>(Spec 1.1) [optional] This field contains a sequence of operating
+system names (ex. <code>$^O</code> in perl) that are incompatible with this
+distribution.  This is an implied black list such that this
+distribution will run on any operating system except those listed in
+this field.  For an alternative way to manage operating system
+dependencies see <a href="#requires_os">requires_os</a> above.</p>
+<p><em>Note: If this field is specified, then <a href="#requires_os">requires_os</a> must not
+be specified.</em></p>
+<p>
+</p>
+<h2><a name="private">private</a></h2>
+<p><em>(Deprecated)</em> (Spec 1.0) [optional] This field has been renamed to
+<a href="#no_index">no_index</a>.  See below.</p>
+<p>
+</p>
+<h2><a name="index">index</a></h2>
+<p>Example:</p>
+<pre>
+  index:
+    file:
+    - My/Module.pm
+    dir:
+    - My/Private
+    package:
+    - My::Module::Stuff
+    namespace:
+    - My::Module::Stuff</pre>
+<p>(Spec 1.1) [optional] A YAML mapping that describes any files,
+directories, packages, and namespaces that are to be indexed. Anything
+that is not explicitly listed here will be ignored by most compliant
+searches and indexers.</p>
+<p>
+</p>
+<h3><a name="file">file</a></h3>
+<p>(Spec 1.1) [optional] Include any listed file(s).</p>
+<p>
+</p>
+<h3><a name="dir">dir</a></h3>
+<p>(Spec 1.1) [optional] Include everything below the listed
+directory(ies).</p>
+<p>
+</p>
+<h3><a name="package">package</a></h3>
+<p>(Spec 1.1) [optional] Include the listed package(s).</p>
+<p>
+</p>
+<h3><a name="namespace">namespace</a></h3>
+<p>(Spec 1.1) [optional] Includes everything below the listed namespace(s),
+but <em>not</em> the listed <code>namespace(s)</code> its self.</p>
+<p>
+</p>
+<h2><a name="no_index">no_index</a></h2>
+<p>Example:</p>
+<pre>
+  no_index:
+    file:
+    - My/Module.pm
+    dir:
+    - My/Private
+    package:
+    - My::Module::Stuff
+    namespace:
+    - My::Module::Stuff</pre>
+<p>(Spec 1.1) [optional] A YAML mapping that describes any files,
+directories, packages, and namespaces that are private
+(i.e. implementation artifacts) that are not of interest to searching
+and indexing tools.</p>
+<p>
+</p>
+<h3><a name="file">file</a></h3>
+<p>(Spec 1.1) [optional] Exclude any listed file(s).</p>
+<p>
+</p>
+<h3><a name="dir">dir</a></h3>
+<p>(Spec 1.1) [optional] Exclude anything below the listed
+directory(ies).</p>
+<p>
+</p>
+<h3><a name="package">package</a></h3>
+<p>(Spec 1.1) [optional] Exclude the listed package(s).</p>
+<p>
+</p>
+<h3><a name="namespace">namespace</a></h3>
+<p>(Spec 1.1) [optional] Excludes anything below the listed namespace(s),
+but <em>not</em> the listed <code>namespace(s)</code> its self.</p>
+<p>
+</p>
+<h2><a name="keywords">keywords</a></h2>
+<p>Example:</p>
+<pre>
+  keywords:
+  - make
+  - build
+  - install</pre>
+<p>(Spec 1.1) [optional] A sequence of keywords/phrases that describe
+this distribution.</p>
+<p>
+</p>
+<h2><a name="generated_by">generated_by</a></h2>
+<p>Example:</p>
+<pre>
+  generated_by: Module::Build version 0.20</pre>
+<p>(Spec 1.0) [required] Indicates the tool that was used to create this
+<em>META.yml</em> file.  It's good form to include both the name of the tool
+and its version, but this field is essentially opaque, at least for
+the moment. If <em>META.yml</em> was generated by hand, it is suggested that
+the author be specified here.</p>
+<p>[Note: My <em>meta_stats.pl</em> script which I use to gather statistics
+regarding <em>META.yml</em> usage prefers the form listed above, i.e. it
+splits on /\s+version\s+/ taking the first field as the name of the
+tool that generated the file and the second field as version of that
+tool. RWS]</p>
+<p>
+</p>
+<h2><a name="auto_regenerate">auto_regenerate</a></h2>
+<p>Example:</p>
+<pre>
+  auto_regenerate: false</pre>
+<p>(Spec 1.1) [optional] Some tools (Module::Build, ExtUtils::MakeMaker)
+automaticaly generate a <em>META.yml</em> file. If you customize this file,
+you should use this field to indicate to tools that follow the
+specification that they should not overwrite your customizations. The
+value of this field is assumed to be 'true' if not present.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>CPAN, <a href="http://www.cpan.org/">http://www.cpan.org/</a></p>
+<p>CPAN.pm, <a href="http://search.cpan.org/author/ANDK/CPAN/">http://search.cpan.org/author/ANDK/CPAN/</a></p>
+<p>CPANPLUS, <a href="http://search.cpan.org/author/KANE/CPANPLUS/">http://search.cpan.org/author/KANE/CPANPLUS/</a></p>
+<p>Data::Dumper, <a href="http://search.cpan.org/author/ILYAM/Data-Dumper/">http://search.cpan.org/author/ILYAM/Data-Dumper/</a></p>
+<p>ExtUtils::MakeMaker, <a href="http://search.cpan.org/author/MSCHWERN/ExtUtils-MakeMaker/">http://search.cpan.org/author/MSCHWERN/ExtUtils-MakeMaker/</a></p>
+<p>Module::Build, <a href="http://search.cpan.org/author/KWILLIAMS/Module-Build/">http://search.cpan.org/author/KWILLIAMS/Module-Build/</a></p>
+<p>Module::Install, <a href="http://search.cpan.org/author/KWILLIAMS/Module-Install/">http://search.cpan.org/author/KWILLIAMS/Module-Install/</a></p>
+<p>XML, <a href="http://www.w3.org/XML/">http://www.w3.org/XML/</a></p>
+<p>YAML, <a href="http://www.yaml.org/">http://www.yaml.org/</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<dl>
+<dt><strong><a name="item_2003">March 14, 2003 (Pi day)</a></strong><br />
+</dt>
 <ul>
-<li><b>March 14, 2003</b> (Pi day) - created version 1.0 of this document.</li>
-<li><b>May 8, 2003</b> - added the "dynamic_config" field, which was
-    missing from the initial version.</li> 
-</ul>
+<li></li>
+Created version 1.0 of this document.
+<p></p></ul>
+<dt><strong><a name="item_may_8_2c_2003">May 8, 2003</a></strong><br />
+</dt>
+<ul>
+<li></li>
+Added the <a href="#dynamic_config">dynamic_config</a> field, which was missing from the initial
+version.
+<p></p></ul>
+<dt><strong><a name="item_november_13_2c_2003">November 13, 2003</a></strong><br />
+</dt>
+<ul>
+<li></li>
+Added more YAML rationale articles.
+<p></p>
+<li></li>
+Fixed existing link to YAML discussion thread to point to new
+<a href="http://nntp.x.perl.org/group/">http://nntp.x.perl.org/group/</a> site.
+<p></p>
+<li></li>
+Added and deprecated the <a href="#private">private</a> field.
+<p></p>
+<li></li>
+Added <a href="#abstract">abstract</a>, <a href="#configure">configure</a>, <a href="#requires_packages">requires_packages</a>,
+<a href="#requires_os">requires_os</a>, <a href="#excludes_os">excludes_os</a>, and <a href="#no_index">no_index</a> fields.
+<p></p>
+<li></li>
+Bumped version.
+<p></p></ul>
+<dt><strong><a name="item_november_16_2c_2003">November 16, 2003</a></strong><br />
+</dt>
+<ul>
+<li></li>
+Added <a href="#generation">generation</a>, <a href="#authored_by">authored_by</a> fields.
+<p></p>
+<li></li>
+Add alternative proposal to the <a href="#recommends">recommends</a> field.
+<p></p>
+<li></li>
+Add proposal for a <a href="#requires_build_tools">requires_build_tools</a> field.
+<p></p></ul>
+<dt><strong><a name="item_december_9_2c_2003">December 9, 2003</a></strong><br />
+</dt>
+<ul>
+<li></li>
+Added link to latest version of this specification on CPAN.
+<p></p>
+<li></li>
+Added section <a href="#version_specifications">VERSION SPECIFICATIONS</a>.
+<p></p>
+<li></li>
+Chang name from Module::Build::META-spec to CPAN::META::Specification.
+<p></p>
+<li></li>
+Add proposal for <a href="#auto_regenerate">auto_regenerate</a> field.
+<p></p></ul>
+<dt><strong><a name="item_december_15_2c_2003">December 15, 2003</a></strong><br />
+</dt>
+<ul>
+<li></li>
+Add <a href="#index">index</a> field as a compliment to <a href="#no_index">no_index</a>
+<p></p>
+<li></li>
+Add <a href="#keywords">keywords</a> field as a means to aid searching distributions.
+<p></p>
+<li></li>
+Add <a href="#terminology">TERMINOLOGY</a> section to explain certain terms that may be
+ambiguous.
+<p></p></ul>
+</dl>
 
 </body>
+
 </html>
