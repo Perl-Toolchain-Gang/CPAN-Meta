@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>CPAN::META::Specification - Specification for F&lt;META.yml&gt;</title>
-<link rev="made" href="mailto:" />
+<link rev="made" href="mailto:root@hampsten.nonet" />
 </head>
 
 <body style="background-color: white">
@@ -25,28 +25,15 @@
 		<li><a href="#metaspec">meta-spec</a></li>
 		<li><a href="#name">name</a></li>
 		<li><a href="#version">version</a></li>
-		<li><a href="#generation">generation</a></li>
 		<li><a href="#abstract">abstract</a></li>
-		<li><a href="#authored_by">authored_by</a></li>
+		<li><a href="#author">author</a></li>
 		<li><a href="#license">license</a></li>
 		<li><a href="#distribution_type">distribution_type</a></li>
 		<li><a href="#requires">requires</a></li>
 		<li><a href="#recommends">recommends</a></li>
 		<li><a href="#build_requires">build_requires</a></li>
 		<li><a href="#conflicts">conflicts</a></li>
-		<li><a href="#requires_build_tools">requires_build_tools</a></li>
-		<li><a href="#requires_packages">requires_packages</a></li>
-		<ul>
-
-			<li><a href="#version">version</a></li>
-			<li><a href="#has_library">has_library</a></li>
-			<li><a href="#has_program">has_program</a></li>
-		</ul>
-
 		<li><a href="#dynamic_config">dynamic_config</a></li>
-		<li><a href="#configure">configure</a></li>
-		<li><a href="#requires_os">requires_os</a></li>
-		<li><a href="#excludes_os">excludes_os</a></li>
 		<li><a href="#private">private</a></li>
 		<li><a href="#index">index</a></li>
 		<ul>
@@ -68,7 +55,6 @@
 
 		<li><a href="#keywords">keywords</a></li>
 		<li><a href="#generated_by">generated_by</a></li>
-		<li><a href="#auto_regenerate">auto_regenerate</a></li>
 	</ul>
 
 	<li><a href="#see_also">SEE ALSO</a></li>
@@ -90,8 +76,8 @@
  name: Module-Build
  abstract: Build and install Perl modules
  version: 0.20
- authored_by:
-   - Ken Williams &lt;ken@mathforum.org&gt;
+ author:
+   - Ken Williams &lt;kwilliams@cpan.org&gt;
  license: perl
  distribution_type: module
  requires:
@@ -193,7 +179,7 @@ the minimum version supported.</p>
 supports a list of versions, each of which may be optionally preceeded
 by a relational operator.</p>
 <p>Supported operators include &lt; (less than), &lt;= (less than or
-equal), &gt; (greater than), &gt;= (greater than or equal), and !=
+equal), &gt; (greater than), &gt;= (greater than or equal), == (equal), and !=
 (not equal).</p>
 <p>If a list is given then it is evaluated from left to right so that any
 specifications in the list that conflict with a previous specification
@@ -247,20 +233,6 @@ case of the libww-perl distribution (see
 <em>META.yml</em> file refers.</p>
 <p>
 </p>
-<h2><a name="generation">generation</a></h2>
-<p>Example:</p>
-<pre>
-  generation: 2</pre>
-<p>(Spec 1.1) [optional] Indicates which generation this version belongs
-to. A generation is a way of indicating that a collection of versions
-are all compatible with each other, whereas a version from a different
-generation may include incompatibilities or other major
-differences. This allows tools like CPAN and CPANPLUS to present to
-its users the greatest version in each generation to choose from when
-the user queries a package instead of only presenting a single highest
-version.</p>
-<p>
-</p>
 <h2><a name="abstract">abstract</a></h2>
 <p>Example:</p>
 <pre>
@@ -269,11 +241,11 @@ version.</p>
 distribution.</p>
 <p>
 </p>
-<h2><a name="authored_by">authored_by</a></h2>
+<h2><a name="author">author</a></h2>
 <p>Example:</p>
 <pre>
-  authored_by:
-    - Ken Williams &lt;ken@mathforum.org&gt;</pre>
+  author:
+    - Ken Williams &lt;kwilliams@cpan.org&gt;</pre>
 <p>(Spec 1.1) [required] A YAML sequence indicating the <code>author(s)</code> of the
 distribution. The prefered form is author-name &lt;email-address&gt;.</p>
 <p>
@@ -294,6 +266,11 @@ options.</p>
 <p>(Spec 1.0) [optional] What kind of stuff is contained in this
 distribution.  Most things on CPAN are <a href="#item_module"><code>module</code></a>s (which can also mean
 a collection of modules), but some things are <code>script</code>s.</p>
+<p>Unfortunately this field is basically meaningless, since many
+distributions are hybrids of several kinds of things, or some new
+thing, or subjectively different in focus depending on who's using
+them.  Tools like Module::Build and MakeMaker will likely stop
+generating this field.</p>
 <p>
 </p>
 <h2><a name="requires">requires</a></h2>
@@ -317,7 +294,7 @@ names, and the values are version specifications as described in
 <p>(Spec 1.0) [optional] A YAML mapping indicating the Perl modules this
 distribution recommends for enhanced operation.</p>
 <p><em>ALTERNATIVE: It may be desirable to present to the user which
-features are dependant on which modules so they can make an informed
+features depend on which modules so they can make an informed
 decision about which recommended modules to install.</em></p>
 <p>Example:</p>
 <pre>
@@ -360,59 +337,14 @@ cannot be installed while this distribution is installed.  This is a
 pretty uncommon situation.</p>
 <p>
 </p>
-<h2><a name="requires_build_tools">requires_build_tools</a></h2>
-<p>Example:</p>
-<pre>
-  requires_build_tools: 1</pre>
-<p>(Spec 1.1) [optional] A boolean that indicates external build tools
-(i.e. compiler, linker, etc.) are required to build this package. If
-not present it is assumed to be false.</p>
-<p>
-</p>
-<h2><a name="requires_packages">requires_packages</a></h2>
-<p>Example:</p>
-<pre>
-  requires_packages:
-  - libiconv:
-      version: 1.9
-      has_library:
-        - iconv
-        - charset
-      has_program:
-        - iconv
-  - zlib
-      has_library:
-        - z</pre>
-<p>(Spec 1.1) [optional] A YAML sequence of fields whose names are the
-names of non-perl distributions which are required by this
-distribution.  Each field is a YAML mapping that more specifically
-describes the requirement.</p>
-<p>
-</p>
-<h3><a name="version">version</a></h3>
-<p>(Spec 1.1) [optional] A version specification indicating the required
-<code>version(s)</code> of the required distribution.</p>
-<p>
-</p>
-<h3><a name="has_library">has_library</a></h3>
-<p>(Spec 1.1) [optional] A sequence of names of loadable or linkable
-libraries provided by this distribution which must be present for the
-distribution to be considered present.</p>
-<p>
-</p>
-<h3><a name="has_program">has_program</a></h3>
-<p>(Spec 1.1) [optional] A sequence of names of executable programs
-provided by this distribution which must be present for the
-distribution to be considered present.</p>
-<p>
-</p>
 <h2><a name="dynamic_config">dynamic_config</a></h2>
 <p>Example:</p>
 <pre>
   dynamic_config: 0</pre>
 <p>(Spec 1.0) [optional] A boolean flag indicating whether a <em>Build.PL</em>
-or <em>Makefile.PL</em> (or similar) must be executed, or whether this
-module can be built, tested and installed solely from consulting its
+or <em>Makefile.PL</em> (or similar) must be executed when building this
+distribution, or whether it can be built, tested and installed solely
+from consulting its
 metadata file.  The main reason to set this to a true value if that
 your module performs some dynamic configuration (asking questions,
 sensing the environment, etc.) as part of its build/install process.</p>
@@ -420,45 +352,7 @@ sensing the environment, etc.) as part of its build/install process.</p>
 - it's probably going to be up to higher-level tools like CPAN
 to do something useful with it.  It can potentially bring lots of
 security, packaging, and convenience improvements.</p>
-<p>
-</p>
-<h2><a name="configure">configure</a></h2>
-<p>Example:</p>
-<pre>
-  configure: auto</pre>
-<p>(Spec 1.1) [optional] If the distribution requires configuration, this
-field indicates whether the configuration process is <code>interactive</code>
-and requires user intervention, <code>scriptable</code> and requires
-intervention or an answer script, or <code>auto</code> and can configure its
-self automatically.</p>
-<p>
-</p>
-<h2><a name="requires_os">requires_os</a></h2>
-<p>Example:</p>
-<pre>
-  requires_os: darwin</pre>
-<p>(Spec 1.1) [optional] This field contains a sequence of operating
-system names (ex. <code>$^O</code> in perl) that are required for this
-distribution.  This is an implied white list such that this
-distribution will not run on any operating system unless it is listed
-in this field.  For an alternative way to manage operating system
-dependencies see <a href="#excludes_os">excludes_os</a> below.</p>
-<p><em>Note: If this field is specified, then <a href="#excludes_os">excludes_os</a> must not
-be specified.</em></p>
-<p>
-</p>
-<h2><a name="excludes_os">excludes_os</a></h2>
-<p>Example:</p>
-<pre>
-  excludes_os: MSWin32</pre>
-<p>(Spec 1.1) [optional] This field contains a sequence of operating
-system names (ex. <code>$^O</code> in perl) that are incompatible with this
-distribution.  This is an implied black list such that this
-distribution will run on any operating system except those listed in
-this field.  For an alternative way to manage operating system
-dependencies see <a href="#requires_os">requires_os</a> above.</p>
-<p><em>Note: If this field is specified, then <a href="#requires_os">requires_os</a> must not
-be specified.</em></p>
+<p>If this field is omitted, it defaults to 1 (true).</p>
 <p>
 </p>
 <h2><a name="private">private</a></h2>
@@ -565,17 +459,6 @@ tool that generated the file and the second field as version of that
 tool. RWS]</p>
 <p>
 </p>
-<h2><a name="auto_regenerate">auto_regenerate</a></h2>
-<p>Example:</p>
-<pre>
-  auto_regenerate: false</pre>
-<p>(Spec 1.1) [optional] Some tools (Module::Build, ExtUtils::MakeMaker)
-automaticaly generate a <em>META.yml</em> file. If you customize this file,
-you should use this field to indicate to tools that follow the
-specification that they should not overwrite your customizations. The
-value of this field is assumed to be 'true' if not present.</p>
-<p>
-</p>
 <hr />
 <h1><a name="see_also">SEE ALSO</a></h1>
 <p>CPAN, <a href="http://www.cpan.org/">http://www.cpan.org/</a></p>
@@ -664,6 +547,30 @@ Add <a href="#keywords">keywords</a> field as a means to aid searching distribut
 <li></li>
 Add <a href="#terminology">TERMINOLOGY</a> section to explain certain terms that may be
 ambiguous.
+<p></p></ul>
+<dt><strong><a name="item_july_26_2c_2005">July 26, 2005</a></strong><br />
+</dt>
+<ul>
+<li></li>
+Removed a bunch of items (generation, requires_build_tools,
+requires_packages, configure, requires_os, excludes_os,
+auto_regenerate) that have never actually been supported, but were
+more like records of brainstorming.
+<p></p>
+<li></li>
+Changed <code>authored_by</code> to <code>author</code>, since that's always been what
+it's actually called in actual <em>META.yml</em> files.
+<p></p>
+<li></li>
+Added the ``=='' operator to the list of supported version-checking
+operators.
+<p></p>
+<li></li>
+Noted that the <code>distribution_type</code> field is basically meaningless,
+and shouldn't really be used.
+<p></p>
+<li></li>
+Clarified <code>dynamic_config</code> a bit.
 <p></p></ul>
 </dl>
 
