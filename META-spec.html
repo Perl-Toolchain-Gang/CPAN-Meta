@@ -46,6 +46,7 @@
 		</ul>
 
 		<li><a href="#keywords">keywords</a></li>
+		<li><a href="#resources">resources</a></li>
 		<li><a href="#generated_by">generated_by</a></li>
 	</ul>
 
@@ -93,6 +94,8 @@
    YAML: 0.35
  build_requires:
    Test: 0
+ urls:
+   license: <a href="http://dev.perl.org/licenses/">http://dev.perl.org/licenses/</a>
  meta-spec:
    version: 1.1
    url: &lt;<a href="http://search.cpan.org/dist/CPAN-META-Specification-1.1/&gt">http://search.cpan.org/dist/CPAN-META-Specification-1.1/&gt</a>;
@@ -429,6 +432,34 @@ but <em>not</em> the listed <code>namespace(s)</code> its self.</p>
   - install</pre>
 <p>(Spec 1.1) [optional] A sequence of keywords/phrases that describe
 this distribution.</p>
+<p>
+</p>
+<h2><a name="resources">resources</a></h2>
+<p>(Spec 1.1) [optional] A mapping of any URL resources related to this
+distribution.  All-lower-case keys, such as <a href="#item_homepage"><code>homepage</code></a>, <a href="#item_license"><code>license</code></a>,
+and <a href="#item_bugtracker"><code>bugtracker</code></a>, are reserved by this specification, as they have
+``official'' uses.  If you'd like to add your own ``special'' entries, use
+at least one upper-case letter.</p>
+<p>The current set of official keys is:</p>
+<dl>
+<dt><strong><a name="item_homepage">homepage</a></strong><br />
+</dt>
+<dd>
+The official home of this project on the web.
+</dd>
+<p></p>
+<dt><strong><a name="item_license">license</a></strong><br />
+</dt>
+<dd>
+An URL for an official statement of this distribution's license.
+</dd>
+<p></p>
+<dt><strong><a name="item_bugtracker">bugtracker</a></strong><br />
+</dt>
+<dd>
+An URL for a bug tracker (e.g. Bugzilla or RT queue) for this project.
+</dd>
+<p></p></dl>
 <p>
 </p>
 <h2><a name="generated_by">generated_by</a></h2>

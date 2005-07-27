@@ -33,6 +33,8 @@ CPAN::META::Specification - Specification for F<META.yml>
    YAML: 0.35
  build_requires:
    Test: 0
+ urls:
+   license: http://dev.perl.org/licenses/
  meta-spec:
    version: 1.1
    url: <http://search.cpan.org/dist/CPAN-META-Specification-1.1/>
@@ -404,6 +406,33 @@ Example:
 
 (Spec 1.1) [optional] A sequence of keywords/phrases that describe
 this distribution.
+
+=head2 resources
+
+(Spec 1.1) [optional] A mapping of any URL resources related to this
+distribution.  All-lower-case keys, such as C<homepage>, C<license>,
+and C<bugtracker>, are reserved by this specification, as they have
+"official" meanings defined here in this specification.  If you'd like
+to add your own "special" entries, use at least one upper-case letter.
+
+The current set of official keys is:
+
+=over 2
+
+=item homepage
+
+The official home of this project on the web.
+
+=item license
+
+An URL for an official statement of this distribution's license.
+
+=item bugtracker
+
+An URL for a bug tracker (e.g. Bugzilla or RT queue) for this project.
+
+=back
+
 
 =head2 generated_by
 
