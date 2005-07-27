@@ -321,42 +321,35 @@ If this field is omitted, it defaults to 1 (true).
 I<(Deprecated)> (Spec 1.0) [optional] This field has been renamed to
 L</"no_index">.  See below.
 
-=head2 index
+=head2 provides
 
 Example:
 
-  index:
-    file:
-    - My/Module.pm
-    dir:
-    - My/Private
-    package:
-    - My::Module::Stuff
-    namespace:
-    - My::Module::Stuff
+  provides:
+    Foo::Bar:
+      file: lib/Foo/Bar.pm
+      version: 0.27_02
+    Foo::Bar::Blah:
+      file: lib/Foo/Bar/Blah.pm
+    Foo::Bar::Baz:
+      file: lib/Foo/Bar/Baz.pm
+      version: 0.3
 
-(Spec 1.1) [optional] A YAML mapping that describes any files,
-directories, packages, and namespaces that are to be indexed. Anything
-that is not explicitly listed here will be ignored by most compliant
-searches and indexers.
+(Spec 1.1) [optional] A YAML mapping that describes all packages
+provided by this distribution.  This information can be (and, in some
+cases, is) used by distribution and automation mechanisms like PAUSE,
+CPAN, and search.cpan.org to build indexes saying in which
+distribution various packages can be found.
 
-=head3 file
-
-(Spec 1.1) [optional] Include any listed file(s).
-
-=head3 dir
-
-(Spec 1.1) [optional] Include everything below the listed
-directory(ies).
-
-=head3 package
-
-(Spec 1.1) [optional] Include the listed package(s).
-
-=head3 namespace
-
-(Spec 1.1) [optional] Includes everything below the listed namespace(s),
-but I<not> the listed namespace(s) its self.
+When using tools like C<Module::Build> that can generate the
+C<provides> mapping for your distribution automatically, make sure you
+examine what it generates to make sure it makes sense - indexers will
+usually trust the C<provides> field if it's present, rather than
+scanning through the distribution files themselves to figure out
+packages and versions.  This is a good thing, because it means you can
+use the C<provides> field to tell the indexers precisely what you want
+indexed about your distribution, rather than relying on them to
+essentially guess what you want indexed.
 
 =head2 no_index
 
@@ -375,7 +368,12 @@ Example:
 (Spec 1.1) [optional] A YAML mapping that describes any files,
 directories, packages, and namespaces that are private
 (i.e. implementation artifacts) that are not of interest to searching
-and indexing tools.
+and indexing tools.  This is useful when no C<provides> field is
+present.
+
+I<(Note: I'm not actually sure who looks at this field, or exactly
+what they do with it.  This spec could be off in some way from actual
+usage.)>
 
 =head3 file
 
