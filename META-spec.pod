@@ -152,13 +152,11 @@ are described here.
 
 Example:
 
-  meta-spec:
-    url: <http://search.cpan.org/dist/CPAN-META-Specification-1.1/>
-    version: 1.1
+  meta-spec: |-
+    http://search.cpan.org/dist/CPAN-META-Specification-1.1/
 
-(Spec 1.1) [required] This mapping indicates the location of the
-version of the META.yml specification used along with the version
-number of that specification.
+(Spec 1.1) [required] {URL} This field indicates the location of the
+version of the META.yml specification used.
 
 =head2 name
 
@@ -166,7 +164,7 @@ Example:
 
   name: Module-Build
 
-(Spec 1.0) [required] The name of the distribution which is often
+(Spec 1.0) [required] {string} The name of the distribution which is often
 created by taking the "main module" in the distribution and changing
 "::" to "-".  Sometimes it's completely different, however, as in the
 case of the libww-perl distribution (see
@@ -178,7 +176,7 @@ Example:
 
   version: 0.20
 
-(Spec 1.0) [required] The version of the distribution to which the
+(Spec 1.0) [required] {version} The version of the distribution to which the
 F<META.yml> file refers.
 
 =head2 abstract
@@ -187,7 +185,7 @@ Example:
 
   abstract: Build and install Perl modules.
 
-(Spec 1.1) [required] A short description of the purpose of the
+(Spec 1.1) [required] {string} A short description of the purpose of the
 distribution.
 
 =head2 author
@@ -197,7 +195,7 @@ Example:
   author:
     - Ken Williams <kwilliams@cpan.org>
 
-(Spec 1.1) [required] A YAML sequence indicating the author(s) of the
+(Spec 1.1) [required] {list of strings} A YAML sequence indicating the author(s) of the
 distribution. The prefered form is author-name <email-address>.
 
 =head2 license
@@ -206,7 +204,7 @@ Example:
 
   license: perl
 
-(Spec 1.0) [required] The license under which this distribution may be
+(Spec 1.0) [required] {string} The license under which this distribution may be
 used and redistributed.  See L<Module::Build> for the list of valid
 options.
 
@@ -216,7 +214,7 @@ Example:
 
   distribution_type: module
 
-(Spec 1.0) [optional] What kind of stuff is contained in this
+(Spec 1.0) [optional] {string} What kind of stuff is contained in this
 distribution.  Most things on CPAN are C<module>s (which can also mean
 a collection of modules), but some things are C<script>s.
 
@@ -234,7 +232,7 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] A YAML mapping indicating the Perl modules this
+(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules this
 distribution requires for proper operation.  The keys are the module
 names, and the values are version specifications as described in
 L<Module::Build> for the "requires" parameter.
@@ -247,7 +245,7 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] A YAML mapping indicating the Perl modules this
+(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules this
 distribution recommends for enhanced operation.
 
 I<ALTERNATIVE: It may be desirable to present to the user which
@@ -266,7 +264,7 @@ Example:
       description: This feature is not available on this platform.
       excludes_os: MSWin32
 
-I<(Spec 1.1) [optional] A YAML sequence of names for optional features
+I<(Spec 1.1) [optional] {map} A YAML sequence of names for optional features
 which are made available when its requirements are met. For each
 feature a description is provided along with any of L<"requires">,
 L<"build_requires">, L<"conflicts">, L<"requires_packages">,
@@ -281,7 +279,7 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] A YAML mapping indicating the Perl modules
+(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules
 required for building and/or testing of this distribution.  These
 dependencies are not required after the module is installed.
 
@@ -293,7 +291,7 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] A YAML mapping indicating the Perl modules that
+(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules that
 cannot be installed while this distribution is installed.  This is a
 pretty uncommon situation.
 
@@ -303,7 +301,7 @@ Example:
 
   dynamic_config: 0
 
-(Spec 1.0) [optional] A boolean flag indicating whether a F<Build.PL>
+(Spec 1.0) [optional] {boolean} A boolean flag indicating whether a F<Build.PL>
 or F<Makefile.PL> (or similar) must be executed when building this
 distribution, or whether it can be built, tested and installed solely
 from consulting its
@@ -320,7 +318,7 @@ If this field is omitted, it defaults to 1 (true).
 
 =head2 private
 
-I<(Deprecated)> (Spec 1.0) [optional] This field has been renamed to
+I<(Deprecated)> (Spec 1.0) [optional] {map} This field has been renamed to
 L</"no_index">.  See below.
 
 =head2 provides
@@ -337,7 +335,7 @@ Example:
       file: lib/Foo/Bar/Baz.pm
       version: 0.3
 
-(Spec 1.1) [optional] A YAML mapping that describes all packages
+(Spec 1.1) [optional] {map} A YAML mapping that describes all packages
 provided by this distribution.  This information can be (and, in some
 cases, is) used by distribution and automation mechanisms like PAUSE,
 CPAN, and search.cpan.org to build indexes saying in which
@@ -367,7 +365,7 @@ Example:
     namespace:
     - My::Module::Stuff
 
-(Spec 1.1) [optional] A YAML mapping that describes any files,
+(Spec 1.1) [optional] {map} A YAML mapping that describes any files,
 directories, packages, and namespaces that are private
 (i.e. implementation artifacts) that are not of interest to searching
 and indexing tools.  This is useful when no C<provides> field is
@@ -400,20 +398,29 @@ but I<not> the listed namespace(s) its self.
 Example:
 
   keywords:
-  - make
-  - build
-  - install
+    - make
+    - build
+    - install
 
-(Spec 1.1) [optional] A sequence of keywords/phrases that describe
+(Spec 1.1) [optional] {list} A sequence of keywords/phrases that describe
 this distribution.
 
 =head2 resources
 
-(Spec 1.1) [optional] A mapping of any URL resources related to this
-distribution.  All-lower-case keys, such as C<homepage>, C<license>,
-and C<bugtracker>, are reserved by this specification, as they have
-"official" meanings defined here in this specification.  If you'd like
-to add your own "special" entries, use at least one upper-case letter.
+Example:
+
+  resources:
+    license: http://dev.perl.org/licenses/
+    homepage: http://sourceforge.net/projects/module-build
+    bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Module-Build
+    MailingList: http://lists.sourceforge.net/lists/listinfo/module-build-general
+
+(Spec 1.1) [optional] {map} A mapping of any URL resources related to
+this distribution.  All-lower-case keys, such as C<homepage>,
+C<license>, and C<bugtracker>, are reserved by this specification, as
+they have "official" meanings defined here in this specification.  If
+you'd like to add your own "special" entries (like the "MailingList"
+entry above), use at least one upper-case letter.
 
 The current set of official keys is:
 
@@ -440,7 +447,7 @@ Example:
 
   generated_by: Module::Build version 0.20
 
-(Spec 1.0) [required] Indicates the tool that was used to create this
+(Spec 1.0) [required] {string} Indicates the tool that was used to create this
 F<META.yml> file.  It's good form to include both the name of the tool
 and its version, but this field is essentially opaque, at least for
 the moment. If F<META.yml> was generated by hand, it is suggested that
