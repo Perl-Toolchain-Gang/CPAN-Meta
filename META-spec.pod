@@ -36,13 +36,13 @@ META-spec - Specification for F<META.yml> documents
  urls:
    license: http://dev.perl.org/licenses/
  meta-spec:
-   version: 1.1
-   url: http://search.cpan.org/dist/CPAN-META-Specification-1.1/
+   version: 1.2
+   url: http://module-build.sourceforge.net/META-spec-v1.2.html
  generated_by: Module::Build version 0.20
 
 =head1 DESCRIPTION
 
-This document describes version 1.1 of the F<META.yml> specification.
+This document describes version 1.2 of the F<META.yml> specification.
 
 The F<META.yml> file describes important properties of contributed
 Perl distributions such as the ones found on CPAN.  It is typically
@@ -55,8 +55,11 @@ installation tools (like CPAN.pm or CPANPLUS), or just for people who
 want to know some stuff about a distribution before downloading it and
 starting to install it.
 
-I<Note: The latest version of this specification can always be found
-at L<http://search.cpan.org/dist/CPAN-META-Specification/>.>
+I<Note: The latest stable version of this specification can always be
+found at L<http://module-build.sourceforge.net/META-spec-current.html>,
+and the latest development version (which may include things that
+won't make it into the stable version can always be found at
+L<http://module-build.sourceforge.net/META-spec-blead.html>.>
 
 =head1 FORMAT
 
@@ -153,8 +156,8 @@ are described here.
 Example:
 
  meta-spec:
-   version: 1.1
-   url: http://search.cpan.org/dist/CPAN-META-Specification-1.1/
+   version: 1.2
+   url: http://module-build.sourceforge.net/META-spec-v1.2.html
 
 (Spec 1.1) [required] {URL} This field indicates the location of the
 version of the META.yml specification used.
