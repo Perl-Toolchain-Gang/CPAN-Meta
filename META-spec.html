@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>CPAN::META::Specification - Specification for F&lt;META.yml&gt;</title>
+<title>META-spec - Specification for F&lt;META.yml&gt; documents</title>
 <link rev="made" href="mailto:root@hampsten.nonet" />
 </head>
 
@@ -59,7 +59,7 @@
 <p>
 </p>
 <h1><a name="name">NAME</a></h1>
-<p>CPAN::META::Specification - Specification for <em>META.yml</em></p>
+<p>META-spec - Specification for <em>META.yml</em> documents</p>
 <p>
 </p>
 <hr />
@@ -97,14 +97,14 @@
  urls:
    license: <a href="http://dev.perl.org/licenses/">http://dev.perl.org/licenses/</a>
  meta-spec:
-   version: 1.1
-   url: <a href="http://search.cpan.org/dist/CPAN-META-Specification-1.1/">http://search.cpan.org/dist/CPAN-META-Specification-1.1/</a>
+   version: 1.2
+   url: <a href="http://module-build.sourceforge.net/META-spec-v1.2.html">http://module-build.sourceforge.net/META-spec-v1.2.html</a>
  generated_by: Module::Build version 0.20</pre>
 <p>
 </p>
 <hr />
 <h1><a name="description">DESCRIPTION</a></h1>
-<p>This document describes version 1.1 of the <em>META.yml</em> specification.</p>
+<p>This document describes version 1.2 of the <em>META.yml</em> specification.</p>
 <p>The <em>META.yml</em> file describes important properties of contributed
 Perl distributions such as the ones found on CPAN.  It is typically
 created by tools like Module::Build, Module::Install, and
@@ -114,8 +114,11 @@ maintaining module collections (like CPAN), for people writing
 installation tools (like CPAN.pm or CPANPLUS), or just for people who
 want to know some stuff about a distribution before downloading it and
 starting to install it.</p>
-<p><em>Note: The latest version of this specification can always be found
-at <a href="http://search.cpan.org/dist/CPAN-META-Specification/">http://search.cpan.org/dist/CPAN-META-Specification/</a>.</em></p>
+<p><em>Note: The latest stable version of this specification can always be
+found at <a href="http://module-build.sourceforge.net/META-spec-current.html">http://module-build.sourceforge.net/META-spec-current.html</a>,
+and the latest development version (which may include things that
+won't make it into the stable version can always be found at
+<a href="http://module-build.sourceforge.net/META-spec-blead.html">http://module-build.sourceforge.net/META-spec-blead.html</a>.</em></p>
 <p>
 </p>
 <hr />
@@ -202,8 +205,8 @@ are described here.</p>
 <p>Example:</p>
 <pre>
  meta-spec:
-   version: 1.1
-   url: <a href="http://search.cpan.org/dist/CPAN-META-Specification-1.1/">http://search.cpan.org/dist/CPAN-META-Specification-1.1/</a></pre>
+   version: 1.2
+   url: <a href="http://module-build.sourceforge.net/META-spec-v1.2.html">http://module-build.sourceforge.net/META-spec-v1.2.html</a></pre>
 <p>(Spec 1.1) [required] {URL} This field indicates the location of the
 version of the META.yml specification used.</p>
 <p>
@@ -597,6 +600,13 @@ and shouldn't really be used.
 <p></p>
 <li></li>
 Clarified <code>dynamic_config</code> a bit.
+<p></p></ul>
+<dt><strong><a name="item_august_23_2c_2005">August 23, 2005</a></strong><br />
+</dt>
+<ul>
+<li></li>
+Removed the name <code>CPAN::META::Specification</code>, since that implies a
+module that doesn't actually exist.
 <p></p></ul>
 </dl>
 
