@@ -1,6 +1,6 @@
 =head1 NAME
 
-CPAN::META::Specification - Specification for F<META.yml>
+META-spec - Specification for F<META.yml> documents
 
 =head1 SYNOPSIS
 
@@ -621,6 +621,17 @@ and shouldn't really be used.
 =item *
 
 Clarified C<dynamic_config> a bit.
+
+=back
+
+=item August 23, 2005
+
+=over 2
+
+=item *
+
+Removed the name C<CPAN::META::Specification>, since that implies a
+module that doesn't actually exist.
 
 =back
 
