@@ -111,13 +111,13 @@ C<LWP::Simple>, or C<DBD::File>.
 
 Some fields require a version specification (ex. L<"requires">,
 L<"recommends">, L<"build_requires">, etc.) to indicate the particular
-version(s) of some other module that may be required as a
+versionZ<>(s) of some other module that may be required as a
 prerequisite.  This section details the version specification formats
 that are currently supported.
 
 The simplest format for a version specification is just the version
-number itself, e.g. C<2.4>.  This means that C<at least> version 2.4
-must be present.  To indicate that C<any> version of a prerequisite is
+number itself, e.g. C<2.4>.  This means that B<at least> version 2.4
+must be present.  To indicate that B<any> version of a prerequisite is
 okay, even if the prerequisite doesn't define a version at all, use
 the version C<0>.
 
