@@ -58,7 +58,7 @@ starting to install it.
 I<Note: The latest stable version of this specification can always be
 found at L<http://module-build.sourceforge.net/META-spec-current.html>,
 and the latest development version (which may include things that
-won't make it into the stable version can always be found at
+won't make it into the stable version) can always be found at
 L<http://module-build.sourceforge.net/META-spec-blead.html>.>
 
 =head1 FORMAT
@@ -71,21 +71,15 @@ XML or Data::Dumper:
 
 =over 4
 
-=item *
-
-Module::Build design plans
+=item Module::Build design plans
 
 L<http://nntp.x.perl.org/group/perl.makemaker/406>
 
-=item *
-
-Not keen on YAML
+=item Not keen on YAML
 
 L<http://nntp.x.perl.org/group/perl.module-authors/1353>
 
-=item *
-
-META Concerns
+=item META Concerns
 
 L<http://nntp.x.perl.org/group/perl.module-authors/1385>
 
@@ -100,46 +94,43 @@ L<http://nntp.x.perl.org/group/perl.module-authors/1385>
 This is the primary object described by the F<META.yml>
 specification. In the context of this document it usually refers to a
 collection of modules, scripts, and/or documents that are distributed
-for other developers to use.
+together for other developers to use.  Examples of distributions are
+C<Class-Container>, C<libwww-perl>, or C<DBI>.
 
 =item module
 
 This refers to a reusable library of code typically contained in a
 single file. Currently, we primarily talk of perl modules, but this
 specification should be open enough to apply to other languages as
-well (ex. python, ruby).
+well (ex. python, ruby).  Examples of modules are C<Class::Container>,
+C<LWP::Simple>, or C<DBD::File>.
 
 =back
 
 =head1 VERSION SPECIFICATIONS
 
 Some fields require a version specification (ex. L<"requires">,
-L<"recommends">, L<"build_requires">, etc.).  This section details the
-version specications that are currently supported.
+L<"recommends">, L<"build_requires">, etc.) to indicate the particular
+version(s) of some other module that may be required as a
+prerequisite.  This section details the version specification formats
+that are currently supported.
 
-If a single version is listed, then that version is considered to be
-the minimum version supported.
+The simplest format for a version specification is just the version
+number itself, e.g. C<2.4>.  This means that C<at least> version 2.4
+must be present.  To indicate that C<any> version of a prerequisite is
+okay, even if the prerequisite doesn't define a version at all, use
+the version C<0>.
 
-If 0 is given as the version number, then any version is supported.
+You may also use the operators E<lt> (less than), E<lt>= (less than or
+equal), E<gt> (greater than), E<gt>= (greater than or equal), ==
+(equal), and != (not equal).  For example, the specification C<E<lt>
+2.0> means that any version of the prerequisite less than 2.0 is
+suitable.
 
-Additionally, for more complicated requirements, the specification
-supports a list of versions, each of which may be optionally preceeded
-by a relational operator.
-
-Supported operators include E<lt> (less than), E<lt>= (less than or
-equal), E<gt> (greater than), E<gt>= (greater than or equal), == (equal), and !=
-(not equal).
-
-If a list is given then it is evaluated from left to right so that any
-specifications in the list that conflict with a previous specification
-are overriden by the later.
-
-Examples:
-
- >= 1.2, != 1.5, < 2.0
-
-Any version from version 1.2 onward, except version 1.5, that also
-preceeds version 2.0.
+For more complicated situations, version specifications may be AND-ed
+together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
+2.0> indicates a version that must be B<at least> 1.2, B<less than>
+2.0, and B<not equal to> 1.5.
 
 =head1 HEADER
 
