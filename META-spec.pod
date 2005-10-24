@@ -475,9 +475,9 @@ Data::Dumper, L<http://search.cpan.org/author/ILYAM/Data-Dumper/>
 
 ExtUtils::MakeMaker, L<http://search.cpan.org/author/MSCHWERN/ExtUtils-MakeMaker/>
 
-Module::Build, L<http://search.cpan.org/author/KWILLIAMS/Module-Build/>
+Module::Build, L<http://search.cpan.org/~kwilliams/Module-Build/>
 
-Module::Install, L<http://search.cpan.org/author/KWILLIAMS/Module-Install/>
+Module::Install, L<http://search.cpan.org/~autrijus/Module-Install/>
 
 XML, L<http://www.w3.org/XML/>
 
