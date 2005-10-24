@@ -205,7 +205,7 @@ Example:
 (Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules this
 distribution requires for proper operation.  The keys are the module
 names, and the values are version specifications as described in
-L<Module::Build> for the "requires" parameter.
+L<VERSION SPECIFICATIONS>.
 
 =head2 recommends
 
@@ -215,12 +215,16 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules this
-distribution recommends for enhanced operation.
+(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules
+this distribution recommends for enhanced operation.  The keys are the
+module names, and the values are version specifications as described
+in L<VERSION SPECIFICATIONS>.
+
+
 
 I<ALTERNATIVE: It may be desirable to present to the user which
-features depend on which modules so they can make an informed
-decision about which recommended modules to install.>
+features depend on which modules so they can make an informed decision
+about which recommended modules to install.>
 
 Example:
 
@@ -250,8 +254,10 @@ Example:
     File::Find: 1.03
 
 (Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules
-required for building and/or testing of this distribution.  These
-dependencies are not required after the module is installed.
+required for building and/or testing of this distribution.  The keys
+are the module names, and the values are version specifications as
+described in L<VERSION SPECIFICATIONS>.  These dependencies are not
+required after the module is installed.
 
 =head2 conflicts
 
@@ -263,7 +269,10 @@ Example:
 
 (Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules that
 cannot be installed while this distribution is installed.  This is a
-pretty uncommon situation.
+pretty uncommon situation.  The keys for C<conflicts> are the module
+names, and the values are version specifications as described in
+L<VERSION SPECIFICATIONS>.
+
 
 =head2 dynamic_config
 
@@ -275,7 +284,7 @@ Example:
 or F<Makefile.PL> (or similar) must be executed when building this
 distribution, or whether it can be built, tested and installed solely
 from consulting its
-metadata file.  The main reason to set this to a true value if that
+metadata file.  The main reason to set this to a true value is that
 your module performs some dynamic configuration (asking questions,
 sensing the environment, etc.) as part of its build/install process.
 

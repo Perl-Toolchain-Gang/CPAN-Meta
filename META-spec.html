@@ -17,7 +17,6 @@
 	<li><a href="#description">DESCRIPTION</a></li>
 	<li><a href="#format">FORMAT</a></li>
 	<li><a href="#terminology">TERMINOLOGY</a></li>
-	<li><a href="#version_specifications">VERSION SPECIFICATIONS</a></li>
 	<li><a href="#header">HEADER</a></li>
 	<li><a href="#fields">FIELDS</a></li>
 	<ul>
@@ -50,6 +49,7 @@
 		<li><a href="#generated_by">generated_by</a></li>
 	</ul>
 
+	<li><a href="#version_specifications">VERSION SPECIFICATIONS</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
 	<li><a href="#history">HISTORY</a></li>
 </ul>
@@ -117,7 +117,7 @@ starting to install it.</p>
 <p><em>Note: The latest stable version of this specification can always be
 found at <a href="http://module-build.sourceforge.net/META-spec-current.html">http://module-build.sourceforge.net/META-spec-current.html</a>,
 and the latest development version (which may include things that
-won't make it into the stable version can always be found at
+won't make it into the stable version) can always be found at
 <a href="http://module-build.sourceforge.net/META-spec-blead.html">http://module-build.sourceforge.net/META-spec-blead.html</a>.</em></p>
 <p>
 </p>
@@ -127,19 +127,25 @@ won't make it into the stable version can always be found at
 <a href="http://www.yaml.org/">http://www.yaml.org/</a>).</p>
 <p>See the following links to learn why we chose YAML instead of, say,
 XML or Data::Dumper:</p>
-<ul>
-<li></li>
-Module::Build design plans
-<p><a href="http://nntp.x.perl.org/group/perl.makemaker/406">http://nntp.x.perl.org/group/perl.makemaker/406</a></p>
+<dl>
+<dt><strong><a name="item_module_3a_3abuild_design_plans">Module::Build design plans</a></strong><br />
+</dt>
+<dd>
+<a href="http://nntp.x.perl.org/group/perl.makemaker/406">http://nntp.x.perl.org/group/perl.makemaker/406</a>
+</dd>
 <p></p>
-<li></li>
-Not keen on YAML
-<p><a href="http://nntp.x.perl.org/group/perl.module-authors/1353">http://nntp.x.perl.org/group/perl.module-authors/1353</a></p>
+<dt><strong><a name="item_not_keen_on_yaml">Not keen on YAML</a></strong><br />
+</dt>
+<dd>
+<a href="http://nntp.x.perl.org/group/perl.module-authors/1353">http://nntp.x.perl.org/group/perl.module-authors/1353</a>
+</dd>
 <p></p>
-<li></li>
-META Concerns
-<p><a href="http://nntp.x.perl.org/group/perl.module-authors/1385">http://nntp.x.perl.org/group/perl.module-authors/1385</a></p>
-<p></p></ul>
+<dt><strong><a name="item_meta_concerns">META Concerns</a></strong><br />
+</dt>
+<dd>
+<a href="http://nntp.x.perl.org/group/perl.module-authors/1385">http://nntp.x.perl.org/group/perl.module-authors/1385</a>
+</dd>
+<p></p></dl>
 <p>
 </p>
 <hr />
@@ -151,7 +157,8 @@ META Concerns
 This is the primary object described by the <em>META.yml</em>
 specification. In the context of this document it usually refers to a
 collection of modules, scripts, and/or documents that are distributed
-for other developers to use.
+together for other developers to use.  Examples of distributions are
+<code>Class-Container</code>, <code>libwww-perl</code>, or <code>DBI</code>.
 </dd>
 <p></p>
 <dt><strong><a name="item_module">module</a></strong><br />
@@ -160,33 +167,10 @@ for other developers to use.
 This refers to a reusable library of code typically contained in a
 single file. Currently, we primarily talk of perl modules, but this
 specification should be open enough to apply to other languages as
-well (ex. python, ruby).
+well (ex. python, ruby).  Examples of modules are <code>Class::Container</code>,
+<code>LWP::Simple</code>, or <code>DBD::File</code>.
 </dd>
 <p></p></dl>
-<p>
-</p>
-<hr />
-<h1><a name="version_specifications">VERSION SPECIFICATIONS</a></h1>
-<p>Some fields require a version specification (ex. <a href="#requires">requires</a>,
-<a href="#recommends">recommends</a>, <a href="#build_requires">build_requires</a>, etc.).  This section details the
-version specications that are currently supported.</p>
-<p>If a single version is listed, then that version is considered to be
-the minimum version supported.</p>
-<p>If 0 is given as the version number, then any version is supported.</p>
-<p>Additionally, for more complicated requirements, the specification
-supports a list of versions, each of which may be optionally preceeded
-by a relational operator.</p>
-<p>Supported operators include &lt; (less than), &lt;= (less than or
-equal), &gt; (greater than), &gt;= (greater than or equal), == (equal), and !=
-(not equal).</p>
-<p>If a list is given then it is evaluated from left to right so that any
-specifications in the list that conflict with a previous specification
-are overriden by the later.</p>
-<p>Examples:</p>
-<pre>
- &gt;= 1.2, != 1.5, &lt; 2.0</pre>
-<p>Any version from version 1.2 onward, except version 1.5, that also
-preceeds version 2.0.</p>
 <p>
 </p>
 <hr />
@@ -279,7 +263,7 @@ generating this field.</p>
 <p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules this
 distribution requires for proper operation.  The keys are the module
 names, and the values are version specifications as described in
-<a href="/Module/Build.html">the Module::Build manpage</a> for the ``requires'' parameter.</p>
+<a href="#version_specifications">VERSION SPECIFICATIONS</a>.</p>
 <p>
 </p>
 <h2><a name="recommends">recommends</a></h2>
@@ -288,11 +272,13 @@ names, and the values are version specifications as described in
   recommends:
     Data::Dumper: 0
     File::Find: 1.03</pre>
-<p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules this
-distribution recommends for enhanced operation.</p>
+<p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules
+this distribution recommends for enhanced operation.  The keys are the
+module names, and the values are version specifications as described
+in <a href="#version_specifications">VERSION SPECIFICATIONS</a>.</p>
 <p><em>ALTERNATIVE: It may be desirable to present to the user which
-features depend on which modules so they can make an informed
-decision about which recommended modules to install.</em></p>
+features depend on which modules so they can make an informed decision
+about which recommended modules to install.</em></p>
 <p>Example:</p>
 <pre>
   optional_features:
@@ -319,8 +305,10 @@ this subcontext as described elsewhere in this document.</em></p>
     Data::Dumper: 0
     File::Find: 1.03</pre>
 <p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules
-required for building and/or testing of this distribution.  These
-dependencies are not required after the module is installed.</p>
+required for building and/or testing of this distribution.  The keys
+are the module names, and the values are version specifications as
+described in <a href="#version_specifications">VERSION SPECIFICATIONS</a>.  These dependencies are not
+required after the module is installed.</p>
 <p>
 </p>
 <h2><a name="conflicts">conflicts</a></h2>
@@ -331,7 +319,9 @@ dependencies are not required after the module is installed.</p>
     File::Find: 1.03</pre>
 <p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules that
 cannot be installed while this distribution is installed.  This is a
-pretty uncommon situation.</p>
+pretty uncommon situation.  The keys for <code>conflicts</code> are the module
+names, and the values are version specifications as described in
+<a href="#version_specifications">VERSION SPECIFICATIONS</a>.</p>
 <p>
 </p>
 <h2><a name="dynamic_config">dynamic_config</a></h2>
@@ -342,7 +332,7 @@ pretty uncommon situation.</p>
 or <em>Makefile.PL</em> (or similar) must be executed when building this
 distribution, or whether it can be built, tested and installed solely
 from consulting its
-metadata file.  The main reason to set this to a true value if that
+metadata file.  The main reason to set this to a true value is that
 your module performs some dynamic configuration (asking questions,
 sensing the environment, etc.) as part of its build/install process.</p>
 <p>Currently Module::Build doesn't actually do anything with this flag
@@ -489,14 +479,37 @@ tool. RWS]</p>
 <p>
 </p>
 <hr />
+<h1><a name="version_specifications">VERSION SPECIFICATIONS</a></h1>
+<p>Some fields require a version specification (ex. <a href="#requires">requires</a>,
+<a href="#recommends">recommends</a>, <a href="#build_requires">build_requires</a>, etc.) to indicate the particular
+version(s) of some other module that may be required as a
+prerequisite.  This section details the version specification formats
+that are currently supported.</p>
+<p>The simplest format for a version specification is just the version
+number itself, e.g. <code>2.4</code>.  This means that <strong>at least</strong> version 2.4
+must be present.  To indicate that <strong>any</strong> version of a prerequisite is
+okay, even if the prerequisite doesn't define a version at all, use
+the version <code>0</code>.</p>
+<p>You may also use the operators &lt; (less than), &lt;= (less than or
+equal), &gt; (greater than), &gt;= (greater than or equal), ==
+(equal), and != (not equal).  For example, the specification <code>&lt;
+2.0</code> means that any version of the prerequisite less than 2.0 is
+suitable.</p>
+<p>For more complicated situations, version specifications may be AND-ed
+together using commas.  The specification <code>&gt;= 1.2, != 1.5, &lt;
+2.0</code> indicates a version that must be <strong>at least</strong> 1.2, <strong>less than</strong>
+2.0, and <strong>not equal to</strong> 1.5.</p>
+<p>
+</p>
+<hr />
 <h1><a name="see_also">SEE ALSO</a></h1>
 <p>CPAN, <a href="http://www.cpan.org/">http://www.cpan.org/</a></p>
 <p>CPAN.pm, <a href="http://search.cpan.org/author/ANDK/CPAN/">http://search.cpan.org/author/ANDK/CPAN/</a></p>
 <p>CPANPLUS, <a href="http://search.cpan.org/author/KANE/CPANPLUS/">http://search.cpan.org/author/KANE/CPANPLUS/</a></p>
 <p>Data::Dumper, <a href="http://search.cpan.org/author/ILYAM/Data-Dumper/">http://search.cpan.org/author/ILYAM/Data-Dumper/</a></p>
 <p>ExtUtils::MakeMaker, <a href="http://search.cpan.org/author/MSCHWERN/ExtUtils-MakeMaker/">http://search.cpan.org/author/MSCHWERN/ExtUtils-MakeMaker/</a></p>
-<p>Module::Build, <a href="http://search.cpan.org/author/KWILLIAMS/Module-Build/">http://search.cpan.org/author/KWILLIAMS/Module-Build/</a></p>
-<p>Module::Install, <a href="http://search.cpan.org/author/KWILLIAMS/Module-Install/">http://search.cpan.org/author/KWILLIAMS/Module-Install/</a></p>
+<p>Module::Build, <a href="http://search.cpan.org/~kwilliams/Module-Build/">http://search.cpan.org/~kwilliams/Module-Build/</a></p>
+<p>Module::Install, <a href="http://search.cpan.org/~autrijus/Module-Install/">http://search.cpan.org/~autrijus/Module-Install/</a></p>
 <p>XML, <a href="http://www.w3.org/XML/">http://www.w3.org/XML/</a></p>
 <p>YAML, <a href="http://www.yaml.org/">http://www.yaml.org/</a></p>
 <p>
