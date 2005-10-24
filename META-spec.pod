@@ -107,31 +107,6 @@ C<LWP::Simple>, or C<DBD::File>.
 
 =back
 
-=head1 VERSION SPECIFICATIONS
-
-Some fields require a version specification (ex. L<"requires">,
-L<"recommends">, L<"build_requires">, etc.) to indicate the particular
-versionZ<>(s) of some other module that may be required as a
-prerequisite.  This section details the version specification formats
-that are currently supported.
-
-The simplest format for a version specification is just the version
-number itself, e.g. C<2.4>.  This means that B<at least> version 2.4
-must be present.  To indicate that B<any> version of a prerequisite is
-okay, even if the prerequisite doesn't define a version at all, use
-the version C<0>.
-
-You may also use the operators E<lt> (less than), E<lt>= (less than or
-equal), E<gt> (greater than), E<gt>= (greater than or equal), ==
-(equal), and != (not equal).  For example, the specification C<E<lt>
-2.0> means that any version of the prerequisite less than 2.0 is
-suitable.
-
-For more complicated situations, version specifications may be AND-ed
-together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
-2.0> indicates a version that must be B<at least> 1.2, B<less than>
-2.0, and B<not equal to> 1.5.
-
 =head1 HEADER
 
 The first line of a F<META.yml> file should be a valid YAML document
@@ -453,6 +428,31 @@ regarding F<META.yml> usage prefers the form listed above, i.e. it
 splits on /\s+version\s+/ taking the first field as the name of the
 tool that generated the file and the second field as version of that
 tool. RWS]
+
+=head1 VERSION SPECIFICATIONS
+
+Some fields require a version specification (ex. L<"requires">,
+L<"recommends">, L<"build_requires">, etc.) to indicate the particular
+versionZ<>(s) of some other module that may be required as a
+prerequisite.  This section details the version specification formats
+that are currently supported.
+
+The simplest format for a version specification is just the version
+number itself, e.g. C<2.4>.  This means that B<at least> version 2.4
+must be present.  To indicate that B<any> version of a prerequisite is
+okay, even if the prerequisite doesn't define a version at all, use
+the version C<0>.
+
+You may also use the operators E<lt> (less than), E<lt>= (less than or
+equal), E<gt> (greater than), E<gt>= (greater than or equal), ==
+(equal), and != (not equal).  For example, the specification C<E<lt>
+2.0> means that any version of the prerequisite less than 2.0 is
+suitable.
+
+For more complicated situations, version specifications may be AND-ed
+together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
+2.0> indicates a version that must be B<at least> 1.2, B<less than>
+2.0, and B<not equal to> 1.5.
 
 =head1 SEE ALSO
 
