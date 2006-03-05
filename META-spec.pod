@@ -138,7 +138,7 @@ Example:
 created by taking the "main module" in the distribution and changing
 "::" to "-".  Sometimes it's completely different, however, as in the
 case of the libww-perl distribution (see
-L<http://search.cpan.org/author/GAAS/libwww-perl/>).
+L<http://search.cpan.org/dist/libwww-perl/>).
 
 =head2 version
 
@@ -467,17 +467,17 @@ together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
 
 CPAN, L<http://www.cpan.org/>
 
-CPAN.pm, L<http://search.cpan.org/author/ANDK/CPAN/>
+CPAN.pm, L<http://search.cpan.org/dist/CPAN/>
 
-CPANPLUS, L<http://search.cpan.org/author/KANE/CPANPLUS/>
+CPANPLUS, L<http://search.cpan.org/dist/CPANPLUS/>
 
-Data::Dumper, L<http://search.cpan.org/author/ILYAM/Data-Dumper/>
+Data::Dumper, L<http://search.cpan.org/dist/Data-Dumper/>
 
-ExtUtils::MakeMaker, L<http://search.cpan.org/author/MSCHWERN/ExtUtils-MakeMaker/>
+ExtUtils::MakeMaker, L<http://search.cpan.org/dist/ExtUtils-MakeMaker/>
 
-Module::Build, L<http://search.cpan.org/~kwilliams/Module-Build/>
+Module::Build, L<http://search.cpan.org/dist/Module-Build/>
 
-Module::Install, L<http://search.cpan.org/~autrijus/Module-Install/>
+Module::Install, L<http://search.cpan.org/dist/Module-Install/>
 
 XML, L<http://www.w3.org/XML/>
 
