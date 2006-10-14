@@ -337,7 +337,7 @@ Example:
   no_index:
     file:
     - My/Module.pm
-    dir:
+    directory:
     - My/Private
     package:
     - My::Module::Stuff
@@ -358,10 +358,14 @@ usage.)>
 
 (Spec 1.1) [optional] Exclude any listed file(s).
 
-=head3 dir
+=head3 directory
 
 (Spec 1.1) [optional] Exclude anything below the listed
 directory(ies).
+
+[Note: previous editions of the spec had C<dir> instead of
+C<directory>, but I think MakeMaker and various users started using
+C<directory>, so in deference we switched to that.]
 
 =head3 package
 
