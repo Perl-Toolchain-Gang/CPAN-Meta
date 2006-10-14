@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>META-spec - Specification for F&lt;META.yml&gt; documents</title>
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:root@b28.apple.com" />
 </head>
 
 <body style="background-color: white">
@@ -39,7 +39,7 @@
 		<ul>
 
 			<li><a href="#file">file</a></li>
-			<li><a href="#dir">dir</a></li>
+			<li><a href="#directory">directory</a></li>
 			<li><a href="#package">package</a></li>
 			<li><a href="#namespace">namespace</a></li>
 		</ul>
@@ -381,7 +381,7 @@ essentially guess what you want indexed.</p>
   no_index:
     file:
     - My/Module.pm
-    dir:
+    directory:
     - My/Private
     package:
     - My::Module::Stuff
@@ -401,9 +401,12 @@ usage.)</em></p>
 <p>(Spec 1.1) [optional] Exclude any listed file(s).</p>
 <p>
 </p>
-<h3><a name="dir">dir</a></h3>
+<h3><a name="directory">directory</a></h3>
 <p>(Spec 1.1) [optional] Exclude anything below the listed
 directory(ies).</p>
+<p>[Note: previous editions of the spec had <code>dir</code> instead of
+<code>directory</code>, but I think MakeMaker and various users started using
+<code>directory</code>, so in deference we switched to that.]</p>
 <p>
 </p>
 <h3><a name="package">package</a></h3>
