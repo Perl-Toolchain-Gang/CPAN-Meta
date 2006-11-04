@@ -350,9 +350,11 @@ directories, packages, and namespaces that are private
 and indexing tools.  This is useful when no C<provides> field is
 present.
 
-I<(Note: I'm not actually sure who looks at this field, or exactly
-what they do with it.  This spec could be off in some way from actual
-usage.)>
+For example, C<search.cpan.org> excludes items listed in C<no_index>
+when searching for POD, meaning files in these directories will not
+converted to HTML and made public - which is useful if you have
+example or test PODs that you don't want the search engine to go
+through.
 
 =head3 file
 

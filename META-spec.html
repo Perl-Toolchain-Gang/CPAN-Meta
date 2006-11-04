@@ -392,9 +392,11 @@ directories, packages, and namespaces that are private
 (i.e. implementation artifacts) that are not of interest to searching
 and indexing tools.  This is useful when no <code>provides</code> field is
 present.</p>
-<p><em>(Note: I'm not actually sure who looks at this field, or exactly
-what they do with it.  This spec could be off in some way from actual
-usage.)</em></p>
+<p>For example, <code>search.cpan.org</code> excludes items listed in <code>no_index</code>
+when searching for POD, meaning files in these directories will not
+converted to HTML and made public - which is useful if you have
+example or test PODs that you don't want the search engine to go
+through.</p>
 <p>
 </p>
 <h3><a name="file">file</a></h3>
