@@ -36,13 +36,13 @@ META-spec - Specification for F<META.yml> documents
  urls:
    license: http://dev.perl.org/licenses/
  meta-spec:
-   version: 1.2
-   url: http://module-build.sourceforge.net/META-spec-v1.2.html
+   version: 1.3
+   url: http://module-build.sourceforge.net/META-spec-v1.3.html
  generated_by: Module::Build version 0.20
 
 =head1 DESCRIPTION
 
-This document describes version 1.2 of the F<META.yml> specification.
+This document describes version 1.3 of the F<META.yml> specification.
 
 The F<META.yml> file describes important properties of contributed
 Perl distributions such as the ones found on CPAN.  It is typically
@@ -122,8 +122,8 @@ are described here.
 Example:
 
  meta-spec:
-   version: 1.2
-   url: http://module-build.sourceforge.net/META-spec-v1.2.html
+   version: 1.3
+   url: http://module-build.sourceforge.net/META-spec-v1.3.html
 
 (Spec 1.1) [required] {URL} This field indicates the location of the
 version of the META.yml specification used.
