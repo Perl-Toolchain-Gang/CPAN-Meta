@@ -259,7 +259,7 @@ required after the module is installed.
 
 Example:
 
-  build_requires:
+  config_requires:
     Data::Dumper: 0
     File::Find: 1.03
 
