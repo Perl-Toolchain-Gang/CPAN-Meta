@@ -255,6 +255,20 @@ are the module names, and the values are version specifications as
 described in L<VERSION SPECIFICATIONS>.  These dependencies are not
 required after the module is installed.
 
+=head2 config_requires
+
+Example:
+
+  build_requires:
+    Data::Dumper: 0
+    File::Find: 1.03
+
+(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules
+required before configuring this distribution.  The keys are the
+module names, and the values are version specifications as described
+in L<VERSION SPECIFICATIONS>.  These dependencies are not required
+after the module is installed.
+
 =head2 conflicts
 
 Example:
@@ -638,6 +652,16 @@ Clarified C<dynamic_config> a bit.
 
 Removed the name C<CPAN::META::Specification>, since that implies a
 module that doesn't actually exist.
+
+=back
+
+=item June 12, 2007
+
+=over 2
+
+=item *
+
+Added C<config_requires>.
 
 =back
 
