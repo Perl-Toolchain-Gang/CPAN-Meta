@@ -255,7 +255,7 @@ are the module names, and the values are version specifications as
 described in L<VERSION SPECIFICATIONS>.  These dependencies are not
 required after the module is installed.
 
-=head2 config_requires
+=head2 configure_requires
 
 Example:
 
@@ -661,7 +661,7 @@ module that doesn't actually exist.
 
 =item *
 
-Added C<config_requires>.
+Added C<configure_requires>.
 
 =back
 
