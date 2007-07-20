@@ -33,7 +33,7 @@ META-spec - Specification for F<META.yml> documents
    YAML: 0.35
  build_requires:
    Test: 0
- urls:
+ resources:
    license: http://dev.perl.org/licenses/
  meta-spec:
    version: 1.3
