@@ -203,9 +203,10 @@ Example:
 
   license: perl
 
-(Spec 1.0) [required] {string} The license under which this distribution may be
-used and redistributed.  See L<Module::Build::API> for the list of valid
-options.
+(Spec 1.0) [required] {string} The license under which this
+distribution may be used and redistributed.  See
+L<http://search.cpan.org/dist/Module-Build/lib/Module/Build/API.pod>
+for the list of valid options.
 
 =head2 distribution_type
 
