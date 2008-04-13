@@ -259,13 +259,13 @@ about which recommended modules to install.>
 Example:
 
   optional_features:
-  - foo:
+    foo:
       description: Provides the ability to blah.
       requires:
         Data::Dumper: 0
         File::Find: 1.03
 
-I<(Spec 1.1) [optional] {map} A YAML sequence of names for optional features
+I<(Spec 1.1) [optional] {map} A YAML mapping of names for optional features
 which are made available when its requirements are met. For each
 feature a description is provided along with any of L<"requires">,
 L<"build_requires">, and L<"conflicts">, which have the same meaning in
