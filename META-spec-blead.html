@@ -98,14 +98,14 @@
  resources:
    license: <a href="http://dev.perl.org/licenses/">http://dev.perl.org/licenses/</a>
  meta-spec:
-   version: 1.3
+   version: 1.4
    url: <a href="http://module-build.sourceforge.net/META-spec-v1.3.html">http://module-build.sourceforge.net/META-spec-v1.3.html</a>
  generated_by: Module::Build version 0.20</pre>
 <p>
 </p>
 <hr />
 <h1><a name="description">DESCRIPTION</a></h1>
-<p>This document describes version 1.3 of the <em>META.yml</em> specification.</p>
+<p>This document describes version 1.4 of the <em>META.yml</em> specification.</p>
 <p>The <em>META.yml</em> file describes important properties of contributed
 Perl distributions such as the ones found on CPAN.  It is typically
 created by tools like Module::Build, Module::Install, and
@@ -190,7 +190,7 @@ are described here.</p>
 <p>Example:</p>
 <pre>
  meta-spec:
-   version: 1.3
+   version: 1.4
    url: <a href="http://module-build.sourceforge.net/META-spec-v1.3.html">http://module-build.sourceforge.net/META-spec-v1.3.html</a></pre>
 <p>(Spec 1.1) [required] {URL} This field indicates the location of the
 version of the META.yml specification used.</p>
@@ -284,12 +284,12 @@ about which recommended modules to install.</em></p>
 <p>Example:</p>
 <pre>
   optional_features:
-  - foo:
+    foo:
       description: Provides the ability to blah.
       requires:
         Data::Dumper: 0
         File::Find: 1.03</pre>
-<p><em>(Spec 1.1) [optional] {map} A YAML sequence of names for optional features
+<p><em>(Spec 1.1) [optional] {map} A YAML mapping of names for optional features
 which are made available when its requirements are met. For each
 feature a description is provided along with any of <a href="#requires">requires</a>,
 <a href="#build_requires">build_requires</a>, and <a href="#conflicts">conflicts</a>, which have the same meaning in
