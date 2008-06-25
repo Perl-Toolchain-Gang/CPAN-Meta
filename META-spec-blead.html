@@ -262,10 +262,10 @@ generating this field.</p>
   requires:
     Data::Dumper: 0
     File::Find: 1.03</pre>
-<p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules this
-distribution requires for proper operation.  The keys are the module
-names, and the values are version specifications as described in
-<a href="#version_specifications">VERSION SPECIFICATIONS</a>.</p>
+<p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl
+prerequisites this distribution requires for proper operation.  The
+keys are the names of the prerequisites (module names or 'perl'), and
+the values are version specifications as described in <a href="#version_specifications">VERSION SPECIFICATIONS</a>.</p>
 <p>
 </p>
 <h2><a name="recommends">recommends</a></h2>
@@ -274,10 +274,10 @@ names, and the values are version specifications as described in
   recommends:
     Data::Dumper: 0
     File::Find: 1.03</pre>
-<p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules
-this distribution recommends for enhanced operation.  The keys are the
-module names, and the values are version specifications as described
-in <a href="#version_specifications">VERSION SPECIFICATIONS</a>.</p>
+<p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl
+prerequisites this distribution recommends for enhanced operation.
+The keys are the names of the prerequisites (module names or 'perl'),
+and the values are version specifications as described in <a href="#version_specifications">VERSION SPECIFICATIONS</a>.</p>
 <p><em>ALTERNATIVE: It may be desirable to present to the user which
 features depend on which modules so they can make an informed decision
 about which recommended modules to install.</em></p>
@@ -302,11 +302,12 @@ this subcontext as described elsewhere in this document.</em></p>
   build_requires:
     Data::Dumper: 0
     File::Find: 1.03</pre>
-<p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules
-required for building and/or testing of this distribution.  The keys
-are the module names, and the values are version specifications as
+<p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl
+prerequisites required for building and/or testing of this
+distribution.  The keys are the names of the prerequisites (module
+names or 'perl'), and the values are version specifications as
 described in <a href="#version_specifications">VERSION SPECIFICATIONS</a>.  These dependencies are not
-required after the module is installed.</p>
+required after the distribution is installed.</p>
 <p>
 </p>
 <h2><a name="configure_requires">configure_requires</a></h2>
@@ -316,11 +317,11 @@ required after the module is installed.</p>
     Module::Build: 0.2809
     Data::Dumper: 0
     File::Find: 1.03</pre>
-<p>(Spec 1.4) [optional] {map} A YAML mapping indicating the Perl modules
+<p>(Spec 1.4) [optional] {map} A YAML mapping indicating the Perl prerequisites
 required before configuring this distribution.  The keys are the
-module names, and the values are version specifications as described
+names of the prerequisites (module names or 'perl'), and the values are version specifications as described
 in <a href="#version_specifications">VERSION SPECIFICATIONS</a>.  These dependencies are not required
-after the module is installed.</p>
+after the distribution is installed.</p>
 <p>
 </p>
 <h2><a name="conflicts">conflicts</a></h2>
@@ -329,11 +330,11 @@ after the module is installed.</p>
   conflicts:
     Data::Dumper: 0
     File::Find: 1.03</pre>
-<p>(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules that
+<p>(Spec 1.0) [optional] {map} A YAML mapping indicating any items that
 cannot be installed while this distribution is installed.  This is a
-pretty uncommon situation.  The keys for <code>conflicts</code> are the module
-names, and the values are version specifications as described in
-<a href="#version_specifications">VERSION SPECIFICATIONS</a>.</p>
+pretty uncommon situation.  The keys for <code>conflicts</code> are the item
+names (module names or 'perl'), and the values are version
+specifications as described in <a href="#version_specifications">VERSION SPECIFICATIONS</a>.</p>
 <p>
 </p>
 <h2><a name="dynamic_config">dynamic_config</a></h2>

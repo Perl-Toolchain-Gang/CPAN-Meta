@@ -232,10 +232,11 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules this
-distribution requires for proper operation.  The keys are the module
-names, and the values are version specifications as described in
-L<VERSION SPECIFICATIONS>.
+(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl
+prerequisites this distribution requires for proper operation.  The
+keys are the names of the prerequisites (module names or 'perl'), and
+the values are version specifications as described in L<VERSION
+SPECIFICATIONS>.
 
 =head2 recommends
 
@@ -245,10 +246,11 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules
-this distribution recommends for enhanced operation.  The keys are the
-module names, and the values are version specifications as described
-in L<VERSION SPECIFICATIONS>.
+(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl
+prerequisites this distribution recommends for enhanced operation.
+The keys are the names of the prerequisites (module names or 'perl'),
+and the values are version specifications as described in L<VERSION
+SPECIFICATIONS>.
 
 
 
@@ -279,11 +281,12 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules
-required for building and/or testing of this distribution.  The keys
-are the module names, and the values are version specifications as
+(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl
+prerequisites required for building and/or testing of this
+distribution.  The keys are the names of the prerequisites (module
+names or 'perl'), and the values are version specifications as
 described in L<VERSION SPECIFICATIONS>.  These dependencies are not
-required after the module is installed.
+required after the distribution is installed.
 
 =head2 configure_requires
 
@@ -294,11 +297,11 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.4) [optional] {map} A YAML mapping indicating the Perl modules
+(Spec 1.4) [optional] {map} A YAML mapping indicating the Perl prerequisites
 required before configuring this distribution.  The keys are the
-module names, and the values are version specifications as described
+names of the prerequisites (module names or 'perl'), and the values are version specifications as described
 in L<VERSION SPECIFICATIONS>.  These dependencies are not required
-after the module is installed.
+after the distribution is installed.
 
 =head2 conflicts
 
@@ -308,11 +311,11 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl modules that
+(Spec 1.0) [optional] {map} A YAML mapping indicating any items that
 cannot be installed while this distribution is installed.  This is a
-pretty uncommon situation.  The keys for C<conflicts> are the module
-names, and the values are version specifications as described in
-L<VERSION SPECIFICATIONS>.
+pretty uncommon situation.  The keys for C<conflicts> are the item
+names (module names or 'perl'), and the values are version
+specifications as described in L<VERSION SPECIFICATIONS>.
 
 
 =head2 dynamic_config
