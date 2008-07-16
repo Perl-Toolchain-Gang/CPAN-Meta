@@ -1,8 +1,10 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>META-spec - Specification for F&lt;META.yml&gt; documents</title>
-<link rev="made" href="mailto:root@b07.apple.com" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@omen.apple.com" />
 </head>
 
 <body style="background-color: white">
@@ -99,7 +101,7 @@
    license: <a href="http://dev.perl.org/licenses/">http://dev.perl.org/licenses/</a>
  meta-spec:
    version: 1.4
-   url: <a href="http://module-build.sourceforge.net/META-spec-v1.3.html">http://module-build.sourceforge.net/META-spec-v1.3.html</a>
+   url: <a href="http://module-build.sourceforge.net/META-spec-v1.4.html">http://module-build.sourceforge.net/META-spec-v1.4.html</a>
  generated_by: Module::Build version 0.20</pre>
 <p>
 </p>
@@ -129,49 +131,51 @@ won't make it into the stable version) can always be found at
 <p>See the following links to learn why we chose YAML instead of, say,
 XML or Data::Dumper:</p>
 <dl>
-<dt><strong><a name="item_module_3a_3abuild_design_plans">Module::Build design plans</a></strong><br />
-</dt>
+<dt><strong><a name="item_module_3a_3abuild_design_plans">Module::Build design plans</a></strong>
+
 <dd>
-<a href="http://nntp.x.perl.org/group/perl.makemaker/406">http://nntp.x.perl.org/group/perl.makemaker/406</a>
+<p><a href="http://nntp.x.perl.org/group/perl.makemaker/406">http://nntp.x.perl.org/group/perl.makemaker/406</a></p>
 </dd>
-<p></p>
-<dt><strong><a name="item_not_keen_on_yaml">Not keen on YAML</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_not_keen_on_yaml">Not keen on YAML</a></strong>
+
 <dd>
-<a href="http://nntp.x.perl.org/group/perl.module-authors/1353">http://nntp.x.perl.org/group/perl.module-authors/1353</a>
+<p><a href="http://nntp.x.perl.org/group/perl.module-authors/1353">http://nntp.x.perl.org/group/perl.module-authors/1353</a></p>
 </dd>
-<p></p>
-<dt><strong><a name="item_meta_concerns">META Concerns</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_meta_concerns">META Concerns</a></strong>
+
 <dd>
-<a href="http://nntp.x.perl.org/group/perl.module-authors/1385">http://nntp.x.perl.org/group/perl.module-authors/1385</a>
+<p><a href="http://nntp.x.perl.org/group/perl.module-authors/1385">http://nntp.x.perl.org/group/perl.module-authors/1385</a></p>
 </dd>
-<p></p></dl>
+</li>
+</dl>
 <p>
 </p>
 <hr />
 <h1><a name="terminology">TERMINOLOGY</a></h1>
 <dl>
-<dt><strong><a name="item_distribution">distribution</a></strong><br />
-</dt>
+<dt><strong><a name="item_distribution">distribution</a></strong>
+
 <dd>
-This is the primary object described by the <em>META.yml</em>
+<p>This is the primary object described by the <em>META.yml</em>
 specification. In the context of this document it usually refers to a
 collection of modules, scripts, and/or documents that are distributed
 together for other developers to use.  Examples of distributions are
-<code>Class-Container</code>, <code>libwww-perl</code>, or <code>DBI</code>.
+<code>Class-Container</code>, <code>libwww-perl</code>, or <code>DBI</code>.</p>
 </dd>
-<p></p>
-<dt><strong><a name="item_module">module</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_module">module</a></strong>
+
 <dd>
-This refers to a reusable library of code typically contained in a
+<p>This refers to a reusable library of code typically contained in a
 single file. Currently, we primarily talk of perl modules, but this
 specification should be open enough to apply to other languages as
 well (ex. python, ruby).  Examples of modules are <code>Class::Container</code>,
-<code>LWP::Simple</code>, or <code>DBD::File</code>.
+<code>LWP::Simple</code>, or <code>DBD::File</code>.</p>
 </dd>
-<p></p></dl>
+</li>
+</dl>
 <p>
 </p>
 <hr />
@@ -461,24 +465,25 @@ you'd like to add your own ``special'' entries (like the ``MailingList''
 entry above), use at least one upper-case letter.</p>
 <p>The current set of official keys is:</p>
 <dl>
-<dt><strong><a name="item_homepage">homepage</a></strong><br />
-</dt>
+<dt><strong><a name="item_homepage">homepage</a></strong>
+
 <dd>
-The official home of this project on the web.
+<p>The official home of this project on the web.</p>
 </dd>
-<p></p>
-<dt><strong><a name="item_license">license</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_license">license</a></strong>
+
 <dd>
-An URL for an official statement of this distribution's license.
+<p>An URL for an official statement of this distribution's license.</p>
 </dd>
-<p></p>
-<dt><strong><a name="item_bugtracker">bugtracker</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_bugtracker">bugtracker</a></strong>
+
 <dd>
-An URL for a bug tracker (e.g. Bugzilla or RT queue) for this project.
+<p>An URL for a bug tracker (e.g. Bugzilla or RT queue) for this project.</p>
 </dd>
-<p></p></dl>
+</li>
+</dl>
 <p>
 </p>
 <h2><a name="generated_by">generated_by</a></h2>
@@ -536,116 +541,125 @@ together using commas.  The specification <code>&gt;= 1.2, != 1.5, &lt;
 <hr />
 <h1><a name="history">HISTORY</a></h1>
 <dl>
-<dt><strong><a name="item_2003">March 14, 2003 (Pi day)</a></strong><br />
-</dt>
+<dt><strong><a name="item_2003">March 14, 2003 (Pi day)</a></strong>
+
 <ul>
-<li></li>
-Created version 1.0 of this document.
-<p></p></ul>
-<dt><strong><a name="item_may_8_2c_2003">May 8, 2003</a></strong><br />
-</dt>
+<li>
+<p>Created version 1.0 of this document.</p>
+</li>
+</ul>
+<dt><strong><a name="item_may_8_2c_2003">May 8, 2003</a></strong>
+
 <ul>
-<li></li>
-Added the <a href="#dynamic_config">dynamic_config</a> field, which was missing from the initial
-version.
-<p></p></ul>
-<dt><strong><a name="item_november_13_2c_2003">November 13, 2003</a></strong><br />
-</dt>
+<li>
+<p>Added the <a href="#dynamic_config">dynamic_config</a> field, which was missing from the initial
+version.</p>
+</li>
+</ul>
+<dt><strong><a name="item_november_13_2c_2003">November 13, 2003</a></strong>
+
 <ul>
-<li></li>
-Added more YAML rationale articles.
-<p></p>
-<li></li>
-Fixed existing link to YAML discussion thread to point to new
-<a href="http://nntp.x.perl.org/group/">http://nntp.x.perl.org/group/</a> site.
-<p></p>
-<li></li>
-Added and deprecated the <a href="#private">private</a> field.
-<p></p>
-<li></li>
-Added <a href="#abstract">abstract</a>, <a href="#configure">configure</a>, <a href="#requires_packages">requires_packages</a>,
-<a href="#requires_os">requires_os</a>, <a href="#excludes_os">excludes_os</a>, and <a href="#no_index">no_index</a> fields.
-<p></p>
-<li></li>
-Bumped version.
-<p></p></ul>
-<dt><strong><a name="item_november_16_2c_2003">November 16, 2003</a></strong><br />
-</dt>
+<li>
+<p>Added more YAML rationale articles.</p>
+</li>
+<li>
+<p>Fixed existing link to YAML discussion thread to point to new
+<a href="http://nntp.x.perl.org/group/">http://nntp.x.perl.org/group/</a> site.</p>
+</li>
+<li>
+<p>Added and deprecated the <a href="#private">private</a> field.</p>
+</li>
+<li>
+<p>Added <a href="#abstract">abstract</a>, <a href="#configure">configure</a>, <a href="#requires_packages">requires_packages</a>,
+<a href="#requires_os">requires_os</a>, <a href="#excludes_os">excludes_os</a>, and <a href="#no_index">no_index</a> fields.</p>
+</li>
+<li>
+<p>Bumped version.</p>
+</li>
+</ul>
+<dt><strong><a name="item_november_16_2c_2003">November 16, 2003</a></strong>
+
 <ul>
-<li></li>
-Added <a href="#generation">generation</a>, <a href="#authored_by">authored_by</a> fields.
-<p></p>
-<li></li>
-Add alternative proposal to the <a href="#recommends">recommends</a> field.
-<p></p>
-<li></li>
-Add proposal for a <a href="#requires_build_tools">requires_build_tools</a> field.
-<p></p></ul>
-<dt><strong><a name="item_december_9_2c_2003">December 9, 2003</a></strong><br />
-</dt>
+<li>
+<p>Added <a href="#generation">generation</a>, <a href="#authored_by">authored_by</a> fields.</p>
+</li>
+<li>
+<p>Add alternative proposal to the <a href="#recommends">recommends</a> field.</p>
+</li>
+<li>
+<p>Add proposal for a <a href="#requires_build_tools">requires_build_tools</a> field.</p>
+</li>
+</ul>
+<dt><strong><a name="item_december_9_2c_2003">December 9, 2003</a></strong>
+
 <ul>
-<li></li>
-Added link to latest version of this specification on CPAN.
-<p></p>
-<li></li>
-Added section <a href="#version_specifications">VERSION SPECIFICATIONS</a>.
-<p></p>
-<li></li>
-Chang name from Module::Build::META-spec to CPAN::META::Specification.
-<p></p>
-<li></li>
-Add proposal for <a href="#auto_regenerate">auto_regenerate</a> field.
-<p></p></ul>
-<dt><strong><a name="item_december_15_2c_2003">December 15, 2003</a></strong><br />
-</dt>
+<li>
+<p>Added link to latest version of this specification on CPAN.</p>
+</li>
+<li>
+<p>Added section <a href="#version_specifications">VERSION SPECIFICATIONS</a>.</p>
+</li>
+<li>
+<p>Chang name from Module::Build::META-spec to CPAN::META::Specification.</p>
+</li>
+<li>
+<p>Add proposal for <a href="#auto_regenerate">auto_regenerate</a> field.</p>
+</li>
+</ul>
+<dt><strong><a name="item_december_15_2c_2003">December 15, 2003</a></strong>
+
 <ul>
-<li></li>
-Add <a href="#index">index</a> field as a compliment to <a href="#no_index">no_index</a>
-<p></p>
-<li></li>
-Add <a href="#keywords">keywords</a> field as a means to aid searching distributions.
-<p></p>
-<li></li>
-Add <a href="#terminology">TERMINOLOGY</a> section to explain certain terms that may be
-ambiguous.
-<p></p></ul>
-<dt><strong><a name="item_july_26_2c_2005">July 26, 2005</a></strong><br />
-</dt>
+<li>
+<p>Add <a href="#index">index</a> field as a compliment to <a href="#no_index">no_index</a></p>
+</li>
+<li>
+<p>Add <a href="#keywords">keywords</a> field as a means to aid searching distributions.</p>
+</li>
+<li>
+<p>Add <a href="#terminology">TERMINOLOGY</a> section to explain certain terms that may be
+ambiguous.</p>
+</li>
+</ul>
+<dt><strong><a name="item_july_26_2c_2005">July 26, 2005</a></strong>
+
 <ul>
-<li></li>
-Removed a bunch of items (generation, requires_build_tools,
+<li>
+<p>Removed a bunch of items (generation, requires_build_tools,
 requires_packages, configure, requires_os, excludes_os,
 auto_regenerate) that have never actually been supported, but were
-more like records of brainstorming.
-<p></p>
-<li></li>
-Changed <code>authored_by</code> to <code>author</code>, since that's always been what
-it's actually called in actual <em>META.yml</em> files.
-<p></p>
-<li></li>
-Added the ``=='' operator to the list of supported version-checking
-operators.
-<p></p>
-<li></li>
-Noted that the <code>distribution_type</code> field is basically meaningless,
-and shouldn't really be used.
-<p></p>
-<li></li>
-Clarified <code>dynamic_config</code> a bit.
-<p></p></ul>
-<dt><strong><a name="item_august_23_2c_2005">August 23, 2005</a></strong><br />
-</dt>
+more like records of brainstorming.</p>
+</li>
+<li>
+<p>Changed <code>authored_by</code> to <code>author</code>, since that's always been what
+it's actually called in actual <em>META.yml</em> files.</p>
+</li>
+<li>
+<p>Added the ``=='' operator to the list of supported version-checking
+operators.</p>
+</li>
+<li>
+<p>Noted that the <code>distribution_type</code> field is basically meaningless,
+and shouldn't really be used.</p>
+</li>
+<li>
+<p>Clarified <code>dynamic_config</code> a bit.</p>
+</li>
+</ul>
+<dt><strong><a name="item_august_23_2c_2005">August 23, 2005</a></strong>
+
 <ul>
-<li></li>
-Removed the name <code>CPAN::META::Specification</code>, since that implies a
-module that doesn't actually exist.
-<p></p></ul>
-<dt><strong><a name="item_june_12_2c_2007">June 12, 2007</a></strong><br />
-</dt>
+<li>
+<p>Removed the name <code>CPAN::META::Specification</code>, since that implies a
+module that doesn't actually exist.</p>
+</li>
+</ul>
+<dt><strong><a name="item_june_12_2c_2007">June 12, 2007</a></strong>
+
 <ul>
-<li></li>
-Added <code>configure_requires</code>.
-<p></p></ul>
+<li>
+<p>Added <code>configure_requires</code>.</p>
+</li>
+</ul>
 </dl>
 
 </body>

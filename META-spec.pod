@@ -37,7 +37,7 @@ META-spec - Specification for F<META.yml> documents
    license: http://dev.perl.org/licenses/
  meta-spec:
    version: 1.4
-   url: http://module-build.sourceforge.net/META-spec-v1.3.html
+   url: http://module-build.sourceforge.net/META-spec-v1.4.html
  generated_by: Module::Build version 0.20
 
 =head1 DESCRIPTION
