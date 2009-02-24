@@ -468,6 +468,10 @@ An URL for an official statement of this distribution's license.
 
 An URL for a bug tracker (e.g. Bugzilla or RT queue) for this project.
 
+=item repository
+
+The URL for the source code repository of this project.
+
 =back
 
 
