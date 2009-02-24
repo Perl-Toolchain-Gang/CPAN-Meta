@@ -446,11 +446,11 @@ Example:
     MailingList: http://lists.sourceforge.net/lists/listinfo/module-build-general
 
 (Spec 1.1) [optional] {map} A mapping of any URL resources related to
-this distribution.  All-lower-case keys, such as C<homepage>,
-C<license>, and C<bugtracker>, are reserved by this specification, as
-they have "official" meanings defined here in this specification.  If
-you'd like to add your own "special" entries (like the "MailingList"
-entry above), use at least one upper-case letter.
+this distribution.  All-lower-case keys, such as C<homepage> and
+C<license>, are reserved by this specification, as they have
+"official" meanings defined here in this specification.  If you'd like
+to add your own "special" entries (like the "MailingList" entry
+above), use at least one upper-case letter.
 
 The current set of official keys is:
 
