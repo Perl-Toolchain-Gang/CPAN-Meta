@@ -6,7 +6,7 @@ dEx - Dependency Expression Language
 
   # Create custom macros that can be expanded in other expressions
   define core = File::Spec in [0.80- !0.86] && Cwd > 2;
-  define xml  = HAS_LIB('xml2') &&  # <= builtin functions
+  define xml  = HAS_LIB('xml2') &&  # <= built-in functions
                 HAS_INCLUDE('libxml/tree.h', 'libxml/parser.h');
 
   # Create tags that can be specified to select a
@@ -220,7 +220,7 @@ valid expression of arbitrary complexity. For example:
   define dbd = DBD::pg || DBD::mysql;
 
 The above defines a macro named C<dbd>. It can be expanded into
-another expression by placing the name between braces, Eg
+another expression by placing the name between braces, e.g.
 
   define store = BerkeleyDB || {dbd}
 
