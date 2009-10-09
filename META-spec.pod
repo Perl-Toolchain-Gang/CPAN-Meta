@@ -4,41 +4,46 @@ META-spec - Specification for CPAN distribution metadata
 
 =head1 SYNOPSIS
 
- --- #YAML:1.0
- name: Module-Build
- abstract: Build and install Perl modules
- version: 0.20
- author:
-   - Ken Williams <kwilliams@cpan.org>
- license: perl
- distribution_type: module
- requires:
-   Config: 0
-   Cwd: 0
-   Data::Dumper: 0
-   ExtUtils::Install: 0
-   File::Basename: 0
-   File::Compare: 0
-   File::Copy: 0
-   File::Find: 0
-   File::Path: 0
-   File::Spec: 0
-   IO::File: 0
-   perl: 5.005_03
- recommends:
-   Archive::Tar: 1.00
-   ExtUtils::Install: 0.3
-   ExtUtils::ParseXS: 2.02
-   Pod::Text: 0
-   YAML: 0.35
- build_requires:
-   Test: 0
- resources:
-   license: http://dev.perl.org/licenses/
- meta-spec:
-   version: 1.4
-   url: http://module-build.sourceforge.net/META-spec-v1.4.html
- generated_by: Module::Build version 0.20
+  my $distmeta = {
+    name => 'Module-Build',
+    abstract => 'Build and install Perl modules',
+    version  => '0.20',
+    author   => [ 'Ken Williams <kwilliams@cpan.org>' ],
+    license  => 'perl',
+    distribution_type => 'module',
+    requires => {
+      'Config' => 0,
+      'Cwd'    => 0,
+      'Data::Dumper' => 0,
+      'ExtUtils::Install' => 0,
+      'File::Basename' => 0,
+      'File::Compare'  => 0,
+      'File::Copy' => 0,
+      'File::Find' => 0,
+      'File::Path' => 0,
+      'File::Spec' => 0,
+      'IO::File'   => 0,
+      'perl'       => 5.005_03,
+    },
+    recommends => {
+      'Archive::Tar' => 1.00,
+      'ExtUtils::Install' => 0.3,
+      'ExtUtils::ParseXS' => 2.02,
+      'Pod::Text' => 0,
+      'YAML' => 0.35,
+    },
+    build_requires => {
+      'Test' => 0,
+    }, 
+    resources => {
+      license => 'http://dev.perl.org/licenses/',
+    },
+    'meta-spec' => {
+      version => 1.4,
+      url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
+    },
+    generated_by => 'Module::Build version 0.20',
+  };
 
 =head1 DESCRIPTION
 
@@ -122,9 +127,10 @@ described here.
 
 Example:
 
- meta-spec:
-   version: 1.4
-   url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  'meta-spec' => {
+    version => 1.4,
+    url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
+  }
 
 (Spec 1.1) [required] {URL} This field indicates the location of the
 version of the metadata specification used.
@@ -133,7 +139,7 @@ version of the metadata specification used.
 
 Example:
 
-  name: Module-Build
+  name => 'Module-Build'
 
 (Spec 1.0) [required] {string} The name of the distribution which is often
 created by taking the "main module" in the distribution and changing
@@ -145,7 +151,7 @@ L<http://search.cpan.org/dist/libwww-perl/>).
 
 Example:
 
-  version: 0.20
+  version => 0.20
 
 (Spec 1.0) [required] {version} The version of the distribution to which the
 metadata structure refers.
@@ -154,7 +160,7 @@ metadata structure refers.
 
 Example:
 
-  abstract: Build and install Perl modules.
+  abstract => 'Build and install Perl modules.'
 
 (Spec 1.1) [required] {string} A short description of the purpose of the
 distribution.
@@ -163,10 +169,9 @@ distribution.
 
 Example:
 
-  author:
-    - Ken Williams <kwilliams@cpan.org>
+  author => [ 'Ken Williams <kwilliams@cpan.org>' ]
 
-(Spec 1.1) [required] {list of strings} An arrayref indicating the
+(Spec 1.1) [required] {arrayref of strings} An arrayref indicating the
 author(s) of the distribution. The prefered form is:
 
   author-name <email-address>
@@ -175,7 +180,7 @@ author(s) of the distribution. The prefered form is:
 
 Example:
 
-  license: perl
+  license => 'perl'
 
 (Spec 1.0) [required] {string} The license under which this
 distribution may be used and redistributed.  See
@@ -186,7 +191,7 @@ for the list of valid options.
 
 Example:
 
-  distribution_type: module
+  distribution_type => 'module'
 
 (Spec 1.0) [optional] {string} What kind of stuff is contained in this
 distribution.  Most things on CPAN are C<module>s (which can also mean
@@ -202,9 +207,10 @@ generating this field.
 
 Example:
 
-  requires:
-    Data::Dumper: 0
-    File::Find: 1.03
+  requires => {
+    'Data::Dumper' => 0,
+    'File::Find'   => 1.03,
+  }
 
 (Spec 1.0) [optional] {hashref} A hashref indicating the Perl
 prerequisites this distribution requires for proper operation.  The
@@ -216,9 +222,10 @@ SPECIFICATIONS>.
 
 Example:
 
-  recommends:
-    Data::Dumper: 0
-    File::Find: 1.03
+  recommends => {
+    'Data::Dumper' => 0,
+    'File::Find'   => 1.03,
+  }
 
 (Spec 1.0) [optional] {hashref} A hashref indicating the Perl
 prerequisites this distribution recommends for enhanced operation.
@@ -226,20 +233,21 @@ The keys are the names of the prerequisites (module names or 'perl'),
 and the values are version specifications as described in L<VERSION
 SPECIFICATIONS>.
 
-
-
 I<ALTERNATIVE: It may be desirable to present to the user which
 features depend on which modules so they can make an informed decision
 about which recommended modules to install.>
 
 Example:
 
-  optional_features:
-    foo:
-      description: Provides the ability to blah.
-      requires:
-        Data::Dumper: 0
-        File::Find: 1.03
+  optional_features => {
+    foo => {
+      description => 'Provides the ability to blah.',
+      requires    => {
+        'Data::Dumper' => 0,
+        'File::Find'   => 1.03,
+      },
+    },
+  }
 
 I<(Spec 1.1) [optional] {hashref} A hashref of names for optional features
 which are made available when its requirements are met. For each
@@ -251,9 +259,10 @@ this subcontext as described elsewhere in this document.>
 
 Example:
 
-  build_requires:
-    Data::Dumper: 0
-    File::Find: 1.03
+  build_requires => {
+    'Data::Dumper' => 0,
+    'File::Find'   => 1.03,
+  }
 
 (Spec 1.0) [optional] {hashref} A hashref indicating the Perl
 prerequisites required for building and/or testing of this
@@ -266,10 +275,11 @@ required after the distribution is installed.
 
 Example:
 
-  configure_requires:
-    Module::Build: 0.2809
-    Data::Dumper: 0
-    File::Find: 1.03
+  configure_requires => {
+    'Module::Build' => 0.2809,
+    'Data::Dumper'  => 0,
+    'File::Find'    => 1.03,
+  }
 
 (Spec 1.4) [optional] {hashref} A hashref indicating the Perl prerequisites
 required before configuring this distribution.  The keys are the
@@ -281,9 +291,10 @@ after the distribution is installed.
 
 Example:
 
-  conflicts:
-    Data::Dumper: 0
-    File::Find: 1.03
+  conflicts => {
+    'Data::Dumper' => 0,
+    'File::Find'   => 1.03,
+  }
 
 (Spec 1.0) [optional] {hashref} A hashref indicating any items that
 cannot be installed while this distribution is installed.  This is a
@@ -296,7 +307,7 @@ specifications as described in L<VERSION SPECIFICATIONS>.
 
 Example:
 
-  dynamic_config: 0
+  dynamic_config => 0
 
 (Spec 1.0) [optional] {boolean} A boolean flag indicating whether a F<Build.PL>
 or F<Makefile.PL> (or similar) must be executed when building this
@@ -322,15 +333,19 @@ L</"no_index">.  See below.
 
 Example:
 
-  provides:
-    Foo::Bar:
-      file: lib/Foo/Bar.pm
-      version: 0.27_02
-    Foo::Bar::Blah:
-      file: lib/Foo/Bar/Blah.pm
-    Foo::Bar::Baz:
-      file: lib/Foo/Bar/Baz.pm
-      version: 0.3
+  provides => {
+    'Foo::Bar' => {
+      file    => 'lib/Foo/Bar.pm',
+      version => 0.27_02
+    },
+    'Foo::Bar::Blah' => {
+      file    => 'lib/Foo/Bar/Blah.pm',
+    },
+    'Foo::Bar::Baz' => {
+      file    => 'lib/Foo/Bar/Baz.pm',
+      version => 0.3,
+    },
+  }
 
 (Spec 1.1) [optional] {hashref} A hashref that describes all packages
 provided by this distribution.  This information can be (and, in some
@@ -352,15 +367,12 @@ essentially guess what you want indexed.
 
 Example:
 
-  no_index:
-    file:
-    - My/Module.pm
-    directory:
-    - My/Private
-    package:
-    - My::Module::Stuff
-    namespace:
-    - My::Module::Stuff
+  no_index => {
+    file      => [ 'My/Module.pm' ],
+    directory => [ 'My/Private' ],
+    package   => [ 'My::Module::Stuff' ],
+    namespace => [ 'My::Module::Stuff' ],
+  }
 
 (Spec 1.1) [optional] {hashref} A hashref that describes any files,
 directories, packages, and namespaces that are private
@@ -400,10 +412,7 @@ but I<not> the listed namespace(s) its self.
 
 Example:
 
-  keywords:
-    - make
-    - build
-    - install
+  keywords => [ qw(make build install) ]
 
 (Spec 1.1) [optional] {arrayref} An arrayref of keywords/phrases that describe
 this distribution.
@@ -412,12 +421,13 @@ this distribution.
 
 Example:
 
-  resources:
-    license: http://dev.perl.org/licenses/
-    homepage: http://sourceforge.net/projects/module-build
-    bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Module-Build
-    repository: http://sourceforge.net/cvs/?group_id=45731
-    MailingList: http://lists.sourceforge.net/lists/listinfo/module-build-general
+  resources => {
+    license     => 'http://dev.perl.org/licenses/',
+    homepage    => 'http://sourceforge.net/projects/module-build',
+    bugtracker  => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Module-Build',
+    repository  => 'http://sourceforge.net/cvs/?group_id=45731',
+    MailingList => 'http://lists.sf.net/lists/listinfo/module-build-general',
+  }
 
 (Spec 1.1) [optional] {hashref} A hashref of any URL resources related to
 this distribution.  All-lower-case keys, such as C<homepage> and
@@ -453,7 +463,7 @@ The URL for the source code repository of this project.
 
 Example:
 
-  generated_by: Module::Build version 0.20
+  generated_by => 'Module::Build version 0.20'
 
 (Spec 1.0) [required] {string} Indicates the tool that was used to
 create this metadata.  It's good form to include both the name
