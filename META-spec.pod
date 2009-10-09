@@ -506,31 +506,7 @@ together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
 
 The distribution metadata structure is meant to be written to a file and
 packaged with library distributions.  The structure is written to the file
-F<META.yml> in the YAML format (see L<http://www.yaml.org/>).
-
-See the following links to learn why we chose YAML instead of, say,
-XML or Data::Dumper:
-
-=over 4
-
-=item Module::Build design plans
-
-L<http://nntp.x.perl.org/group/perl.makemaker/406>
-
-=item Not keen on YAML
-
-L<http://nntp.x.perl.org/group/perl.module-authors/1353>
-
-=item META Concerns
-
-L<http://nntp.x.perl.org/group/perl.module-authors/1385>
-
-=back
-
-=head2 HEADER
-
-The first line of a F<META.yml> file should be a valid YAML document
-header like C<"--- #YAML:1.0">.
+F<META.yml> in the YAML Tiny format (see L<YAML::Tiny>).
 
 =head1 SEE ALSO
 
