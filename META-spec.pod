@@ -425,7 +425,11 @@ Example:
     license     => 'http://dev.perl.org/licenses/',
     homepage    => 'http://sourceforge.net/projects/module-build',
     bugtracker  => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Module-Build',
-    repository  => 'http://sourceforge.net/cvs/?group_id=45731',
+    repository  => {
+      url  => 'git://github.com/dagolden/cpan-meta-spec.git',
+      web  => 'http://github.com/dagolden/cpan-meta-spec',
+      type => 'git',
+    },
     MailingList => 'http://lists.sf.net/lists/listinfo/module-build-general',
   }
 
@@ -454,7 +458,12 @@ An URL for a bug tracker (e.g. Bugzilla or RT queue) for this project.
 
 =item repository
 
-The URL for the source code repository of this project.
+This entry describes the source control repository for this distribution.  It
+is a hashref with the following entries:
+
+  url  - a URL pointing to the repostiory itself
+  web  - a URL pointing to a web front-end for the repository
+  type - a lowercase string indicating the VCS used; e.g.: git, cvs, darcs
 
 =back
 
