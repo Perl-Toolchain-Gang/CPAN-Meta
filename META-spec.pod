@@ -166,8 +166,10 @@ Example:
   author:
     - Ken Williams <kwilliams@cpan.org>
 
-(Spec 1.1) [required] {list of strings} A YAML sequence indicating the author(s) of the
-distribution. The prefered form is author-name <email-address>.
+(Spec 1.1) [required] {list of strings} An arrayref indicating the
+author(s) of the distribution. The prefered form is:
+
+  author-name <email-address>
 
 =head2 license
 
@@ -204,7 +206,7 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl
+(Spec 1.0) [optional] {hashref} A hashref indicating the Perl
 prerequisites this distribution requires for proper operation.  The
 keys are the names of the prerequisites (module names or 'perl'), and
 the values are version specifications as described in L<VERSION
@@ -218,7 +220,7 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl
+(Spec 1.0) [optional] {hashref} A hashref indicating the Perl
 prerequisites this distribution recommends for enhanced operation.
 The keys are the names of the prerequisites (module names or 'perl'),
 and the values are version specifications as described in L<VERSION
@@ -239,7 +241,7 @@ Example:
         Data::Dumper: 0
         File::Find: 1.03
 
-I<(Spec 1.1) [optional] {map} A YAML mapping of names for optional features
+I<(Spec 1.1) [optional] {hashref} A hashref of names for optional features
 which are made available when its requirements are met. For each
 feature a description is provided along with any of L<"requires">,
 L<"build_requires">, and L<"conflicts">, which have the same meaning in
@@ -253,7 +255,7 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] {map} A YAML mapping indicating the Perl
+(Spec 1.0) [optional] {hashref} A hashref indicating the Perl
 prerequisites required for building and/or testing of this
 distribution.  The keys are the names of the prerequisites (module
 names or 'perl'), and the values are version specifications as
@@ -269,7 +271,7 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.4) [optional] {map} A YAML mapping indicating the Perl prerequisites
+(Spec 1.4) [optional] {hashref} A hashref indicating the Perl prerequisites
 required before configuring this distribution.  The keys are the
 names of the prerequisites (module names or 'perl'), and the values are version specifications as described
 in L<VERSION SPECIFICATIONS>.  These dependencies are not required
@@ -283,7 +285,7 @@ Example:
     Data::Dumper: 0
     File::Find: 1.03
 
-(Spec 1.0) [optional] {map} A YAML mapping indicating any items that
+(Spec 1.0) [optional] {hashref} A hashref indicating any items that
 cannot be installed while this distribution is installed.  This is a
 pretty uncommon situation.  The keys for C<conflicts> are the item
 names (module names or 'perl'), and the values are version
@@ -313,7 +315,7 @@ If this field is omitted, it defaults to 1 (true).
 
 =head2 private
 
-I<(Deprecated)> (Spec 1.0) [optional] {map} This field has been renamed to
+I<(Deprecated)> (Spec 1.0) [optional] {hashref} This field has been renamed to
 L</"no_index">.  See below.
 
 =head2 provides
@@ -330,14 +332,14 @@ Example:
       file: lib/Foo/Bar/Baz.pm
       version: 0.3
 
-(Spec 1.1) [optional] {map} A YAML mapping that describes all packages
+(Spec 1.1) [optional] {hashref} A hashref that describes all packages
 provided by this distribution.  This information can be (and, in some
 cases, is) used by distribution and automation mechanisms like PAUSE,
 CPAN, and search.cpan.org to build indexes saying in which
 distribution various packages can be found.
 
 When using tools like C<Module::Build> that can generate the
-C<provides> mapping for your distribution automatically, make sure you
+C<provides> hashref for your distribution automatically, make sure you
 examine what it generates to make sure it makes sense - indexers will
 usually trust the C<provides> field if it's present, rather than
 scanning through the distribution files themselves to figure out
@@ -360,7 +362,7 @@ Example:
     namespace:
     - My::Module::Stuff
 
-(Spec 1.1) [optional] {map} A YAML mapping that describes any files,
+(Spec 1.1) [optional] {hashref} A hashref that describes any files,
 directories, packages, and namespaces that are private
 (i.e. implementation artifacts) that are not of interest to searching
 and indexing tools.  This is useful when no C<provides> field is
@@ -403,7 +405,7 @@ Example:
     - build
     - install
 
-(Spec 1.1) [optional] {list} A sequence of keywords/phrases that describe
+(Spec 1.1) [optional] {arrayref} An arrayref of keywords/phrases that describe
 this distribution.
 
 =head2 resources
@@ -417,7 +419,7 @@ Example:
     repository: http://sourceforge.net/cvs/?group_id=45731
     MailingList: http://lists.sourceforge.net/lists/listinfo/module-build-general
 
-(Spec 1.1) [optional] {map} A mapping of any URL resources related to
+(Spec 1.1) [optional] {hashref} A hashref of any URL resources related to
 this distribution.  All-lower-case keys, such as C<homepage> and
 C<license>, are reserved by this specification, as they have
 "official" meanings defined here in this specification.  If you'd like
