@@ -203,106 +203,6 @@ thing, or subjectively different in focus depending on who's using
 them.  Tools like Module::Build and MakeMaker will likely stop
 generating this field.
 
-=head2 requires
-
-Example:
-
-  requires => {
-    'Data::Dumper' => 0,
-    'File::Find'   => 1.03,
-  }
-
-(Spec 1.0) [optional] {hashref} A hashref indicating the Perl
-prerequisites this distribution requires for proper operation.  The
-keys are the names of the prerequisites (module names or 'perl'), and
-the values are version specifications as described in L<VERSION
-SPECIFICATIONS>.
-
-=head2 recommends
-
-Example:
-
-  recommends => {
-    'Data::Dumper' => 0,
-    'File::Find'   => 1.03,
-  }
-
-(Spec 1.0) [optional] {hashref} A hashref indicating the Perl
-prerequisites this distribution recommends for enhanced operation.
-The keys are the names of the prerequisites (module names or 'perl'),
-and the values are version specifications as described in L<VERSION
-SPECIFICATIONS>.
-
-I<ALTERNATIVE: It may be desirable to present to the user which
-features depend on which modules so they can make an informed decision
-about which recommended modules to install.>
-
-Example:
-
-  optional_features => {
-    foo => {
-      description => 'Provides the ability to blah.',
-      requires    => {
-        'Data::Dumper' => 0,
-        'File::Find'   => 1.03,
-      },
-    },
-  }
-
-I<(Spec 1.1) [optional] {hashref} A hashref of names for optional features
-which are made available when its requirements are met. For each
-feature a description is provided along with any of L<"requires">,
-L<"build_requires">, and L<"conflicts">, which have the same meaning in
-this subcontext as described elsewhere in this document.>
-
-=head2 build_requires
-
-Example:
-
-  build_requires => {
-    'Data::Dumper' => 0,
-    'File::Find'   => 1.03,
-  }
-
-(Spec 1.0) [optional] {hashref} A hashref indicating the Perl
-prerequisites required for building and/or testing of this
-distribution.  The keys are the names of the prerequisites (module
-names or 'perl'), and the values are version specifications as
-described in L<VERSION SPECIFICATIONS>.  These dependencies are not
-required after the distribution is installed.
-
-=head2 configure_requires
-
-Example:
-
-  configure_requires => {
-    'Module::Build' => 0.2809,
-    'Data::Dumper'  => 0,
-    'File::Find'    => 1.03,
-  }
-
-(Spec 1.4) [optional] {hashref} A hashref indicating the Perl prerequisites
-required before configuring this distribution.  The keys are the
-names of the prerequisites (module names or 'perl'), and the values are version specifications as described
-in L<VERSION SPECIFICATIONS>.  These dependencies are not required
-after the distribution is installed.
-
-=head2 conflicts
-
-Example:
-
-  conflicts => {
-    'Data::Dumper' => 0,
-    'File::Find'   => 1.03,
-  }
-
-(Spec 1.0) [optional] {hashref} A hashref indicating any items that
-cannot be installed while this distribution is installed.  This is a
-pretty uncommon situation.  The keys for C<conflicts> are the item
-names (module names or 'perl'), and the values are version
-specifications as described in L<VERSION SPECIFICATIONS>.
-
-
 =head2 dynamic_config
 
 Example:
@@ -476,6 +376,64 @@ regarding F<META.yml> usage prefers the form listed above, i.e. it
 splits on /\s+version\s+/ taking the first field as the name of the
 tool that generated the file and the second field as version of that
 tool. RWS]
+
+=head1 PREREQ DATA
+
+These entries in the metadata structure all define the relationship
+between this distribution and other packages.  These data are sorted
+into I<phases> in which other packages may be needed, and each phase is
+described using the same terms.
+
+For example, to specify that C<Data::Dumper> is C<required> during the
+C<test> phase, this entry would appear in the distribution metadata:
+
+  test => {
+    requires => {
+      'Data::Dumper' => 2.00,
+    },
+  }
+
+The inner hashref is a list of pairs of L</dependency names|DEPENDENCY
+SPECIFICATIONS> and L</version numbers|VERSION SPECIFICATIONS>.
+
+=head2 configure phase
+
+The configure phase occurs before any dynamic configuration has been
+attempted.  Libraries required by the configure phase must be installed
+before the distribution building tool has been executed.
+
+=head2 build phase
+
+The build phase is when the distribution's source code is compiled (if
+necessary) and otherwise made ready for installation.
+
+=head2 test phase
+
+The test phase is when the distribution's automated test suite is run.
+Any library that is needed only for testing and not for subsequent use
+should be listed here.
+
+=head2 install phase
+
+The install phase refers not only to when the distribution's contents
+are installed, but also to its continued use.  Any library that is a
+prerequisite for regular use of this distribution should be indicated
+here.
+
+=head2 requires
+
+Dependencies that are required absolutely must be in place for proper
+completion of the phase.
+
+=head2 recommends
+
+Dependencies that are recommended are recommended for enhanced operation
+of the described distribution.
+
+=head2 conflicts
+
+These libraries cannot be installed when the phase is in operation.
+This is a pretty uncommon situation.
 
 =head1 VERSION SPECIFICATIONS
 
