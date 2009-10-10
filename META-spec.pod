@@ -504,9 +504,15 @@ together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
 
 =head1 SERIALIZATION
 
-The distribution metadata structure is meant to be written to a file and
-packaged with library distributions.  The structure is written to the file
-F<META.yml> in the YAML Tiny format (see L<YAML::Tiny>).
+Distribution metadata should be serialized (as a hashref) as
+JSON-encoded data and packaged with distributions as the file
+F<META.json>.
+
+In the past, the distribution metadata structure had been packed with
+library distributions as F<META.yml>, a file in the YAML Tiny format
+(for which, see L<YAML::Tiny>).  Tools that look for distribution
+metadata should be capable of loading F<META.yml>, but F<META.json>
+should be preferred if both are found.
 
 =head1 SEE ALSO
 
@@ -524,7 +530,7 @@ Module::Build, L<http://search.cpan.org/dist/Module-Build/>
 
 Module::Install, L<http://search.cpan.org/dist/Module-Install/>
 
-XML, L<http://www.w3.org/XML/>
+JSON, L<http://json.org/>
 
 YAML, L<http://www.yaml.org/>
 
