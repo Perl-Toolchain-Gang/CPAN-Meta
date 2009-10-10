@@ -456,8 +456,8 @@ An URL for an official statement of this distribution's license.
 This entry describes the bug tracking system for this distribution.  It
 is a hashref with the following entries:
 
-  web  - a URL pointing to a web front-end for the bug tracker
-  type - a lowercase string indicating the VCS used; e.g.: git, cvs, darcs
+  web    - a URL pointing to a web front-end for the bug tracker
+  mailto - an email address to which bugs can be sent
 
 =item repository
 
