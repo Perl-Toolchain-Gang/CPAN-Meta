@@ -172,9 +172,19 @@ Example:
   author => [ 'Ken Williams <kwilliams@cpan.org>' ]
 
 (Spec 1.1) [required] {arrayref of strings} An arrayref indicating the
-author(s) of the distribution. The prefered form is:
+person(s) to contact concerning the distribution. The prefered form is:
 
-  author-name <email-address>
+  contact-name <email-address>
+
+This field serves as a general contact independent of L</"resources">
+C<MailingList> and C<bugtracker>. The addressee(s) can be contacted for any
+purpose including but not limited to (security) problems with the distribution,
+questions about the distribution or bugs in the distribution.
+
+Most of the time, a distribution's original author is also the contact. When a
+distribution extends or changes ownership and is released by a different person,
+this field's content changes accordingly. Crediting the original author(s) is
+outside the scope of this metadata specification.
 
 =head2 license
 
