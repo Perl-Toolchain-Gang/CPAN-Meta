@@ -38,6 +38,7 @@ META-spec - Specification for CPAN distribution metadata
     resources => {
       license => 'http://dev.perl.org/licenses/',
     },
+    dynamic_config => 1,
     'meta-spec' => {
       version => 1.4,
       url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
@@ -309,20 +310,13 @@ Example:
 
   dynamic_config => 0
 
-(Spec 1.0) [optional] {boolean} A boolean flag indicating whether a F<Build.PL>
-or F<Makefile.PL> (or similar) must be executed when building this
-distribution, or whether it can be built, tested and installed solely
-from consulting its
-metadata file.  The main reason to set this to a true value is that
-your module performs some dynamic configuration (asking questions,
-sensing the environment, etc.) as part of its build/install process.
-
-Currently Module::Build doesn't actually do anything with this flag
-- it's probably going to be up to higher-level tools like CPAN
-to do something useful with it.  It can potentially bring lots of
-security, packaging, and convenience improvements.
-
-If this field is omitted, it defaults to 1 (true).
+(Spec 2.0) [required] {boolean} A boolean flag indicating whether a
+F<Build.PL> or F<Makefile.PL> (or similar) must be executed when building
+this distribution, or whether it can be built, tested and installed solely
+from consulting its metadata file.  The main reason to set this to a true
+value is if your module performs some dynamic configuration (asking
+questions, sensing the environment, etc.) as part of its configuration,
+build or test processes.
 
 =head2 private
 
