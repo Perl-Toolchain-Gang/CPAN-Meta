@@ -7,6 +7,9 @@ META-spec - Specification for CPAN distribution metadata
   my $distmeta = {
     name => 'Module-Build',
     abstract => 'Build and install Perl modules',
+    description =>  "Module::Build is a system for building, testing, "
+                .   "and installing Perl modules.  It is meant to be an "
+                .   "alternative to "ExtUtils::MakeMaker... blah blah blah",
     version  => '0.20',
     author   => [ 'Ken Williams <kwilliams@cpan.org>' ],
     license  => 'perl',
@@ -164,6 +167,18 @@ Example:
 
 (Spec 1.1) [required] {string} A short description of the purpose of the
 distribution.
+
+=head2 description
+
+Example:
+
+    description =>  "Module::Build is a system for building, testing, "
+                .   "and installing Perl modules.  It is meant to be an "
+                .   "alternative to "ExtUtils::MakeMaker... blah blah blah"
+
+(Spec 2.0) [optiona] {string} A longer, more complete description of the
+purpose or intended use of the distribution than the one provided by the 
+C<abstract> key.
 
 =head2 author
 
