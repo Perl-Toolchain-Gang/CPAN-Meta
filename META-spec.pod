@@ -154,7 +154,8 @@ Example:
   version => 0.20
 
 (Spec 1.0) [required] {version} The version of the distribution to which the
-metadata structure refers.
+metadata structure refers.  The value must be in one of the valid version
+number formats described in L<VERSION FORMATS>
 
 =head2 abstract
 
@@ -476,6 +477,58 @@ regarding F<META.yml> usage prefers the form listed above, i.e. it
 splits on /\s+version\s+/ taking the first field as the name of the
 tool that generated the file and the second field as version of that
 tool. RWS]
+
+=head1 VERSION FORMATS
+
+Several fields in the CPAN Meta Spec take a "version number", either
+directly or within a larger data structure.  These version numbers
+should given as strings, not numeric literals.  If any characters
+not matching C<qr{[\d.]}> appear, the version number must be given within
+quotes as a string
+
+   version => 1.234       # Number (acceptable)
+   version => '1.234'     # String (preferred)
+   version => '1.23_04'   # String (required due to '_')
+
+Unless otherwise specified, version numbers must appear in one of two
+formats:
+
+=over
+
+=item Decimal versions
+
+Decimal versions are regular "decimal numbers", with some limitations.  They
+must be positive and must have a leading and trailing digit.  A single
+underscore may be included, but must be between two digits.
+
+   version => '1.234'       # OK
+   version => '1.23_04'     # OK
+
+   version => '1.23_04_05'  # Illegal
+
+=item Dotted-integer versions
+
+Dotted-integer (also known as dotted-decimals) versions consist of positive
+integers separated by full stop characters (i.e. "dots", "periods" or "decimal
+points").  This are equivalent to Perl "v-strings", with some additional
+restrictions on form.  They must be presented in "normal form", which has a
+leading "v" character and at least three integer components.  All components
+after the first are restricted to the range 0 to 999.  The final component
+may be separated by an underscore character intead of a period.
+Dotted-integer versions must be quoted strings.
+
+   version => 'v1.2.3'      # OK
+   version => 'v1.2_3'      # OK
+   version => 'v1.2.3.4'    # OK
+   version => 'v1.2.3_4'    # OK
+   version => 'v2009.10.31' # OK
+
+   version => 'v1.2'          # Illegal
+   version => '1.2.3'         # Illegal
+   version => 'v1.2_3_4'      # Illegal
+   version => 'v1.2009.10.31' # Illegal
+
+=back
 
 =head1 VERSION SPECIFICATIONS
 
