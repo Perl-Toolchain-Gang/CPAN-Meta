@@ -321,6 +321,27 @@ should consider the entire installation a failure.
 See L</Merging and Resolving Prerequisites> for details on merging
 prerequisites.
 
+I<Suggestion for use:> Because there is currently no way for a distribution
+to specify a dependency on an optional_feature of another dependency, a good
+practice may be to encapsulate all optional feature dependencies information
+into a separate distribution. For example, in the metadata for Foo-Bar-1.23:
+
+  optional_features => {
+    wibble => {
+      description => 'Provides Wibble support',
+      prereqs => {
+        runtime => {
+          requires => [
+            'Foo::Bar::Wibble' => '1.23'
+          ]
+        }
+      }
+    }
+  }
+
+Then, in Foo-Bar-Wibble-1.23, specify the prerequisites for "Wibble support"
+normally in the C<prereqs> key.  This allows distributions that need "Wibble
+support" to specify *both* Foo::Bar and Foo::Bar::Wibble as required modules.
 
 =head2 provides
 
