@@ -492,10 +492,12 @@ C<test> phase, this entry would appear in the distribution metadata:
     }
   }
 
-The inner arrayref is a list of pairs of module names and
+The inner arrayref is a I<Ordered Mapping> of module names and
 L<version specifications|/Version Specifications>.
 
 =head3 Phases
+
+[Describe how these have to be cumulated during install process]
 
 =over
 
@@ -522,6 +524,10 @@ The runtime phase refers not only to when the distribution's contents
 are installed, but also to its continued use.  Any library that is a
 prerequisite for regular use of this distribution should be indicated
 here.
+
+=item develop
+
+[describe how this is for developer tools]
 
 =back
 
@@ -550,6 +556,10 @@ These libraries cannot be installed when the phase is in operation.
 This is a pretty uncommon situation.
 
 =back
+
+=head3 Ordered Mapping
+
+[Describe how ordered mapping of module => version spec should be used.]
 
 =head2 Merging and Resolving Prerequisites
 
