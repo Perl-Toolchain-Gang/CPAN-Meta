@@ -187,6 +187,49 @@ distribution may be used and redistributed.  See
 L<http://search.cpan.org/dist/Module-Build/lib/Module/Build/API.pod>
 for the list of valid options.
 
+=head2 release_status
+
+Example:
+
+  release_status => 'stable'
+
+(Spec 2.0) [required] {string} The release status of this distribution.  If
+the C<version> field contains an underscore character, then
+C<release_status> must be either "testing" or "unstable".  If C<version>
+does not contain an underscore, C<release_status> may contain either
+"stable", "testing" or "unstable".
+
+The definition of these three values follow:
+
+=over
+
+=item stable
+
+This indicates an ordinary, "final" release that should be indexed by PAUSE
+or other indexers.
+
+=item testing
+
+This indicates a "beta" release that is substantially complete, but has an
+elevated risk of bugs and requires additional testing.  The distribution
+should not be installed over a stable release without an explicit request
+or other confirmation from a user.  This release status may also be used
+for "release candidate" versions of a distribution.
+
+=item unstable
+
+This indicates an "alpha" release that is under active development, but has
+been released for early feedback or testing and may be missing features or
+may have serious bugs.  The distribution should not be installed over a
+stable release without an explicit request or other confirmation from a
+user.
+
+=back
+
+Consumers may use this field to determine how to index the distribution for
+CPAN or other repositories in addition to or in replacement of heuristics
+based on version number or file name.
+
 =head2 distribution_type
 
 Example:
