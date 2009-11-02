@@ -11,30 +11,36 @@ META-spec - Specification for CPAN distribution metadata
     author   => [ 'Ken Williams <kwilliams@cpan.org>' ],
     license  => 'perl',
     distribution_type => 'module',
-    requires => {
-      'Config' => 0,
-      'Cwd'    => 0,
-      'Data::Dumper' => 0,
-      'ExtUtils::Install' => 0,
-      'File::Basename' => 0,
-      'File::Compare'  => 0,
-      'File::Copy' => 0,
-      'File::Find' => 0,
-      'File::Path' => 0,
-      'File::Spec' => 0,
-      'IO::File'   => 0,
-      'perl'       => 5.005_03,
-    },
-    recommends => {
-      'Archive::Tar' => 1.00,
-      'ExtUtils::Install' => 0.3,
-      'ExtUtils::ParseXS' => 2.02,
-      'Pod::Text' => 0,
-      'YAML' => 0.35,
-    },
-    build_requires => {
-      'Test' => 0,
-    }, 
+    prereqs => {
+      runtime => {
+        requires => [
+          'Config' => 0,
+          'Cwd'    => 0,
+          'Data::Dumper' => 0,
+          'ExtUtils::Install' => 0,
+          'File::Basename' => 0,
+          'File::Compare'  => 0,
+          'File::Copy' => 0,
+          'File::Find' => 0,
+          'File::Path' => 0,
+          'File::Spec' => 0,
+          'IO::File'   => 0,
+          'perl'       => '5.005_03',
+        ],
+        recommends => [
+          'Archive::Tar' => 1.00,
+          'ExtUtils::Install' => 0.3,
+          'ExtUtils::ParseXS' => 2.02,
+          'Pod::Text' => 0,
+          'YAML' => 0.35,
+        ],
+      },
+      build => {
+        requires => [
+          'Test' => 0,
+        ],
+      }
+    }
     resources => {
       license => 'http://dev.perl.org/licenses/',
     },
@@ -229,6 +235,93 @@ If this field is omitted, it defaults to 1 (true).
 I<(Deprecated)> (Spec 1.0) [optional] {hashref} This field has been renamed to
 L</"no_index">.  See below.
 
+=head2 prereqs
+
+Example:
+
+    prereqs => {
+      runtime => {
+        requires => [
+          'perl'          => '5.006',
+          'File::Spec'    => '0.86',
+          'JSON'          => '2.16',
+        ],
+        prefers => [
+          'JSON::XS'      => '2.26',
+        ]
+        recommends => [
+          'Archive::Tar'  => 0,
+        ],
+      },
+      build => {
+        requires => [
+          'Test::More'    => "0.94",
+        ],
+        prefers => [
+          'Test::Deep'    => "0.10",
+        ],
+      }
+    }
+
+(Spec 2.0) [optional] {prereq-spec} A hashref that describes all the
+prerequisites required for operation.  The keys are phases of activity,
+such as C<configure>, C<build>, C<test> and C<runtime>.  Values are
+hashref-of-arrayref structures, with subkeys for type of prerequisite
+relationship such as C<requires>, C<prefers>, or C<recommends>.  The
+arrayref describes an ordered map of module names and version
+specifications.  See the L</PREREQ SPEC> section for the full description
+of the prereq-spec data structure.
+
+=head2 optional_features
+
+Example:
+
+  optional_features => {
+    sqlite => {
+      description => 'Provides SQLite support',
+      prereqs => {
+        runtime => {
+          requires => [
+            'DBD::SQLite' => '1.25'
+          ]
+        }
+      }
+    }
+  }
+
+(Spec 2.0) [optional] {hashref} A hashref of names for optional features
+with incremental prerequisites.  Each key of the C<optional_features>
+hashref is an identifier for a feature and each value is hashref with
+additional information about the feature.  Valid keys include:
+
+=over
+
+=item description
+
+A string describing the feature.
+
+=item prereqs
+
+A C<prereq-spec> data structure describing additional requirements
+that must be satisfied for the feature to be supported or enabled
+
+=back
+
+By default, optional_features must not add additional prerequisites.  (If
+prerequisites happen to be already satisfied, metadata consumers may
+indicate that the optional feature is supported.)  If an optional feature
+is used by a consumer to add prerequisites, the prerequisites should be
+merged into those given by the C<prereqs> key and adopt the same semantics.
+
+For example, if an optional feature has a "runtime/requires" prerequisite
+on the Algorithm::Diff module and the feature has been selected for
+installation, then if Algorithm::Diff cannot be installed, the installer
+should consider the entire installation a failure.
+
+See L</Merging and Resolving Prerequisites> for details on merging
+prerequisites.
+
+
 =head2 provides
 
 Example:
@@ -377,63 +470,116 @@ splits on /\s+version\s+/ taking the first field as the name of the
 tool that generated the file and the second field as version of that
 tool. RWS]
 
-=head1 PREREQ DATA
+=head1 PREREQUISITES
 
-These entries in the metadata structure all define the relationship
-between this distribution and other packages.  These data are sorted
-into I<phases> in which other packages may be needed, and each phase is
-described using the same terms.
+=head2 Prereq Spec
+
+The C<prereqs> key and data structures within the C<optional_features> key
+specify a C<prereq-spec> data type.  These entries in the metadata
+structure all define the relationship between this distribution and other
+packages.  A C<prereq-spec> is a hierarchical data structure which divides
+prerequisites into I<Phases> of activity in the installation process
+and I<Relationships> that indicate how prerequisites should be resolved.
 
 For example, to specify that C<Data::Dumper> is C<required> during the
 C<test> phase, this entry would appear in the distribution metadata:
 
-  test => {
-    requires => {
-      'Data::Dumper' => 2.00,
-    },
+  prereqs => {
+    test => {
+      requires => [
+        'Data::Dumper' => '2.00'
+      ]
+    }
   }
 
-The inner hashref is a list of pairs of L</dependency names|DEPENDENCY
-SPECIFICATIONS> and L</version numbers|VERSION SPECIFICATIONS>.
+The inner arrayref is a list of pairs of module names and
+L<version specifications|/Version Specifications>.
 
-=head2 configure phase
+=head3 Phases
+
+=over
+
+=item configure
 
 The configure phase occurs before any dynamic configuration has been
 attempted.  Libraries required by the configure phase must be installed
 before the distribution building tool has been executed.
 
-=head2 build phase
+=item build
 
 The build phase is when the distribution's source code is compiled (if
 necessary) and otherwise made ready for installation.
 
-=head2 test phase
+=item test
 
 The test phase is when the distribution's automated test suite is run.
 Any library that is needed only for testing and not for subsequent use
 should be listed here.
 
-=head2 install phase
+=item runtime
 
-The install phase refers not only to when the distribution's contents
+The runtime phase refers not only to when the distribution's contents
 are installed, but also to its continued use.  Any library that is a
 prerequisite for regular use of this distribution should be indicated
 here.
 
-=head2 requires
+=back
+
+=head3 Relationships
+
+=over
+
+=item requires
 
 Dependencies that are required absolutely must be in place for proper
 completion of the phase.
 
-=head2 recommends
+=item prefers
 
-Dependencies that are recommended are recommended for enhanced operation
+Dependencies that are optional but strongly encouraged and should be
+satisfied except in resource constrained environments.
+
+=item recommends
+
+Dependencies that are optional but recommended for enhanced operation
 of the described distribution.
 
-=head2 conflicts
+=item conflicts
 
 These libraries cannot be installed when the phase is in operation.
 This is a pretty uncommon situation.
+
+=back
+
+=head2 Merging and Resolving Prerequisites
+
+Whenever metadata consumer merge prerequisites, either from different
+phases or from C<optional_features>, they should merged in a way which
+preserves the intended semantics of the prerequisite structure.  Generally,
+this means concatenating the version specifications using commas, as
+described in the L<VERSION SPECIFICATIONS> section.
+
+Another subtle error that can occur in resolving prerequisites comes from
+the way that modules in prerequisits are indexed to distribution files on
+CPAN.  When a module is deleted from a distribution, prerequisites calling
+for that module could indicate an older distribution should installed,
+potentially overwriting files from a newer distribution.
+
+For example, as of Oct 31, 2009, the CPAN index file contains these
+module-distribution mappings:
+
+  Class::MOP                   0.94  D/DR/DROLSKY/Class-MOP-0.94.tar.gz
+  Class::MOP::Class            0.94  D/DR/DROLSKY/Class-MOP-0.94.tar.gz
+  Class::MOP::Class::Immutable 0.04  S/ST/STEVAN/Class-MOP-0.36.tar.gz
+
+Consider the case where "Class::MOP" is either installed or listed as a
+prequisite.  Should a distribution specify "Class::MOP::Class::Immutable"
+as a prerequisites, it could result in Class-MOP-0.36.tar.gz being
+installed, overwriting any files from Class-MOP-0.94.tar.gz.
+
+Consumers of metadata should test whether prerequisites would result in
+installed module files being "downgraded" to an older version and may warn
+user or ignore the prerequisite that would cause such a result.
 
 =head1 VERSION SPECIFICATIONS
 
