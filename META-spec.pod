@@ -39,6 +39,7 @@ META-spec - Specification for CPAN distribution metadata
       license => 'http://dev.perl.org/licenses/',
     },
     dynamic_config => 1,
+    keywords => [ qw/ toolchain cpan dual-life / ],
     'meta-spec' => {
       version => 1.4,
       url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
@@ -454,10 +455,12 @@ but I<not> the listed namespace(s) its self.
 
 Example:
 
-  keywords => [ qw(make build install) ]
+  keywords => [ qw/ toolchain cpan dual-life / ]
 
 (Spec 1.1) [optional] {arrayref} An arrayref of keywords/phrases that describe
-this distribution.
+this distribution.  Keywords should not include whitespace.  Consumers of the
+C<keywords> field may modify whitespace (converting to dashes or underscores)
+if needed for particular purposes (e.g. browser-friendly URLs).
 
 =head2 resources
 
