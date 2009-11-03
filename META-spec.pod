@@ -169,7 +169,8 @@ Example:
   version => 0.20
 
 (Spec 1.0) [required] {version} The version of the distribution to which the
-metadata structure refers.
+metadata structure refers.  The value must be in one of the valid version
+number formats described in L<VERSION FORMATS>
 
 =head2 abstract
 
@@ -581,7 +582,62 @@ splits on /\s+version\s+/ taking the first field as the name of the
 tool that generated the file and the second field as version of that
 tool. RWS]
 
-=head1 VERSION SPECIFICATIONS
+=head1 VERSION NUMBERS
+
+=head2 Version Formats
+
+Several fields in the CPAN Meta Spec take a "version number", either
+directly or within a larger data structure.  These version numbers
+should given as strings, not numeric literals.  If any characters
+not matching C<qr{[0-9.]}> appear, the version number must be given
+as a string
+
+   version => 1.234       # Number (acceptable)
+   version => '1.234'     # String (preferred)
+   version => '1.23_04'   # String (required due to '_')
+
+Unless otherwise specified, version numbers must appear in one of two
+formats:
+
+=over
+
+=item Decimal versions
+
+Decimal versions are regular "decimal numbers", with some limitations.  They
+must be positive and must have a leading and trailing digit.  A single
+underscore may be included, but must be between two digits.  They should
+not use exponential notation ("1.23e-2").
+
+   version => '1.234'       # OK
+   version => '1.23_04'     # OK
+
+   version => '1.23_04_05'  # Illegal
+
+=item Dotted-integer versions
+
+Dotted-integer (also known as dotted-decimal) versions consist of positive
+integers separated by full stop characters (i.e. "dots", "periods" or "decimal
+points").  This are equivalent to Perl "v-strings", with some additional
+restrictions on form.  They must be given in "normal" form, which has a
+leading "v" character and at least three integer components.  All components
+after the first are restricted to the range 0 to 999.  The final component
+may be separated by an underscore character instead of a period.
+Dotted-integer versions must be quoted strings.
+
+   version => 'v1.2.3'      # OK
+   version => 'v1.2_3'      # OK
+   version => 'v1.2.3.4'    # OK
+   version => 'v1.2.3_4'    # OK
+   version => 'v2009.10.31' # OK
+
+   version => 'v1.2'          # Illegal
+   version => '1.2.3'         # Illegal
+   version => 'v1.2_3_4'      # Illegal
+   version => 'v1.2009.10.31' # Illegal
+
+=back
+
+=head2 Version Specifications
 
 Some fields require a version specification (ex. L<"requires">,
 L<"recommends">, L<"build_requires">, etc.) to indicate the particular
@@ -605,6 +661,53 @@ For more complicated situations, version specifications may be AND-ed
 together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
 2.0> indicates a version that must be B<at least> 1.2, B<less than>
 2.0, and B<not equal to> 1.5.
+
+=head2 Extracting Version Numbers from Perl Modules
+
+To get the version number from a Perl module, consumers should use the
+C<< MM->parse_version($file) >> method provided by L<ExtUtils::MakeMaker> or
+the L<Module::Build::ModuleInfo> module provided with L<Module::Build>.  For
+example, for the module given by C<$mod>, the version may be retrieved in one
+of the following ways:
+
+  # via ExtUtils::MakeMaker
+  my $file = MM->_installed_file_for_module($mod);
+  my $version = MM->parse_version($file)
+
+The private C<_installed_file_for_module> method may be replaced with
+other methods for locating a module in C<@INC>.
+
+  # via Module::Build
+  my $info = Module::Build::ModuleInfo->new_from_module($mod);
+  my $version = $info->version;
+
+If only a filename is available, the following approach may be used:
+
+  # via Module::Build
+  my $info = Module::Build::ModuleInfo->new_from_file($file);
+  my $version = $info->version;
+
+=head2 Comparing Version Numbers
+
+The L<version> module provides the most reliable way to compare version
+numbers in all the various ways they might be provided or might exist
+within modules.  Given two strings containing version numbers, C<$v1> and
+C<$v2>, they should be converted to C<version> objects before using
+ordinary comparison operators.  For example:
+
+  use version;
+  if ( version->new($v1) <=> version->new($v2) ) {
+    print "Versions are not equal\n";
+  }
+
+If the only comparison needed is whether an installed module is of a
+sufficiently high version, a direct test may be done using the string
+form of C<eval> and the C<use> function.  For example, for module C<$mod>
+and version prerequisite C<$prereq>:
+
+  if ( eval "use $mod $prereq (); 1" ) {
+    print "Module $mod version is OK.\n";
+  }
 
 =head1 SERIALIZATION
 
