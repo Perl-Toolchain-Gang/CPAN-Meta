@@ -38,6 +38,7 @@ META-spec - Specification for CPAN distribution metadata
     resources => {
       license => 'http://dev.perl.org/licenses/',
     },
+    dynamic_config => 1,
     'meta-spec' => {
       version => 1.4,
       url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
@@ -352,20 +353,18 @@ Example:
 
   dynamic_config => 0
 
-(Spec 1.0) [optional] {boolean} A boolean flag indicating whether a F<Build.PL>
-or F<Makefile.PL> (or similar) must be executed when building this
-distribution, or whether it can be built, tested and installed solely
-from consulting its
-metadata file.  The main reason to set this to a true value is that
-your module performs some dynamic configuration (asking questions,
-sensing the environment, etc.) as part of its build/install process.
+(Spec 2.0) [required] {boolean} A boolean flag indicating whether a F<Build.PL>
+or F<Makefile.PL> (or similar) must be executed to determine prerequisites.
+The main reason to set this to a true value is if your module performs some
+dynamic configuration (asking questions, sensing the environment, etc.) as part
+of its configuration.  The main reason to set this to a false value is to
+indicate that prerequisites may be considered valid for static analysis.
 
-Currently Module::Build doesn't actually do anything with this flag
-- it's probably going to be up to higher-level tools like CPAN
-to do something useful with it.  It can potentially bring lots of
-security, packaging, and convenience improvements.
-
-If this field is omitted, it defaults to 1 (true).
+This field explicitly does not indicate whether installation may be safely
+performed without using a Makefile or Build file, as there may be special files
+to install or custom installation targets (e.g. for dual-life modules that
+exist on CPAN as well as in the Perl core).  This field only defines whether
+prerequisites are complete as given in the META file.
 
 =head2 private
 
