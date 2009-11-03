@@ -13,6 +13,7 @@ META-spec - Specification for CPAN distribution metadata
     version  => '0.20',
     author   => [ 'Ken Williams <kwilliams@cpan.org>' ],
     license  => 'perl_5',
+    language => 'perl5',
     distribution_type => 'module',
     requires => {
       'Config' => 0,
@@ -256,6 +257,15 @@ licensing not described above:
  unknown         License not provided in metadata
 
 All other strings are invalid in the license field.
+
+=head2 language
+
+Example:
+
+  language => 'perl5'
+
+(Spec 2.0) [required] {string} The programming language in which the 
+distribution is implemented.
 
 =head2 distribution_type
 
