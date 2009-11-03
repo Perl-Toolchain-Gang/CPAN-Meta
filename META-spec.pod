@@ -126,8 +126,17 @@ C<LWP::Simple>, or C<DBD::File>.
 
 =head1 STRUCTURE
 
-The distribution metadata structure is a hash whose keys are are
-described here.
+The distribution metadata structure is a hash whose keys are
+described here.  All other keys are invalid and should be ignored.
+
+=head2 Custom Keys
+
+Any custom keys within the metadata structure (whether top-level or within
+sub-hashes) not described in the specification document *must* begin with an
+"x" or "X" and be followed by an underscore or dash; i.e. they must match the
+pattern: C<< qr{^x[_-]}i >>
+
+Consumers of metadata information may ignore any or all custom keys.
 
 =head2 meta-spec
 
@@ -514,14 +523,13 @@ Example:
       type => 'git',
     },
     MailingList => 'http://lists.sf.net/lists/listinfo/module-build-general',
+    x_twitter   => 'http://http://twitter.com/cpan_linked/',
   }
 
-(Spec 1.1) [optional] {hashref} A hashref of any URL resources related to
-this distribution.  All-lower-case keys, such as C<homepage> and
-C<license>, are reserved by this specification, as they have
-"official" meanings defined here in this specification.  If you'd like
-to add your own "special" entries (like the "MailingList" entry
-above), use at least one upper-case letter.
+(Spec 2.0) [optional] {hashref} A hashref of any URL resources related to this
+distribution.  If you'd like to add your own "special" entries (like the
+"x_twitter" entry above), they must begin with an "x" or "X" as described
+in the rules for L</"Custom Keys">.
 
 The current set of official keys is:
 
