@@ -12,7 +12,7 @@ META-spec - Specification for CPAN distribution metadata
                 .   "alternative to "ExtUtils::MakeMaker... blah blah blah",
     version  => '0.20',
     author   => [ 'Ken Williams <kwilliams@cpan.org>' ],
-    license  => 'perl_5',
+    license  => 'perl5',
     language => 'perl5',
     distribution_type => 'module',
     prereqs => {
@@ -196,7 +196,7 @@ Example:
                 .   "alternative to "ExtUtils::MakeMaker... blah blah blah"
 
 (Spec 2.0) [optiona] {string} A longer, more complete description of the
-purpose or intended use of the distribution than the one provided by the 
+purpose or intended use of the distribution than the one provided by the
 C<abstract> key.
 
 =head2 author
@@ -224,7 +224,7 @@ outside the scope of this metadata specification.
 
 Example:
 
-  license => 'perl_5'
+  license => 'perl5'
 
   license => ['apache_2','mozilla_1_0']
 
@@ -256,7 +256,7 @@ The following list of license strings are valid:
  mozilla_1_0     Mozilla Public License, Version 1.0
  mozilla_1_1     Mozilla Public License, Version 1.1
  openssl         OpenSSL License
- perl_5          The Perl 5 License (Artistic 1 & GPL 1)
+ perl5           The Perl 5 License (Artistic 1 & GPL 1)
  qpl_1_0         Q Public License, Version 1.0
  ssleay          Original SSLeay License
  sun             Sun Internet Standards Source License (SISSL)
@@ -280,7 +280,7 @@ Example:
 
   language => 'perl5'
 
-(Spec 2.0) [required] {string} The programming language in which the 
+(Spec 2.0) [required] {string} The programming language in which the
 distribution is implemented.
 
 =head2 release_status
