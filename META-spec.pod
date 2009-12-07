@@ -79,34 +79,6 @@ and the latest development version (which may include things that
 won't make it into the stable version) can always be found at
 L<http://module-build.sourceforge.net/META-spec-blead.html>.>
 
-=begin MAINTAINER
-
-The master source for the META spec is META-spec.pod.  META-spec.html
-is built (manually) from META-spec.pod whenever there are changes, and
-the two files should generally be checked in together.  Ideally it
-would happen through a trigger or something, but it doesn't.
-
-Ken has a cron job that copies the latest bleeding-edge version of the
-spec (HTML version) to Sourceforge whenever his laptop is turned on:
-
-  21 * * * * svn cat http://svn.perl.org/modules/Module-Build/trunk/website/META-spec.html \
-       | ssh kwilliams@shell.sourceforge.net \
-       'cat > /home/groups/m/mo/module-build/htdocs/META-spec-blead.html'
-
-The numbered revisions of the spec at
-L<"http://module-build.sourceforge.net/"> are captures of the spec at
-opportune moments.  A couple of symlinks also exist for convenience:
-
- -rw-r--r--  1 kwilliams 24585 Oct 10 17:21 META-spec-blead.html
- lrwxrwxrwx  1 kwilliams    19 Jan 19  2007 META-spec-current.html -> META-spec-v1.3.html
- lrwxrwxrwx  1 kwilliams    22 Jan 19  2007 META-spec.html -> META-spec-current.html
- -rw-r--r--  1 kwilliams  5830 Jul 25  2005 META-spec-v1.0.html
- -rw-r--r--  1 kwilliams  7847 Jul 25  2005 META-spec-v1.1.html
- -rw-r--r--  1 kwilliams 22635 Aug 23  2005 META-spec-v1.2.html
- -rw-r--r--  1 kwilliams 24086 Nov  4  2006 META-spec-v1.3.html
-
-=end MAINTAINER
-
 
 =head1 TERMINOLOGY
 
