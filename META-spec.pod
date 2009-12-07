@@ -932,3 +932,4 @@ JSON, L<http://json.org/>
 
 YAML, L<http://www.yaml.org/>
 
+# vi:tw=72
