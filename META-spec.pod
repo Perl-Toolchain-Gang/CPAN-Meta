@@ -91,9 +91,57 @@ This refers to a reusable library of code typically contained in a
 single file. Currently, we primarily talk of perl modules, but this
 specification should be open enough to apply to other languages as
 well (ex. python, ruby).  Examples of modules are C<Class::Container>,
-C<LWP::Simple>, or C<DBD::File>.
+C<LWP::Simple>, or C<DBD::File>.  Modules are usually organized into
+one or more packages.
+
+=item package
+
+This refers to a namespace declared with the Perl C<package> statement.
+In Perl, packages often have a version number property given by the
+<$VERSION> variable in the namespace.
+
+=item consumer
+
+The term 'consumer' refers to code that reads a metafile, deserializes a
+metafile into a data structure in memory or interprets the data
+structure of metadata elements.
+
+=item producer
+
+The term 'producer' refers to code that constructs a metadata data
+structure, serializes into a bytestream and writes it to disk.
 
 =back
+
+=head1 DATA TYPES
+
+Fields in the L</STRUCTURE> section describe data elements, each of
+which has an associated data type as described.  There are three
+'primative' types: String, List and Map.  Other types define compound
+data structures or define constraints on the values of the field.
+
+=head2 String
+
+A data element containing a non-zero length sequence of [UTF8?]
+characters, such as an ordinary Perl scalar that is not a reference.
+
+=head2 List
+
+An ordered list of one or more data elements.  Elements may be of mixed
+type.
+
+Producers should represent List elements using a data structure which
+unambiguously indicates that multiple values are possible, such as a
+reference to a Perl array (an "arrayref").
+
+Consumers expecting a List must consider a String as equivalent to a
+List of length 1.
+
+=head2 Map
+
+An unordered collection of one or more data elements ("values"), indexed
+by associated String elements ("keys").  Value elements may be of mixed
+type.
 
 =head1 STRUCTURE
 
