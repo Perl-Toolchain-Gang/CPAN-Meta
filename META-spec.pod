@@ -11,7 +11,10 @@ META-spec - Specification for CPAN distribution metadata
                 .   "and installing Perl modules.  It is meant to be an "
                 .   "alternative to "ExtUtils::MakeMaker... blah blah blah",
     version  => '0.20',
-    author   => [ 'Ken Williams <kwilliams@cpan.org>' ],
+    author   => [
+      'Ken Williams <kwilliams@cpan.org>',
+      'Module-Build List <module-build@perl.org>', # additional contact
+    ],
     license  => 'perl5',
     language => 'perl5',
     distribution_type => 'module',
@@ -60,18 +63,15 @@ META-spec - Specification for CPAN distribution metadata
 =head1 DESCRIPTION
 
 This document describes version 2.0 of the CPAN distribution
-metadata specification.
+metadata specification, also knows as the "CPAN Meta Spec".
 
-The distribution metadata describe important properties of contributed
-Perl distributions such as the ones found on CPAN.  It is typically
-created by tools like Module::Build, Module::Install, and
-ExtUtils::MakeMaker.
+The distribution metadata describe important properties of Perl
+distributions such as the ones found on CPAN.  Distributions and a
+corresponding metadata file are typically created by tools like
+Module::Build, Module::Install or ExtUtils::MakeMaker.
 
-The data in the metadata file are meant to be helpful for people
-maintaining module collections (like CPAN), for people writing
-installation tools (like CPAN.pm or CPANPLUS), or just for people who
-want to know some stuff about a distribution before downloading it and
-starting to install it.
+The data in the metadata file are intended to support automated tools
+that index, examine, package or install Perl distributions.
 
 =head1 TERMINOLOGY
 
