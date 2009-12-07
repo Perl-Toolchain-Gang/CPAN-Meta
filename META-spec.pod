@@ -73,13 +73,6 @@ installation tools (like CPAN.pm or CPANPLUS), or just for people who
 want to know some stuff about a distribution before downloading it and
 starting to install it.
 
-I<Note: The latest stable version of this specification can always be
-found at L<http://module-build.sourceforge.net/META-spec-current.html>,
-and the latest development version (which may include things that
-won't make it into the stable version) can always be found at
-L<http://module-build.sourceforge.net/META-spec-blead.html>.>
-
-
 =head1 TERMINOLOGY
 
 =over 4
