@@ -117,8 +117,9 @@ structure, serializes into a bytestream and writes it to disk.
 
 Fields in the L</STRUCTURE> section describe data elements, each of
 which has an associated data type as described.  There are three
-'primative' types: String, List and Map.  Other types define compound
-data structures or define constraints on the values of the field.
+'primative' types: String, List and Map.  Other types are subtypes of
+these primatives and define compound data structures or define
+constraints on the values of the field.
 
 =head2 String
 
@@ -143,19 +144,31 @@ An unordered collection of one or more data elements ("values"), indexed
 by associated String elements ("keys").  Value elements may be of mixed
 type.
 
+=head2 URL
+
+A subtype of string containing a Uniform Resource Locator
+
 =head1 STRUCTURE
 
-The distribution metadata structure is a hash whose keys are
-described here.  All other keys are invalid and should be ignored.
+The distribution metadata structure is a data element of type Map.
+This section describes valid keys within the Map.
 
-=head2 Custom Keys
-
-Any custom keys within the metadata structure (whether top-level or within
-sub-hashes) not described in the specification document *must* begin with an
-"x" or "X" and be followed by an underscore or dash; i.e. they must match the
-pattern: C<< qr{^x[_-]}i >>
+Any custom keys (whether top-level or within compound data structures)
+not described in this specification document *must* begin with an "x" or
+"X" and be followed by an underscore; i.e. they must match the pattern:
+C<< qr{\Ax_}i >>
 
 Consumers of metadata information may ignore any or all custom keys.
+All other keys not described herein are invalid and should be ignored.
+
+For each key, an example is provided followed by a description.  The
+description begins with the version of spec in which the key was added,
+whether the key is 'required' or 'optional' and the data type of the
+corresponding data element.  These items are in parentheses, brackets
+and braces, respectively.
+
+If a data type is a Map or Map subtype, sub-keys will be described
+similarly.
 
 =head2 meta-spec
 
@@ -166,8 +179,28 @@ Example:
     url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
   }
 
-(Spec 1.1) [required] {URL} This field indicates the location of the
-version of the metadata specification used.
+(Spec 1.1) [required] {Map} This field indicates the version of the CPAN
+Meta Spec that should be used to interpret the metadata.  Subkeys
+include:
+
+=over
+
+=item version
+
+(Spec 1.1) [required] {String} A decimal number that indicates the
+version of the CPAN Meta Spec.
+
+=item url
+
+(Spec 1.1) [required] {URL}
+
+The location of the metadata specification document corresponding to
+the given version.
+
+=back
+
+Consumers must check this key as soon as possible and abort further metadata
+processing if the meta-spec version is not supported by the consumer.
 
 =head2 name
 
