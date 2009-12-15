@@ -469,7 +469,9 @@ Example:
 (Spec 2.0) [optional] {hashref} A hashref of names for optional features
 with incremental prerequisites.  Each key of the C<optional_features>
 hashref is an identifier for a feature and each value is hashref with
-additional information about the feature.  Valid keys include:
+additional information about the feature.  Identifers are arbitrary
+strings and do not need a leading "x_" like custom meta field keys.
+Valid keys for the hashref include:
 
 =over
 
