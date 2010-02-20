@@ -161,10 +161,7 @@ C<$hashref> would contain:
 sub as_string_hash {
   my ($self) = @_;
 
-  my %hash;
-  for my $module ($self->__modules) {
-    $hash{ $module } = $self->__entry_for($module)->as_string;
-  }
+  my %hash = map {; $_ => $self->{$_}->as_string } keys %$self;
 
   return \%hash;
 }
