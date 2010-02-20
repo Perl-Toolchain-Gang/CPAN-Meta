@@ -3,6 +3,22 @@ use warnings;
 package Version::Requirements;
 # ABSTRACT: a set of version requirements for a CPAN dist
 
+=head1 SYNOPSIS
+
+  use Version::Requirements;
+
+  my $build_requires = Version::Requirements->new;
+
+  $build_requires->add_minimum('Library::Foo' => 1.208);
+
+  $build_requires->add_minimum('Library::Foo' => 2.602);
+
+  $build_requires->add_minimum('Module::Bar'  => 'v1.2.3');
+
+  $METAyml->{build_requires} = $build_requires->as_string_hash;
+
+=cut
+
 use Carp ();
 use Scalar::Util ();
 use version ();
