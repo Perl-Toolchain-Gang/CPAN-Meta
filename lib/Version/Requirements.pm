@@ -55,39 +55,22 @@ sub as_string_hash {
   return \%hash;
 }
 
-sub __x_meets_req_y {
-  my ($self, $given, $req) = @_;
-
-  # We have a specific requirement:
-  my ($type, $spec) = @$req;
-
-  if ($type eq 'exact') {
-    return $given == $spec;
-  } elsif ($type eq 'range') {
-  }
-
-  Carp::croak "unknown version requirement type: $type";
-}
-
-# Module => {
-#   minimum => x,
-#   maximum => y,
-#   exclude => z,
-# }
-# Module => exact_vesion
-
-sub add_maximum;
-sub add_exclusion;
-
-sub requirements { die'...' }
-
 {
   package
     Version::Requirements::_Spec::Exact;
   sub _new     { bless { version => $_[1] } => $_[0] }
+
   sub _accepts { return $_[0]{version} == $_[1] }
 
   sub as_string { return "== $_[0]{version}" }
+
+  sub exact_version {
+    my ($self, $version) = @_;
+
+    return $self if $self->_accepts($version);
+
+    Carp::confess("illegal requirements: unequal exact version specified");
+  }
 
   sub with_minimum {
     my ($self, $minimum) = @_;
@@ -103,7 +86,7 @@ sub requirements { die'...' }
 
   sub with_exclusion {
     my ($self, $exclusion) = @_;
-    return $self unless $exclusion == $self;
+    return $self unless $exclusion == $self->{version};
     Carp::confess("illegal requirements: excluded exact specification");
   }
 }
@@ -127,6 +110,15 @@ sub requirements { die'...' }
     push @parts, map {; "!= $_" } @{ $self->{exclusions} || [] };
 
     return join q{, }, @parts;
+  }
+
+  sub exact_version {
+    my ($self, $version) = @_;
+
+    Carp::confess("illegal requirements: exact specification outside of range")
+      unless $self->_accepts($version);
+
+    return Version::Requirements::_Spec::Exact->_new($version);
   }
 
   sub _simplify {

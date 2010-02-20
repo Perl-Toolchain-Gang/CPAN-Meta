@@ -15,7 +15,7 @@ use Test::More 0.88;
 
   $req->add_minimum('Foo::Baz' => version->declare('v1.2.3'));
 
-  $req->add_minimum('Foo::Undef' => 0);
+  $req->add_minimum('Foo::Undef' => undef);
 
   is_deeply(
     $req->as_string_hash,
@@ -106,6 +106,25 @@ use Test::More 0.88;
 
   ok(!$ok, "we can't exclude all values")
     or diag explain $req->as_string_hash;
+}
+
+{
+  my $req = Version::Requirements->new;
+
+  $req->add_minimum(Foo => 1);
+  $req->add_maximum(Foo => 1);
+
+  $req->add_maximum(Foo => 2); # ignored
+  $req->add_minimum(Foo => 0); # ignored
+  $req->add_exclusion(Foo => .5); # ignored
+
+  is_deeply(
+    $req->as_string_hash,
+    {
+      'Foo' => '== 1',
+    },
+    "if min==max, becomes exact requirement",
+  );
 }
 
 done_testing;
