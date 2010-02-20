@@ -23,8 +23,10 @@ sub _version_object {
 }
 
 BEGIN {
-  for my $type (qw(minimum maximum exclusion)) {
+  for my $type (qw(minimum maximum exclusion exact_version)) {
     my $method = "with_$type";
+    my $to_add = $type eq 'exact_version' ? $type : "add_$type";
+
     my $code = sub {
       my ($self, $name, $version) = @_;
 
@@ -35,7 +37,6 @@ BEGIN {
       $self->{ $name } = $old->$method($version);
     };
     
-    my $to_add = "add_$type";
     no strict 'refs';
     *$to_add = $code;
   }
@@ -64,7 +65,7 @@ sub as_string_hash {
 
   sub as_string { return "== $_[0]{version}" }
 
-  sub exact_version {
+  sub with_exact_version {
     my ($self, $version) = @_;
 
     return $self if $self->_accepts($version);
@@ -112,8 +113,9 @@ sub as_string_hash {
     return join q{, }, @parts;
   }
 
-  sub exact_version {
+  sub with_exact_version {
     my ($self, $version) = @_;
+    $self = $self->_self;
 
     Carp::confess("illegal requirements: exact specification outside of range")
       unless $self->_accepts($version);

@@ -6,6 +6,18 @@ use version;
 
 use Test::More 0.88;
 
+sub dies_ok (&@) {
+  my ($code, $qr, $comment) = @_;
+
+  my $lived = eval { $code->(); 1 };
+
+  if ($lived) {
+    fail("$comment: did not die");
+  } else {
+    like($@, $qr, $comment);
+  }
+}
+
 {
   my $req = Version::Requirements->new;
 
@@ -26,6 +38,20 @@ use Test::More 0.88;
     },
     "some basic minimums",
   );
+}
+
+{
+  my $req = Version::Requirements->new;
+  $req->add_maximum(Foo => 1);
+  is_deeply($req->as_string_hash, { Foo => '<= 1' }, "max only");
+}
+
+{
+  my $req = Version::Requirements->new;
+  $req->add_exclusion(Foo => 1);
+  $req->add_exclusion(Foo => 2);
+  # Why would you ever do this?? -- rjbs, 2010-02-20
+  is_deeply($req->as_string_hash, { Foo => '!= 1, != 2' }, "excl only");
 }
 
 {
@@ -94,18 +120,35 @@ use Test::More 0.88;
 
 {
   my $req = Version::Requirements->new;
+  $req->add_minimum(Foo => 1);
 
-  my $ok = eval {
-    $req->add_minimum(Foo => 1);
-    $req->add_exclusion(Foo => 1);
-    $req->add_maximum(Foo => 1);
-    1;
-  };
+  $req->add_exclusion(Foo => 1);
 
-  my $error = $@;
+  dies_ok { $req->add_maximum(Foo => 1); }
+    qr/excluded all/,
+    "can't exclude all values" ;
+}
 
-  ok(!$ok, "we can't exclude all values")
-    or diag explain $req->as_string_hash;
+{
+  my $req = Version::Requirements->new;
+  $req->add_minimum(Foo => 1);
+  dies_ok {$req->exact_version(Foo => 0.5); }
+    qr/outside of range/,
+    "can't add outside-range exact spec to range";
+}
+
+{
+  my $req = Version::Requirements->new;
+  $req->add_minimum(Foo => 1);
+  dies_ok { $req->add_maximum(Foo => 0.5); }
+    qr/minimum exceeds maximum/,
+    "maximum must exceed (or equal) minimum";
+
+  $req = Version::Requirements->new;
+  $req->add_maximum(Foo => 0.5);
+  dies_ok { $req->add_minimum(Foo => 1); }
+    qr/minimum exceeds maximum/,
+    "maximum must exceed (or equal) minimum";
 }
 
 {
@@ -125,6 +168,37 @@ use Test::More 0.88;
     },
     "if min==max, becomes exact requirement",
   );
+}
+
+sub foo_1 {
+  my $req = Version::Requirements->new;
+  $req->exact_version(Foo => 1);
+  return $req;
+}
+
+{
+  my $req = foo_1;
+
+  $req->exact_version(Foo => 1); # ignored
+
+  is_deeply($req->as_string_hash, { Foo => '== 1' }, "exact requirement");
+
+  dies_ok { $req->exact_version(Foo => 2); }
+    qr/unequal/,
+    "can't exactly specify differing versions" ;
+
+  $req = foo_1;
+  $req->add_minimum(Foo => 0); # ignored
+  $req->add_maximum(Foo => 2); # ignored
+
+  dies_ok { $req->add_maximum(Foo => 0); } qr/maximum below/, "max < fixed";
+
+  $req = foo_1;
+  dies_ok { $req->add_minimum(Foo => 2); } qr/minimum above/, "min > fixed";
+
+  $req = foo_1;
+  $req->add_exclusion(Foo => 8); # ignored
+  dies_ok { $req->add_exclusion(Foo => 1); } qr/excluded exact/, "!= && ==";
 }
 
 done_testing;
