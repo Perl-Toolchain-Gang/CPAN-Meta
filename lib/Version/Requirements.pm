@@ -17,11 +17,30 @@ package Version::Requirements;
 
   $METAyml->{build_requires} = $build_requires->as_string_hash;
 
+=head1 DESCRIPTION
+
+A Version::Requirements object models a set of version constraints like those
+specified in the F<META.yml> or F<META.json> files in CPAN distributions.  It
+can be built up by adding more and more constraints, and it will reduce them to
+the simplest representation.
+
+Logically impossible constraints will be identified immediately by thrown
+exceptions.
+
 =cut
 
 use Carp ();
 use Scalar::Util ();
 use version ();
+
+=method new
+
+  my $req = Version::Requirements->new;
+
+This returns a new Version::Requirements object.  It ignores any arguments
+given.
+
+=cut
 
 sub new {
   my ($class) = @_;
@@ -37,6 +56,50 @@ sub _version_object {
 
   return $version;
 }
+
+=method add_minimum
+
+  $req->add_minimum( $module => $version );
+
+This adds a new minimum version requirement.  If the new requirement is
+redundant to the existing specification, this has no effect.
+
+Minimum requirements are inclusive.  C<$version> is required, along with any
+greater version number.
+
+=method add_maximum
+
+  $req->add_minimum( $module => $version );
+
+This adds a new maximum version requirement.  If the new requirement is
+redundant to the existing specification, this has no effect.
+
+Maximum requirements are inclusive.  No version strictly greater than the given
+version is allowed.
+
+=method add_exclusion
+
+  $req->add_exclusion( $module => $version );
+
+This adds a new excluded version.  For example, you might use these three
+method calls:
+
+  $req->add_minimum( $module => '1.00' );
+  $req->add_maximum( $module => '1.82' );
+
+  $req->add_exclusion( $module => '1.75' );
+
+Any version between 1.00 and 1.82 inclusive would be acceptable, except for
+1.75.
+
+=method exact_version
+
+  $req->exact_version( $module => $version );
+
+This sets the version required for the given module to I<exactly> the given
+version.  No other version would be considered acceptable.
+
+=cut
 
 BEGIN {
   for my $type (qw(minimum maximum exclusion exact_version)) {
@@ -60,6 +123,40 @@ BEGIN {
 
 sub __modules   { keys %{ $_[ 0 ] } }
 sub __entry_for { $_[0]{ $_[1] }    }
+
+=method as_string_hash
+
+This returns a reference to a hash describing the requirements using the
+strings in the F<META.yml> specification.
+
+For example after the following program:
+
+  my $req = Version::Requirements->new;
+
+  $req->add_minimum('Version::Requirements' => 0.102);
+
+  $req->add_minimum('Library::Foo' => 1.208);
+
+  $req->add_maximum('Library::Foo' => 2.602);
+
+  $req->add_minimum('Module::Bar'  => 'v1.2.3');
+
+  $req->add_exclusion('Module::Bar'  => 'v1.2.8');
+
+  $req->exact_version('Xyzzy'  => '6.01');
+
+  my $hashref = $req->as_string_hash;
+
+C<$hashref> would contain:
+
+  {
+    'Version::Requirements' => '0.102',
+    'Library::Foo' => '>= 1.208, <= 2.206',
+    'Module::Bar'  => '>= v1.2.3, != v1.2.8',
+    'Xyzzy'        => '== 6.01',
+  }
+
+=cut
 
 sub as_string_hash {
   my ($self) = @_;
