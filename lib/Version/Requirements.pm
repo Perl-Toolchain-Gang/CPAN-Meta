@@ -121,6 +121,16 @@ BEGIN {
   }
 }
 
+=method add_requirements
+
+  $req->add_requirements( $another_req_object );
+
+This method adds all the requirements in the given Version::Requirements object
+to the requirements object on which it was called.  If there are any conflicts,
+an exception is thrown.
+
+=cut
+
 sub add_requirements {
   my ($self, $req) = @_;
 
@@ -135,18 +145,42 @@ sub add_requirements {
   return $self;
 }
 
+=method clear_requirement
+
+  $req->clear_requirement( $module );
+
+This removes the requirement for a given module from the object.
+
+=cut
+
+sub clear_requirement {
+  my ($self, $module) = @_;
+  delete $self->{ $module };
+}
+
+=method required_modules
+
+This method returns a list of all the modules for which requirements have been
+specified.
+
+=cut
+
+sub required_modules { keys %{ $_[ 0 ] } }
+
+=method clone
+
+  $req->clone;
+
+This method returns a clone of the invocant.  The clone and the original object
+can then be changed independent of one another.
+
+=cut
+
 sub clone {
   my ($self) = @_;
   my $new = (ref $self)->new;
 
   return $new->add_requirements($self);
-}
-
-sub required_modules { keys %{ $_[ 0 ] } }
-
-sub clear_requirement {
-  my ($self, $module) = @_;
-  delete $self->{ $module };
 }
 
 sub __entry_for {
@@ -194,6 +228,16 @@ sub as_string_hash {
 
   return \%hash;
 }
+
+=method from_string_hash
+
+  my $req = Version::Requirements->from_string_hash( \%hash );
+
+This is an alternate constructor for a Version::Requirements object.  It takes
+a hash of module names and version requirement strings and returns a new
+Version::Requirements object.
+
+=cut
 
 my %methods_for_op = (
   '==' => [ qw(exact_version) ],
