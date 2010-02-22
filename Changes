@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          add is_simple method to V:R
+          as_string_hash will now simplify ">= 1, != 1" to "> 1"
 
 0.100520  2010-02-21 23:15:34 America/New_York
           add_requirements method added (to merge V:R objects)
