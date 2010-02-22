@@ -100,9 +100,6 @@ sub dies_ok (&@) {
 }
 
 {
-  # ATTENTION
-  # This might change in the future to generate '> 1, <= 2'
-  # but there is no need to.  Just do not rely on it too much.
   my $req = Version::Requirements->new;
 
   $req->add_minimum(Foo => 1);
@@ -112,7 +109,7 @@ sub dies_ok (&@) {
   is_deeply(
     $req->as_string_hash,
     {
-      Foo => '>= 1, <= 2, != 1',
+      Foo => '> 1, <= 2',
     },
     "we can exclude an endpoint",
   );

@@ -352,10 +352,27 @@ sub from_string_hash {
 
     return "$self->{minimum}" if (keys %$self) == 1 and exists $self->{minimum};
 
+    my @exclusions = @{ $self->{exclusions} || [] };
+
     my @parts;
-    push @parts, ">= $self->{minimum}" if exists $self->{minimum};
-    push @parts, "<= $self->{maximum}" if exists $self->{maximum};
-    push @parts, map {; "!= $_" } @{ $self->{exclusions} || [] };
+
+    for my $pair (
+      [ qw( >= > minimum ) ],
+      [ qw( <= < maximum ) ],
+    ) {
+      my ($op, $e_op, $k) = @$pair;
+      if (exists $self->{$k}) {
+        my @new_exclusions = grep { $_ != $self->{ $k } } @exclusions;
+        if (@new_exclusions == @exclusions) {
+          push @parts, "$op $self->{ $k }";
+        } else {
+          push @parts, "$e_op $self->{ $k }";
+          @exclusions = @new_exclusions;
+        }
+      }
+    }
+
+    push @parts, map {; "!= $_" } @exclusions;
 
     return join q{, }, @parts;
   }
