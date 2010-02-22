@@ -38,18 +38,23 @@ sub dies_ok (&@) {
     },
     "some basic minimums",
   );
+
+  ok($req->is_simple, "just minimums? simple");
 }
 
 {
   my $req = Version::Requirements->new;
   $req->add_maximum(Foo => 1);
   is_deeply($req->as_string_hash, { Foo => '<= 1' }, "max only");
+
+  ok(! $req->is_simple, "maximums? not simple");
 }
 
 {
   my $req = Version::Requirements->new;
   $req->add_exclusion(Foo => 1);
   $req->add_exclusion(Foo => 2);
+
   # Why would you ever do this?? -- rjbs, 2010-02-20
   is_deeply($req->as_string_hash, { Foo => '!= 1, != 2' }, "excl only");
 }
