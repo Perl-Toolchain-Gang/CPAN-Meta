@@ -121,6 +121,27 @@ BEGIN {
   }
 }
 
+sub add_requirements {
+  my ($self, $req) = @_;
+
+  for my $module ($req->__modules) {
+    my $modifiers = $req->__entry_for($module)->as_modifiers;
+    for my $modifier (@$modifiers) {
+      my ($method, @args) = @$modifier;
+      $self->$method($module => @args);
+    };
+  }
+
+  return $self;
+}
+
+sub clone {
+  my ($self) = @_;
+  my $new = (ref $self)->new;
+
+  return $new->add_requirements($self);
+}
+
 sub __modules   { keys %{ $_[ 0 ] } }
 sub __entry_for { $_[0]{ $_[1] }    }
 
@@ -166,6 +187,8 @@ sub as_string_hash {
   return \%hash;
 }
 
+##############################################################
+
 {
   package
     Version::Requirements::_Spec::Exact;
@@ -174,6 +197,8 @@ sub as_string_hash {
   sub _accepts { return $_[0]{version} == $_[1] }
 
   sub as_string { return "== $_[0]{version}" }
+
+  sub as_modifiers { return [ [ exact_version => $_[0]{version} ] ] }
 
   sub with_exact_version {
     my ($self, $version) = @_;
@@ -202,11 +227,22 @@ sub as_string_hash {
   }
 }
 
+##############################################################
+
 {
   package
     Version::Requirements::_Spec::Range;
 
   sub _self { ref($_[0]) ? $_[0] : (bless { } => $_[0]) }
+
+  sub as_modifiers {
+    my ($self) = @_;
+    my @mods;
+    push @mods, [ add_minimum => $self->{minimum} ] if exists $self->{minimum};
+    push @mods, [ add_maximum => $self->{maximum} ] if exists $self->{maximum};
+    push @mods, map {; [ add_exclusion => $_ ] } @{$self->{exclusions} || []};
+    return \@mods;
+  }
 
   sub as_string {
     my ($self) = @_;
