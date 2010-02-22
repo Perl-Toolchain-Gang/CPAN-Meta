@@ -124,7 +124,7 @@ BEGIN {
 sub add_requirements {
   my ($self, $req) = @_;
 
-  for my $module ($req->__modules) {
+  for my $module ($req->required_modules) {
     my $modifiers = $req->__entry_for($module)->as_modifiers;
     for my $modifier (@$modifiers) {
       my ($method, @args) = @$modifier;
@@ -142,8 +142,16 @@ sub clone {
   return $new->add_requirements($self);
 }
 
-sub __modules   { keys %{ $_[ 0 ] } }
-sub __entry_for { $_[0]{ $_[1] }    }
+sub required_modules { keys %{ $_[ 0 ] } }
+
+sub clear_requirement {
+  my ($self, $module) = @_;
+  delete $self->{ $module };
+}
+
+sub __entry_for {
+  $_[0]{ $_[1] }
+}
 
 =method as_string_hash
 
@@ -185,6 +193,39 @@ sub as_string_hash {
   my %hash = map {; $_ => $self->{$_}->as_string } keys %$self;
 
   return \%hash;
+}
+
+my %methods_for_op = (
+  '==' => [ qw(exact_version) ],
+  '!=' => [ qw(add_exclusion) ],
+  '>=' => [ qw(add_minimum)   ],
+  '<=' => [ qw(add_maximum)   ],
+  '>'  => [ qw(add_minimum add_exclusion) ],
+  '<'  => [ qw(add_maximum add_exclusion) ],
+);
+
+sub from_string_hash {
+  my ($class, $hash) = @_;
+
+  my $self = $class->new;
+
+  for my $module (keys %$hash) {
+    my @parts = split qr{\s*,\s*}, $hash->{ $module };
+    for my $part (@parts) {
+      my ($op, $ver) = split /\s+/, $part, 2;
+
+      if (! defined $ver) {
+        $self->add_minimum($module => $op);
+      } else {
+        Carp::confess("illegal requirement string: $hash->{ $module }")
+          unless my $methods = $methods_for_op{ $op };
+
+        $self->$_($module => $ver) for @$methods;
+      }
+    }
+  }
+
+  return $self;
 }
 
 ##############################################################
