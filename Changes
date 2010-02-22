@@ -2,6 +2,13 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+0.100520  2010-02-21 23:15:34 America/New_York
+          add_requirements method added (to merge V:R objects)
+          clear_requirement method added
+          from_hash_string method added
+          clone method added
+          required_modules method added
+
 0.100510  2010-02-20 17:27:19 America/New_York
           first release!
 
