@@ -187,6 +187,22 @@ sub __entry_for {
   $_[0]{ $_[1] }
 }
 
+=method is_simple
+
+This method returns true if and only if all requirements are inclusive minimums
+-- that is, if their string expression is just the version number.
+
+=cut
+
+sub is_simple {
+  my ($self) = @_;
+  for my $module ($self->required_modules) {
+    # XXX: This is a complete hack, but also entirely correct.
+    return if $self->__entry_for($module)->as_string =~ /\s/;
+  }
+  return 1;
+}
+
 =method as_string_hash
 
 This returns a reference to a hash describing the requirements using the
