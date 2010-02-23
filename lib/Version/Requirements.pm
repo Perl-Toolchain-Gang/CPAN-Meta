@@ -114,6 +114,8 @@ BEGIN {
       my $old = $self->{ $name } || 'Version::Requirements::_Spec::Range';
 
       $self->{ $name } = $old->$method($version);
+
+      return $self;
     };
     
     no strict 'refs';
@@ -156,6 +158,8 @@ This removes the requirement for a given module from the object.
 sub clear_requirement {
   my ($self, $module) = @_;
   delete $self->{ $module };
+
+  return $self;
 }
 
 =method required_modules
@@ -200,6 +204,7 @@ sub is_simple {
     # XXX: This is a complete hack, but also entirely correct.
     return if $self->__entry_for($module)->as_string =~ /\s/;
   }
+
   return 1;
 }
 
