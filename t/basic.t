@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 use Version::Requirements;
-use version;
 
 use Test::More 0.88;
 
@@ -169,6 +168,25 @@ sub dies_ok (&@) {
       'Foo' => '== 1',
     },
     "if min==max, becomes exact requirement",
+  );
+}
+
+{
+  my $req = Version::Requirements->new;
+  $req->add_minimum(Foo => 1);
+  $req->add_exclusion(Foo => 0);
+  $req->add_maximum(Foo => 3);
+  $req->add_exclusion(Foo => 4);
+
+  $req->add_exclusion(Foo => 2);
+  $req->add_exclusion(Foo => 2);
+
+  is_deeply(
+    $req->as_string_hash,
+    {
+      Foo => '>= 1, <= 3, != 2',
+    },
+    'test exclusion-skipping',
   );
 }
 

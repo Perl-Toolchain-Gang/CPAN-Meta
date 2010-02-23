@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 use Version::Requirements;
-use version;
 
 use Test::More 0.88;
 
