@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.100530  2010-02-22 21:09:40 America/New_York
           add is_simple method to V:R
           as_string_hash will now simplify ">= 1, != 1" to "> 1"
 
