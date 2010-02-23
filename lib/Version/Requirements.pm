@@ -67,6 +67,8 @@ redundant to the existing specification, this has no effect.
 Minimum requirements are inclusive.  C<$version> is required, along with any
 greater version number.
 
+This method returns the requirements object.
+
 =method add_maximum
 
   $req->add_minimum( $module => $version );
@@ -76,6 +78,8 @@ redundant to the existing specification, this has no effect.
 
 Maximum requirements are inclusive.  No version strictly greater than the given
 version is allowed.
+
+This method returns the requirements object.
 
 =method add_exclusion
 
@@ -92,12 +96,16 @@ method calls:
 Any version between 1.00 and 1.82 inclusive would be acceptable, except for
 1.75.
 
+This method returns the requirements object.
+
 =method exact_version
 
   $req->exact_version( $module => $version );
 
 This sets the version required for the given module to I<exactly> the given
 version.  No other version would be considered acceptable.
+
+This method returns the requirements object.
 
 =cut
 
@@ -131,6 +139,8 @@ This method adds all the requirements in the given Version::Requirements object
 to the requirements object on which it was called.  If there are any conflicts,
 an exception is thrown.
 
+This method returns the requirements object.
+
 =cut
 
 sub add_requirements {
@@ -152,6 +162,8 @@ sub add_requirements {
   $req->clear_requirement( $module );
 
 This removes the requirement for a given module from the object.
+
+This method returns the requirements object.
 
 =cut
 
