@@ -71,7 +71,7 @@ This method returns the requirements object.
 
 =method add_maximum
 
-  $req->add_minimum( $module => $version );
+  $req->add_maximum( $module => $version );
 
 This adds a new maximum version requirement.  If the new requirement is
 redundant to the existing specification, this has no effect.
