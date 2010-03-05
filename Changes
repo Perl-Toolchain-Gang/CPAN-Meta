@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.100630  2010-03-04 22:54:15 America/New_York
           do not lose ">= 0" requirements on merge
 
 0.100530  2010-02-22 21:09:40 America/New_York
