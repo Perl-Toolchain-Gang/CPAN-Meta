@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          do not lose ">= 0" requirements on merge
 
 0.100530  2010-02-22 21:09:40 America/New_York
           add is_simple method to V:R

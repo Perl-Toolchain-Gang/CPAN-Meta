@@ -115,4 +115,22 @@ sub dies_ok (&@) {
   );
 }
 
+{
+  my $left = Version::Requirements->new;
+  $left->add_minimum(Foo => 0);
+  $left->add_minimum(Bar => 1);
+
+  my $right = Version::Requirements->new;
+  $right->add_requirements($left);
+
+  is_deeply(
+    $right->as_string_hash,
+    {
+      Foo => 0,
+      Bar => 1,
+    },
+    "we do not lose 0-min reqs on merge",
+  );
+}
+
 done_testing;

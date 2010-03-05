@@ -438,10 +438,6 @@ sub from_string_hash {
     my ($self, $minimum) = @_;
     $self = $self->_self;
 
-    # If $minimum is false, it's undef or 0, which cannot be meaningful as a
-    # minimum.  -- rjbs, 2010-02-20
-    return $self unless $minimum;
-
     if (defined (my $old_min = $self->{minimum})) {
       $self->{minimum} = (sort { $b cmp $a } ($minimum, $old_min))[0];
     } else {
