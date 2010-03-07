@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.100660  2010-03-07 13:05:59 America/New_York
           specify that we need version.pm 0.77
 
 0.100630  2010-03-04 22:54:15 America/New_York
