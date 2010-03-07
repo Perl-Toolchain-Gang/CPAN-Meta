@@ -31,7 +31,7 @@ exceptions.
 
 use Carp ();
 use Scalar::Util ();
-use version ();
+use version 0.77 (); # the ->parse method
 
 =method new
 

@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          specify that we need version.pm 0.77
 
 0.100630  2010-03-04 22:54:15 America/New_York
           do not lose ">= 0" requirements on merge
