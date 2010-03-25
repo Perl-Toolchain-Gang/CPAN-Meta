@@ -211,7 +211,7 @@ Example:
 (Spec 1.0) [required] {string} The name of the distribution which is often
 created by taking the "main module" in the distribution and changing
 "::" to "-".  Sometimes it's completely different, however, as in the
-case of the libww-perl distribution (see
+case of the libwww-perl distribution (see
 L<http://search.cpan.org/dist/libwww-perl/>).
 
 =head2 version
