@@ -222,7 +222,7 @@ Example:
 
 (Spec 1.0) [required] {version} The version of the distribution to which the
 metadata structure refers.  The value must be in one of the valid version
-number formats described in L<VERSION FORMATS>
+number formats described in L</Version Formats>.
 
 =head2 abstract
 
