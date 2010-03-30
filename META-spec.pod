@@ -446,7 +446,7 @@ such as C<configure>, C<build>, C<test> and C<runtime>.  Values are
 hashref-of-arrayref structures, with subkeys for type of prerequisite
 relationship such as C<requires>, C<prefers>, or C<recommends>.  The
 arrayref describes an ordered map of module names and version
-specifications.  See the L</PREREQ SPEC> section for the full description
+specifications.  See the L</Prereq Spec> section for the full description
 of the prereq-spec data structure.
 
 =head2 optional_features
