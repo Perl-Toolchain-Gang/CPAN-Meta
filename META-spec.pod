@@ -356,13 +356,11 @@ Example:
 
   release_status => 'stable'
 
-(Spec 2.0) [required] {String} The release status of this distribution.  If
-the C<version> field contains an underscore character, then
-C<release_status> must be either "testing" or "unstable".  If C<version>
-does not contain an underscore, C<release_status> may contain either
-"stable", "testing" or "unstable".
+(Spec 2.0) [required] {String} The release status of this distribution.
+If the C<version> field contains an underscore character, then
+C<release_status> B<must not> be "stable."
 
-These three values are defined as follows:
+The C<release_status> field B<must> have one of the following values:
 
 =over
 
@@ -415,7 +413,7 @@ etc.) as part of its configuration.  This field should be set to a false
 value is to indicate that prerequisites included in metadata may be
 considered valid for static analysis.
 
-This field explicitly does not indicate whether installation may be
+This field explicitly B<does not> indicate whether installation may be
 safely performed without using a Makefile or Build file, as there may be
 special files to install or custom installation targets (e.g. for
 dual-life modules that exist on CPAN as well as in the Perl core).  This
@@ -442,15 +440,15 @@ Example:
         'JSON::XS'      => '2.26',
       },
       recommends => {
-        'Archive::Tar'  => 0,
+        'Archive::Tar'  => '0',
       },
     },
     build => {
       requires => {
-        'Test::More'    => "0.94",
+        'Test::More'    => '0.94',
       },
       prefers => {
-        'Test::Deep'    => "0.10",
+        'Test::Deep'    => '0.10',
       },
     }
   }
@@ -520,7 +518,7 @@ that must be satisfied for the feature to be supported or enabled.
 
 =back
 
-Consumers must not include optional features as prerequisites without
+Consumers B<must not> include optional features as prerequisites without
 explict instruction from users (whether via interactive prompting or
 a function parameter or a configuration value).
 
@@ -638,7 +636,7 @@ Example:
 
 (Spec 2.0) [optional] {Map} A hashref of any resources related to this
 distribution.  If you'd like to add your own entries (like the
-"x_twitter" entry above), they must begin with an "x_" or "X_" as
+"x_twitter" entry above), they B<must> begin with an "x_" or "X_" as
 described in the rules for L</Custom Keys>.
 
 The current set of official keys is:
@@ -695,7 +693,7 @@ example, C<1.200> B<must not> be serialized as C<1.2>.  Version
 comparison should be delegated to the Perl L<version> module, version
 0.80 or newer.
 
-Unless otherwise specified, version numbers must appear in one of two
+Unless otherwise specified, version numbers B<must> appear in one of two
 formats:
 
 =over
@@ -703,7 +701,7 @@ formats:
 =item Decimal versions
 
 Decimal versions are regular "decimal numbers", with some limitations.
-They must be positive and must have a leading and trailing digit.  A
+They B<must> be non-negative and B<must> begin and end with a digit.  A
 single underscore may be included, but must be between two digits.  They
 should not use exponential notation ("1.23e-2").
 
@@ -711,6 +709,8 @@ should not use exponential notation ("1.23e-2").
    version => '1.23_04'     # OK
 
    version => '1.23_04_05'  # Illegal
+   version => '1.'          # Illegal
+   version => '.1'          # Illegal
 
 =item Dotted-integer versions
 
@@ -794,7 +794,7 @@ L<version ranges|/Version Ranges>.
 =item configure
 
 The configure phase occurs before any dynamic configuration has been
-attempted.  Libraries required by the configure phase must be installed
+attempted.  Libraries required by the configure phase B<must> be installed
 before the distribution building tool has been executed.
 
 =item build
@@ -827,7 +827,7 @@ here.
 
 =item requires
 
-Dependencies that are required absolutely must be in place for proper
+Dependencies that are required B<must> be installed for proper
 completion of the phase.
 
 =item prefers
