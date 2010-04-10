@@ -571,19 +571,14 @@ Example:
     },
   }
 
-(Spec 1.1) [optional] {Map} A hashref that describes all packages
-provided by this distribution.  This information can be (and, in some
-cases, is) used by distribution and automation mechanisms like PAUSE,
-CPAN, and search.cpan.org to build indexes saying in which
-distribution various packages can be found.
+(Spec 1.1) [optional] {Map}
 
-When using tools like C<Module::Build> that can generate the
-C<provides> hashref for your distribution automatically, make sure you
-examine what it generates to make sure it makes sense - indexers will
-usually trust the C<provides> field if it's present, rather than
-scanning through the distribution files themselves to figure out
-packages and versions.  This is a good thing, because it means you can
-use the C<provides> field to tell the indexers precisely what you want
+This describes all packages provided by this distribution.  This
+information can be (and, in some cases, is) used by distribution and
+automation mechanisms like PAUSE, CPAN, and search.cpan.org to build
+indexes saying in which distribution various packages can be found.
+
+This entry allows you to tell the indexers precisely what you want
 indexed about your distribution, rather than relying on them to
 essentially guess what you want indexed.
 
