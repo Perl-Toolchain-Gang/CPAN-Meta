@@ -356,13 +356,11 @@ Example:
 
   release_status => 'stable'
 
-(Spec 2.0) [required] {String} The release status of this distribution.  If
-the C<version> field contains an underscore character, then
-C<release_status> must be either "testing" or "unstable".  If C<version>
-does not contain an underscore, C<release_status> may contain either
-"stable", "testing" or "unstable".
+(Spec 2.0) [required] {String} The release status of this distribution.
+If the C<version> field contains an underscore character, then
+C<release_status> B<must not> be "stable."
 
-These three values are defined as follows:
+The C<release_status> field B<must> have one of the following values:
 
 =over
 
