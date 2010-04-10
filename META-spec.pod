@@ -147,7 +147,8 @@ value elements may be of mixed types.
 
 =head2 URL
 
-A subtype of string containing a Uniform Resource Locator
+I<URL> is a subtype of string containing a Uniform Resource Locator or
+Identifier.  (It is called URL and not URI for historical reasons.)
 
 =head1 STRUCTURE
 
