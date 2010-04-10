@@ -834,7 +834,11 @@ here.
 
 =item develop
 
-[describe how this is for developer tools]
+The develop phase's prereqs are libraries needed to work on the
+distribution's source code as its author does.  These tools might be
+needed to build a release tarball, to run author-only tests, or to
+perform other tasks related to developing new versions of the
+distribution.
 
 =back
 
