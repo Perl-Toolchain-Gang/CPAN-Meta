@@ -98,7 +98,7 @@ one or more packages.
 
 This refers to a namespace declared with the Perl C<package> statement.
 In Perl, packages often have a version number property given by the
-<$VERSION> variable in the namespace.
+C<$VERSION> variable in the namespace.
 
 =item consumer
 
