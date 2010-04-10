@@ -440,15 +440,15 @@ Example:
         'JSON::XS'      => '2.26',
       },
       recommends => {
-        'Archive::Tar'  => 0,
+        'Archive::Tar'  => '0',
       },
     },
     build => {
       requires => {
-        'Test::More'    => "0.94",
+        'Test::More'    => '0.94',
       },
       prefers => {
-        'Test::Deep'    => "0.10",
+        'Test::Deep'    => '0.10',
       },
     }
   }
