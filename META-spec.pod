@@ -254,7 +254,7 @@ metadata structure refers.
 
 Example:
 
-  abstract => 'Build and install Perl modules.'
+  abstract => 'Build and install Perl modules'
 
 (Spec 1.1) [required] {String} A short description of the purpose of the
 distribution.
