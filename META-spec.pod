@@ -267,7 +267,7 @@ Example:
                 .   "and installing Perl modules.  It is meant to be an "
                 .   "alternative to "ExtUtils::MakeMaker... blah blah blah"
 
-(Spec 2.0) [optiona] {String} A longer, more complete description of the
+(Spec 2.0) [optional] {String} A longer, more complete description of the
 purpose or intended use of the distribution than the one provided by the
 C<abstract> key.
 
@@ -277,7 +277,7 @@ Example:
 
   author => [ 'Ken Williams <kwilliams@cpan.org>' ]
 
-(Spec 1.1) [required] {arrayref of strings} An arrayref indicating the
+(Spec 1.1) [required] {List of Strings} An arrayref indicating the
 person(s) to contact concerning the distribution. The prefered form is:
 
   contact-name <email-address>
