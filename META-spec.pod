@@ -214,6 +214,10 @@ These items are in parentheses, brackets and braces, respectively.
 If a data type is a Map or Map subtype, subkeys will be described
 similarly.
 
+Some fields are marked I<Deprecated>.  These are shown for historical
+context and must not be produced in or consumed from any metadata structure
+of version 2.0 or higher.
+
 =head2 meta-spec
 
 Example:
@@ -312,11 +316,11 @@ mailing lists devoted to the distribution may also be listed.
 
 Example:
 
-  license => 'perl5'
+  license => 'perl_5'
 
   license => [ 'apache_2', 'mozilla_1_0' ]
 
-(Spec 2.0) [required] {License String or List of one or more License Strings}
+(Spec 2.0) [required] {List of License Strings}
 
 One or more licenses that apply to some or all of the files in the
 distribution.  If multiple licenses are listed, the distribution
@@ -362,15 +366,6 @@ licensing not described above:
 
 All other strings are invalid in the license field.
 
-=head2 language
-
-Example:
-
-  language => 'perl5'
-
-(Spec 2.0) [required] {String} The programming language in which the
-distribution is implemented.
-
 =head2 release_status
 
 Example:
@@ -383,7 +378,7 @@ C<release_status> must be either "testing" or "unstable".  If C<version>
 does not contain an underscore, C<release_status> may contain either
 "stable", "testing" or "unstable".
 
-The definition of these three values follow:
+These three values are defined as follows:
 
 =over
 
@@ -416,19 +411,9 @@ based on version number or file name.
 
 =head2 distribution_type
 
-Example:
-
-  distribution_type => 'module'
-
-(Spec 1.0) [optional] {String} What kind of stuff is contained in this
-distribution.  Most things on CPAN are C<module>s (which can also mean
-a collection of modules), but some things are C<script>s.
-
-Unfortunately this field is basically meaningless, since many
-distributions are hybrids of several kinds of things, or some new
-thing, or subjectively different in focus depending on who's using
-them.  Tools like Module::Build and MakeMaker will likely stop
-generating this field.
+I<Deprecated> (Spec 1.0) [optional] {String} This field indicated
+'module' or 'script' but was considered meaningless, since many
+distributions are hybrids of several kinds of things.
 
 =head2 dynamic_config
 
@@ -438,10 +423,12 @@ Example:
 
 (Spec 2.0) [required] {Boolean} A boolean flag indicating whether a
 F<Build.PL> or F<Makefile.PL> (or similar) must be executed to determine
-prerequisites.  The main reason to set this to a true value is if your
-module performs some dynamic configuration (asking questions, sensing
-the environment, etc.) as part of its configuration.  The main reason to
-set this to a false value is to indicate that prerequisites may be
+prerequisites.  
+
+This filed should be set to a true value if the distribution performs
+some dynamic configuration (asking questions, sensing the environment,
+etc.) as part of its configuration.  This field should be set to a false
+value is to indicate that prerequisites included in metadata may be
 considered valid for static analysis.
 
 This field explicitly does not indicate whether installation may be
@@ -449,7 +436,7 @@ safely performed without using a Makefile or Build file, as there may be
 special files to install or custom installation targets (e.g. for
 dual-life modules that exist on CPAN as well as in the Perl core).  This
 field only defines whether prerequisites are complete as given in the
-META file.
+metadata file.
 
 =head2 private
 
@@ -462,36 +449,38 @@ Example:
 
   prereqs => {
     runtime => {
-      requires => [
+      requires => {
         'perl'          => '5.006',
         'File::Spec'    => '0.86',
         'JSON'          => '2.16',
-      ],
-      prefers => [
+      },
+      prefers => {
         'JSON::XS'      => '2.26',
-      ]
-      recommends => [
+      },
+      recommends => {
         'Archive::Tar'  => 0,
-      ],
+      },
     },
     build => {
-      requires => [
+      requires => {
         'Test::More'    => "0.94",
-      ],
-      prefers => [
+      },
+      prefers => {
         'Test::Deep'    => "0.10",
-      ],
+      },
     }
   }
 
 (Spec 2.0) [optional] {Prereq Specification}
 
-A Map that
-describes all the prerequisites required for operation.  The keys are
-phases of activity, such as C<configure>, C<build>, C<test> and
-C<runtime>.  Values are Maps in which they keys name the
-type of prerequisite relationship such as C<requires>, C<prefers>, or
+A Map that describes all the prerequisites of the distribution.  The
+keys are phases of activity, such as C<configure>, C<build>, C<test> or 
+C<runtime>.  Values are Maps in which the keys name the type of
+prerequisite relationship such as C<requires>, C<prefers>, or
 C<recommends> and the values are L<Version Requirements|/Prereq Spec>.
+
+The full definition for this field is given in the L</Prereq Spec>
+section.
 
 =head2 optional_features
 
@@ -512,12 +501,10 @@ Example:
 
 (Spec 2.0) [optional] {Map}
 
-This is a map of names for optional features with incremental
-prerequisites.  Each key of the C<optional_features> Map is an
-identifier for a feature and each value is hashref with additional
-information about the feature.  Identifers are arbitrary strings and do
-not need a leading "x_" like custom meta field keys.  Valid keys for the
-hashref include:
+This Map describes optional features with incremental prerequisites.
+Each key of the C<optional_features> Map is a String used to identify
+the feature and each value is a Map with additional information about
+the feature.  Valid subkeys include:
 
 =over
 
@@ -533,9 +520,10 @@ enabled.
 
 =back
 
-Unless selected by the user, optional features do not add additional
-prerequisites.  (If prerequisites happen to be already satisfied,
-metadata consumers may indicate that the optional feature is supported.)
+Consumer must not include optional features as prerequisites without
+explict instruction from users (whether via interactive prompting or
+a function parameter or a configuration value).
+
 If an optional feature is used by a consumer to add prerequisites, the
 prerequisites should be merged into those given by the C<prereqs> key
 and adopt the same semantics.
