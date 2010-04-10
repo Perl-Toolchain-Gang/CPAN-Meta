@@ -245,7 +245,7 @@ within the distribution.  C.f. L<http://search.cpan.org/dist/libwww-perl/>.
 
 Example:
 
-  version => 0.20
+  version => '0.20'
 
 (Spec 1.0) [required] {Version} The version of the distribution to which the
 metadata structure refers.
