@@ -16,8 +16,6 @@ META-spec - Specification for CPAN distribution metadata
       'Module-Build List <module-build@perl.org>', # additional contact
     ],
     license  => 'perl_5',
-    language => 'perl_5',
-    distribution_type => 'module',
     prereqs => {
       runtime => {
         requires => {
@@ -35,7 +33,7 @@ META-spec - Specification for CPAN distribution metadata
           'perl'       => '5.005_03',
         },
         recommends => {
-          'Archive::Tar' => 1.00,
+          'Archive::Tar' => '1.00',
           'ExtUtils::Install' => 0.3,
           'ExtUtils::ParseXS' => 2.02,
           'Pod::Text' => 0,
@@ -117,8 +115,8 @@ structure, serializes into a bytestream and writes it to disk.
 
 Fields in the L</STRUCTURE> section describe data elements, each of
 which has an associated data type as described.  There are three
-'primative' types: String, List and Map.  Other types are subtypes of
-these primatives and define compound data structures or define
+primitive types: Boolean, String, List and Map.  Other types are
+subtypes of primitives and define compound data structures or define
 constraints on the values of the field.
 
 =head1 Boolean
@@ -555,6 +553,8 @@ This describes all packages provided by this distribution.  This
 information can be (and, in some cases, is) used by distribution and
 automation mechanisms like PAUSE, CPAN, and search.cpan.org to build
 indexes saying in which distribution various packages can be found.
+This entry allows you to tell the indexers precisely what you want
+indexed about your distribution.
 
 The keys of C<provides> are package names that can be found within
 the distribution.  The values are Maps with the following valid subkeys:
@@ -829,7 +829,11 @@ here.
 
 =item develop
 
-[describe how this is for developer tools]
+The develop phase's prereqs are libraries needed to work on the
+distribution's source code as its author does.  These tools might be
+needed to build a release tarball, to run author-only tests, or to
+perform other tasks related to developing new versions of the
+distribution.
 
 =back
 
@@ -839,37 +843,34 @@ here.
 
 =item requires
 
-Dependencies that are required B<must> be installed for proper
+These dependencies are required B<must> be installed for proper
 completion of the phase.
-
-=item prefers
-
-Dependencies that are optional but strongly encouraged and should be
-satisfied except in resource constrained environments.
 
 =item recommends
 
-Dependencies that are optional but recommended for enhanced operation
+Recommended dependencies are I<strongly> encouraged and should be
+satisfied except in resource constrained environments.
+
+=item suggests
+
+These dependencies are optional, but suggested for enhanced operation
 of the described distribution.
 
 =item conflicts
 
 These libraries cannot be installed when the phase is in operation.
-This is a pretty uncommon situation.
+This is a very rare situation, and the C<conflicts> relationship should
+be used with great caution, or not at all.
 
 =back
 
-=head3 Ordered Mapping
-
-[Describe how ordered mapping of module => version spec should be used.]
-
 =head2 Merging and Resolving Prerequisites
 
-Whenever metadata consumer merge prerequisites, either from different
+Whenever metadata consumers merge prerequisites, either from different
 phases or from C<optional_features>, they should merged in a way which
 preserves the intended semantics of the prerequisite structure.  Generally,
 this means concatenating the version specifications using commas, as
-described in the L<VERSION SPECIFICATIONS> section.
+described in the L<Version Ranges> section.
 
 Another subtle error that can occur in resolving prerequisites comes from
 the way that modules in prerequisits are indexed to distribution files on
