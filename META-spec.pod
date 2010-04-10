@@ -150,15 +150,15 @@ A I<Map> is an unordered collection of one or more data elements
 ("values"), indexed by associated String elements ("keys").  The Map's
 value elements may be of mixed types.
 
-=head2 URL
-
-I<URL> is a subtype of string containing a Uniform Resource Locator or
-Identifier.  (It is called URL and not URI for historical reasons.)
-
 =head2 License String
 
 A I<License String> is a subtype of String.  It is described in detail
 below under L</license>.
+
+=head2 URL
+
+I<URL> is a subtype of String containing a Uniform Resource Locator or
+Identifier.  (It is called URL and not URI for historical reasons.)
 
 =head2 Version
 
