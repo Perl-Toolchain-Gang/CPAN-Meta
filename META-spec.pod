@@ -150,30 +150,14 @@ A I<Map> is an unordered collection of one or more data elements
 ("values"), indexed by associated String elements ("keys").  The Map's
 value elements may be of mixed types.
 
-=head2 Version Requirements
+=head2 Version Range
 
-The I<Version Requirements> type is either:
-
-=over
-
-=item *
-
-a subtype of Map in which the keys are package names and the values
-identify valid versions
-
-=item *
-
-a subtype of List that behaves like a ordered version of the Map
-described above
-
-=back
-
-Version Requirements is detailed below under L</Prereq Spec>.
+The I<Version Range> type is specified below under L</Version Ranges>
 
 =head2 Prereq Specification
 
 I<Prereq Specification> is a subtype of Map.  It is detailed below under
-L</prereq>.
+L</Prereq Specifications>.
 
 =head2 URL
 
@@ -316,7 +300,7 @@ Example:
 
   license => [ 'apache_2', 'mozilla_1_0' ]
 
-(Spec 2.0) [required] {License String or List of one or more License Strings}
+(Spec 2.0) [required] {List of one or more License Strings}
 
 One or more licenses that apply to some or all of the files in the
 distribution.  If multiple licenses are listed, the distribution
@@ -486,12 +470,11 @@ Example:
 
 (Spec 2.0) [optional] {Prereq Specification}
 
-A Map that
-describes all the prerequisites required for operation.  The keys are
-phases of activity, such as C<configure>, C<build>, C<test> and
-C<runtime>.  Values are Maps in which they keys name the
-type of prerequisite relationship such as C<requires>, C<prefers>, or
-C<recommends> and the values are L<Version Requirements|/Prereq Spec>.
+A Map that describes all the prerequisites required for operation.  The
+keys are phases of activity, such as C<configure>, C<build>, C<test> and
+C<runtime>.  Values are Maps in which they keys name the type of
+prerequisite relationship such as C<requires>, C<prefers>, or
+C<recommends>.  The  and the values are L<Version Requirements|/Prereq Spec>.
 
 =head2 optional_features
 
@@ -588,21 +571,21 @@ Example:
   no_index => {
     file      => [ 'My/Module.pm' ],
     directory => [ 'My/Private' ],
-    package   => [ 'My::Module::Stuff' ],
-    namespace => [ 'My::Module::Stuff' ],
+    package   => [ 'My::Module::Secret' ],
+    namespace => [ 'My::Module::Sample' ],
   }
 
-(Spec 1.1) [optional] {hashref} A hashref that describes any files,
-directories, packages, and namespaces that are private
-(i.e. implementation artifacts) that are not of interest to searching
-and indexing tools.  This is useful when no C<provides> field is
-present.
+(Spec 1.1) [optional] {Map} A hashref that describes any files,
+directories, packages, and namespaces that are private (i.e.
+implementation artifacts) that are not of interest to searching and
+indexing tools.
 
-For example, C<search.cpan.org> excludes items listed in C<no_index>
-when searching for POD, meaning files in these directories will not
-converted to HTML and made public - which is useful if you have
-example or test PODs that you don't want the search engine to go
-through.
+For example, search.cpan.org excludes items listed in C<no_index> when
+searching for Pod, meaning files in these directories will not converted
+to HTML and made public - which is useful if you have example libraries
+or test Pod files that you don't want the search engine to go through.
+PAUSE will respect this field, so it  is useful when no C<provides>
+field is present.
 
 =head3 file
 
@@ -610,12 +593,9 @@ through.
 
 =head3 directory
 
-(Spec 1.1) [optional] Exclude anything below the listed
-directory(ies).
+(Spec 1.1) [optional] Exclude anything below the listed directory(ies).
 
-[Note: previous editions of the spec had C<dir> instead of
-C<directory>, but I think MakeMaker and various users started using
-C<directory>, so in deference we switched to that.]
+[ Note: previous editions of the spec had C<dir> instead of C<directory> ]
 
 =head3 package
 
@@ -626,16 +606,17 @@ C<directory>, so in deference we switched to that.]
 (Spec 1.1) [optional] Excludes anything below the listed namespace(s),
 but I<not> the listed namespace(s) its self.
 
+For example, in the code snippet above, C<My::Module::Sample::Foo> would
+be ignored, but C<My::Module::Sample> would not.
+
 =head2 keywords
 
 Example:
 
   keywords => [ qw/ toolchain cpan dual-life / ]
 
-(Spec 1.1) [optional] {arrayref} An arrayref of keywords/phrases that describe
-this distribution.  Keywords should not include whitespace.  Consumers of the
-C<keywords> field may modify whitespace (converting to dashes or underscores)
-if needed for particular purposes (e.g. browser-friendly URLs).
+(Spec 1.1) [optional] {List}  An arrayref of keywords/phrases that describe
+this distribution.  Keywords B<must not> include whitespace.
 
 =head2 resources
 
@@ -654,17 +635,17 @@ Example:
       type => 'git',
     },
     MailingList => 'http://lists.sf.net/lists/listinfo/module-build-general',
-    x_twitter   => 'http://http://twitter.com/cpan_linked/',
+    x_twitter   => 'http://twitter.com/cpan_linked/',
   }
 
-(Spec 2.0) [optional] {hashref} A hashref of any URL resources related to this
-distribution.  If you'd like to add your own "special" entries (like the
-"x_twitter" entry above), they must begin with an "x" or "X" as described
-in the rules for L</"Custom Keys">.
+(Spec 2.0) [optional] {Map} A hashref of any resources related to this
+distribution.  If you'd like to add your own entries (like the
+"x_twitter" entry above), they must begin with an "x_" or "X_" as
+described in the rules for L</Custom Keys>.
 
 The current set of official keys is:
 
-=over 2
+=over
 
 =item homepage
 
@@ -693,38 +674,28 @@ is a hashref with the following entries:
 
 =back
 
-
 =head2 generated_by
 
 Example:
 
   generated_by => 'Module::Build version 0.20'
 
-(Spec 1.0) [required] {string} Indicates the tool that was used to
-create this metadata.  It's good form to include both the name
-of the tool and its version, but this field is essentially opaque, at
-least for the moment. If the metadata structure was generated by hand,
-it is suggested that the author be specified here.
-
-[Note: My F<meta_stats.pl> script which I use to gather statistics
-regarding F<META.yml> usage prefers the form listed above, i.e. it
-splits on /\s+version\s+/ taking the first field as the name of the
-tool that generated the file and the second field as version of that
-tool. RWS]
+(Spec 1.0) [required] {String} Indicates the tool that was used to
+create this metadata.  There are no defined semantics for this field,
+but it is traditional to use a string in the form "Generating::Package
+version 1.23" or the author's name, if the file was generated by hand.
 
 =head1 VERSION NUMBERS
 
 =head2 Version Formats
 
-Several fields in the CPAN Meta Spec take a "version number", either
-directly or within a larger data structure.  These version numbers
-should given as strings, not numeric literals.  If any characters
-not matching C<qr{[0-9.]}> appear, the version number must be given
-as a string
+This section defines the Version type, used by several fields in the
+CPAN Meta Spec.
 
-   version => 1.234       # Number (acceptable)
-   version => '1.234'     # String (preferred)
-   version => '1.23_04'   # String (required due to '_')
+These version numbers should treated as strings, not numbers.  For
+example, C<1.200> B<must not> be serialized as C<1.2>.  Version
+comparison should be delegated to the Perl L<version> module, version
+0.80 or newer.
 
 Unless otherwise specified, version numbers must appear in one of two
 formats:
@@ -733,10 +704,10 @@ formats:
 
 =item Decimal versions
 
-Decimal versions are regular "decimal numbers", with some limitations.  They
-must be positive and must have a leading and trailing digit.  A single
-underscore may be included, but must be between two digits.  They should
-not use exponential notation ("1.23e-2").
+Decimal versions are regular "decimal numbers", with some limitations.
+They must be positive and must have a leading and trailing digit.  A
+single underscore may be included, but must be between two digits.  They
+should not use exponential notation ("1.23e-2").
 
    version => '1.234'       # OK
    version => '1.23_04'     # OK
@@ -767,13 +738,12 @@ Dotted-integer versions must be quoted strings.
 
 =back
 
-=head2 Version Specifications
+=head2 Version Ranges
 
-Some fields require a version specification (ex. L<"requires">,
-L<"recommends">, L<"build_requires">, etc.) to indicate the particular
-versionZ<>(s) of some other module that may be required as a
-prerequisite.  This section details the version specification formats
-that are currently supported.
+Some fields (prereq, optional_features) require a version specification
+to indicate the particular versionZ<>(s) of some other module that may
+be required as a prerequisite.  This section details the Version
+Requirements type used to provide this information.
 
 The simplest format for a version specification is just the version
 number itself, e.g. C<2.4>.  This means that B<at least> version 2.4
@@ -839,6 +809,9 @@ and version prerequisite C<$prereq>:
     print "Module $mod version is OK.\n";
   }
 
+If the values of C<$mod> and C<$prereq> have not been scrubbed, however,
+this presents security implications.
+
 =head1 PREREQUISITES
 
 =head2 Prereq Spec
@@ -862,7 +835,7 @@ C<test> phase, this entry would appear in the distribution metadata:
   }
 
 The inner arrayref is a I<Ordered Mapping> of module names and
-L<version specifications|/Version Specifications>.
+L<version ranges|/Version Ranges>.
 
 =head3 Phases
 
