@@ -848,17 +848,17 @@ distribution.
 
 =item requires
 
-Dependencies that are required B<must> be installed for proper
+These dependencies are required B<must> be installed for proper
 completion of the phase.
-
-=item prefers
-
-Dependencies that are optional but strongly encouraged and should be
-satisfied except in resource constrained environments.
 
 =item recommends
 
-Dependencies that are optional but recommended for enhanced operation
+Recommended dependencies are I<strongly> encouraged and should be
+satisfied except in resource constrained environments.
+
+=item suggests
+
+These dependencies are optional, but suggested for enhanced operation
 of the described distribution.
 
 =item conflicts
