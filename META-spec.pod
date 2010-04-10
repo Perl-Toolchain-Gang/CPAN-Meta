@@ -158,7 +158,7 @@ below under L</license>.
 =head2 URL
 
 I<URL> is a subtype of String containing a Uniform Resource Locator or
-Identifier.  (It is called URL and not URI for historical reasons.)
+Identifier.  [ This type is called URL and not URI for historical reasons. ]
 
 =head2 Version
 
@@ -201,20 +201,22 @@ similarly.
 Example:
 
   'meta-spec' => {
-    version => 1.4,
+    version => '1.4',
     url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
   }
 
 (Spec 1.1) [required] {Map} This field indicates the version of the CPAN
-Meta Spec that should be used to interpret the metadata.  Subkeys
-include:
+Meta Spec that should be used to interpret the metadata.  It B<must>
+include entries for the following:
 
 =over
 
 =item version
 
-(Spec 1.1) [required] {String} A decimal number that indicates the
-version of the CPAN Meta Spec.
+(Spec 1.1) [required] {Version}
+
+This Version is the version of the CPAN Meta Spec against which the
+document was generated.
 
 =item url
 
