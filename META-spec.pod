@@ -718,7 +718,7 @@ formats:
 Decimal versions are regular "decimal numbers", with some limitations.
 They B<must> be non-negative and B<must> begin and end with a digit.  A
 single underscore may be included, but must be between two digits.  They
-should not use exponential notation ("1.23e-2").
+must not use exponential notation ("1.23e-2").
 
    version => '1.234'       # OK
    version => '1.23_04'     # OK
@@ -729,14 +729,14 @@ should not use exponential notation ("1.23e-2").
 
 =item Dotted-integer versions
 
-Dotted-integer (also known as dotted-decimal) versions consist of positive
-integers separated by full stop characters (i.e. "dots", "periods" or "decimal
-points").  This are equivalent to Perl "v-strings", with some additional
-restrictions on form.  They must be given in "normal" form, which has a
-leading "v" character and at least three integer components.  All components
-after the first are restricted to the range 0 to 999.  The final component
-may be separated by an underscore character instead of a period.
-Dotted-integer versions must be quoted strings.
+Dotted-integer (also known as dotted-decimal) versions consist of
+positive integers separated by full stop characters (i.e. "dots",
+"periods" or "decimal points").  This are equivalent in format to Perl
+"v-strings", with some additional restrictions on form.  They must be
+given in "normal" form, which has a leading "v" character and at least
+three integer components.  All components after the first are restricted
+to the range 0 to 999.  The final component may be separated by an
+underscore character instead of a period.
 
    version => 'v1.2.3'      # OK
    version => 'v1.2_3'      # OK
@@ -754,7 +754,7 @@ Dotted-integer versions must be quoted strings.
 =head2 Version Ranges
 
 Some fields (prereq, optional_features) require a version specification
-to indicate the particular versionZ<>(s) of some other module that may
+to indicate the particular version(s) of some other module that may
 be required as a prerequisite.  This section details the Version
 Requirements type used to provide this information.
 
@@ -791,14 +791,11 @@ C<test> phase, this entry would appear in the distribution metadata:
 
   prereqs => {
     test => {
-      requires => [
+      requires => {
         'Data::Dumper' => '2.00'
-      ]
+      }
     }
   }
-
-The inner arrayref is a I<Ordered Mapping> of module names and
-L<version ranges|/Version Ranges>.
 
 =head3 Phases
 
