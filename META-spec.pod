@@ -555,6 +555,8 @@ This describes all packages provided by this distribution.  This
 information can be (and, in some cases, is) used by distribution and
 automation mechanisms like PAUSE, CPAN, and search.cpan.org to build
 indexes saying in which distribution various packages can be found.
+This entry allows you to tell the indexers precisely what you want
+indexed about your distribution.
 
 The keys of C<provides> are package names that can be found within
 the distribution.  The values are Maps with the following valid subkeys:
