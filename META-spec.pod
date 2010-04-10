@@ -864,7 +864,8 @@ of the described distribution.
 =item conflicts
 
 These libraries cannot be installed when the phase is in operation.
-This is a pretty uncommon situation.
+This is a very rare situation, and the C<conflicts> relationship should
+be used with great caution, or not at all.
 
 =back
 
