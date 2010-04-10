@@ -115,8 +115,8 @@ structure, serializes into a bytestream and writes it to disk.
 
 Fields in the L</STRUCTURE> section describe data elements, each of
 which has an associated data type as described.  There are three
-'primative' types: String, List and Map.  Other types are subtypes of
-these primatives and define compound data structures or define
+primitive types: Boolean, String, List and Map.  Other types are
+subtypes of primitives and define compound data structures or define
 constraints on the values of the field.
 
 =head1 Boolean
