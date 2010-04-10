@@ -869,10 +869,6 @@ be used with great caution, or not at all.
 
 =back
 
-=head3 Ordered Mapping
-
-[Describe how ordered mapping of module => version spec should be used.]
-
 =head2 Merging and Resolving Prerequisites
 
 Whenever metadata consumer merge prerequisites, either from different
