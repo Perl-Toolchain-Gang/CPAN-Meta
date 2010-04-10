@@ -415,7 +415,7 @@ etc.) as part of its configuration.  This field should be set to a false
 value is to indicate that prerequisites included in metadata may be
 considered valid for static analysis.
 
-This field explicitly does not indicate whether installation may be
+This field explicitly B<does not> indicate whether installation may be
 safely performed without using a Makefile or Build file, as there may be
 special files to install or custom installation targets (e.g. for
 dual-life modules that exist on CPAN as well as in the Perl core).  This
