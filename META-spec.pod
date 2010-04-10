@@ -102,13 +102,13 @@ C<$VERSION> variable in the namespace.
 
 =item consumer
 
-The term 'consumer' refers to code that reads a metafile, deserializes a
-metafile into a data structure in memory or interprets the data
+The term I<consumer> refers to code that reads a metafile, deserializes a
+metafile into a data structure in memory, or interprets the data
 structure of metadata elements.
 
 =item producer
 
-The term 'producer' refers to code that constructs a metadata data
+The term I<producer> refers to code that constructs a metadata data
 structure, serializes into a bytestream and writes it to disk.
 
 =back
@@ -123,26 +123,27 @@ constraints on the values of the field.
 
 =head2 String
 
-A data element containing a non-zero length sequence of [UTF8?]
-characters, such as an ordinary Perl scalar that is not a reference.
+A I<String> is data element containing a non-zero length sequence of
+Unicode characters, such as an ordinary Perl scalar that is not a
+reference.
 
 =head2 List
 
-An ordered list of one or more data elements.  Elements may be of mixed
-type.
+A I<List> is an ordered list of one or more data elements.  Elements of
+a List may be of mixed types.
 
-Producers should represent List elements using a data structure which
+Producers B<must> represent List elements using a data structure which
 unambiguously indicates that multiple values are possible, such as a
 reference to a Perl array (an "arrayref").
 
-Consumers expecting a List must consider a String as equivalent to a
+Consumers expecting a List B<must> consider a String as equivalent to a
 List of length 1.
 
 =head2 Map
 
-An unordered collection of one or more data elements ("values"), indexed
-by associated String elements ("keys").  Value elements may be of mixed
-type.
+A I<Map> is an unordered collection of one or more data elements
+("values"), indexed by associated String elements ("keys").  The Map's
+value elements may be of mixed types.
 
 =head2 URL
 
