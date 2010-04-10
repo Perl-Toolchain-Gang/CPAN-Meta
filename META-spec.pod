@@ -207,9 +207,11 @@ Example:
     url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
   }
 
-(Spec 1.1) [required] {Map} This field indicates the version of the CPAN
-Meta Spec that should be used to interpret the metadata.  It B<must>
-include entries for the following:
+(Spec 1.1) [required] {Map}
+
+This field indicates the version of the CPAN Meta Spec that should be
+used to interpret the metadata.  It B<must> include entries for the
+following:
 
 =over
 
@@ -238,10 +240,12 @@ Example:
 
   name => 'Module-Build'
 
-(Spec 1.0) [required] {string} The name of the distribution.  This is often
-created by taking the "main module" in the distribution and changing
-C<::> to C<->, but the name may be completely unrelated to the modules
-within the distribution.  C.f. L<http://search.cpan.org/dist/libwww-perl/>.
+(Spec 1.0) [required] {String}
+
+This field is name of the distribution.  This is often created by taking
+the "main module" in the distribution and changing C<::> to C<->, but
+the name may be completely unrelated to the modules within the
+distribution.  C.f. L<http://search.cpan.org/dist/libwww-perl/>.
 
 =head2 version
 
@@ -249,8 +253,10 @@ Example:
 
   version => '0.20'
 
-(Spec 1.0) [required] {Version} The version of the distribution to which the
-metadata structure refers.
+(Spec 1.0) [required] {Version}
+
+This field gives the version of the distribution to which the metadata
+structure refers.
 
 =head2 abstract
 
@@ -258,8 +264,9 @@ Example:
 
   abstract => 'Build and install Perl modules'
 
-(Spec 1.1) [required] {String} A short description of the purpose of the
-distribution.
+(Spec 1.1) [required] {String}
+
+This is a short description of the purpose of the distribution.
 
 =head2 description
 
@@ -269,9 +276,10 @@ Example:
                 .   "and installing Perl modules.  It is meant to be an "
                 .   "alternative to "ExtUtils::MakeMaker... blah blah blah"
 
-(Spec 2.0) [optional] {String} A longer, more complete description of the
-purpose or intended use of the distribution than the one provided by the
-C<abstract> key.
+(Spec 2.0) [optional] {String}
+
+A longer, more complete description of the purpose or intended use of
+the distribution than the one provided by the C<abstract> key.
 
 =head2 author
 
@@ -279,8 +287,10 @@ Example:
 
   author => [ 'Ken Williams <kwilliams@cpan.org>' ]
 
-(Spec 1.1) [required] {List of Strings} An arrayref indicating the
-person(s) to contact concerning the distribution. The prefered form is:
+(Spec 1.1) [required] {List of one or more Strings}
+
+This List indicates the person(s) to contact concerning the
+distribution. The prefered form is:
 
   contact-name <email-address>
 
@@ -302,7 +312,7 @@ Example:
 
   license => [ 'apache_2', 'mozilla_1_0' ]
 
-(Spec 2.0) [required] {List of License Strings}
+(Spec 2.0) [required] {List of one or more License Strings}
 
 One or more licenses that apply to some or all of the files in the
 distribution.  If multiple licenses are listed, the distribution
@@ -354,8 +364,10 @@ Example:
 
   release_status => 'stable'
 
-(Spec 2.0) [required] {String} The release status of this distribution.
-If the C<version> field contains an underscore character, then
+(Spec 2.0) [required] {String} 
+
+This field provides the  release status of this distribution.  If the
+C<version> field contains an underscore character, then
 C<release_status> B<must not> be "stable."
 
 The C<release_status> field B<must> have one of the following values:
@@ -391,9 +403,11 @@ based on version number or file name.
 
 =head2 distribution_type
 
-I<Deprecated> (Spec 1.0) [optional] {String} This field indicated
-'module' or 'script' but was considered meaningless, since many
-distributions are hybrids of several kinds of things.
+I<Deprecated> (Spec 1.0) [optional] {String} 
+
+This field indicated 'module' or 'script' but was considered
+meaningless, since many distributions are hybrids of several kinds of
+things.
 
 =head2 dynamic_config
 
@@ -401,9 +415,10 @@ Example:
 
   dynamic_config => 0
 
-(Spec 2.0) [required] {Boolean} A boolean flag indicating whether a
-F<Build.PL> or F<Makefile.PL> (or similar) must be executed to determine
-prerequisites.
+(Spec 2.0) [required] {Boolean} 
+
+A boolean flag indicating whether a F<Build.PL> or F<Makefile.PL> (or
+similar) must be executed to determine prerequisites.
 
 This filed should be set to a true value if the distribution performs
 some dynamic configuration (asking questions, sensing the environment,
@@ -420,8 +435,9 @@ metadata file.
 
 =head2 private
 
-I<(Deprecated)> (Spec 1.0) [optional] {Map} This field has been renamed to
-L</"no_index">.  See below.
+I<(Deprecated)> (Spec 1.0) [optional] {Map} 
+
+This field has been renamed to L</"no_index">.  See below.
 
 =head2 prereqs
 
@@ -553,8 +569,6 @@ This describes all packages provided by this distribution.  This
 information can be (and, in some cases, is) used by distribution and
 automation mechanisms like PAUSE, CPAN, and search.cpan.org to build
 indexes saying in which distribution various packages can be found.
-This entry allows you to tell the indexers precisely what you want
-indexed about your distribution.
 
 The keys of C<provides> are package names that can be found within
 the distribution.  The values are Maps with the following valid subkeys:
@@ -623,7 +637,7 @@ Example:
 
   keywords => [ qw/ toolchain cpan dual-life / ]
 
-(Spec 1.1) [optional] {List}
+(Spec 1.1) [optional] {List of zero or more Strings}
 
 A List of keywords that describe this distribution.  Keywords
 B<must not> include whitespace.
@@ -764,11 +778,11 @@ must be present.  To indicate that B<any> version of a prerequisite is
 okay, even if the prerequisite doesn't define a version at all, use
 the version C<0>.
 
-You may also use the operators E<lt> (less than), E<lt>= (less than or
-equal), E<gt> (greater than), E<gt>= (greater than or equal), ==
-(equal), and != (not equal).  For example, the specification C<E<lt>
-2.0> means that any version of the prerequisite less than 2.0 is
-suitable.
+Alternatively, a version range may use the operators E<lt> (less than),
+E<lt>= (less than or equal), E<gt> (greater than), E<gt>= (greater than
+or equal), == (equal), and != (not equal).  For example, the
+specification C<E<lt> 2.0> means that any version of the prerequisite
+less than 2.0 is suitable.
 
 For more complicated situations, version specifications may be AND-ed
 together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
@@ -798,8 +812,6 @@ C<test> phase, this entry would appear in the distribution metadata:
   }
 
 =head3 Phases
-
-[Describe how these have to be cumulated during install process]
 
 =over
 
@@ -873,7 +885,7 @@ this means concatenating the version specifications using commas, as
 described in the L<Version Ranges> section.
 
 Another subtle error that can occur in resolving prerequisites comes from
-the way that modules in prerequisits are indexed to distribution files on
+the way that modules in prerequisites are indexed to distribution files on
 CPAN.  When a module is deleted from a distribution, prerequisites calling
 for that module could indicate an older distribution should installed,
 potentially overwriting files from a newer distribution.
