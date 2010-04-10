@@ -16,8 +16,6 @@ META-spec - Specification for CPAN distribution metadata
       'Module-Build List <module-build@perl.org>', # additional contact
     ],
     license  => 'perl_5',
-    language => 'perl_5',
-    distribution_type => 'module',
     prereqs => {
       runtime => {
         requires => {
@@ -35,7 +33,7 @@ META-spec - Specification for CPAN distribution metadata
           'perl'       => '5.005_03',
         },
         recommends => {
-          'Archive::Tar' => 1.00,
+          'Archive::Tar' => '1.00',
           'ExtUtils::Install' => 0.3,
           'ExtUtils::ParseXS' => 2.02,
           'Pod::Text' => 0,
