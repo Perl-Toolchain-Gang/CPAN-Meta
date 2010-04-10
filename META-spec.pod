@@ -294,7 +294,7 @@ questions about the distribution or bugs in the distribution.
 
 A distribution's original author is usually the contact that should be
 listed within this field.  Co-maintainers, successor maintainers or
-mailing lists devoted to the distribution may also be listed.  
+mailing lists devoted to the distribution may also be listed.
 
 =head2 license
 
@@ -405,7 +405,7 @@ Example:
 
 (Spec 2.0) [required] {Boolean} A boolean flag indicating whether a
 F<Build.PL> or F<Makefile.PL> (or similar) must be executed to determine
-prerequisites.  
+prerequisites.
 
 This filed should be set to a true value if the distribution performs
 some dynamic configuration (asking questions, sensing the environment,
@@ -460,7 +460,7 @@ The keys are phases of activity, such as C<configure>, C<build>, C<test>
 or C<runtime>.  Values are Maps in which the keys name the type of
 prerequisite relationship such as C<requires>, C<prefers>, or
 C<recommends> and the value provides a set of prerequisite relations
-that relate package names to I<Version Ranges>.  
+that relate package names to I<Version Ranges>.
 
 The set of relations may be specified either as a Map of unordered
 relations, or as an ordered List of package name and Version Range
@@ -556,9 +556,21 @@ information can be (and, in some cases, is) used by distribution and
 automation mechanisms like PAUSE, CPAN, and search.cpan.org to build
 indexes saying in which distribution various packages can be found.
 
-This entry allows you to tell the indexers precisely what you want
-indexed about your distribution, rather than relying on them to
-essentially guess what you want indexed.
+The keys of C<provides> are package names that can be found within
+the distribution.  The values are Maps with the following valid subkeys:
+
+=over
+
+=item file
+
+This field is required.  The value must contain a relative file path
+from the root of the distribution to the file containing the package.
+
+=item version
+
+This field contains the I<Version> String of the package.
+
+=back
 
 =head2 no_index
 
@@ -571,39 +583,39 @@ Example:
     namespace => [ 'My::Module::Sample' ],
   }
 
-(Spec 1.1) [optional] {Map} A hashref that describes any files,
-directories, packages, and namespaces that are private (i.e.
-implementation artifacts) that are not of interest to searching and
-indexing tools.
+(Spec 1.1) [optional] {Map}
 
-For example, search.cpan.org excludes items listed in C<no_index> when
-searching for Pod, meaning files in these directories will not converted
-to HTML and made public - which is useful if you have example libraries
-or test Pod files that you don't want the search engine to go through.
-PAUSE will respect this field, so it  is useful when no C<provides>
-field is present.
+This Map describes any files, directories, packages, and namespaces that
+are private to the packaging or implementation of the distribution and
+should be ignored by indexing or search tools.
 
-=head3 file
+Valid subkeys are as follows:
 
-(Spec 1.1) [optional] Exclude any listed file(s).
+=over
 
-=head3 directory
+=item file
 
-(Spec 1.1) [optional] Exclude anything below the listed directory(ies).
+A I<List> of relative paths to files.
+
+=item directory
+
+A I<List> of relative paths to directories.
 
 [ Note: previous editions of the spec had C<dir> instead of C<directory> ]
 
-=head3 package
+=item package
 
-(Spec 1.1) [optional] Exclude the listed package(s).
+A I<List> of package names.
 
-=head3 namespace
+=item namespace
 
-(Spec 1.1) [optional] Excludes anything below the listed namespace(s),
-but I<not> the listed namespace(s) its self.
+A I<List> of package namespaces, where anything below the namespace
+must be ignored, but I<not> the namespace itself.
 
-For example, in the code snippet above, C<My::Module::Sample::Foo> would
+In the example above for C<no_index>, C<My::Module::Sample::Foo> would
 be ignored, but C<My::Module::Sample> would not.
+
+=back
 
 =head2 keywords
 
@@ -611,8 +623,10 @@ Example:
 
   keywords => [ qw/ toolchain cpan dual-life / ]
 
-(Spec 1.1) [optional] {List}  An arrayref of keywords/phrases that describe
-this distribution.  Keywords B<must not> include whitespace.
+(Spec 1.1) [optional] {List}
+
+A List of keywords that describe this distribution.  Keywords
+B<must not> include whitespace.
 
 =head2 resources
 
@@ -634,12 +648,11 @@ Example:
     x_twitter   => 'http://twitter.com/cpan_linked/',
   }
 
-(Spec 2.0) [optional] {Map} A hashref of any resources related to this
-distribution.  If you'd like to add your own entries (like the
-"x_twitter" entry above), they B<must> begin with an "x_" or "X_" as
-described in the rules for L</Custom Keys>.
+(Spec 2.0) [optional] {Map}
 
-The current set of official keys is:
+This field describes resources related to this distribution.
+
+Valid subkeys include:
 
 =over
 
@@ -654,7 +667,7 @@ An URL for an official statement of this distribution's license.
 =item bugtracker
 
 This entry describes the bug tracking system for this distribution.  It
-is a hashref with the following entries:
+is a Map with the following keys:
 
   web    - a URL pointing to a web front-end for the bug tracker
   mailto - an email address to which bugs can be sent
@@ -662,7 +675,7 @@ is a hashref with the following entries:
 =item repository
 
 This entry describes the source control repository for this distribution.  It
-is a hashref with the following entries:
+is a Map with the following entries:
 
   url  - a URL pointing to the repository itself
   web  - a URL pointing to a web front-end for the repository
@@ -676,10 +689,12 @@ Example:
 
   generated_by => 'Module::Build version 0.20'
 
-(Spec 1.0) [required] {String} Indicates the tool that was used to
-create this metadata.  There are no defined semantics for this field,
-but it is traditional to use a string in the form "Generating::Package
-version 1.23" or the author's name, if the file was generated by hand.
+(Spec 1.0) [required] {String}
+
+This field indicates the tool that was used to create this metadata.
+There are no defined semantics for this field, but it is traditional to
+use a string in the form "Generating::Package version 1.23" or the
+author's name, if the file was generated by hand.
 
 =head1 VERSION NUMBERS
 
