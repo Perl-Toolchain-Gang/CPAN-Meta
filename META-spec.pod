@@ -490,9 +490,9 @@ Example:
       description => 'Provides SQLite support',
       prereqs => {
         runtime => {
-          requires => [
+          requires => {
             'DBD::SQLite' => '1.25'
-          ]
+          }
         }
       }
     }
@@ -509,7 +509,8 @@ the feature.  Valid subkeys include:
 
 =item description
 
-a String describing the feature; this entry is required
+This is a String describing the feature.  Every optional feature
+should provide a description
 
 =item prereqs
 
@@ -519,25 +520,18 @@ that must be satisfied for the feature to be supported or enabled.
 
 =back
 
-Consumer must not include optional features as prerequisites without
+Consumers must not include optional features as prerequisites without
 explict instruction from users (whether via interactive prompting or
 a function parameter or a configuration value).
 
 If an optional feature is used by a consumer to add prerequisites, the
-prerequisites should be merged into those given by the C<prereqs> key
-using the same semantics.
-
-For example, if an optional feature has a "runtime/requires"
-prerequisite on the Algorithm::Diff module and the feature has been
-selected for installation, then if Algorithm::Diff cannot be installed,
-the installer should consider the entire installation a failure.
-
-See L</Merging and Resolving Prerequisites> for details on merging
-prerequisites.
+consumer should merge the optional feature prerequisites into those
+given by the C<prereqs> key using the same semantics.  See L</Merging
+and Resolving Prerequisites> for details on merging prerequisites.
 
 I<Suggestion for disuse:> Because there is currently no way for a
 distribution to specify a dependency on an optional feature of another
-dependency, the use of this feature is discouraged.
+dependency, the use of C<optional_feature> is discouraged.
 
 =head2 provides
 
