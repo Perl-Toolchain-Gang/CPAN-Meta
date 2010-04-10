@@ -15,12 +15,12 @@ META-spec - Specification for CPAN distribution metadata
       'Ken Williams <kwilliams@cpan.org>',
       'Module-Build List <module-build@perl.org>', # additional contact
     ],
-    license  => 'perl5',
-    language => 'perl5',
+    license  => 'perl_5',
+    language => 'perl_5',
     distribution_type => 'module',
     prereqs => {
       runtime => {
-        requires => [
+        requires => {
           'Config' => 0,
           'Cwd'    => 0,
           'Data::Dumper' => 0,
@@ -33,14 +33,14 @@ META-spec - Specification for CPAN distribution metadata
           'File::Spec' => 0,
           'IO::File'   => 0,
           'perl'       => '5.005_03',
-        ],
-        recommends => [
+        },
+        recommends => {
           'Archive::Tar' => 1.00,
           'ExtUtils::Install' => 0.3,
           'ExtUtils::ParseXS' => 2.02,
           'Pod::Text' => 0,
           'YAML' => 0.35,
-        ],
+        },
       },
       build => {
         requires => [
@@ -49,7 +49,7 @@ META-spec - Specification for CPAN distribution metadata
       }
     }
     resources => {
-      license => 'http://dev.perl.org/licenses/',
+      license => [ 'http://dev.perl.org/licenses/' ],
     },
     dynamic_config => 1,
     keywords => [ qw/ toolchain cpan dual-life / ],
@@ -57,7 +57,7 @@ META-spec - Specification for CPAN distribution metadata
       version => 1.4,
       url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
     },
-    generated_by => 'Module::Build version 0.20',
+    generated_by => 'Module::Build version 0.36',
   };
 
 =head1 DESCRIPTION
@@ -164,10 +164,10 @@ Consumers of metadata information may ignore any or all custom keys.
 All other keys not described herein are invalid and should be ignored.
 
 For each key, an example is provided followed by a description.  The
-description begins with the version of spec in which the key was added,
-whether the key is 'required' or 'optional' and the data type of the
-corresponding data element.  These items are in parentheses, brackets
-and braces, respectively.
+description begins with the version of spec in which the key was added
+or in which the definition was modified, whether the key is 'required'
+or 'optional' and the data type of the corresponding data element.
+These items are in parentheses, brackets and braces, respectively.
 
 If a data type is a Map or Map subtype, subkeys will be described
 similarly.
@@ -210,11 +210,10 @@ Example:
 
   name => 'Module-Build'
 
-(Spec 1.0) [required] {string} The name of the distribution which is often
+(Spec 1.0) [required] {string} The name of the distribution.  This is often
 created by taking the "main module" in the distribution and changing
-"::" to "-".  Sometimes it's completely different, however, as in the
-case of the libwww-perl distribution (see
-L<http://search.cpan.org/dist/libwww-perl/>).
+"::" to "-", but the name may be completely unrelated to the modules
+within the distribution.  C.f. L<http://search.cpan.org/dist/libwww-perl/>.
 
 =head2 version
 
@@ -258,15 +257,15 @@ person(s) to contact concerning the distribution. The prefered form is:
 
   contact-name <email-address>
 
-This field serves as a general contact independent of L</"resources">
-C<MailingList> and C<bugtracker>. The addressee(s) can be contacted for any
-purpose including but not limited to (security) problems with the distribution,
+This field provides a general contact list independent of other
+structured fields provided within the L</"resources"> field, such as
+L</"bugtracker">.  The addressee(s) can be contacted for any purpose
+including but not limited to (security) problems with the distribution,
 questions about the distribution or bugs in the distribution.
 
-Most of the time, a distribution's original author is also the contact. When a
-distribution extends or changes ownership and is released by a different person,
-this field's content changes accordingly. Crediting the original author(s) is
-outside the scope of this metadata specification.
+A distribution's original author is usually the contact that should be
+listed within this field.  Co-maintainers, successor maintainers or
+mailing lists devoted to the distribution may also be listed.  
 
 =head2 license
 
