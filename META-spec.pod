@@ -150,45 +150,27 @@ A I<Map> is an unordered collection of one or more data elements
 ("values"), indexed by associated String elements ("keys").  The Map's
 value elements may be of mixed types.
 
-=head2 Version Requirements
+=head2 License String
 
-The I<Version Requirements> type is either:
-
-=over
-
-=item *
-
-a subtype of Map in which the keys are package names and the values
-identify valid versions
-
-=item *
-
-a subtype of List that behaves like a ordered version of the Map
-described above
-
-=back
-
-Version Requirements is detailed below under L</Prereq Spec>.
-
-=head2 Prereq Specification
-
-I<Prereq Specification> is a subtype of Map.  It is detailed below under
-L</prereq>.
+A I<License String> is a subtype of String.  It is described in detail
+below under L</license>.
 
 =head2 URL
 
-I<URL> is a subtype of string containing a Uniform Resource Locator or
-Identifier.  (It is called URL and not URI for historical reasons.)
+I<URL> is a subtype of String containing a Uniform Resource Locator or
+Identifier.  [ This type is called URL and not URI for historical reasons. ]
 
 =head2 Version
 
-A I<Version> is a subtype of string.  It is described in detail below
-under L</Version Formats>.
+A I<Version> is a subtype of String.  It descibes the values that may be
+used as versions of packages or distributions.  It is described in
+detail below under L</Version Formats>.
 
-=head2 License String
+=head2 Version Range
 
-A I<License String> is a subtype of string.  It is described in detail
-below under L</license>.
+The I<Version Range> type is a subtype of String.  It describes a range
+of versions that may be present or installed to fulfill prerequisites.
+It is specified below under L</Version Ranges>
 
 =head1 STRUCTURE
 
@@ -223,20 +205,22 @@ of version 2.0 or higher.
 Example:
 
   'meta-spec' => {
-    version => 1.4,
+    version => '1.4',
     url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
   }
 
 (Spec 1.1) [required] {Map} This field indicates the version of the CPAN
-Meta Spec that should be used to interpret the metadata.  Subkeys
-include:
+Meta Spec that should be used to interpret the metadata.  It B<must>
+include entries for the following:
 
 =over
 
 =item version
 
-(Spec 1.1) [required] {String} A decimal number that indicates the
-version of the CPAN Meta Spec.
+(Spec 1.1) [required] {Version}
+
+This Version is the version of the CPAN Meta Spec against which the
+document was generated.
 
 =item url
 
@@ -265,7 +249,7 @@ within the distribution.  C.f. L<http://search.cpan.org/dist/libwww-perl/>.
 
 Example:
 
-  version => 0.20
+  version => '0.20'
 
 (Spec 1.0) [required] {Version} The version of the distribution to which the
 metadata structure refers.
@@ -274,7 +258,7 @@ metadata structure refers.
 
 Example:
 
-  abstract => 'Build and install Perl modules.'
+  abstract => 'Build and install Perl modules'
 
 (Spec 1.1) [required] {String} A short description of the purpose of the
 distribution.
@@ -287,7 +271,7 @@ Example:
                 .   "and installing Perl modules.  It is meant to be an "
                 .   "alternative to "ExtUtils::MakeMaker... blah blah blah"
 
-(Spec 2.0) [optiona] {String} A longer, more complete description of the
+(Spec 2.0) [optional] {String} A longer, more complete description of the
 purpose or intended use of the distribution than the one provided by the
 C<abstract> key.
 
@@ -297,7 +281,7 @@ Example:
 
   author => [ 'Ken Williams <kwilliams@cpan.org>' ]
 
-(Spec 1.1) [required] {arrayref of strings} An arrayref indicating the
+(Spec 1.1) [required] {List of Strings} An arrayref indicating the
 person(s) to contact concerning the distribution. The prefered form is:
 
   contact-name <email-address>
@@ -471,13 +455,28 @@ Example:
     }
   }
 
-(Spec 2.0) [optional] {Prereq Specification}
+(Spec 2.0) [optional] {Map}
 
-A Map that describes all the prerequisites of the distribution.  The
-keys are phases of activity, such as C<configure>, C<build>, C<test> or 
-C<runtime>.  Values are Maps in which the keys name the type of
+This is a Map that describes all the prerequisites of the distribution.
+The keys are phases of activity, such as C<configure>, C<build>, C<test>
+or C<runtime>.  Values are Maps in which the keys name the type of
 prerequisite relationship such as C<requires>, C<prefers>, or
-C<recommends> and the values are L<Version Requirements|/Prereq Spec>.
+C<recommends> and the value provides a set of prerequisite relations
+that relate package names to I<Version Ranges>.  
+
+The set of relations may be specified either as a Map of unordered
+relations, or as an ordered List of package name and Version Range
+pairs.  Consider the following examples:
+
+  prereqs => { runtime => { requires => { Foo => '1.234', Bar => '2.345' } } }
+
+  prereqs => { runtime => { requires => [ Foo => '1.234', Bar => '2.345' ] } }
+
+In the first example, there is no preferred order implied to check or
+install prerequisites.  In the second, a preferred order is implied,
+which allows hand-optimization in some cases.  Consumers should respect
+an ordered set of relationships unless there are particular reasons for
+an alternate ordering.
 
 The full definition for this field is given in the L</Prereq Spec>
 section.
@@ -510,13 +509,13 @@ the feature.  Valid subkeys include:
 
 =item description
 
-a String describing the feature
+a String describing the feature; this entry is required
 
 =item prereqs
 
-A C<Prereq Specification> data structure describing additional
-requirements that must be satisfied for the feature to be supported or
-enabled.
+This entry, which is required, has the same structure as that of the
+C<L</prereqs>> key, above.  It provides a list of package requirements
+that must be satisfied for the feature to be supported or enabled.
 
 =back
 
@@ -526,17 +525,17 @@ a function parameter or a configuration value).
 
 If an optional feature is used by a consumer to add prerequisites, the
 prerequisites should be merged into those given by the C<prereqs> key
-and adopt the same semantics.
+using the same semantics.
 
-For example, if an optional feature has a "runtime/requires" prerequisite
-on the Algorithm::Diff module and the feature has been selected for
-installation, then if Algorithm::Diff cannot be installed, the installer
-should consider the entire installation a failure.
+For example, if an optional feature has a "runtime/requires"
+prerequisite on the Algorithm::Diff module and the feature has been
+selected for installation, then if Algorithm::Diff cannot be installed,
+the installer should consider the entire installation a failure.
 
 See L</Merging and Resolving Prerequisites> for details on merging
 prerequisites.
 
-I<Suggestion for use:> Because there is currently no way for a
+I<Suggestion for disuse:> Because there is currently no way for a
 distribution to specify a dependency on an optional feature of another
 dependency, the use of this feature is discouraged.
 
@@ -576,21 +575,21 @@ Example:
   no_index => {
     file      => [ 'My/Module.pm' ],
     directory => [ 'My/Private' ],
-    package   => [ 'My::Module::Stuff' ],
-    namespace => [ 'My::Module::Stuff' ],
+    package   => [ 'My::Module::Secret' ],
+    namespace => [ 'My::Module::Sample' ],
   }
 
-(Spec 1.1) [optional] {hashref} A hashref that describes any files,
-directories, packages, and namespaces that are private
-(i.e. implementation artifacts) that are not of interest to searching
-and indexing tools.  This is useful when no C<provides> field is
-present.
+(Spec 1.1) [optional] {Map} A hashref that describes any files,
+directories, packages, and namespaces that are private (i.e.
+implementation artifacts) that are not of interest to searching and
+indexing tools.
 
-For example, C<search.cpan.org> excludes items listed in C<no_index>
-when searching for POD, meaning files in these directories will not
-converted to HTML and made public - which is useful if you have
-example or test PODs that you don't want the search engine to go
-through.
+For example, search.cpan.org excludes items listed in C<no_index> when
+searching for Pod, meaning files in these directories will not converted
+to HTML and made public - which is useful if you have example libraries
+or test Pod files that you don't want the search engine to go through.
+PAUSE will respect this field, so it  is useful when no C<provides>
+field is present.
 
 =head3 file
 
@@ -598,12 +597,9 @@ through.
 
 =head3 directory
 
-(Spec 1.1) [optional] Exclude anything below the listed
-directory(ies).
+(Spec 1.1) [optional] Exclude anything below the listed directory(ies).
 
-[Note: previous editions of the spec had C<dir> instead of
-C<directory>, but I think MakeMaker and various users started using
-C<directory>, so in deference we switched to that.]
+[ Note: previous editions of the spec had C<dir> instead of C<directory> ]
 
 =head3 package
 
@@ -614,16 +610,17 @@ C<directory>, so in deference we switched to that.]
 (Spec 1.1) [optional] Excludes anything below the listed namespace(s),
 but I<not> the listed namespace(s) its self.
 
+For example, in the code snippet above, C<My::Module::Sample::Foo> would
+be ignored, but C<My::Module::Sample> would not.
+
 =head2 keywords
 
 Example:
 
   keywords => [ qw/ toolchain cpan dual-life / ]
 
-(Spec 1.1) [optional] {arrayref} An arrayref of keywords/phrases that describe
-this distribution.  Keywords should not include whitespace.  Consumers of the
-C<keywords> field may modify whitespace (converting to dashes or underscores)
-if needed for particular purposes (e.g. browser-friendly URLs).
+(Spec 1.1) [optional] {List}  An arrayref of keywords/phrases that describe
+this distribution.  Keywords B<must not> include whitespace.
 
 =head2 resources
 
@@ -642,17 +639,17 @@ Example:
       type => 'git',
     },
     MailingList => 'http://lists.sf.net/lists/listinfo/module-build-general',
-    x_twitter   => 'http://http://twitter.com/cpan_linked/',
+    x_twitter   => 'http://twitter.com/cpan_linked/',
   }
 
-(Spec 2.0) [optional] {hashref} A hashref of any URL resources related to this
-distribution.  If you'd like to add your own "special" entries (like the
-"x_twitter" entry above), they must begin with an "x" or "X" as described
-in the rules for L</"Custom Keys">.
+(Spec 2.0) [optional] {Map} A hashref of any resources related to this
+distribution.  If you'd like to add your own entries (like the
+"x_twitter" entry above), they must begin with an "x_" or "X_" as
+described in the rules for L</Custom Keys>.
 
 The current set of official keys is:
 
-=over 2
+=over
 
 =item homepage
 
@@ -681,38 +678,28 @@ is a hashref with the following entries:
 
 =back
 
-
 =head2 generated_by
 
 Example:
 
   generated_by => 'Module::Build version 0.20'
 
-(Spec 1.0) [required] {string} Indicates the tool that was used to
-create this metadata.  It's good form to include both the name
-of the tool and its version, but this field is essentially opaque, at
-least for the moment. If the metadata structure was generated by hand,
-it is suggested that the author be specified here.
-
-[Note: My F<meta_stats.pl> script which I use to gather statistics
-regarding F<META.yml> usage prefers the form listed above, i.e. it
-splits on /\s+version\s+/ taking the first field as the name of the
-tool that generated the file and the second field as version of that
-tool. RWS]
+(Spec 1.0) [required] {String} Indicates the tool that was used to
+create this metadata.  There are no defined semantics for this field,
+but it is traditional to use a string in the form "Generating::Package
+version 1.23" or the author's name, if the file was generated by hand.
 
 =head1 VERSION NUMBERS
 
 =head2 Version Formats
 
-Several fields in the CPAN Meta Spec take a "version number", either
-directly or within a larger data structure.  These version numbers
-should given as strings, not numeric literals.  If any characters
-not matching C<qr{[0-9.]}> appear, the version number must be given
-as a string
+This section defines the Version type, used by several fields in the
+CPAN Meta Spec.
 
-   version => 1.234       # Number (acceptable)
-   version => '1.234'     # String (preferred)
-   version => '1.23_04'   # String (required due to '_')
+These version numbers should treated as strings, not numbers.  For
+example, C<1.200> B<must not> be serialized as C<1.2>.  Version
+comparison should be delegated to the Perl L<version> module, version
+0.80 or newer.
 
 Unless otherwise specified, version numbers must appear in one of two
 formats:
@@ -721,10 +708,10 @@ formats:
 
 =item Decimal versions
 
-Decimal versions are regular "decimal numbers", with some limitations.  They
-must be positive and must have a leading and trailing digit.  A single
-underscore may be included, but must be between two digits.  They should
-not use exponential notation ("1.23e-2").
+Decimal versions are regular "decimal numbers", with some limitations.
+They must be positive and must have a leading and trailing digit.  A
+single underscore may be included, but must be between two digits.  They
+should not use exponential notation ("1.23e-2").
 
    version => '1.234'       # OK
    version => '1.23_04'     # OK
@@ -755,13 +742,12 @@ Dotted-integer versions must be quoted strings.
 
 =back
 
-=head2 Version Specifications
+=head2 Version Ranges
 
-Some fields require a version specification (ex. L<"requires">,
-L<"recommends">, L<"build_requires">, etc.) to indicate the particular
-versionZ<>(s) of some other module that may be required as a
-prerequisite.  This section details the version specification formats
-that are currently supported.
+Some fields (prereq, optional_features) require a version specification
+to indicate the particular versionZ<>(s) of some other module that may
+be required as a prerequisite.  This section details the Version
+Requirements type used to provide this information.
 
 The simplest format for a version specification is just the version
 number itself, e.g. C<2.4>.  This means that B<at least> version 2.4
@@ -779,53 +765,6 @@ For more complicated situations, version specifications may be AND-ed
 together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
 2.0> indicates a version that must be B<at least> 1.2, B<less than>
 2.0, and B<not equal to> 1.5.
-
-=head2 Extracting Version Numbers from Perl Modules
-
-To get the version number from a Perl module, consumers should use the
-C<< MM->parse_version($file) >> method provided by L<ExtUtils::MakeMaker> or
-the L<Module::Build::ModuleInfo> module provided with L<Module::Build>.  For
-example, for the module given by C<$mod>, the version may be retrieved in one
-of the following ways:
-
-  # via ExtUtils::MakeMaker
-  my $file = MM->_installed_file_for_module($mod);
-  my $version = MM->parse_version($file)
-
-The private C<_installed_file_for_module> method may be replaced with
-other methods for locating a module in C<@INC>.
-
-  # via Module::Build
-  my $info = Module::Build::ModuleInfo->new_from_module($mod);
-  my $version = $info->version;
-
-If only a filename is available, the following approach may be used:
-
-  # via Module::Build
-  my $info = Module::Build::ModuleInfo->new_from_file($file);
-  my $version = $info->version;
-
-=head2 Comparing Version Numbers
-
-The L<version> module provides the most reliable way to compare version
-numbers in all the various ways they might be provided or might exist
-within modules.  Given two strings containing version numbers, C<$v1> and
-C<$v2>, they should be converted to C<version> objects before using
-ordinary comparison operators.  For example:
-
-  use version;
-  if ( version->new($v1) <=> version->new($v2) ) {
-    print "Versions are not equal\n";
-  }
-
-If the only comparison needed is whether an installed module is of a
-sufficiently high version, a direct test may be done using the string
-form of C<eval> and the C<use> function.  For example, for module C<$mod>
-and version prerequisite C<$prereq>:
-
-  if ( eval "use $mod $prereq (); 1" ) {
-    print "Module $mod version is OK.\n";
-  }
 
 =head1 PREREQUISITES
 
@@ -850,7 +789,7 @@ C<test> phase, this entry would appear in the distribution metadata:
   }
 
 The inner arrayref is a I<Ordered Mapping> of module names and
-L<version specifications|/Version Specifications>.
+L<version ranges|/Version Ranges>.
 
 =head3 Phases
 
@@ -959,6 +898,58 @@ library distributions as F<META.yml>, a file in the YAML Tiny format
 (for which, see L<YAML::Tiny>).  Tools that look for distribution
 metadata should be capable of loading F<META.yml>, but F<META.json>
 should be preferred if both are found.
+
+=head1 NOTES FOR IMPLEMENTORS
+
+=head2 Extracting Version Numbers from Perl Modules
+
+To get the version number from a Perl module, consumers should use the
+C<< MM->parse_version($file) >> method provided by L<ExtUtils::MakeMaker> or
+the L<Module::Build::ModuleInfo> module provided with L<Module::Build>.  For
+example, for the module given by C<$mod>, the version may be retrieved in one
+of the following ways:
+
+  # via ExtUtils::MakeMaker
+  my $file = MM->_installed_file_for_module($mod);
+  my $version = MM->parse_version($file)
+
+The private C<_installed_file_for_module> method may be replaced with
+other methods for locating a module in C<@INC>.
+
+  # via Module::Build
+  my $info = Module::Build::ModuleInfo->new_from_module($mod);
+  my $version = $info->version;
+
+If only a filename is available, the following approach may be used:
+
+  # via Module::Build
+  my $info = Module::Build::ModuleInfo->new_from_file($file);
+  my $version = $info->version;
+
+=head2 Comparing Version Numbers
+
+The L<version> module provides the most reliable way to compare version
+numbers in all the various ways they might be provided or might exist
+within modules.  Given two strings containing version numbers, C<$v1> and
+C<$v2>, they should be converted to C<version> objects before using
+ordinary comparison operators.  For example:
+
+  use version;
+  if ( version->new($v1) <=> version->new($v2) ) {
+    print "Versions are not equal\n";
+  }
+
+If the only comparison needed is whether an installed module is of a
+sufficiently high version, a direct test may be done using the string
+form of C<eval> and the C<use> function.  For example, for module C<$mod>
+and version prerequisite C<$prereq>:
+
+  if ( eval "use $mod $prereq (); 1" ) {
+    print "Module $mod version is OK.\n";
+  }
+
+If the values of C<$mod> and C<$prereq> have not been scrubbed, however,
+this presents security implications.
 
 =head1 SEE ALSO
 
