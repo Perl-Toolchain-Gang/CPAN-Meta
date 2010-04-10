@@ -121,6 +121,11 @@ which has an associated data type as described.  There are three
 these primatives and define compound data structures or define
 constraints on the values of the field.
 
+=head1 Boolean
+
+A I<Boolean> is used to provide a true or false value.  It B<must> be
+represented as a defined value.
+
 =head2 String
 
 A I<String> is data element containing a non-zero length sequence of
@@ -145,10 +150,45 @@ A I<Map> is an unordered collection of one or more data elements
 ("values"), indexed by associated String elements ("keys").  The Map's
 value elements may be of mixed types.
 
+=head2 Version Requirements
+
+The I<Version Requirements> type is either:
+
+=over
+
+=item *
+
+a subtype of Map in which the keys are package names and the values
+identify valid versions
+
+=item *
+
+a subtype of List that behaves like a ordered version of the Map
+described above
+
+=back
+
+Version Requirements is detailed below under L</Prereq Spec>.
+
+=head2 Prereq Specification
+
+I<Prereq Specification> is a subtype of Map.  It is detailed below under
+L</prereq>.
+
 =head2 URL
 
 I<URL> is a subtype of string containing a Uniform Resource Locator or
 Identifier.  (It is called URL and not URI for historical reasons.)
+
+=head2 Version
+
+A I<Version> is a subtype of string.  It is described in detail below
+under L</Version Formats>.
+
+=head2 License String
+
+A I<License String> is a subtype of string.  It is described in detail
+below under L</license>.
 
 =head1 STRUCTURE
 
@@ -157,7 +197,7 @@ This section describes valid keys within the Map.
 
 Any keys not described in this specification document (whether top-level
 or within compound data structures described herein) are considered
-"custom keys" and *must* begin with an "x" or "X" and be followed by an
+I<custom keys> and B<must> begin with an "x" or "X" and be followed by an
 underscore; i.e. they must match the pattern: C<< qr{\Ax_}i >>.  If a
 custom key refers to a compound data structure, subkeys within it do not
 need an "x_" or "X_" prefix.
@@ -167,7 +207,7 @@ All other keys not described herein are invalid and should be ignored.
 
 For each key, an example is provided followed by a description.  The
 description begins with the version of spec in which the key was added,
-whether the key is 'required' or 'optional' and the data type of the
+whether the key is I<required> or I<optional> and the data type of the
 corresponding data element.  These items are in parentheses, brackets
 and braces, respectively.
 
@@ -212,10 +252,10 @@ Example:
 
   name => 'Module-Build'
 
-(Spec 1.0) [required] {string} The name of the distribution which is often
+(Spec 1.0) [required] {String} The name of the distribution, which is often
 created by taking the "main module" in the distribution and changing
-"::" to "-".  Sometimes it's completely different, however, as in the
-case of the libwww-perl distribution (see
+C<::> to C<->.  Sometimes it's completely different, however, as in the
+case of the C<libwww-perl> distribution (see
 L<http://search.cpan.org/dist/libwww-perl/>).
 
 =head2 version
@@ -224,9 +264,8 @@ Example:
 
   version => 0.20
 
-(Spec 1.0) [required] {version} The version of the distribution to which the
-metadata structure refers.  The value must be in one of the valid version
-number formats described in L</Version Formats>.
+(Spec 1.0) [required] {Version} The version of the distribution to which the
+metadata structure refers.
 
 =head2 abstract
 
@@ -234,7 +273,7 @@ Example:
 
   abstract => 'Build and install Perl modules.'
 
-(Spec 1.1) [required] {string} A short description of the purpose of the
+(Spec 1.1) [required] {String} A short description of the purpose of the
 distribution.
 
 =head2 description
@@ -245,7 +284,7 @@ Example:
                 .   "and installing Perl modules.  It is meant to be an "
                 .   "alternative to "ExtUtils::MakeMaker... blah blah blah"
 
-(Spec 2.0) [optiona] {string} A longer, more complete description of the
+(Spec 2.0) [optiona] {String} A longer, more complete description of the
 purpose or intended use of the distribution than the one provided by the
 C<abstract> key.
 
@@ -260,9 +299,9 @@ person(s) to contact concerning the distribution. The prefered form is:
 
   contact-name <email-address>
 
-This field serves as a general contact independent of L</"resources">
-C<MailingList> and C<bugtracker>. The addressee(s) can be contacted for any
-purpose including but not limited to (security) problems with the distribution,
+This field serves as a general contact independent of L</resources> and
+C<bugtracker>. The addressee(s) may be contacted for any purpose
+including but not limited to: (security) problems with the distribution,
 questions about the distribution or bugs in the distribution.
 
 Most of the time, a distribution's original author is also the contact. When a
@@ -276,9 +315,9 @@ Example:
 
   license => 'perl5'
 
-  license => ['apache_2','mozilla_1_0']
+  license => [ 'apache_2', 'mozilla_1_0' ]
 
-(Spec 2.0) [required] {license string or arrayref of license strings}
+(Spec 2.0) [required] {License String or List of one or more License Strings}
 
 One or more licenses that apply to some or all of the files in the
 distribution.  If multiple licenses are listed, the distribution
@@ -330,7 +369,7 @@ Example:
 
   language => 'perl5'
 
-(Spec 2.0) [required] {string} The programming language in which the
+(Spec 2.0) [required] {String} The programming language in which the
 distribution is implemented.
 
 =head2 release_status
@@ -339,7 +378,7 @@ Example:
 
   release_status => 'stable'
 
-(Spec 2.0) [required] {string} The release status of this distribution.  If
+(Spec 2.0) [required] {String} The release status of this distribution.  If
 the C<version> field contains an underscore character, then
 C<release_status> must be either "testing" or "unstable".  If C<version>
 does not contain an underscore, C<release_status> may contain either
@@ -382,7 +421,7 @@ Example:
 
   distribution_type => 'module'
 
-(Spec 1.0) [optional] {string} What kind of stuff is contained in this
+(Spec 1.0) [optional] {String} What kind of stuff is contained in this
 distribution.  Most things on CPAN are C<module>s (which can also mean
 a collection of modules), but some things are C<script>s.
 
@@ -398,60 +437,62 @@ Example:
 
   dynamic_config => 0
 
-(Spec 2.0) [required] {boolean} A boolean flag indicating whether a F<Build.PL>
-or F<Makefile.PL> (or similar) must be executed to determine prerequisites.
-The main reason to set this to a true value is if your module performs some
-dynamic configuration (asking questions, sensing the environment, etc.) as part
-of its configuration.  The main reason to set this to a false value is to
-indicate that prerequisites may be considered valid for static analysis.
+(Spec 2.0) [required] {Boolean} A boolean flag indicating whether a
+F<Build.PL> or F<Makefile.PL> (or similar) must be executed to determine
+prerequisites.  The main reason to set this to a true value is if your
+module performs some dynamic configuration (asking questions, sensing
+the environment, etc.) as part of its configuration.  The main reason to
+set this to a false value is to indicate that prerequisites may be
+considered valid for static analysis.
 
-This field explicitly does not indicate whether installation may be safely
-performed without using a Makefile or Build file, as there may be special files
-to install or custom installation targets (e.g. for dual-life modules that
-exist on CPAN as well as in the Perl core).  This field only defines whether
-prerequisites are complete as given in the META file.
+This field explicitly does not indicate whether installation may be
+safely performed without using a Makefile or Build file, as there may be
+special files to install or custom installation targets (e.g. for
+dual-life modules that exist on CPAN as well as in the Perl core).  This
+field only defines whether prerequisites are complete as given in the
+META file.
 
 =head2 private
 
-I<(Deprecated)> (Spec 1.0) [optional] {hashref} This field has been renamed to
+I<(Deprecated)> (Spec 1.0) [optional] {Map} This field has been renamed to
 L</"no_index">.  See below.
 
 =head2 prereqs
 
 Example:
 
-    prereqs => {
-      runtime => {
-        requires => [
-          'perl'          => '5.006',
-          'File::Spec'    => '0.86',
-          'JSON'          => '2.16',
-        ],
-        prefers => [
-          'JSON::XS'      => '2.26',
-        ]
-        recommends => [
-          'Archive::Tar'  => 0,
-        ],
-      },
-      build => {
-        requires => [
-          'Test::More'    => "0.94",
-        ],
-        prefers => [
-          'Test::Deep'    => "0.10",
-        ],
-      }
+  prereqs => {
+    runtime => {
+      requires => [
+        'perl'          => '5.006',
+        'File::Spec'    => '0.86',
+        'JSON'          => '2.16',
+      ],
+      prefers => [
+        'JSON::XS'      => '2.26',
+      ]
+      recommends => [
+        'Archive::Tar'  => 0,
+      ],
+    },
+    build => {
+      requires => [
+        'Test::More'    => "0.94",
+      ],
+      prefers => [
+        'Test::Deep'    => "0.10",
+      ],
     }
+  }
 
-(Spec 2.0) [optional] {prereq-spec} A hashref that describes all the
-prerequisites required for operation.  The keys are phases of activity,
-such as C<configure>, C<build>, C<test> and C<runtime>.  Values are
-hashref-of-arrayref structures, with subkeys for type of prerequisite
-relationship such as C<requires>, C<prefers>, or C<recommends>.  The
-arrayref describes an ordered map of module names and version
-specifications.  See the L</Prereq Spec> section for the full description
-of the prereq-spec data structure.
+(Spec 2.0) [optional] {Prereq Specification}
+
+A Map that
+describes all the prerequisites required for operation.  The keys are
+phases of activity, such as C<configure>, C<build>, C<test> and
+C<runtime>.  Values are Maps in which they keys name the
+type of prerequisite relationship such as C<requires>, C<prefers>, or
+C<recommends> and the values are L<Version Requirements|/Prereq Spec>.
 
 =head2 optional_features
 
@@ -470,31 +511,35 @@ Example:
     }
   }
 
-(Spec 2.0) [optional] {hashref} A hashref of names for optional features
-with incremental prerequisites.  Each key of the C<optional_features>
-hashref is an identifier for a feature and each value is hashref with
-additional information about the feature.  Identifers are arbitrary
-strings and do not need a leading "x_" like custom meta field keys.
-Valid keys for the hashref include:
+(Spec 2.0) [optional] {Map}
+
+This is a map of names for optional features with incremental
+prerequisites.  Each key of the C<optional_features> Map is an
+identifier for a feature and each value is hashref with additional
+information about the feature.  Identifers are arbitrary strings and do
+not need a leading "x_" like custom meta field keys.  Valid keys for the
+hashref include:
 
 =over
 
 =item description
 
-A string describing the feature.
+a String describing the feature
 
 =item prereqs
 
-A C<prereq-spec> data structure describing additional requirements
-that must be satisfied for the feature to be supported or enabled
+A C<Prereq Specification> data structure describing additional
+requirements that must be satisfied for the feature to be supported or
+enabled.
 
 =back
 
-By default, optional_features must not add additional prerequisites.  (If
-prerequisites happen to be already satisfied, metadata consumers may
-indicate that the optional feature is supported.)  If an optional feature
-is used by a consumer to add prerequisites, the prerequisites should be
-merged into those given by the C<prereqs> key and adopt the same semantics.
+Unless selected by the user, optional features do not add additional
+prerequisites.  (If prerequisites happen to be already satisfied,
+metadata consumers may indicate that the optional feature is supported.)
+If an optional feature is used by a consumer to add prerequisites, the
+prerequisites should be merged into those given by the C<prereqs> key
+and adopt the same semantics.
 
 For example, if an optional feature has a "runtime/requires" prerequisite
 on the Algorithm::Diff module and the feature has been selected for
@@ -505,7 +550,7 @@ See L</Merging and Resolving Prerequisites> for details on merging
 prerequisites.
 
 I<Suggestion for use:> Because there is currently no way for a distribution
-to specify a dependency on an optional_feature of another dependency, a good
+to specify a dependency on an optional feature of another dependency, a good
 practice may be to encapsulate all optional feature dependencies information
 into a separate distribution. For example, in the metadata for Foo-Bar-1.23:
 
@@ -522,9 +567,10 @@ into a separate distribution. For example, in the metadata for Foo-Bar-1.23:
     }
   }
 
-Then, in Foo-Bar-Wibble-1.23, specify the prerequisites for "Wibble support"
-normally in the C<prereqs> key.  This allows distributions that need "Wibble
-support" to specify *both* Foo::Bar and Foo::Bar::Wibble as required modules.
+Then, in Foo-Bar-Wibble-1.23, specify the prerequisites for "Wibble
+support" normally in the C<prereqs> key.  This allows distributions that
+need "Wibble support" to specify B<both> Foo::Bar and Foo::Bar::Wibble
+as required modules.
 
 =head2 provides
 
@@ -544,7 +590,7 @@ Example:
     },
   }
 
-(Spec 1.1) [optional] {hashref} A hashref that describes all packages
+(Spec 1.1) [optional] {Map} A hashref that describes all packages
 provided by this distribution.  This information can be (and, in some
 cases, is) used by distribution and automation mechanisms like PAUSE,
 CPAN, and search.cpan.org to build indexes saying in which
