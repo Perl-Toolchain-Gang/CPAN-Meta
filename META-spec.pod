@@ -154,11 +154,6 @@ value elements may be of mixed types.
 
 The I<Version Range> type is specified below under L</Version Ranges>
 
-=head2 Prereq Specification
-
-I<Prereq Specification> is a subtype of Map.  It is detailed below under
-L</Prereq Specifications>.
-
 =head2 URL
 
 I<URL> is a subtype of string containing a Uniform Resource Locator or
@@ -468,13 +463,23 @@ Example:
     }
   }
 
-(Spec 2.0) [optional] {Prereq Specification}
+(Spec 2.0) [optional] {Map}
 
 A Map that describes all the prerequisites required for operation.  The
 keys are phases of activity, such as C<configure>, C<build>, C<test> and
 C<runtime>.  Values are Maps in which they keys name the type of
 prerequisite relationship such as C<requires>, C<prefers>, or
-C<recommends>.  The  and the values are L<Version Requirements|/Prereq Spec>.
+C<recommends>.  The value for each relationship type is a Map of package
+names to Version Ranges.  Alternately, a value may be a List of pairs,
+meaning that the following two entries are almost equivalent:
+
+  prereqs => { runtime => { requires => { Foo => '1.234', Bar => '2.345' } } }
+
+  prereqs => { runtime => { requires => [ Foo => '1.234', Bar => '2.345' ] } }
+
+In the first example, there is no preferred order implied to check or
+install prerequisites.  In the second, a preferred order is implied,
+which allows hand-optimization in some cases.
 
 =head2 optional_features
 
@@ -500,19 +505,19 @@ prerequisites.  Each key of the C<optional_features> Map is an
 identifier for a feature and each value is hashref with additional
 information about the feature.  Identifers are arbitrary strings and do
 not need a leading "x_" like custom meta field keys.  Valid keys for the
-hashref include:
+Map include:
 
 =over
 
 =item description
 
-a String describing the feature
+a String describing the feature; this entry is required
 
 =item prereqs
 
-A C<Prereq Specification> data structure describing additional
-requirements that must be satisfied for the feature to be supported or
-enabled.
+This entry, which is required, has the same structure as that of the
+C<L</prereqs>> key, above.  It provides a list of package requirements
+that must be satisfied for the feature to be supported or enabled.
 
 =back
 
@@ -521,17 +526,17 @@ prerequisites.  (If prerequisites happen to be already satisfied,
 metadata consumers may indicate that the optional feature is supported.)
 If an optional feature is used by a consumer to add prerequisites, the
 prerequisites should be merged into those given by the C<prereqs> key
-and adopt the same semantics.
+using the same semantics.
 
-For example, if an optional feature has a "runtime/requires" prerequisite
-on the Algorithm::Diff module and the feature has been selected for
-installation, then if Algorithm::Diff cannot be installed, the installer
-should consider the entire installation a failure.
+For example, if an optional feature has a "runtime/requires"
+prerequisite on the Algorithm::Diff module and the feature has been
+selected for installation, then if Algorithm::Diff cannot be installed,
+the installer should consider the entire installation a failure.
 
 See L</Merging and Resolving Prerequisites> for details on merging
 prerequisites.
 
-I<Suggestion for use:> Because there is currently no way for a
+I<Suggestion for disuse:> Because there is currently no way for a
 distribution to specify a dependency on an optional feature of another
 dependency, the use of this feature is discouraged.
 
@@ -762,56 +767,6 @@ together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
 2.0> indicates a version that must be B<at least> 1.2, B<less than>
 2.0, and B<not equal to> 1.5.
 
-=head2 Extracting Version Numbers from Perl Modules
-
-To get the version number from a Perl module, consumers should use the
-C<< MM->parse_version($file) >> method provided by L<ExtUtils::MakeMaker> or
-the L<Module::Build::ModuleInfo> module provided with L<Module::Build>.  For
-example, for the module given by C<$mod>, the version may be retrieved in one
-of the following ways:
-
-  # via ExtUtils::MakeMaker
-  my $file = MM->_installed_file_for_module($mod);
-  my $version = MM->parse_version($file)
-
-The private C<_installed_file_for_module> method may be replaced with
-other methods for locating a module in C<@INC>.
-
-  # via Module::Build
-  my $info = Module::Build::ModuleInfo->new_from_module($mod);
-  my $version = $info->version;
-
-If only a filename is available, the following approach may be used:
-
-  # via Module::Build
-  my $info = Module::Build::ModuleInfo->new_from_file($file);
-  my $version = $info->version;
-
-=head2 Comparing Version Numbers
-
-The L<version> module provides the most reliable way to compare version
-numbers in all the various ways they might be provided or might exist
-within modules.  Given two strings containing version numbers, C<$v1> and
-C<$v2>, they should be converted to C<version> objects before using
-ordinary comparison operators.  For example:
-
-  use version;
-  if ( version->new($v1) <=> version->new($v2) ) {
-    print "Versions are not equal\n";
-  }
-
-If the only comparison needed is whether an installed module is of a
-sufficiently high version, a direct test may be done using the string
-form of C<eval> and the C<use> function.  For example, for module C<$mod>
-and version prerequisite C<$prereq>:
-
-  if ( eval "use $mod $prereq (); 1" ) {
-    print "Module $mod version is OK.\n";
-  }
-
-If the values of C<$mod> and C<$prereq> have not been scrubbed, however,
-this presents security implications.
-
 =head1 PREREQUISITES
 
 =head2 Prereq Spec
@@ -944,6 +899,58 @@ library distributions as F<META.yml>, a file in the YAML Tiny format
 (for which, see L<YAML::Tiny>).  Tools that look for distribution
 metadata should be capable of loading F<META.yml>, but F<META.json>
 should be preferred if both are found.
+
+=head1 NOTES FOR IMPLEMENTORS
+
+=head2 Extracting Version Numbers from Perl Modules
+
+To get the version number from a Perl module, consumers should use the
+C<< MM->parse_version($file) >> method provided by L<ExtUtils::MakeMaker> or
+the L<Module::Build::ModuleInfo> module provided with L<Module::Build>.  For
+example, for the module given by C<$mod>, the version may be retrieved in one
+of the following ways:
+
+  # via ExtUtils::MakeMaker
+  my $file = MM->_installed_file_for_module($mod);
+  my $version = MM->parse_version($file)
+
+The private C<_installed_file_for_module> method may be replaced with
+other methods for locating a module in C<@INC>.
+
+  # via Module::Build
+  my $info = Module::Build::ModuleInfo->new_from_module($mod);
+  my $version = $info->version;
+
+If only a filename is available, the following approach may be used:
+
+  # via Module::Build
+  my $info = Module::Build::ModuleInfo->new_from_file($file);
+  my $version = $info->version;
+
+=head2 Comparing Version Numbers
+
+The L<version> module provides the most reliable way to compare version
+numbers in all the various ways they might be provided or might exist
+within modules.  Given two strings containing version numbers, C<$v1> and
+C<$v2>, they should be converted to C<version> objects before using
+ordinary comparison operators.  For example:
+
+  use version;
+  if ( version->new($v1) <=> version->new($v2) ) {
+    print "Versions are not equal\n";
+  }
+
+If the only comparison needed is whether an installed module is of a
+sufficiently high version, a direct test may be done using the string
+form of C<eval> and the C<use> function.  For example, for module C<$mod>
+and version prerequisite C<$prereq>:
+
+  if ( eval "use $mod $prereq (); 1" ) {
+    print "Module $mod version is OK.\n";
+  }
+
+If the values of C<$mod> and C<$prereq> have not been scrubbed, however,
+this presents security implications.
 
 =head1 SEE ALSO
 
