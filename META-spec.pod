@@ -871,11 +871,11 @@ be used with great caution, or not at all.
 
 =head2 Merging and Resolving Prerequisites
 
-Whenever metadata consumer merge prerequisites, either from different
+Whenever metadata consumers merge prerequisites, either from different
 phases or from C<optional_features>, they should merged in a way which
 preserves the intended semantics of the prerequisite structure.  Generally,
 this means concatenating the version specifications using commas, as
-described in the L<VERSION SPECIFICATIONS> section.
+described in the L<Version Ranges> section.
 
 Another subtle error that can occur in resolving prerequisites comes from
 the way that modules in prerequisits are indexed to distribution files on
