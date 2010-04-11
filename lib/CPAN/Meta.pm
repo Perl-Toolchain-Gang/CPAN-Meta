@@ -33,6 +33,8 @@ BEGIN {
   for my $attr (@LIST_READERS) {
     *$attr = sub {
       my $value = $_[0]{ $attr };
+      confess "$attr must be called in list context"
+        unless wantarray;
       return @$value if ref $value;
       return $value;
     };
