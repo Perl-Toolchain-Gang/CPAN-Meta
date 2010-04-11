@@ -52,7 +52,7 @@ META-spec - Specification for CPAN distribution metadata
     dynamic_config => 1,
     keywords => [ qw/ toolchain cpan dual-life / ],
     'meta-spec' => {
-      version => 1.4,
+      version => '2.0',
       url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
     },
     generated_by => 'Module::Build version 0.36',
@@ -224,10 +224,11 @@ document was generated.
 
 =item url
 
-(Spec 1.1) [required] {URL}
+(Spec 2.0) [optional] {URL}
 
 The location of the metadata specification document corresponding to
-the given version.
+the given version.  This is strictly for human-consumption and should
+not impact the interpretation of the document.
 
 =back
 
