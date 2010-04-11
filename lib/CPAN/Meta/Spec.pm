@@ -15,7 +15,7 @@ META-spec - Specification for CPAN distribution metadata
     abstract => 'Build and install Perl modules',
     description =>  "Module::Build is a system for building, testing, "
                 .   "and installing Perl modules.  It is meant to be an "
-                .   "alternative to "ExtUtils::MakeMaker... blah blah blah",
+                .   "alternative to ExtUtils::MakeMaker... blah blah blah",
     version  => '0.36',
     author   => [
       'Ken Williams <kwilliams@cpan.org>',
@@ -51,9 +51,18 @@ META-spec - Specification for CPAN distribution metadata
           'Test::More' => '0',
         },
       }
-    }
+    },
     resources => {
       license => ['http://dev.perl.org/licenses/'],
+    },
+    optional_features => {
+      domination => {
+        description => 'Take over the world',
+        prereqs     => {
+          develop => { requires => { 'Genius::Evil'     => '1.234' } },
+          runtime => { requires => { 'Machine::Weather' => '2.0'   } },
+        },
+      },
     },
     dynamic_config => 1,
     keywords => [ qw/ toolchain cpan dual-life / ],
