@@ -1,3 +1,9 @@
+use strict;
+package CPAN::Meta::Spec;
+our $VERSION = '2.0';
+# vi:tw=72
+1;
+
 =head1 NAME
 
 META-spec - Specification for CPAN distribution metadata
@@ -998,4 +1004,3 @@ JSON, L<http://json.org/>
 
 YAML, L<http://www.yaml.org/>
 
-# vi:tw=72
