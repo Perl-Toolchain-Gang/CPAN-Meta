@@ -58,4 +58,68 @@ sub requirements_for {
   return $req;
 }
 
+# sub clone {
+#   my ($self) = @_;
+# 
+#   my %new_arg;
+# 
+#   for my $phase ($self->__legal_phases) {
+#     for my $type ($self->__legal_types) {
+#       my $req = $self->requirements_for($phase, $type);
+#       next unless $req->required_modules;
+# 
+#       $new_arg{ $phase }{ $type } = $req->as_string_hash;
+#     }
+#   }
+# 
+#   return (ref $self)->new(\%new_arg);
+#   my %guts = @_;
+# }
+
+sub with_merged_prereqs {
+  my ($self, $other) = @_;
+
+  my @other = blessed($other) ? $other : @$other;
+
+  my @prereq_objs = ($self, @other);
+
+  my %new_arg;
+
+  for my $phase ($self->__legal_phases) {
+    for my $type ($self->__legal_types) {
+      my $req = Version::Requirements->new;
+
+      for my $prereq (@prereq_objs) {
+        my $this_req = $prereq->requirements_for($phase, $type);
+        next unless $this_req->required_modules;
+
+        $req->add_requirements($this_req);
+      }
+
+      next unless $req->required_modules;
+
+      $new_arg{ $phase }{ $type } = $req->as_string_hash;
+    }
+  }
+
+  return (ref $self)->new(\%new_arg);
+}
+
+sub as_string_hash {
+  my ($self) = @_;
+
+  my %hash;
+
+  for my $phase ($self->__legal_phases) {
+    for my $type ($self->__legal_types) {
+      my $req = $self->requirements_for($phase, $type);
+      next unless $req->required_modules;
+
+      $hash{ $phase }{ $type } = $req->as_string_hash;
+    }
+  }
+
+  return \%hash;
+}
+
 1;

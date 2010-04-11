@@ -4,7 +4,7 @@ use Test::More 0.88;
 
 use CPAN::Meta::Prereq;
 
-my $prereq = CPAN::Meta::Prereq->new({
+my $prereq_struct = {
   runtime => {
     requires => {
       'Config' => 0,
@@ -33,9 +33,13 @@ my $prereq = CPAN::Meta::Prereq->new({
       'Test' => 0,
     },
   }
-});
+};
+
+my $prereq = CPAN::Meta::Prereq->new($prereq_struct);
 
 isa_ok($prereq, 'CPAN::Meta::Prereq');
+
+is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
 
 {
   my $req = $prereq->requirements_for('runtime');
