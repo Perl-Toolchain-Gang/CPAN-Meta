@@ -979,8 +979,6 @@ CPAN.pm, L<http://search.cpan.org/dist/CPAN/>
 
 CPANPLUS, L<http://search.cpan.org/dist/CPANPLUS/>
 
-Data::Dumper, L<http://search.cpan.org/dist/Data-Dumper/>
-
 ExtUtils::MakeMaker, L<http://search.cpan.org/dist/ExtUtils-MakeMaker/>
 
 Module::Build, L<http://search.cpan.org/dist/Module-Build/>
