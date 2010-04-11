@@ -784,12 +784,13 @@ and B<not equal to> 1.5.
 
 =head2 Prereq Spec
 
-The C<prereqs> key and data structures within the C<optional_features> key
-specify a C<prereq-spec> data type.  These entries in the metadata
-structure all define the relationship between this distribution and other
-packages.  A C<prereq-spec> is a hierarchical data structure which divides
-prerequisites into I<Phases> of activity in the installation process
-and I<Relationships> that indicate how prerequisites should be resolved.
+The C<prereqs> key and data structures within the C<optional_features>
+key use prerequisite specification structures.  These entries in the
+metadata structure define the relationship between this distribution
+and other packages.  The prereq spec structure is a hierarchical data
+structure which divides prerequisites into I<Phases> of activity in the
+installation process and I<Relationships> that indicate how
+prerequisites should be resolved.
 
 For example, to specify that C<Data::Dumper> is C<required> during the
 C<test> phase, this entry would appear in the distribution metadata:
