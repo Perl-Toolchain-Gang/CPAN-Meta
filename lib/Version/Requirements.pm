@@ -161,6 +161,17 @@ sub add_requirements {
 
   my $bool = $req->accepts_modules($module => $version);
 
+Given an module and version, this method returns true if the version
+specification for the module accepts the provided version.  In other words,
+given:
+
+  Module => '>= 1.00, < 2.00'
+
+We will accept 1.00 and 1.75 but not 0.50 or 2.00.
+
+For modules that do not appear in the requirements, this method will return
+true.
+
 =cut
 
 sub accepts_module {
