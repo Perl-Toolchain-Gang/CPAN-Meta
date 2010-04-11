@@ -1,0 +1,197 @@
+<html>
+<head>
+ <title>Specification for META.yml</title>
+</head>
+
+<body>
+<h2 align=center>Specification for the META.yml file</h2>
+
+<p>This document describes version 1.0 of the META.yml specification.</p>
+
+<p>
+The META.yml file describes important properties of contributed Perl
+distributions such as the ones found on <a
+href="http://www.cpan.org">CPAN</a>.  It is typically created by tools
+like <a
+href="http://search.cpan.org/author/KWILLIAMS/Module-Build/">Module::Build</a>
+and <a
+href="http://search.cpan.org/author/MSCHWERN/ExtUtils-MakeMaker/">ExtUtils::MakeMaker</a>.
+</p>
+
+<p>
+The fields in the META.yml file are meant to be helpful to people
+maintaining module collections (like CPAN), for people writing
+installation tools (like <a
+href="http://search.cpan.org/author/ANDK/CPAN/">CPAN.pm</a> or <a
+href="http://search.cpan.org/author/KANE/CPANPLUS/">CPANPLUS</a>), or
+just people who want to know some stuff about a distribution before
+downloading it and starting to install it.
+</p>
+
+<h3>Format</h3>
+
+<p>
+META.yml files are written in the <a
+href="http://www.yaml.org/">YAML</a> format.  The reasons we chose
+YAML instead of, say, XML or Data::Dumper are discussed in <a
+href="http://archive.develooper.com/makemaker@perl.org/msg00405.html">this
+thread</a> on the MakeMaker mailing list.
+</p>
+
+<p>
+The first line of a META.yml file should be a valid <a
+href="http://www.yaml.org/spec/#.Document">YAML document header</a>
+like <nobr><tt>"--- #YAML:1.0"</tt></nobr>.
+</p>
+
+<h3>Fields</h3>
+
+<p>
+The rest of the META.yml file is one big YAML <a
+href="http://www.yaml.org/spec/#.-syntax-mapping-Mapping-">mapping</a>,
+whose keys are described here.
+</p>
+
+<ul>
+
+<li><b>name</b><br>
+Example: <b>Module-Build</b>
+<p>
+The name of the distribution.  Often created by taking the "main
+module" in the distribution and changing "::" to "-".  Sometimes it's
+completely different, however, as in the case of the <a
+href="http://search.cpan.org/author/GAAS/libwww-perl/">libwww-perl</a>
+distribution.
+</p>
+
+<li><b>version</b><br>
+Example: <b>0.16</b>
+<p>
+The version of the distribution to which the META.yml file refers.
+</p>
+
+<li><b>license</b><br>
+Example: <b>perl</b>
+<p>
+The license under which this distribution may be used and
+redistributed.  See <a
+href="http://search.cpan.org/author/KWILLIAMS/Module-Build/">Module::Build</a>
+for the list of valid options.
+</p>
+
+<li><b>distribution_type</b><br>
+Example: <b>module</b>
+<p>
+What kind of stuff is contained in this distribution.  Most things on
+CPAN are <code>module</code>s (which can also mean a collection of
+modules), but some things are <code>script</code>s.
+</p>
+
+<li><b>requires</b><br>
+Example:<br>
+<b>
+&nbsp;&nbsp;Data::Dumper: 0<br>
+&nbsp;&nbsp;File::Find: 1.03<br>
+</b>   
+<p>
+A YAML <a
+href="http://www.yaml.org/spec/#.-syntax-mapping-Mapping-">mapping</a>
+indicating the Perl modules this distribution requires for proper
+operation.  The keys are the module names, and the values are version
+specifications as described in the <a
+href="http://search.cpan.org/author/KWILLIAMS/Module-Build/lib/Module/Build.pm">
+documentation for Module::Build's "requires" parameter</a>.
+</p>
+
+<p><i>Note: the exact nature of the fancy specifications like
+<nobr><tt>"&gt;= 1.2, != 1.5, &lt 2.0"</tt></nobr> is subject to
+change.  Advance notice will be given here.  The simple specifications
+like <tt>"1.2"</tt> will not change in format.</i>
+</p>
+
+<li><b>recommends</b><br>
+Example:<br>
+<b>
+&nbsp;&nbsp;Data::Dumper: 0<br>
+&nbsp;&nbsp;File::Find: 1.03<br>
+</b>   
+<p>
+A YAML <a
+href="http://www.yaml.org/spec/#.-syntax-mapping-Mapping-">mapping</a>
+indicating the Perl modules this distribution recommends for enhanced
+operation.
+</p>
+
+<li><b>build_requires</b><br>
+Example:<br>
+<b>
+&nbsp;&nbsp;Data::Dumper: 0<br>
+&nbsp;&nbsp;File::Find: 1.03<br>
+</b>   
+<p>
+A YAML <a
+href="http://www.yaml.org/spec/#.-syntax-mapping-Mapping-">mapping</a>
+indicating the Perl modules required for building and/or testing of
+this distribution.  These dependencies are not required after the
+module is installed.
+</p>
+
+<li><b>conflicts</b><br>
+Example:<br>
+<b>
+&nbsp;&nbsp;Data::Dumper: 0<br>
+&nbsp;&nbsp;File::Find: 1.03<br>
+</b>   
+<p>
+A YAML <a
+href="http://www.yaml.org/spec/#.-syntax-mapping-Mapping-">mapping</a>
+indicating the Perl modules that cannot be installed while this
+distribution is installed.  This is a pretty uncommon situation.
+</p>
+
+<li><b>dynamic_config</b><br>
+Example: <b>0</b>
+<p>
+A boolean flag indicating whether a <tt>Build.PL</tt> or
+<tt>Makefile.PL</tt> (or similar) must be executed, or whether this
+module can be built, tested and installed solely from consulting its
+metadata file.  The main reason to set this to a true value if that
+your module performs some dynamic configuration (asking questions,
+sensing the environment, etc.) as part of its build/install process.
+</p>
+
+<p>
+Currently <tt>Module::Build</tt> doesn't actually do anything with
+this flag - it's probably going to be up to higher-level tools like
+<tt>CPAN.pm</tt> to do something useful with it.  It can potentially
+bring lots of security, packaging, and convenience improvements.
+</p>
+
+<li><b>generated_by</b><br>
+Example: <b>Module::Build version 0.16</b>
+<p>
+Indicates the tool that was used to create this META.yml file.  It's
+good form to include both the name of the tool and its version, but
+this field is essentially opaque, at least for the moment.
+</p>
+
+</ul>
+
+<h3>Related Projects</h3>
+<dl>
+ <dt>DOAP</dt>
+
+ <dd>An RDF vocabulary to describe software projects. <a
+ href="http://usefulinc.com/doap">http://usefulinc.com/doap</a>.</dd>
+</dl>
+
+<h3>History</h3>
+
+<ul>
+<li><b>March 14, 2003</b> (Pi day) - created version 1.0 of this document.</li>
+<li><b>May 8, 2003</b> - added the "dynamic_config" field, which was
+    missing from the initial version.</li> 
+</ul>
+
+</body>
+</html>
