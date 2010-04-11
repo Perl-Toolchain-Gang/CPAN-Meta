@@ -13,13 +13,20 @@ sub __legal_types  { qw(requires recommends suggests conflicts) }
 sub new {
   my ($class, $prereq_spec) = @_;
 
+  my %is_legal_phase = map {; $_ => 1 } $class->__legal_phases;
+  my %is_legal_type  = map {; $_ => 1 } $class->__legal_types;
+
   my %guts;
-  PHASE: for my $phase ($class->__legal_phases) {
-    next PHASE unless my $phase_spec = $prereq_spec->{ $phase };
+  for my $phase (keys %$prereq_spec) {
+    next PHASE unless $phase =~ /\Ax_/i or $is_legal_phase{$phase};
+
+    my $phase_spec = $prereq_spec->{ $phase };
     next PHASE unless keys %$phase_spec;
 
     TYPE: for my $type ($class->__legal_types) {
-      next TYPE unless my $spec = $phase_spec->{ $type };
+      next TYPE unless $type =~ /\Ax_/i or $is_legal_type{$type};
+
+      my $spec = $prereq_spec->{ $type };
       next TYPE unless keys %$spec;
 
       $guts{$phase}{$type} = Version::Requirements->from_string_hash($spec);
@@ -35,7 +42,7 @@ sub requirements_for {
 
   my $req = Version::Requirements->new;
 
-  unless (grep { $phase eq $_ } $self->__legal_phases) {
+  unless ($phase =~ /\Ax_/i or grep { $phase eq $_ } $self->__legal_phases) {
     carp "requested requirements for unknown phase: $phase";
     return $req;
   }
@@ -45,7 +52,7 @@ sub requirements_for {
   my %is_legal_type = map {; $_ => 1 } $self->__legal_types;
 
   for my $type (ref($types) ? @$types : $types) {
-    unless ($is_legal_type{ $type }) {
+    unless ($type =~ /\Ax_/i or $is_legal_type{ $type }) {
       carp "requested requirements for unknown type: $phase";
       next;
     }

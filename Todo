@@ -1,5 +1,3 @@
 - add "should_index" method
 
 - add CPAN::Meta::Feature class
-
-- better handling of X_* throughout (maybe)
