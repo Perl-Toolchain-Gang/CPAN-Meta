@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.101010  2010-04-11 10:20:02 America/New_York
           add a public accepts_module version
 
 0.100660  2010-03-07 13:05:59 America/New_York
