@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          add a public accepts_module version
 
 0.100660  2010-03-07 13:05:59 America/New_York
           specify that we need version.pm 0.77

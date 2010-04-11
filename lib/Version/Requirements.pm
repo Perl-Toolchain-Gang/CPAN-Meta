@@ -119,7 +119,7 @@ BEGIN {
 
       $version = $self->_version_object( $version );
 
-      my $old = $self->{ $name } || 'Version::Requirements::_Spec::Range';
+      my $old = $self->{ $name } || 'Version::Requirements::_Range::Range';
 
       $self->{ $name } = $old->$method($version);
 
@@ -155,6 +155,21 @@ sub add_requirements {
   }
 
   return $self;
+}
+
+=method accepts_module
+
+  my $bool = $req->accepts_modules($module => $version);
+
+=cut
+
+sub accepts_module {
+  my ($self, $module, $version) = @_;
+
+  $version = $self->_version_object( $version );
+
+  return 1 unless my $range = $self->__entry_for($module);
+  return $range->_accepts($version);
 }
 
 =method clear_requirement
@@ -309,7 +324,7 @@ sub from_string_hash {
 
 {
   package
-    Version::Requirements::_Spec::Exact;
+    Version::Requirements::_Range::Exact;
   sub _new     { bless { version => $_[1] } => $_[0] }
 
   sub _accepts { return $_[0]{version} == $_[1] }
@@ -349,7 +364,7 @@ sub from_string_hash {
 
 {
   package
-    Version::Requirements::_Spec::Range;
+    Version::Requirements::_Range::Range;
 
   sub _self { ref($_[0]) ? $_[0] : (bless { } => $_[0]) }
 
@@ -401,7 +416,7 @@ sub from_string_hash {
     Carp::confess("illegal requirements: exact specification outside of range")
       unless $self->_accepts($version);
 
-    return Version::Requirements::_Spec::Exact->_new($version);
+    return Version::Requirements::_Range::Exact->_new($version);
   }
 
   sub _simplify {
@@ -412,7 +427,7 @@ sub from_string_hash {
         Carp::confess("illegal requirements: excluded all values")
           if grep { $_ == $self->{minimum} } @{ $self->{exclusions} || [] };
 
-        return Version::Requirements::_Spec::Exact->_new($self->{minimum})
+        return Version::Requirements::_Range::Exact->_new($self->{minimum})
       }
 
       Carp::confess("illegal requirements: minimum exceeds maximum")
