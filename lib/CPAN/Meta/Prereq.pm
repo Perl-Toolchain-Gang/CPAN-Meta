@@ -58,24 +58,6 @@ sub requirements_for {
   return $req;
 }
 
-# sub clone {
-#   my ($self) = @_;
-# 
-#   my %new_arg;
-# 
-#   for my $phase ($self->__legal_phases) {
-#     for my $type ($self->__legal_types) {
-#       my $req = $self->requirements_for($phase, $type);
-#       next unless $req->required_modules;
-# 
-#       $new_arg{ $phase }{ $type } = $req->as_string_hash;
-#     }
-#   }
-# 
-#   return (ref $self)->new(\%new_arg);
-#   my %guts = @_;
-# }
-
 sub with_merged_prereqs {
   my ($self, $other) = @_;
 
