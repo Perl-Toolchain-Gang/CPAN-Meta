@@ -10,50 +10,50 @@ META-spec - Specification for CPAN distribution metadata
     description =>  "Module::Build is a system for building, testing, "
                 .   "and installing Perl modules.  It is meant to be an "
                 .   "alternative to "ExtUtils::MakeMaker... blah blah blah",
-    version  => '0.20',
+    version  => '0.36',
     author   => [
       'Ken Williams <kwilliams@cpan.org>',
       'Module-Build List <module-build@perl.org>', # additional contact
     ],
-    license  => 'perl_5',
+    license  => [ 'perl_5' ],
     prereqs => {
       runtime => {
         requires => {
-          'Config' => 0,
-          'Cwd'    => 0,
-          'Data::Dumper' => 0,
-          'ExtUtils::Install' => 0,
-          'File::Basename' => 0,
-          'File::Compare'  => 0,
-          'File::Copy' => 0,
-          'File::Find' => 0,
-          'File::Path' => 0,
-          'File::Spec' => 0,
-          'IO::File'   => 0,
-          'perl'       => '5.005_03',
+          'perl'   => '5.006',
+          'Config' => '0',
+          'Cwd'    => '0',
+          'Data::Dumper' => '0',
+          'ExtUtils::Install' => '0',
+          'File::Basename' => '0',
+          'File::Compare'  => '0',
+          'File::Copy' => '0',
+          'File::Find' => '0',
+          'File::Path' => '0',
+          'File::Spec' => '0',
+          'IO::File'   => '0',
         },
         recommends => {
           'Archive::Tar' => '1.00',
-          'ExtUtils::Install' => 0.3,
-          'ExtUtils::ParseXS' => 2.02,
-          'Pod::Text' => 0,
-          'YAML' => 0.35,
+          'ExtUtils::Install' => '0.3',
+          'ExtUtils::ParseXS' => '2.02',
+          'Pod::Text' => '0',
+          'YAML' => '0.35',
         },
       },
       build => {
-        requires => [
-          'Test' => 0,
-        ],
+        requires => {
+          'Test::More' => '0',
+        },
       }
     }
     resources => {
-      license => [ 'http://dev.perl.org/licenses/' ],
+      license => ['http://dev.perl.org/licenses/'],
     },
     dynamic_config => 1,
     keywords => [ qw/ toolchain cpan dual-life / ],
     'meta-spec' => {
       version => '2.0',
-      url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
+      url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
     },
     generated_by => 'Module::Build version 0.36',
   };
@@ -63,13 +63,12 @@ META-spec - Specification for CPAN distribution metadata
 This document describes version 2.0 of the CPAN distribution
 metadata specification, also knows as the "CPAN Meta Spec".
 
-The distribution metadata describe important properties of Perl
-distributions such as the ones found on CPAN.  Distributions and a
-corresponding metadata file are typically created by tools like
-Module::Build, Module::Install or ExtUtils::MakeMaker.
-
-The data in the metadata file are intended to support automated tools
-that index, examine, package or install Perl distributions.
+Distribution metadata describe important properties of Perl
+distributions. Distribution building tools like Module::Build,
+Module::Install, ExtUtils::MakeMaker or Dist::Zilla should create a
+metadata file in accordance with this specification and include it with
+the distribution for use by automated tools that index, examine, package
+or install Perl distributions.
 
 =head1 TERMINOLOGY
 
@@ -85,12 +84,11 @@ or C<DBI>.
 
 =item module
 
-This refers to a reusable library of code typically contained in a
-single file. Currently, we primarily talk of perl modules, but this
-specification should be open enough to apply to other languages as
-well (ex. python, ruby).  Examples of modules are C<Class::Container>,
-C<LWP::Simple>, or C<DBD::File>.  Modules are usually organized into
-one or more packages.
+This refers to a reusable library of code contained in a single file.
+Modules usually contain one or more packages and are often referred
+to by the name of a primary package that can be mapped to the file
+name. For example, one would refer to C<File::Spec> instead of
+F<File/Spec.pm>
 
 =item package
 
@@ -109,15 +107,19 @@ structure of metadata elements.
 The term I<producer> refers to code that constructs a metadata data
 structure, serializes into a bytestream and writes it to disk.
 
+=item must, should, may, etc.
+
+These terms are interpreted as described in IETF RFC 2119.
+
 =back
 
 =head1 DATA TYPES
 
 Fields in the L</STRUCTURE> section describe data elements, each of
-which has an associated data type as described.  There are three
+which has an associated data type as described herein.  There are four
 primitive types: Boolean, String, List and Map.  Other types are
 subtypes of primitives and define compound data structures or define
-constraints on the values of the field.
+constraints on the values of the data element.
 
 =head1 Boolean
 
@@ -132,8 +134,8 @@ reference.
 
 =head2 List
 
-A I<List> is an ordered list of zero or more data elements.  Elements of
-a List may be of mixed types.
+A I<List> is an ordered collection of zero or more data elements.
+Elements of a List may be of mixed types.
 
 Producers B<must> represent List elements using a data structure which
 unambiguously indicates that multiple values are possible, such as a
@@ -150,8 +152,8 @@ value elements may be of mixed types.
 
 =head2 License String
 
-A I<License String> is a subtype of String.  It is described in detail
-below under L</license>.
+A I<License String> is a subtype of String with a restricted set of
+values.  It is described in detail below under L</license>.
 
 =head2 URL
 
@@ -186,7 +188,7 @@ Consumers of metadata information B<may> ignore any or all custom keys.
 All other keys not described herein are invalid and should be ignored.
 
 For each key, an example is provided followed by a description.  The
-description begins with the version of spec in which the key was added,
+description begins with the version of spec in which the key was added
 or in which the definition was modified, whether the key is I<required>
 or I<optional> and the data type of the corresponding data element.
 These items are in parentheses, brackets and braces, respectively.
@@ -203,37 +205,33 @@ of version 2.0 or higher.
 Example:
 
   'meta-spec' => {
-    version => '1.4',
-    url     => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
+    version => '2.0',
+    url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
   }
 
 (Spec 1.1) [required] {Map}
 
 This field indicates the version of the CPAN Meta Spec that should be
-used to interpret the metadata.  It B<must> include entries for the
-following:
+used to interpret the metadata.  Consumers must check this key as soon
+as possible and abort further metadata processing if the meta-spec
+version is not supported by the consumer.
+
+It B<must> include entries for the following:
 
 =over
 
 =item version
 
-(Spec 1.1) [required] {Version}
-
-This Version is the version of the CPAN Meta Spec against which the
+This subkey gives the I<Version> of the CPAN Meta Spec against which the
 document was generated.
 
 =item url
 
-(Spec 2.0) [optional] {URL}
-
-The location of the metadata specification document corresponding to
+This is a I<URL> of the metadata specification document corresponding to
 the given version.  This is strictly for human-consumption and should
 not impact the interpretation of the document.
 
 =back
-
-Consumers must check this key as soon as possible and abort further metadata
-processing if the meta-spec version is not supported by the consumer.
 
 =head2 name
 
@@ -244,15 +242,15 @@ Example:
 (Spec 1.0) [required] {String}
 
 This field is name of the distribution.  This is often created by taking
-the "main module" in the distribution and changing C<::> to C<->, but
-the name may be completely unrelated to the modules within the
+the "main package" in the distribution and changing C<::> to C<->, but
+the name may be completely unrelated to the packages within the
 distribution.  C.f. L<http://search.cpan.org/dist/libwww-perl/>.
 
 =head2 version
 
 Example:
 
-  version => '0.20'
+  version => '0.36'
 
 (Spec 1.0) [required] {Version}
 
@@ -291,7 +289,7 @@ Example:
 (Spec 1.1) [required] {List of one or more Strings}
 
 This List indicates the person(s) to contact concerning the
-distribution. The prefered form is:
+distribution. The prefered form of the contact string is:
 
   contact-name <email-address>
 
@@ -301,15 +299,16 @@ C<bugtracker>.  The addressee(s) can be contacted for any purpose
 including but not limited to (security) problems with the distribution,
 questions about the distribution or bugs in the distribution.
 
-A distribution's original author is usually the contact that should be
-listed within this field.  Co-maintainers, successor maintainers or
-mailing lists devoted to the distribution may also be listed.
+A distribution's original author is usually the contact listed within
+this field.  Co-maintainers, successor maintainers or mailing lists
+devoted to the distribution may also be listed in addition to or instead
+of the original author.
 
 =head2 license
 
 Example:
 
-  license => 'perl_5'
+  license => [ 'perl_5' ]
 
   license => [ 'apache_2', 'mozilla_1_0' ]
 
@@ -317,7 +316,8 @@ Example:
 
 One or more licenses that apply to some or all of the files in the
 distribution.  If multiple licenses are listed, the distribution
-documentation should be consulted for specific terms.
+documentation must be consulted to clarify the interpretation of
+multiple licenses.
 
 The following list of license strings are valid:
 
@@ -341,7 +341,7 @@ The following list of license strings are valid:
  mozilla_1_0     Mozilla Public License, Version 1.0
  mozilla_1_1     Mozilla Public License, Version 1.1
  openssl         OpenSSL License
- perl5           The Perl 5 License (Artistic 1 & GPL 1)
+ perl_5          The Perl 5 License (Artistic 1 & GPL 1)
  qpl_1_0         Q Public License, Version 1.0
  ssleay          Original SSLeay License
  sun             Sun Internet Standards Source License (SISSL)
@@ -421,10 +421,10 @@ Example:
 A boolean flag indicating whether a F<Build.PL> or F<Makefile.PL> (or
 similar) must be executed to determine prerequisites.
 
-This filed should be set to a true value if the distribution performs
+This field should be set to a true value if the distribution performs
 some dynamic configuration (asking questions, sensing the environment,
 etc.) as part of its configuration.  This field should be set to a false
-value is to indicate that prerequisites included in metadata may be
+value to indicate that prerequisites included in metadata may be
 considered valid for static analysis.
 
 This field explicitly B<does not> indicate whether installation may be
@@ -462,7 +462,7 @@ Example:
       requires => {
         'Test::More'    => '0.94',
       },
-      prefers => {
+      recommendss => {
         'Test::Deep'    => '0.10',
       },
     }
@@ -474,13 +474,9 @@ This is a Map that describes all the prerequisites of the distribution.
 The keys are phases of activity, such as C<configure>, C<build>, C<test>
 or C<runtime>.  Values are Maps in which the keys name the type of
 prerequisite relationship such as C<requires>, C<recommends>, or
-C<suggests> and the value provides a set of prerequisite relations
-that relate package names to I<Version Ranges>.
-
-The set of relations B<must> be specified as a Map of package-version
-pairs, as in the following examples:
-
-  prereqs => { runtime => { requires => { Foo => '1.234', Bar => '2.345' } } }
+C<suggests> and the value provides a set of prerequisite relations.  The
+set of relations B<must> be specified as a Map of package names to
+version ranges.  
 
 The full definition for this field is given in the L</Prereq Spec>
 section.
@@ -518,24 +514,29 @@ should provide a description
 
 =item prereqs
 
-This entry, which is required, has the same structure as that of the
+This entry is required and has the same structure as that of the
 C<L</prereqs>> key, above.  It provides a list of package requirements
 that must be satisfied for the feature to be supported or enabled.
 
 =back
 
 Consumers B<must not> include optional features as prerequisites without
-explict instruction from users (whether via interactive prompting or
-a function parameter or a configuration value).
+explict instruction from users (whether via interactive prompting,
+a function parameter or a configuration value, etc. ).
 
-If an optional feature is used by a consumer to add prerequisites, the
-consumer should merge the optional feature prerequisites into those
-given by the C<prereqs> key using the same semantics.  See L</Merging
-and Resolving Prerequisites> for details on merging prerequisites.
+If an optional feature is used by a consumer to add additional
+prerequisites, the consumer should merge the optional feature
+prerequisites into those given by the C<prereqs> key using the same
+semantics.  See L</Merging and Resolving Prerequisites> for details on
+merging prerequisites.
 
 I<Suggestion for disuse:> Because there is currently no way for a
 distribution to specify a dependency on an optional feature of another
-dependency, the use of C<optional_feature> is discouraged.
+dependency, the use of C<optional_feature> is discouraged.  Instead,
+create a separate, installable distribution that ensures the desired
+feature is available.  For example, if C<Foo::Bar> has a "Baz" feature,
+release a separate C<Foo-Bar-Baz> distribution that satisfies
+requirements for the feature.
 
 =head2 provides
 
@@ -558,9 +559,9 @@ Example:
 (Spec 1.1) [optional] {Map}
 
 This describes all packages provided by this distribution.  This
-information can be (and, in some cases, is) used by distribution and
-automation mechanisms like PAUSE, CPAN, and search.cpan.org to build
-indexes saying in which distribution various packages can be found.
+information is used by distribution and automation mechanisms like
+PAUSE, CPAN, and search.cpan.org to build indexes saying in which
+distribution various packages can be found.
 
 The keys of C<provides> are package names that can be found within
 the distribution.  The values are Maps with the following valid subkeys:
@@ -570,7 +571,7 @@ the distribution.  The values are Maps with the following valid subkeys:
 =item file
 
 This field is required.  The value must contain a relative file path
-from the root of the distribution to the file containing the package.
+from the root of the distribution to the module containing the package.
 
 =item version
 
@@ -639,7 +640,7 @@ B<must not> include whitespace.
 Example:
 
   resources => {
-    license     => 'http://dev.perl.org/licenses/',
+    license     => [ 'http://dev.perl.org/licenses/' ],
     homepage    => 'http://sourceforge.net/projects/module-build',
     bugtracker  => {
       web    => 'http://github.com/dagolden/cpan-meta-spec/issues',
@@ -667,7 +668,9 @@ The official home of this project on the web.
 
 =item license
 
-An URL for an official statement of this distribution's license.
+A List of URL's that relate to this distribution's license.  As with the
+top-level C<license> field, distribution documentation must be consulted
+to clarify the interpretation of multiple licenses.
 
 =item bugtracker
 
@@ -692,7 +695,7 @@ is a Map with the following entries:
 
 Example:
 
-  generated_by => 'Module::Build version 0.20'
+  generated_by => 'Module::Build version 0.36'
 
 (Spec 1.0) [required] {String}
 
@@ -708,7 +711,7 @@ author's name, if the file was generated by hand.
 This section defines the Version type, used by several fields in the
 CPAN Meta Spec.
 
-These version numbers should treated as strings, not numbers.  For
+Version numbers must treated as strings, not numbers.  For
 example, C<1.200> B<must not> be serialized as C<1.2>.  Version
 comparison should be delegated to the Perl L<version> module, version
 0.80 or newer.
@@ -758,12 +761,12 @@ underscore character instead of a period.
 
 =head2 Version Ranges
 
-Some fields (prereq, optional_features) require a version specification
-to indicate the particular version(s) of some other module that may
-be required as a prerequisite.  This section details the Version
-Requirements type used to provide this information.
+Some fields (prereq, optional_features) indicate the particular
+version(s) of some other module that may be required as a prerequisite.
+This section details the Version Range type used to provide this
+information.
 
-The simplest format for a version specification is just the version
+The simplest format for a Version Range is just the version
 number itself, e.g. C<2.4>.  This means that B<at least> version 2.4
 must be present.  To indicate that B<any> version of a prerequisite is
 okay, even if the prerequisite doesn't define a version at all, use
@@ -784,10 +787,9 @@ and B<not equal to> 1.5.
 
 =head2 Prereq Spec
 
-The C<prereqs> key and data structures within the C<optional_features>
-key use prerequisite specification structures.  These entries in the
-metadata structure define the relationship between this distribution
-and other packages.  The prereq spec structure is a hierarchical data
+The C<prereqs> key in the top-level metadata and within
+C<optional_features> define the relationship between a distribution and
+other packages.  The prereq spec structure is a hierarchical data
 structure which divides prerequisites into I<Phases> of activity in the
 installation process and I<Relationships> that indicate how
 prerequisites should be resolved.
@@ -804,6 +806,12 @@ C<test> phase, this entry would appear in the distribution metadata:
   }
 
 =head3 Phases
+
+Requirements for regular use must be listed in the C<runtime> phase.
+Other requirements should be listed in the earliest stage in which they are
+required and consumers must combine requirements across phases when
+appropriate. For example, I<build> requirements must also be available
+during the I<test> phase.
 
 =over
 
@@ -847,8 +855,8 @@ distribution.
 
 =item requires
 
-These dependencies are required B<must> be installed for proper
-completion of the phase.
+These dependencies B<must> be installed for proper completion of the
+phase.
 
 =item recommends
 
@@ -857,7 +865,7 @@ satisfied except in resource constrained environments.
 
 =item suggests
 
-These dependencies are optional, but suggested for enhanced operation
+These dependencies are optional, but are suggested for enhanced operation
 of the described distribution.
 
 =item conflicts
@@ -882,21 +890,21 @@ CPAN.  When a module is deleted from a distribution, prerequisites calling
 for that module could indicate an older distribution should installed,
 potentially overwriting files from a newer distribution.
 
-For example, as of Oct 31, 2009, the CPAN index file contains these
+For example, as of Oct 31, 2009, the CPAN index file contained these
 module-distribution mappings:
 
   Class::MOP                   0.94  D/DR/DROLSKY/Class-MOP-0.94.tar.gz
   Class::MOP::Class            0.94  D/DR/DROLSKY/Class-MOP-0.94.tar.gz
   Class::MOP::Class::Immutable 0.04  S/ST/STEVAN/Class-MOP-0.36.tar.gz
 
-Consider the case where "Class::MOP" is either installed or listed as a
-prequisite.  Should a distribution specify "Class::MOP::Class::Immutable"
-as a prerequisites, it could result in Class-MOP-0.36.tar.gz being
-installed, overwriting any files from Class-MOP-0.94.tar.gz.
+Consider the case where "Class::MOP" 0.94 is installed.  If a
+distribution specified "Class::MOP::Class::Immutable" as a prerequisite,
+it could result in Class-MOP-0.36.tar.gz being installed, overwriting
+any files from Class-MOP-0.94.tar.gz.
 
 Consumers of metadata B<should> test whether prerequisites would result
 in installed module files being "owngraded" to an older version and
-B<may> warn user or ignore the prerequisite that would cause such a
+B<may> warn users or ignore the prerequisite that would cause such a
 result.
 
 =head1 SERIALIZATION
