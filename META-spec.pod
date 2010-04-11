@@ -132,7 +132,7 @@ reference.
 
 =head2 List
 
-A I<List> is an ordered list of one or more data elements.  Elements of
+A I<List> is an ordered list of zero or more data elements.  Elements of
 a List may be of mixed types.
 
 Producers B<must> represent List elements using a data structure which
@@ -144,7 +144,7 @@ List of length 1.
 
 =head2 Map
 
-A I<Map> is an unordered collection of one or more data elements
+A I<Map> is an unordered collection of zero or more data elements
 ("values"), indexed by associated String elements ("keys").  The Map's
 value elements may be of mixed types.
 
