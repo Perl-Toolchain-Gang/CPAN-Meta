@@ -182,7 +182,7 @@ underscore; i.e. they must match the pattern: C<< qr{\Ax_}i >>.  If a
 custom key refers to a compound data structure, subkeys within it do not
 need an "x_" or "X_" prefix.
 
-Consumers of metadata information may ignore any or all custom keys.
+Consumers of metadata information B<may> ignore any or all custom keys.
 All other keys not described herein are invalid and should be ignored.
 
 For each key, an example is provided followed by a description.  The
@@ -397,9 +397,9 @@ user.
 
 =back
 
-Consumers may use this field to determine how to index the distribution for
-CPAN or other repositories in addition to or in replacement of heuristics
-based on version number or file name.
+Consumers B<may> use this field to determine how to index the
+distribution for CPAN or other repositories in addition to or in
+replacement of heuristics based on version number or file name.
 
 =head2 distribution_type
 
@@ -731,8 +731,8 @@ formats:
 
 Decimal versions are regular "decimal numbers", with some limitations.
 They B<must> be non-negative and B<must> begin and end with a digit.  A
-single underscore may be included, but must be between two digits.  They
-must not use exponential notation ("1.23e-2").
+single underscore B<may> be included, but B<must> be between two digits.
+They B<must not> use exponential notation ("1.23e-2").
 
    version => '1.234'       # OK
    version => '1.23_04'     # OK
@@ -749,7 +749,7 @@ positive integers separated by full stop characters (i.e. "dots",
 "v-strings", with some additional restrictions on form.  They must be
 given in "normal" form, which has a leading "v" character and at least
 three integer components.  All components after the first are restricted
-to the range 0 to 999.  The final component may be separated by an
+to the range 0 to 999.  The final component B<may> be separated by an
 underscore character instead of a period.
 
    version => 'v1.2.3'      # OK
@@ -778,16 +778,16 @@ must be present.  To indicate that B<any> version of a prerequisite is
 okay, even if the prerequisite doesn't define a version at all, use
 the version C<0>.
 
-Alternatively, a version range may use the operators E<lt> (less than),
+Alternatively, a version range B<may> use the operators E<lt> (less than),
 E<lt>= (less than or equal), E<gt> (greater than), E<gt>= (greater than
 or equal), == (equal), and != (not equal).  For example, the
 specification C<E<lt> 2.0> means that any version of the prerequisite
 less than 2.0 is suitable.
 
-For more complicated situations, version specifications may be AND-ed
+For more complicated situations, version specifications B<may> be AND-ed
 together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
-2.0> indicates a version that must be B<at least> 1.2, B<less than>
-2.0, and B<not equal to> 1.5.
+2.0> indicates a version that must be B<at least> 1.2, B<less than> 2.0,
+and B<not equal to> 1.5.
 
 =head1 PREREQUISITES
 
@@ -902,9 +902,10 @@ prequisite.  Should a distribution specify "Class::MOP::Class::Immutable"
 as a prerequisites, it could result in Class-MOP-0.36.tar.gz being
 installed, overwriting any files from Class-MOP-0.94.tar.gz.
 
-Consumers of metadata should test whether prerequisites would result in
-installed module files being "downgraded" to an older version and may warn
-user or ignore the prerequisite that would cause such a result.
+Consumers of metadata B<should> test whether prerequisites would result
+in installed module files being "owngraded" to an older version and
+B<may> warn user or ignore the prerequisite that would cause such a
+result.
 
 =head1 SERIALIZATION
 
