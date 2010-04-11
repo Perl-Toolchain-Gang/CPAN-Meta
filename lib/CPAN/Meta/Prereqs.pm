@@ -1,4 +1,4 @@
-package CPAN::Meta::Prereq;
+package CPAN::Meta::Prereqs;
 use strict;
 use warnings;
 

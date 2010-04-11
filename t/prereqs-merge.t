@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::More 0.88;
 
-use CPAN::Meta::Prereq;
+use CPAN::Meta::Prereqs;
 
 my $prereq_struct_1 = {
   runtime => {
@@ -23,9 +23,9 @@ my $prereq_struct_1 = {
   }
 };
 
-my $prereq_1 = CPAN::Meta::Prereq->new($prereq_struct_1);
+my $prereq_1 = CPAN::Meta::Prereqs->new($prereq_struct_1);
 
-isa_ok($prereq_1, 'CPAN::Meta::Prereq', 'first prereq');
+isa_ok($prereq_1, 'CPAN::Meta::Prereqs', 'first prereq');
 
 is_deeply($prereq_1->as_string_hash, $prereq_struct_1, '...and it round trips');
 
@@ -51,9 +51,9 @@ my $prereq_struct_2 = {
   }
 };
 
-my $prereq_2 = CPAN::Meta::Prereq->new($prereq_struct_2);
+my $prereq_2 = CPAN::Meta::Prereqs->new($prereq_struct_2);
 
-isa_ok($prereq_2, 'CPAN::Meta::Prereq', 'second prereq');
+isa_ok($prereq_2, 'CPAN::Meta::Prereqs', 'second prereq');
 
 is_deeply($prereq_1->as_string_hash, $prereq_struct_1, '...and it round trips');
 
