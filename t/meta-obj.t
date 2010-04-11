@@ -133,4 +133,52 @@ is($meta->meta_spec_version, '2.0', '->meta_spec_version');
 
 is($meta->generated_by, 'Module::Build version 0.36', '->generated_by');
 
+my $basic = $meta->effective_prereqs;
+
+is_deeply(
+  $basic->as_string_hash,
+  $distmeta->{prereqs},
+  "->effective_prereqs()"
+);
+
+my $with_features = $meta->effective_prereqs([ qw(domination) ]);
+
+is_deeply(
+  $with_features->as_string_hash,
+  {
+    develop => { requires => { 'Genius::Evil'     => '1.234' } },
+    runtime => {
+      requires => {
+        'perl'   => '5.006',
+        'Config' => '0',
+        'Cwd'    => '0',
+        'Data::Dumper' => '0',
+        'ExtUtils::Install' => '0',
+        'File::Basename' => '0',
+        'File::Compare'  => '0',
+        'File::Copy' => '0',
+        'File::Find' => '0',
+        'File::Path' => '0',
+        'File::Spec' => '0',
+        'IO::File'   => '0',
+        'Machine::Weather' => '2.0',
+      },
+      recommends => {
+        'Archive::Tar' => '1.00',
+        'ExtUtils::Install' => '0.3',
+        'ExtUtils::ParseXS' => '2.02',
+        'Pod::Text' => '0',
+        'YAML' => '0.35',
+      },
+    },
+    build => {
+      requires => {
+        'Test::More' => '0',
+      },
+    }
+  },
+  "->effective_prereqs([ qw(domination) ])"
+);
+
+
 done_testing;

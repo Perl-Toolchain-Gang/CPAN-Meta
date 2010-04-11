@@ -79,14 +79,14 @@ sub effective_prereqs {
   my ($self, $features) = @_;
   $features ||= [];
   
-  my $prereq = CPAN::Meta::Prereq->new($self->prereq);
+  my $prereq = CPAN::Meta::Prereqs->new($self->prereqs);
 
   return $prereq unless @$features;
 
   my @other = map {;
     confess "unknown feature requested: $_"
       unless my $f = $self->optional_features->{$_};
-    CPAN::Meta::Prereq->new($f->{prereq});
+    CPAN::Meta::Prereqs->new($f->{prereqs});
   } @$features;
 
   return $prereq->with_merged_prereqs(\@other);
