@@ -492,11 +492,13 @@ Valid subkeys are as follows:
 
 =item file
 
-A I<List> of relative paths to files.
+A I<List> of relative paths to files.  Paths B<must be> specified with
+unix convetions.
 
 =item directory
 
-A I<List> of relative paths to directories.
+A I<List> of relative paths to directories.  Paths B<must be> specified
+with unix convetions.
 
 [ Note: previous editions of the spec had C<dir> instead of C<directory> ]
 

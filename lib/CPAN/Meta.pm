@@ -94,4 +94,33 @@ sub effective_prereqs {
   return $prereq->with_merged_prereqs(\@other);
 }
 
+sub should_index_file {
+  my ($self, $filename) = @_;
+
+  for my $no_index_file (@{ $self->{no_index}{file} || [] }) {
+    return if $filename eq $no_index_file;
+  }
+
+  for my $no_index_dir (@{ $self->{no_index}{directory} }) {
+    $no_index_dir =~ s{$}{/} unless $no_index_dir =~ m{/\z};
+    return if index($filename, $no_index_dir) == 0;
+  }
+
+  return 1;
+}
+
+sub should_index_package {
+  my ($self, $package) = @_;
+
+  for my $no_index_pkg (@{ $self->{no_index}{package} || [] }) {
+    return if $package eq $no_index_pkg;
+  }
+
+  for my $no_index_ns (@{ $self->{no_index}{namespace} }) {
+    return if index($package, "${no_index_ns}::") == 0;
+  }
+
+  return 1;
+}
+
 1;
