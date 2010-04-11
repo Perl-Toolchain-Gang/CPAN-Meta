@@ -477,19 +477,10 @@ prerequisite relationship such as C<requires>, C<recommends>, or
 C<suggests> and the value provides a set of prerequisite relations
 that relate package names to I<Version Ranges>.
 
-The set of relations may be specified either as a Map of unordered
-relations, or as an ordered List of package name and Version Range
-pairs.  Consider the following examples:
+The set of relations B<must> be specified as a Map of package-version
+pairs, as in the following examples:
 
   prereqs => { runtime => { requires => { Foo => '1.234', Bar => '2.345' } } }
-
-  prereqs => { runtime => { requires => [ Foo => '1.234', Bar => '2.345' ] } }
-
-In the first example, there is no preferred order implied to check or
-install prerequisites.  In the second, a preferred order is implied,
-which allows hand-optimization in some cases.  Consumers should respect
-an ordered set of relationships unless there are particular reasons for
-an alternate ordering.
 
 The full definition for this field is given in the L</Prereq Spec>
 section.
