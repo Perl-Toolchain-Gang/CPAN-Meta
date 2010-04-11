@@ -180,5 +180,28 @@ is_deeply(
   "->effective_prereqs([ qw(domination) ])"
 );
 
+my $chk_feature = sub {
+  my $feature = shift;
+
+  isa_ok($feature, 'CPAN::Meta::Feature');
+
+  is($feature->identifier,  'domination',          '$feature->identifier');
+  is($feature->description, 'Take over the world', '$feature->description');
+
+  is_deeply(
+    $feature->prereqs->as_string_hash,
+    {
+      develop => { requires => { 'Genius::Evil'     => '1.234' } },
+      runtime => { requires => { 'Machine::Weather' => '2.0'   } },
+    },
+    '$feature->prereqs',
+  );
+};
+
+my @features = $meta->features;
+is(@features, 1, "we got one feature");
+$chk_feature->($features[0]);
+
+$chk_feature->( $meta->feature('domination') );
 
 done_testing;

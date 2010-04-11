@@ -3,6 +3,7 @@ use warnings;
 package CPAN::Meta;
 
 use Carp qw(confess);
+use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
 
 BEGIN {
@@ -97,11 +98,11 @@ sub effective_prereqs {
 sub should_index_file {
   my ($self, $filename) = @_;
 
-  for my $no_index_file (@{ $self->{no_index}{file} || [] }) {
+  for my $no_index_file (@{ $self->no_index->{file} || [] }) {
     return if $filename eq $no_index_file;
   }
 
-  for my $no_index_dir (@{ $self->{no_index}{directory} }) {
+  for my $no_index_dir (@{ $self->no_index->{directory} }) {
     $no_index_dir =~ s{$}{/} unless $no_index_dir =~ m{/\z};
     return if index($filename, $no_index_dir) == 0;
   }
@@ -112,15 +113,34 @@ sub should_index_file {
 sub should_index_package {
   my ($self, $package) = @_;
 
-  for my $no_index_pkg (@{ $self->{no_index}{package} || [] }) {
+  for my $no_index_pkg (@{ $self->no_index->{package} || [] }) {
     return if $package eq $no_index_pkg;
   }
 
-  for my $no_index_ns (@{ $self->{no_index}{namespace} }) {
+  for my $no_index_ns (@{ $self->no_index->{namespace} }) {
     return if index($package, "${no_index_ns}::") == 0;
   }
 
   return 1;
+}
+
+sub features {
+  my ($self) = @_;
+
+  my $opt_f = $self->optional_features;
+  my @features = map {; CPAN::Meta::Feature->new($_ => $opt_f->{ $_ }) }
+                 keys %$opt_f;
+
+  return @features;
+}
+
+sub feature {
+  my ($self, $ident) = @_;
+
+  confess "no feature named $ident"
+    unless my $f = $self->optional_features->{ $ident };
+
+  return CPAN::Meta::Feature->new($ident, $f);
 }
 
 1;
