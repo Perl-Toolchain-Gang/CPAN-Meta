@@ -450,10 +450,10 @@ Example:
         'File::Spec'    => '0.86',
         'JSON'          => '2.16',
       },
-      prefers => {
+      recommends => {
         'JSON::XS'      => '2.26',
       },
-      recommends => {
+      suggests => {
         'Archive::Tar'  => '0',
       },
     },
@@ -472,8 +472,8 @@ Example:
 This is a Map that describes all the prerequisites of the distribution.
 The keys are phases of activity, such as C<configure>, C<build>, C<test>
 or C<runtime>.  Values are Maps in which the keys name the type of
-prerequisite relationship such as C<requires>, C<prefers>, or
-C<recommends> and the value provides a set of prerequisite relations
+prerequisite relationship such as C<requires>, C<recommends>, or
+C<suggests> and the value provides a set of prerequisite relations
 that relate package names to I<Version Ranges>.
 
 The set of relations may be specified either as a Map of unordered
