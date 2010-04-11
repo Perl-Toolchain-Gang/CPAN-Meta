@@ -1,3 +1,9 @@
+use strict;
+package CPAN::Meta::Spec;
+our $VERSION = '2.0';
+# vi:tw=72
+1;
+
 =head1 NAME
 
 META-spec - Specification for CPAN distribution metadata
@@ -536,6 +542,9 @@ This entry is required and has the same structure as that of the
 C<L</prereqs>> key.  It provides a list of package requirements
 that must be satisfied for the feature to be supported or enabled.
 
+There is one crucial restriction:  the preqreqs of an optional feature
+B<must not> include C<configure> phase prereqs.
+
 =back
 
 Consumers B<must not> include optional features as prerequisites without
@@ -995,4 +1004,3 @@ JSON, L<http://json.org/>
 
 YAML, L<http://www.yaml.org/>
 
-# vi:tw=72
