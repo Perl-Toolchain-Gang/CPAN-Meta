@@ -46,7 +46,7 @@ sub requirements_for {
 
   for my $type (ref($types) ? @$types : $types) {
     unless ($is_legal_type{ $type }) {
-      carp "requested requirements for unknown type: $phase";
+      carp "requested requirements for unknown type: $type";
       next;
     }
 
