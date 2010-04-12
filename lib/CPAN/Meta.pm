@@ -240,7 +240,7 @@ the given JSON string.
 
 sub load_json_string {
   my ($class, $json) = @_;
-  $struct = JSON->new->utf8->decode($json);
+  my $struct = JSON->new->utf8->decode($json);
   return $class->new($struct);
 }
 

@@ -75,6 +75,7 @@ my $metafile = File::Spec->catfile( $tmpdir, 'META.json' );
 
 $meta->save($metafile);
 ok( -f $metafile, "save meta to file" );
+
 ok( $meta = CPAN::Meta->_load_file($metafile), 'load saved file' );
 is($meta->{name},     'Module-Build', 'name correct');
 
