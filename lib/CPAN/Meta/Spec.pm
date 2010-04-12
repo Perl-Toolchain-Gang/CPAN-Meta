@@ -697,7 +697,7 @@ to clarify the interpretation of multiple licenses.
 =item bugtracker
 
 This entry describes the bug tracking system for this distribution.  It
-is a Map with the following keys:
+is a Map with the following valid keys:
 
   web    - a URL pointing to a web front-end for the bug tracker
   mailto - an email address to which bugs can be sent
@@ -705,11 +705,16 @@ is a Map with the following keys:
 =item repository
 
 This entry describes the source control repository for this distribution.  It
-is a Map with the following entries:
+is a Map with the following valid keys:
 
   url  - a URL pointing to the repository itself
   web  - a URL pointing to a web front-end for the repository
-  type - a lowercase string indicating the VCS used; e.g.: git, cvs, darcs
+  type - a lowercase string indicating the VCS used
+
+Because a url like C<http://myrepo.example.com/> is ambiguous as to
+type, producers should provide a C<type> whenever a C<url> key is given.
+The C<type> field should be the name of the most common program used
+to work with the repository, e.g. git, svn, cvs, darcs, bzr or hg.
 
 =back
 
