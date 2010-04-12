@@ -306,7 +306,7 @@ The following list of license strings are valid:
 
  string          description
  -------------   -----------------------------------------------
- agpl_3          GNU Affero General Publi License, Version 3
+ agpl_3          GNU Affero General Public License, Version 3
  apache_1_1      Apache Software License, Version 1.1
  apache_2_0      Apache License, Version 2.0
  artistic_1      Artistic License, (Version 1)
