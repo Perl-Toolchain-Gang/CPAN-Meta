@@ -196,6 +196,10 @@ This method returns the requirements object.
 
 sub clear_requirement {
   my ($self, $module) = @_;
+
+  Carp::confess("can't clear requirements on finalized requirements")
+    if $self->is_finalized;
+
   delete $self->{requirements}{ $module };
 
   return $self;
@@ -245,6 +249,28 @@ sub is_simple {
 
   return 1;
 }
+
+=method is_finalized
+
+This method returns true if the requirements have been finalized by having the
+C<finalize> method called on them.
+
+=cut
+
+sub is_finalized { $_[0]{finalized} }
+
+=method finalize
+
+This method marks the requirements finalized.  Subsequent attempts to change
+the requirements will be fatal, I<if> they would result in a change.  If they
+would not alter the requirements, they have no effect.
+
+If a finalized set of requirements is cloned, the cloned requirements are not
+also finalized.
+
+=cut
+
+sub finalize { $_[0]{finalized} = 1 }
 
 =method as_string_hash
 
