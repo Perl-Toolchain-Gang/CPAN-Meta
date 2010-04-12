@@ -62,7 +62,7 @@ my $distmeta = {
   dynamic_config => 1,
   keywords => [ qw/ toolchain cpan dual-life / ],
   'meta-spec' => {
-    version => '2.0',
+    version => '2',
     url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
   },
   generated_by => 'Module::Build version 0.36',

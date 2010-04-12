@@ -10,7 +10,7 @@ my %distmeta = (
   author   => 'Joe' ,
   license  => 'perl_5',
   'meta-spec' => {
-    version => '2.0',
+    version => '2',
     url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
   },
   dynamic_config => 1,

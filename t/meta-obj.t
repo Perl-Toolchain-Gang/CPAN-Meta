@@ -61,7 +61,7 @@ my $distmeta = {
   dynamic_config => 1,
   keywords => [ qw/ toolchain cpan dual-life / ],
   'meta-spec' => {
-    version => '2.0',
+    version => '2',
     url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
   },
   generated_by => 'Module::Build version 0.36',
@@ -123,13 +123,13 @@ is_deeply(
 is_deeply(
   $meta->meta_spec,
   {
-    version => '2.0',
+    version => '2',
     url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
   },
   '->meta_spec',
 );
 
-is($meta->meta_spec_version, '2.0', '->meta_spec_version');
+is($meta->meta_spec_version, '2', '->meta_spec_version');
 
 is($meta->generated_by, 'Module::Build version 0.36', '->generated_by');
 
