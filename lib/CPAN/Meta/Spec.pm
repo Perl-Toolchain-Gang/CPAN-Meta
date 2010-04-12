@@ -838,10 +838,30 @@ C<test> phase, this entry would appear in the distribution metadata:
 =head3 Phases
 
 Requirements for regular use must be listed in the C<runtime> phase.
-Other requirements should be listed in the earliest stage in which they are
-required and consumers must combine requirements across phases when
-appropriate. For example, I<build> requirements must also be available
-during the I<test> phase.
+Other requirements should be listed in the earliest stage in which they
+are required and consumers must accumulate and satisfy requirements
+across phases before executing the activity. For example, I<build>
+requirements must also be available during the I<test> phase.
+
+  before action       requirements that must be met
+  ----------------    --------------------------------
+  perl Build.PL       configure
+  perl Makefile.PL
+
+  make                configure, runtime, build
+  Build
+
+  make test           configure, runtime, build, test
+  Build test
+
+Consumers that install the distribution must ensure that
+I<runtime> requirements are also installed and may install
+dependencies from other phases.
+
+  after action        requirements that must be met
+  ----------------    --------------------------------
+  make install        runtime
+  Build install
 
 =over
 
