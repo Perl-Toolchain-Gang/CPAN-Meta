@@ -69,9 +69,6 @@ my %definitions = (
     'map'       => {
         ':key'  => { name => \&identifier,
             'map'   => { description        => { value => \&string },
-                         requires_packages  => { value => \&string },
-                         requires_os        => { value => \&string },
-                         excludes_os        => { value => \&string },
                          requires           => $module_map1,
                          recommends         => $module_map1,
                          build_requires     => $module_map1,
@@ -130,9 +127,6 @@ my %definitions = (
     'map'       => {
         ':key'  => { name => \&identifier,
             'map'   => { description        => { value => \&string },
-                         requires_packages  => { value => \&string },
-                         requires_os        => { value => \&string },
-                         excludes_os        => { value => \&string },
                          requires           => $module_map1,
                          recommends         => $module_map1,
                          build_requires     => $module_map1,
@@ -191,9 +185,6 @@ my %definitions = (
     'map'       => {
         ':key'  => { name => \&identifier,
             'map'   => { description        => { value => \&string },
-                         requires_packages  => { value => \&string },
-                         requires_os        => { value => \&string },
-                         excludes_os        => { value => \&string },
                          requires           => $module_map1,
                          recommends         => $module_map1,
                          build_requires     => $module_map1,
@@ -261,9 +252,6 @@ my %definitions = (
     'map'       => {
         ':key'  => { name => \&identifier,
             'map'   => { description        => { value => \&string },
-                         requires_packages  => { value => \&string },
-                         requires_os        => { value => \&string },
-                         excludes_os        => { value => \&string },
                          requires           => $module_map1,
                          recommends         => $module_map1,
                          build_requires     => $module_map1,
@@ -325,6 +313,7 @@ my %definitions = (
   'name'                => { mandatory => 1, value => \&string  },
   'version'             => { mandatory => 1, value => \&version },
   'license'             => { mandatory => 1, value => \&license },
+  'license_uri'         => { mandatory => 1, value => \&license },
   'generated_by'        => { mandatory => 1, value => \&string  },
 
   'distribution_type'   => { value => \&string  },
