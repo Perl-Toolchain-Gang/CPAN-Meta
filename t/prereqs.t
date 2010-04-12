@@ -42,7 +42,7 @@ isa_ok($prereq, 'CPAN::Meta::Prereqs');
 is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
 
 {
-  my $req = $prereq->requirements_for('runtime');
+  my $req = $prereq->requirements_for(qw(runtime requires));
   my @req_mod = $req->required_modules;
 
   ok(
@@ -62,8 +62,12 @@ is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
 }
 
 {
-  my $req = $prereq->requirements_for('runtime', [ qw(requires recommends) ]);
-  my @req_mod = $req->required_modules;
+  my $req = $prereq->requirements_for(qw(runtime requires));
+  my $rec = $prereq->requirements_for(qw(runtime recommends));
+
+  my $merged = $req->clone->add_requirements($rec);
+
+  my @req_mod = $merged->required_modules;
 
   ok(
     (grep { 'Cwd' eq $_ } @req_mod),
@@ -82,14 +86,14 @@ is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
 }
 
 {
-  my $req = $prereq->requirements_for('runtime', [ qw(suggests) ]);
+  my $req = $prereq->requirements_for(qw(runtime suggests));
   my @req_mod = $req->required_modules;
 
   is(@req_mod, 0, "empty set of runtime/suggests requirements");
 }
 
 {
-  my $req = $prereq->requirements_for('develop', [ qw(suggests) ]);
+  my $req = $prereq->requirements_for(qw(develop suggests));
   my @req_mod = $req->required_modules;
 
   is(@req_mod, 0, "empty set of develop/suggests requirements");

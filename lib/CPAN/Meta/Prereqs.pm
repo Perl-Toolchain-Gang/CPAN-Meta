@@ -1,8 +1,17 @@
-package CPAN::Meta::Prereqs;
 use strict;
 use warnings;
+package CPAN::Meta::Prereqs;
+# ABSTRACT: a set of distribution prerequisites by phase and type
 
-use Carp qw(carp);
+=head1 DESCRIPTION
+
+A CPAN::Meta::Prereqs object represents the prerequisites for a CPAN
+distribution or one of its optional features.  Each set of prereqs is
+organized by phase and type, as described in L<CPAN::Meta::Prereqs>.
+
+=cut
+
+use Carp qw(confess);
 use Scalar::Util qw(blessed);
 use Version::Requirements 0.101010; # accepts_module
 
@@ -30,32 +39,19 @@ sub new {
 }
 
 sub requirements_for {
-  my ($self, $phase, $types) = @_;
-  $types ||= 'requires';
+  my ($self, $phase, $type) = @_;
 
   my $req = Version::Requirements->new;
 
-  unless (grep { $phase eq $_ } $self->__legal_phases) {
-    carp "requested requirements for unknown phase: $phase";
-    return $req;
+  unless ($phase =~ /\Ax_/i or grep { $phase eq $_ } $self->__legal_phases) {
+    confess "requested requirements for unknown phase: $phase";
   }
 
-  return $req unless $self->{ $phase };
-
-  my %is_legal_type = map {; $_ => 1 } $self->__legal_types;
-
-  for my $type (ref($types) ? @$types : $types) {
-    unless ($is_legal_type{ $type }) {
-      carp "requested requirements for unknown type: $type";
-      next;
-    }
-
-    next unless my $prereq = $self->{ $phase }{ $type };
-
-    $req->add_requirements($prereq);
+  unless ($type =~ /\Ax_/i or grep { $type eq $_ } $self->__legal_types) {
+    confess "requested requirements for unknown type: $type";
   }
 
-  return $req;
+  return $self->{ $phase }{ $type } ||= Version::Requirements->new;
 }
 
 sub with_merged_prereqs {
