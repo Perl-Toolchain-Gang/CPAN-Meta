@@ -741,7 +741,7 @@ This field has been renamed to L</"no_index">.
 This section defines the Version type, used by several fields in the
 CPAN Meta Spec.
 
-Version numbers must treated as strings, not numbers.  For
+Version numbers must be treated as strings, not numbers.  For
 example, C<1.200> B<must not> be serialized as C<1.2>.  Version
 comparison should be delegated to the Perl L<version> module, version
 0.80 or newer.
