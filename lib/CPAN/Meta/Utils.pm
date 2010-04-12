@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-package CPAN::Meta;
+package CPAN::Meta::Utils;
 
 use Carp qw(confess);
 

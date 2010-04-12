@@ -1,6 +1,7 @@
 --- 
 abstract: a modern perl interactive shell
-author: Matt S Trout - mst (at) shadowcatsystems.co.uk (L<http://www.shadowcatsystems.co.uk/>)
+author: 
+  - Matt S Trout - mst (at) shadowcatsystems.co.uk (L<http://www.shadowcatsystems.co.uk/>)
 build_requires: 
   Test::More: 0
 distribution_type: module

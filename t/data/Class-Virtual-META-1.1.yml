@@ -12,5 +12,5 @@ requires:
     Class::ISA:                    0.31
     Test::More:                    0.5
 meta-spec:
-    url: http://module-build.sourceforge.net/META-spec-new.html
+    url: http://module-build.sourceforge.net/META-spec-v1.1.html
     version: 1.1
