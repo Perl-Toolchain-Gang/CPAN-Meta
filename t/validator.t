@@ -15,7 +15,7 @@ use Data::Dumper;
 for my $f ( @files ) {
   my $meta = CPAN::Meta->load( File::Spec->catfile('t','data',$f) );
   my $cmv = CPAN::Meta::Validator->new({%$meta});
-  ok( $cmv->is_valid, "$f validates" ) 
+  ok( $cmv->is_valid, "$f validates" )
     or diag( "ERRORS:\n" . join( "\n", $cmv->errors ) );
 }
 
