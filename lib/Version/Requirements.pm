@@ -119,10 +119,7 @@ BEGIN {
 
       $version = $self->_version_object( $version );
 
-      my $old = $self->__entry_for($name)
-              || 'Version::Requirements::_Range::Range';
-
-      $self->__set_entry_for($name, $old->$method($version));
+      $self->__modify_entry_for($name, $method, $version);
 
       return $self;
     };
@@ -197,6 +194,8 @@ This method returns the requirements object.
 sub clear_requirement {
   my ($self, $module) = @_;
 
+  return $self unless $self->__entry_for($module);
+
   Carp::confess("can't clear requirements on finalized requirements")
     if $self->is_finalized;
 
@@ -231,7 +230,24 @@ sub clone {
 }
 
 sub __entry_for     { $_[0]{requirements}{ $_[1] } }
-sub __set_entry_for { $_[0]{requirements}{ $_[1] } = $_[2] }
+
+sub __modify_entry_for {
+  my ($self, $name, $method, $version) = @_;
+
+  my $fin = $self->is_finalized;
+  my $old = $self->__entry_for($name);
+
+  Carp::confess("can't add new requirements to finalized requirements")
+    if $fin and not $old;
+
+  my $new = ($old || 'Version::Requirements::_Range::Range')
+          ->$method($version);
+
+  Carp::confess("can't modify finalized requirements")
+    if $fin and $old->as_string ne $new->as_string;
+
+  $self->{requirements}{ $name } = $new;
+}
 
 =method is_simple
 
@@ -371,29 +387,33 @@ sub from_string_hash {
 
   sub as_modifiers { return [ [ exact_version => $_[0]{version} ] ] }
 
+  sub _clone {
+    (ref $_[0])->_new( version->new( $_[0]{version} ) )
+  }
+
   sub with_exact_version {
     my ($self, $version) = @_;
 
-    return $self if $self->_accepts($version);
+    return $self->_clone if $self->_accepts($version);
 
     Carp::confess("illegal requirements: unequal exact version specified");
   }
 
   sub with_minimum {
     my ($self, $minimum) = @_;
-    return $self if $self->{version} >= $minimum;
+    return $self->_clone if $self->{version} >= $minimum;
     Carp::confess("illegal requirements: minimum above exact specification");
   }
 
   sub with_maximum {
     my ($self, $maximum) = @_;
-    return $self if $self->{version} <= $maximum;
+    return $self->_clone if $self->{version} <= $maximum;
     Carp::confess("illegal requirements: maximum below exact specification");
   }
 
   sub with_exclusion {
     my ($self, $exclusion) = @_;
-    return $self unless $exclusion == $self->{version};
+    return $self->_clone unless $exclusion == $self->{version};
     Carp::confess("illegal requirements: excluded exact specification");
   }
 }
@@ -405,6 +425,22 @@ sub from_string_hash {
     Version::Requirements::_Range::Range;
 
   sub _self { ref($_[0]) ? $_[0] : (bless { } => $_[0]) }
+
+  sub _clone {
+    return (bless { } => $_[0]) unless ref $_[0];
+
+    my ($s) = @_;
+    my %guts = (
+      (exists $s->{minimum} ? (minimum => version->new($s->{minimum})) : ()),
+      (exists $s->{maximum} ? (maximum => version->new($s->{maximum})) : ()),
+
+      (exists $s->{exclusions}
+        ? (exclusions => [ map { version->new($_) } @{ $s->{exclusions} } ])
+        : ()),
+    );
+
+    bless \%guts => ref($s);
+  }
 
   sub as_modifiers {
     my ($self) = @_;
@@ -449,7 +485,7 @@ sub from_string_hash {
 
   sub with_exact_version {
     my ($self, $version) = @_;
-    $self = $self->_self;
+    $self = $self->_clone;
 
     Carp::confess("illegal requirements: exact specification outside of range")
       unless $self->_accepts($version);
@@ -489,7 +525,7 @@ sub from_string_hash {
 
   sub with_minimum {
     my ($self, $minimum) = @_;
-    $self = $self->_self;
+    $self = $self->_clone;
 
     if (defined (my $old_min = $self->{minimum})) {
       $self->{minimum} = (sort { $b cmp $a } ($minimum, $old_min))[0];
@@ -502,7 +538,7 @@ sub from_string_hash {
 
   sub with_maximum {
     my ($self, $maximum) = @_;
-    $self = $self->_self;
+    $self = $self->_clone;
 
     if (defined (my $old_max = $self->{maximum})) {
       $self->{maximum} = (sort { $a cmp $b } ($maximum, $old_max))[0];
@@ -515,7 +551,7 @@ sub from_string_hash {
 
   sub with_exclusion {
     my ($self, $exclusion) = @_;
-    $self = $self->_self;
+    $self = $self->_clone;
 
     push @{ $self->{exclusions} ||= [] }, $exclusion;
 
