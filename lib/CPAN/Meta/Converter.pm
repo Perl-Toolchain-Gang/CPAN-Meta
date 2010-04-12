@@ -18,9 +18,9 @@ my %known_specs = (
 # converters
 #
 # called as $converter->($element, $field_name, $full_meta, $to_version)
-# 
+#
 # defined return value used for field
-# undef return value means field is skipped 
+# undef return value means field is skipped
 #--------------------------------------------------------------------------#
 
 sub _keep { $_[0] }
@@ -64,10 +64,10 @@ sub _optional_features_2 {
       prereqs => _prereqs->(undef, undef, $origin->{$name}),
     };
     delete $features->{$name}{prereqs}{configure};
-  } 
+  }
   return $features;
 }
-  
+
 #  resources => {
 #    license     => [ 'http://dev.perl.org/licenses/' ],
 #    homepage    => 'http://sourceforge.net/projects/module-build',
@@ -93,6 +93,27 @@ sub _resources_2 {
   my (undef, undef, $meta) = @_;
   return undef unless exists $meta->{resources};
   return _convert($meta->{resource}, $resource_conversion_spec);
+}
+
+sub _convert {
+  my ($data, $spec, $to_version) = @_;
+
+  my $new_data = {};
+  for my $key ( %$spec ) {
+    next if $key eq ':custom' || $key eq ':drop';
+    next unless my $fcn = $spec->{$key};
+    $new_data->{$key} = $fcn->($data->{$key}, $key, $data, $to_version);
+  }
+
+  my $drop_list   = $spec->{':drop'};
+  my $customizer  = $spec->{':custom'};
+
+  for my $key ( keys %$data ) {
+    next if $drop_list && grep { $key eq $_ } @$drop_list;
+    $new_data->{ $customizer->($key) } = $data->{$key};
+  }
+
+  return $new_data;
 }
 
 #--------------------------------------------------------------------------#
@@ -122,7 +143,7 @@ my %up_convert = (
     ':drop' => [ qw/ private distribution_type / ],
 
     # other random keys need x_ prefixing
-    ':custom'              => \&prefix_custom,
+    ':custom'              => \&_prefix_custom,
   },
 );
 
@@ -154,7 +175,7 @@ sub convert_to {
     my $conversion_spec = $up_convert{"${new_version}-from-${old_version}"};
     die "converting from $old_version to $new_version not supported"
       unless $conversion_spec;
-    return _convert( $self->{data}, $conversion_spec );
+    return _convert( $self->{data}, $conversion_spec, $new_version );
   }
 }
 

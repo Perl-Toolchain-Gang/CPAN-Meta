@@ -15,7 +15,8 @@ for my $f ( @files ) {
   my $path = File::Spec->catfile('t','data',$f);
   my $original = CPAN::Meta->_load_file( $path  );
   ok( $original, "loaded $f" );
-  next unless $original->{'meta-spec'}{version} == 1.4;
+  $original->{'meta-spec'}{version} ||= '1.0';
+  next unless $original->{'meta-spec'}{version} eq '1.4';
   my $meta = CPAN::Meta->load_file( $path );
   is ( $meta->meta_spec_version, 2, "loads are upconverted to spec version 2");
 }
