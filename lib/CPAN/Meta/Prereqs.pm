@@ -23,13 +23,21 @@ sub new {
   my ($class, $prereq_spec) = @_;
   $prereq_spec ||= {};
 
+  my %is_legal_phase = map {; $_ => 1 } $class->__legal_phases;
+  my %is_legal_type  = map {; $_ => 1 } $class->__legal_types;
+
   my %guts;
-  PHASE: for my $phase ($class->__legal_phases) {
-    next PHASE unless my $phase_spec = $prereq_spec->{ $phase };
+  PHASE: for my $phase (keys %$prereq_spec) {
+    next PHASE unless $phase =~ /\Ax_/i or $is_legal_phase{$phase};
+
+    my $phase_spec = $prereq_spec->{ $phase };
     next PHASE unless keys %$phase_spec;
 
-    TYPE: for my $type ($class->__legal_types) {
-      next TYPE unless my $spec = $phase_spec->{ $type };
+    TYPE: for my $type (keys %$phase_spec) {
+      next TYPE unless $type =~ /\Ax_/i or $is_legal_type{$type};
+
+      my $spec = $phase_spec->{ $type };
+
       next TYPE unless keys %$spec;
 
       $guts{$phase}{$type} = Version::Requirements->from_string_hash($spec);
