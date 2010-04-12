@@ -172,11 +172,9 @@ sub new {
 
 =cut
 
-sub load {
+# private to help tests conversion/validation -- dagolden, 2010-04-12 
+sub _load_file {
   my ($class, $file) = @_;
-
-  confess "load() requires a valid, readable filename"
-    unless -r $file;
 
   my $struct;
   if ( $file =~ m{\.json} ) {
@@ -187,9 +185,18 @@ sub load {
     my @yaml = Parse::CPAN::Meta::LoadFile( $file );
     $struct = $yaml[0];
   }
-  else {
-    confess "load() could not determine the filetype of '$file'"
-  }
+  return $struct;
+}
+
+
+sub load {
+  my ($class, $file) = @_;
+
+  confess "load() requires a valid, readable filename"
+    unless -r $file;
+
+  my $struct = $class->_load_file( $file )
+    or confess "load() could not determine the filetype of '$file'";
 
   return $class->new($struct);
 }
