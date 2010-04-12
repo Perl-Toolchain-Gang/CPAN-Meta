@@ -16,7 +16,7 @@ sub dies_ok (&@) {
   }
 }
 
-my $prereq_struct = {
+my $prereqs_struct = {
   runtime => {
     requires => {
       'Config' => '1.234',
@@ -36,32 +36,56 @@ my $prereq_struct = {
   }
 };
 
-my $prereq = CPAN::Meta::Prereqs->new($prereq_struct);
+my $prereqs = CPAN::Meta::Prereqs->new($prereqs_struct);
 
-isa_ok($prereq, 'CPAN::Meta::Prereqs');
+isa_ok($prereqs, 'CPAN::Meta::Prereqs');
 
-$prereq->finalize;
+$prereqs->finalize;
 
-pass('we survive finalization');
+ok($prereqs->is_finalized, 'cloned obj is not finalized');
 
-is_deeply($prereq->as_string_hash, $prereq_struct, '...and still round-trip');
+is_deeply($prereqs->as_string_hash, $prereqs_struct, '...and still round-trip');
 
-$prereq->requirements_for(qw(runtime requires))->add_minimum(Cwd => 10);
+$prereqs->requirements_for(qw(runtime requires))->add_minimum(Cwd => 10);
 
 pass('...we can add a minimum if it has no effect');
 
 dies_ok
-  { $prereq->requirements_for(qw(runtime requires))->add_minimum(Cwd => 1000) }
+  { $prereqs->requirements_for(qw(runtime requires))->add_minimum(Cwd => 1000) }
   qr{finalized req},
   '...but we die if it would alter a finalized prereqs';
 
-$prereq->requirements_for(qw(develop suggests));
+$prereqs->requirements_for(qw(develop suggests));
 
 pass('...we can get a V:R object for a previously unconfigured phase');
 
 dies_ok
-  { $prereq->requirements_for(qw(develop suggests))->add_minimum(Foo => 1) }
+  { $prereqs->requirements_for(qw(develop suggests))->add_minimum(Foo => 1) }
   qr{finalized req},
   '...but we die if we try to put anything in it';
+
+my $clone = $prereqs->clone;
+
+isa_ok($clone, 'CPAN::Meta::Prereqs', 'cloned prereqs obj');
+
+ok(! $clone->is_finalized, 'cloned obj is not finalized');
+
+is_deeply($clone->as_string_hash, $prereqs_struct, '...it still round-trips');
+
+$clone->requirements_for(qw(runtime requires))->add_minimum(Cwd => 10);
+
+pass('...we can add minimum if it has no effect');
+
+$clone->requirements_for(qw(runtime requires))->add_minimum(Cwd => 1000);
+
+pass('...or if it has an effect');
+
+$clone->requirements_for(qw(develop suggests));
+
+pass('...we can get a V:R object for a previously unconfigured phase');
+
+$clone->requirements_for(qw(develop suggests))->add_minimum(Foo => 1);
+
+pass('...and we can add stuff to it');
 
 done_testing;
