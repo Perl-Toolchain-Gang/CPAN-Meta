@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 package CPAN::Meta::Validator;
+# ABSTRACT: validate CPAN distribution metadata structures
 
 use Carp qw(confess);
 
