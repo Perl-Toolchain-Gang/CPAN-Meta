@@ -151,7 +151,7 @@ sub convert_to {
     die "downconverting not yet supported";
   }
   else {
-    my $conversion_spec = $up_convert{"${old_version}_to_${new_version}"};
+    my $conversion_spec = $up_convert{"${new_version}-from-${old_version}"};
     die "converting from $old_version to $new_version not supported"
       unless $conversion_spec;
     return _convert( $self->{data}, $conversion_spec );

@@ -75,11 +75,11 @@ my $metafile = File::Spec->catfile( $tmpdir, 'META.json' );
 
 $meta->save($metafile);
 ok( -f $metafile, "save meta to file" );
-ok( $meta = CPAN::Meta->load($metafile), 'load saved file' );
-is($meta->name,     'Module-Build', 'name correct');
+ok( $meta = CPAN::Meta->_load_file($metafile), 'load saved file' );
+is($meta->{name},     'Module-Build', 'name correct');
 
 
-ok( $meta = CPAN::Meta->load('t/data/META-1_4.yml'), 'load META-1.4' );
-is($meta->name,     'Module-Build', 'name correct');
+ok( $meta = CPAN::Meta->_load_file('t/data/META-1_4.yml'), 'load META-1.4' );
+is($meta->{name},     'Module-Build', 'name correct');
 
 done_testing;

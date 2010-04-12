@@ -202,7 +202,7 @@ sub load {
 
   # validate
   my $cmv = CPAN::Meta::Validator->new( $struct );
-  unless ( ! $cmv->is_valid ) {
+  unless ( $cmv->is_valid ) {
     my $msg = "Invalid META file '$file'.  Errors found:\n";
     $msg .= join( "\n", $cmv->errors );
     confess $msg;
