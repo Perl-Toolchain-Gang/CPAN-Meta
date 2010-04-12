@@ -1,6 +1,5 @@
 use strict;
 package CPAN::Meta::Spec;
-our $VERSION = '2.0';
 # vi:tw=72
 1;
 
@@ -67,7 +66,7 @@ META-spec - Specification for CPAN distribution metadata
     dynamic_config => 1,
     keywords => [ qw/ toolchain cpan dual-life / ],
     'meta-spec' => {
-      version => '2.0',
+      version => '2',
       url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
     },
     generated_by => 'Module::Build version 0.36',
@@ -75,8 +74,8 @@ META-spec - Specification for CPAN distribution metadata
 
 =head1 DESCRIPTION
 
-This document describes version 2.0 of the CPAN distribution
-metadata specification, also knows as the "CPAN Meta Spec".
+This document describes version 2 of the CPAN distribution metadata
+specification, also knows as the "CPAN Meta Spec".
 
 Distribution metadata describe important properties of Perl
 distributions. Distribution building tools like Module::Build,
@@ -213,7 +212,7 @@ similarly.
 
 Some fields are marked I<Deprecated>.  These are shown for historical
 context and must not be produced in or consumed from any metadata structure
-of version 2.0 or higher.
+of version 2 or higher.
 
 =head2 REQUIRED FIELDS
 
@@ -257,7 +256,7 @@ Example:
 
   dynamic_config => 0
 
-(Spec 2.0) [required] {Boolean} 
+(Spec 2) [required] {Boolean} 
 
 A boolean flag indicating whether a F<Build.PL> or F<Makefile.PL> (or
 similar) must be executed to determine prerequisites.
@@ -296,7 +295,7 @@ Example:
 
   license => [ 'apache_2', 'mozilla_1_0' ]
 
-(Spec 2.0) [required] {List of one or more License Strings}
+(Spec 2) [required] {List of one or more License Strings}
 
 One or more licenses that apply to some or all of the files in the
 distribution.  If multiple licenses are listed, the distribution
@@ -348,7 +347,7 @@ All other strings are invalid in the license field.
 Example:
 
   'meta-spec' => {
-    version => '2.0',
+    version => '2',
     url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
   }
 
@@ -395,7 +394,7 @@ Example:
 
   release_status => 'stable'
 
-(Spec 2.0) [required] {String} 
+(Spec 2) [required] {String} 
 
 This field provides the  release status of this distribution.  If the
 C<version> field contains an underscore character, then
@@ -453,7 +452,7 @@ Example:
                 .   "and installing Perl modules.  It is meant to be an "
                 .   "alternative to "ExtUtils::MakeMaker... blah blah blah"
 
-(Spec 2.0) [optional] {String}
+(Spec 2) [optional] {String}
 
 A longer, more complete description of the purpose or intended use of
 the distribution than the one provided by the C<abstract> key.
@@ -533,7 +532,7 @@ Example:
     }
   }
 
-(Spec 2.0) [optional] {Map}
+(Spec 2) [optional] {Map}
 
 This Map describes optional features with incremental prerequisites.
 Each key of the C<optional_features> Map is a String used to identify
@@ -604,7 +603,7 @@ Example:
     }
   }
 
-(Spec 2.0) [optional] {Map}
+(Spec 2) [optional] {Map}
 
 This is a Map that describes all the prerequisites of the distribution.
 The keys are phases of activity, such as C<configure>, C<build>, C<test>
@@ -677,7 +676,7 @@ Example:
     x_twitter   => 'http://twitter.com/cpan_linked/',
   }
 
-(Spec 2.0) [optional] {Map}
+(Spec 2) [optional] {Map}
 
 This field describes resources related to this distribution.
 
