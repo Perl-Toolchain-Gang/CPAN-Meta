@@ -119,9 +119,10 @@ BEGIN {
 
       $version = $self->_version_object( $version );
 
-      my $old = $self->{ $name } || 'Version::Requirements::_Range::Range';
+      my $old = $self->__entry_for($name)
+              || 'Version::Requirements::_Range::Range';
 
-      $self->{ $name } = $old->$method($version);
+      $self->__set_entry_for($name, $old->$method($version));
 
       return $self;
     };
@@ -195,7 +196,7 @@ This method returns the requirements object.
 
 sub clear_requirement {
   my ($self, $module) = @_;
-  delete $self->{ $module };
+  delete $self->{requirements}{ $module };
 
   return $self;
 }
@@ -207,7 +208,7 @@ specified.
 
 =cut
 
-sub required_modules { keys %{ $_[ 0 ] } }
+sub required_modules { keys %{ $_[0]{requirements} } }
 
 =method clone
 
@@ -225,9 +226,8 @@ sub clone {
   return $new->add_requirements($self);
 }
 
-sub __entry_for {
-  $_[0]{ $_[1] }
-}
+sub __entry_for     { $_[0]{requirements}{ $_[1] } }
+sub __set_entry_for { $_[0]{requirements}{ $_[1] } = $_[2] }
 
 =method is_simple
 
@@ -283,7 +283,8 @@ C<$hashref> would contain:
 sub as_string_hash {
   my ($self) = @_;
 
-  my %hash = map {; $_ => $self->{$_}->as_string } keys %$self;
+  my %hash = map {; $_ => $self->{requirements}{$_}->as_string }
+             $self->required_modules;
 
   return \%hash;
 }
