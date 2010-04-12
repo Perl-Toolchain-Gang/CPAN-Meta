@@ -46,6 +46,65 @@ my $no_index_1_1 = {
 };
 
 my %definitions = (
+'2' => {
+#  'header'              => { mandatory => 1, value => \&header },
+  'meta-spec'           => { mandatory => 1, 'map' => { version => { mandatory => 1, value => \&version},
+                                                        url     => { value => \&url } } },
+
+  'name'                => { mandatory => 1, value => \&string  },
+  'version'             => { mandatory => 1, value => \&version },
+  'abstract'            => { mandatory => 1, value => \&string  },
+  'author'              => { mandatory => 1, lazylist => { value => \&string } },
+  'license'             => { mandatory => 1, lazylist => { value => \&license } },
+  'generated_by'        => { mandatory => 1, value => \&string  },
+  'dynamic_config'      => { mandatory => 1, value => \&boolean },
+
+  'requires'            => $module_map1,
+  'recommends'          => $module_map1,
+  'build_requires'      => $module_map1,
+  'configure_requires'  => $module_map1,
+  'conflicts'           => $module_map2,
+
+  'optional_features'   => {
+    'map'       => {
+        ':key'  => { name => \&identifier,
+            'map'   => { description        => { value => \&string },
+                         requires_packages  => { value => \&string },
+                         requires_os        => { value => \&string },
+                         excludes_os        => { value => \&string },
+                         requires           => $module_map1,
+                         recommends         => $module_map1,
+                         build_requires     => $module_map1,
+                         conflicts          => $module_map2,
+            }
+        }
+     }
+  },
+
+  'provides'    => {
+    'map'       => { ':key' => { name  => \&module,
+                                 'map' => { file    => { mandatory => 1, value => \&file },
+                                            version => { value => \&version } } } }
+  },
+
+  'no_index'    => $no_index_1_3,
+
+  'keywords'    => { lazylist => { value => \&string } },
+
+  'resources'   => {
+    'map'       => { license    => { lazylist => { value => \&url } },
+                     homepage   => { value => \&url },
+                     bugtracker => { value => \&url },
+                     repository => { value => \&url },
+                     ':key'     => { value => \&string, name => \&resource },
+    }
+  },
+
+  # additional user defined key/value pairs
+  # note we can only validate the key name, as the structure is user defined
+  ':key'        => { name => \&keyword },
+},
+
 '1.4' => {
 #  'header'              => { mandatory => 1, value => \&header },
   'meta-spec'           => { mandatory => 1, 'map' => { version => { mandatory => 1, value => \&version},
@@ -333,12 +392,12 @@ sub errors {
 
 =item * check_map($spec,$data)
 
-Checks whether a map (or hash) part of the YAML data structure conforms to the
+Checks whether a map (or hash) part of the data structure conforms to the
 appropriate specification definition.
 
 =item * check_list($spec,$data)
 
-Checks whether a list (or array) part of the YAML data structure conforms to
+Checks whether a list (or array) part of the data structure conforms to
 the appropriate specification definition.
 
 =item * check_lazylist($spec,$data)
@@ -353,12 +412,12 @@ sub check_map {
     my ($self,$spec,$data) = @_;
 
     if(ref($spec) ne 'HASH') {
-        $self->_error( "Unknown META.yml specification, cannot validate." );
+        $self->_error( "Unknown META specification, cannot validate." );
         return;
     }
 
     if(ref($data) ne 'HASH') {
-        $self->_error( "Expected a map structure from YAML string or file." );
+        $self->_error( "Expected a map structure from string or file." );
         return;
     }
 
@@ -380,7 +439,7 @@ sub check_map {
             } elsif($spec->{$key}{'list'}) {
                 $self->check_list($spec->{$key}{'list'},$data->{$key});
             } elsif($spec->{$key}{'lazylist'}) {
-                $self->check_lazylist($spec->{$key}{'list'},$data->{$key});
+                $self->check_lazylist($spec->{$key}{'lazylist'},$data->{$key});
             }
 
         } elsif ($spec->{':key'}) {
@@ -392,7 +451,7 @@ sub check_map {
             } elsif($spec->{':key'}{'list'}) {
                 $self->check_list($spec->{':key'}{'list'},$data->{$key});
             } elsif($spec->{':key'}{'lazylist'}) {
-                $self->check_lazylist($spec->{':key'}{'list'},$data->{$key});
+                $self->check_lazylist($spec->{':key'}{'lazylist'},$data->{$key});
             }
 
 
@@ -437,7 +496,7 @@ sub check_list {
         } elsif(defined $spec->{'list'}) {
             $self->check_list($spec->{'list'},$value);
         } elsif(defined $spec->{'lazylist'}) {
-            $self->check_lazylist($spec->{'list'},$value);
+            $self->check_lazylist($spec->{'lazylist'},$value);
         } elsif ($spec->{':key'}) {
             $self->check_map($spec,$value);
         } else {
@@ -453,9 +512,9 @@ sub check_list {
 
 =item * header($self,$key,$value)
 
-Validates that the YAML header is valid.
+Validates that the header is valid.
 
-Note: No longer used as we now read the YAML data structure, not the file.
+Note: No longer used as we now read the data structure, not the file.
 
 =item * url($self,$key,$value)
 
@@ -463,7 +522,7 @@ Validates that a given value is in an acceptable URL format
 
 =item * urlspec($self,$key,$value)
 
-Validates that the URL to a META.yml specification is a known one.
+Validates that the URL to a META specification is a known one.
 
 =item * string_or_undef($self,$key,$value)
 
@@ -506,7 +565,7 @@ keyword.
 
 =item * keyword($self,$key,$value)
 
-Validates that key is in an acceptable format for the META.yml specification,
+Validates that key is in an acceptable format for the META specification,
 i.e. any in the character class [-_a-z]. 
 
 For user defined keys, although not explicitly stated in the specifications 
@@ -516,7 +575,7 @@ can be used. This clarification has been added to v2.0 of the specification.
 
 =item * identifier($self,$key,$value)
 
-Validates that key is in an acceptable format for the META.yml specification,
+Validates that key is in an acceptable format for the META specification,
 for an identifier, i.e. any that matches the regular expression
 qr/[a-z][a-z_]/i. 
 
@@ -576,11 +635,11 @@ sub urlspec {
     if(defined $value) {
         return 1    if($value && $known_specs{$self->{spec}} eq $value);
         if($value && $known_urls{$value}) {
-            $self->_error( 'META.yml specification URL does not match version' );
+            $self->_error( 'META specification URL does not match version' );
             return 0;
         }
     }
-    $self->_error( 'Unknown META.yml specification' );
+    $self->_error( 'Unknown META specification' );
     return 0;
 }
 
@@ -643,7 +702,7 @@ sub boolean {
     return 0;
 }
 
-my %licenses = (
+my %v1_licenses = (
     'perl'         => 'http://dev.perl.org/licenses/',
     'gpl'          => 'http://www.opensource.org/licenses/gpl-license.php',
     'apache'       => 'http://apache.org/licenses/LICENSE-2.0',
@@ -661,15 +720,45 @@ my %licenses = (
     'unknown'      => undef,
 );
 
+my %v2_licenses = map { $_ => 1 } qw(
+  agpl_3
+  apache_1_1
+  apache_2_0
+  artistic_1
+  artistic_2
+  bsd
+  freebsd
+  gfdl_1_2
+  gfdl_1_3
+  gpl_1
+  gpl_2
+  gpl_3
+  lgpl_2_1
+  lgpl_3_0
+  mit
+  mozilla_1_0
+  mozilla_1_1
+  openssl
+  perl_5
+  qpl_1_0
+  ssleay
+  sun
+  zlib
+  open_source
+  restricted
+  unrestricted
+  unknown
+);
+
 sub license {
     my ($self,$key,$value) = @_;
+    my $licenses = $self->{spec} < 2 ? \%v1_licenses : \%v2_licenses;
     if(defined $value) {
-        return 1    if($value && exists $licenses{$value});
-        return 2    if($value);
+        return 1    if($value && exists $licenses->{$value});
     } else {
         $value = '<undef>';
     }
-    $self->_error( "License '$value' is unknown" );
+    $self->_error( "License '$value' is invalid" );
     return 0;
 }
 
