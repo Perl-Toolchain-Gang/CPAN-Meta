@@ -42,6 +42,8 @@ information on the meaning of individual fields, consult the spec.
 use Carp qw(confess);
 use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
+use JSON 2 ();
+use Parse::CPAN::Meta ();
 
 =head1 STRING DATA
 
@@ -163,6 +165,34 @@ sub new {
   bless $struct => $class;
 }
 
+=method load
+
+  my $meta = CPAN::Meta->load($distmeta_file);
+
+=cut
+
+sub load {
+  my ($class, $file) = @_;
+
+  confess "load() requires a valid, readable filename"
+    unless -r $file;
+
+  my $struct;
+  if ( $file =~ m{\.json} ) {
+    my $guts = do { local (@ARGV,$/) = $file; <> };
+    $struct = JSON->new->utf8->decode($guts);
+  }
+  elsif ( $file =~ m{\.ya?ml} ) {
+    my @yaml = Parse::CPAN::Meta::LoadFile( $file );
+    $struct = $yaml[0];
+  }
+  else {
+    confess "load() could not determine the filetype of '$file'"
+  }
+
+  return $class->new($struct);
+}
+
 =method meta_spec_version
 
 This method returns the version part of the C<meta_spec> entry in the distmeta
@@ -193,7 +223,7 @@ distribution's core prereqs before the CPAN::Meta::Prereqs object is returned.
 sub effective_prereqs {
   my ($self, $features) = @_;
   $features ||= [];
-  
+
   my $prereq = CPAN::Meta::Prereqs->new($self->prereqs);
 
   return $prereq unless @$features;
