@@ -1,3 +1,5 @@
+package CPAN::Meta::Spec::History;
+
 =head1 HISTORY
 
 =over 4
