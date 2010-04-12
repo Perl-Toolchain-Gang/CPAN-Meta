@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use autodie;
 package CPAN::Meta;
 # ABSTRACT: the distribution metadata for a CPAN dist
 
@@ -39,7 +40,7 @@ information on the meaning of individual fields, consult the spec.
 
 =cut
 
-use Carp qw(confess);
+use Carp qw(carp confess);
 use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
 use JSON 2 ();
@@ -191,6 +192,22 @@ sub load {
   }
 
   return $class->new($struct);
+}
+
+=method save
+
+  $meta->save($distmeta_file);
+
+=cut
+
+sub save {
+  my ($self, $file) = @_;
+
+  carp "'$file' should end in '.json'"
+    unless $file =~ m{\.json$};
+
+  open my $fh, ">", $file;
+  print {$fh} JSON->new->utf8->encode({%$self});
 }
 
 =method meta_spec_version
