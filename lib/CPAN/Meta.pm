@@ -207,7 +207,7 @@ sub save {
     unless $file =~ m{\.json$};
 
   open my $fh, ">", $file;
-  print {$fh} JSON->new->utf8->encode({%$self});
+  print {$fh} JSON->new->utf8->pretty->encode({%$self});
 }
 
 =method meta_spec_version
