@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+0.101020  2010-04-12 09:08:26 America/New_York
+          add finalization with ->finalize and ->is_finalized
+
 0.101010  2010-04-11 10:20:02 America/New_York
           add a public accepts_module version
 
