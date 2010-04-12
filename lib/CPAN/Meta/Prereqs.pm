@@ -13,7 +13,7 @@ organized by phase and type, as described in L<CPAN::Meta::Prereqs>.
 
 use Carp qw(confess);
 use Scalar::Util qw(blessed);
-use Version::Requirements 0.101010; # accepts_module
+use Version::Requirements 0.101020; # finalize
 
 =method new
 
@@ -68,7 +68,9 @@ sub new {
 
       next TYPE unless keys %$spec;
 
-      $guts{$phase}{$type} = Version::Requirements->from_string_hash($spec);
+      $guts{prereqs}{$phase}{$type} = Version::Requirements->from_string_hash(
+        $spec
+      );
     }
   }
 
@@ -95,8 +97,6 @@ sub requirements_for {
   confess "requirements_for called without phase" unless defined $phase;
   confess "requirements_for called without type"  unless defined $type;
 
-  my $req = Version::Requirements->new;
-
   unless ($phase =~ /\Ax_/i or grep { $phase eq $_ } $self->__legal_phases) {
     confess "requested requirements for unknown phase: $phase";
   }
@@ -105,7 +105,11 @@ sub requirements_for {
     confess "requested requirements for unknown type: $type";
   }
 
-  return $self->{ $phase }{ $type } ||= Version::Requirements->new;
+  my $req = ($self->{prereqs}{$phase}{$type} ||= Version::Requirements->new);
+
+  $req->finalize if $self->is_finalized;
+
+  return $req;
 }
 
 =method with_merged_prereqs
@@ -176,6 +180,50 @@ sub as_string_hash {
   }
 
   return \%hash;
+}
+
+=method is_finalized
+
+This method returns true if the set of prereqs has been marked "finalized," and
+cannot be altered.
+
+=cut
+
+sub is_finalized { $_[0]{finalized} }
+
+=method finalize
+
+Calling C<finalize> on a Prereqs object will close it for further modification.
+Attempting to make any changes that would actually alter the prereqs will
+result in an exception being thrown.
+
+=cut
+
+sub finalize {
+  my ($self) = @_;
+
+  $self->{finalized} = 1;
+
+  for my $phase (keys %{ $self->{prereqs} }) {
+    $_->finalize for values %{ $self->{prereqs}{$phase} };
+  }
+}
+
+=method clone
+
+  my $cloned_prereqs = $prereqs->clone;
+
+This method returns a Prereqs object that is identical to the original object,
+but can be altered without affecting the original object.  Finalization does
+not survive cloning, meaning that you may clone a finalized set of prereqs and
+then modify the clone.
+
+=cut
+
+sub clone {
+  my ($self) = @_;
+
+  my $clone = (ref $self)->new( $self->as_string_hash );
 }
 
 1;
