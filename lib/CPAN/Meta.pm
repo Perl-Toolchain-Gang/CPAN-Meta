@@ -190,8 +190,9 @@ sub _load_file {
   return $struct;
 }
 
-
-sub load {
+# XXX: Much of this can be simplified when we can rely on a JSON-speaking
+# upstream Parse::CPAN::Meta. -- rjbs, 2010-04-12
+sub load_file {
   my ($class, $file) = @_;
 
   # load
@@ -211,6 +212,36 @@ sub load {
   # return up-converted to version 2
   my $cmc = CPAN::Meta::Converter->new( $struct );
   return $class->new( $cmc->convert_to(2) );
+}
+
+=method load_yaml_string
+
+  my $meta = CPAN::Meta->load_yaml_string($yaml);
+
+This method returns a new CPAN::Meta object using the first document in the
+given YAML string.
+
+=cut
+
+sub load_yaml_string {
+  my ($class, $yaml) = @_;
+  my ($struct) = Parse::CPAN::Meta::Load( $yaml );
+  return $class->new($struct);
+}
+
+=method load_json_string
+
+  my $meta = CPAN::Meta->load_json_string($json);
+
+This method returns a new CPAN::Meta object using the structure represented by
+the given JSON string.
+
+=cut
+
+sub load_json_string {
+  my ($class, $json) = @_;
+  $struct = JSON->new->utf8->decode($json);
+  return $class->new($struct);
 }
 
 =method save
