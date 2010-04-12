@@ -21,6 +21,7 @@ sub __legal_types  { qw(requires recommends suggests conflicts) }
 # expect a prereq spec from META.json -- rjbs, 2010-04-11
 sub new {
   my ($class, $prereq_spec) = @_;
+  $prereq_spec ||= {};
 
   my %guts;
   PHASE: for my $phase ($class->__legal_phases) {

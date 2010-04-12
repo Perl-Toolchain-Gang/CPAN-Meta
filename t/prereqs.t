@@ -99,5 +99,23 @@ is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
   is(@req_mod, 0, "empty set of develop/suggests requirements");
 }
 
+{
+  my $new_prereq = CPAN::Meta::Prereqs->new;
+
+  $new_prereq
+    ->requirements_for(qw(runtime requires))
+    ->add_minimum(Foo => '1.000');
+
+  $new_prereq
+    ->requirements_for(qw(runtime requires))
+    ->add_minimum(Bar => '2.976');
+
+  is_deeply(
+    $new_prereq->as_string_hash,
+    { runtime => { requires => { Foo => '1.000', Bar => '2.976' } } },
+    'we can accumulate new requirements on a prereq object',
+  );
+}
+
 done_testing;
 
