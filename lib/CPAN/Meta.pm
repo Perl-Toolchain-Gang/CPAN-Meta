@@ -165,7 +165,19 @@ BEGIN {
 sub new {
   my ($class, $struct) = @_;
 
-  bless $struct => $class;
+  # validate
+  my $cmv = CPAN::Meta::Validator->new( $struct );
+  unless ( $cmv->is_valid ) {
+    my $msg = "Invalid META structure.  Errors found:\n";
+    $msg .= join( "\n", $cmv->errors );
+    confess $msg;
+  }
+
+  # return up-converted to version 2
+  my $cmc = CPAN::Meta::Converter->new( $struct );
+  my $self = $cmc->convert_to( 2 );
+
+  bless $self => $class;
 }
 
 =method load
@@ -201,17 +213,7 @@ sub load_file {
   my $struct = $class->_load_file( $file )
     or confess "load() could not determine the filetype of '$file'";
 
-  # validate
-  my $cmv = CPAN::Meta::Validator->new( $struct );
-  unless ( $cmv->is_valid ) {
-    my $msg = "Invalid META file '$file'.  Errors found:\n";
-    $msg .= join( "\n", $cmv->errors );
-    confess $msg;
-  }
-
-  # return up-converted to version 2
-  my $cmc = CPAN::Meta::Converter->new( $struct );
-  return $class->new( $cmc->convert_to(2) );
+  return $class->new($struct);
 }
 
 =method load_yaml_string

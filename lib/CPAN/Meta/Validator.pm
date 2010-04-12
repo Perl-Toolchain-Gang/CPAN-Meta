@@ -465,7 +465,7 @@ sub check_map {
 sub check_lazylist {
     my ($self,$spec,$data) = @_;
 
-    if ( defined $data && ! defined ref($data) ) {
+    if ( defined $data && ! ref($data) ) {
       $data = [ $data ];
     }
 

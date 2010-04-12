@@ -27,7 +27,7 @@ sub _keep { $_[0] }
 
 sub _keep_or_one { defined($_[0]) ? $_[0] : 1 }
 
-sub _generated_by { __PACKAGE__ . " version " . __PACKAGE__->VERSION }
+sub _generated_by { __PACKAGE__ . " version " . (__PACKAGE__->VERSION || "<dev>") }
 
 sub _listify { ref $_[0] eq 'ARRAY' ? $_[0] : [$_[0]] }
 

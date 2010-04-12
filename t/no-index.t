@@ -6,8 +6,9 @@ use CPAN::Meta;
 
 my %distmeta = (
   name     => 'Module-Billed',
+  abstract => 'inscrutable',
   version  => '1',
-  author   => 'Joe' ,
+  author   => 'Joe',
   license  => 'perl_5',
   'meta-spec' => {
     version => '2',
