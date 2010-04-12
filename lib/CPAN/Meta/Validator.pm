@@ -6,8 +6,8 @@ package CPAN::Meta::Validator;
 use Carp qw(confess);
 
 #--------------------------------------------------------------------------#
-# This code copied and adapted from Test::CPAN::Meta 
-# by Barbie, <barbie@cpan.org> for Miss Barbell Productions, 
+# This code copied and adapted from Test::CPAN::Meta
+# by Barbie, <barbie@cpan.org> for Miss Barbell Productions,
 # L<http://www.missbarbell.co.uk>
 #--------------------------------------------------------------------------#
 
@@ -25,7 +25,9 @@ my %known_specs = (
 my %known_urls = map {$known_specs{$_} => $_} keys %known_specs;
 
 my $module_map1 = { 'map' => { ':key' => { name => \&module, value => \&exversion } } };
+
 my $module_map2 = { 'map' => { ':key' => { name => \&module, value => \&version   } } };
+
 my $no_index_1_3 = {
     'map'       => { file       => { list => { value => \&string } },
                      directory  => { list => { value => \&string } },
@@ -33,6 +35,7 @@ my $no_index_1_3 = {
                      namespace  => { list => { value => \&string } },
     }
 };
+
 my $no_index_1_2 = {
     'map'       => { file       => { list => { value => \&string } },
                      dir        => { list => { value => \&string } },
@@ -40,9 +43,22 @@ my $no_index_1_2 = {
                      namespace  => { list => { value => \&string } },
     }
 };
+
 my $no_index_1_1 = {
     'map'       => { ':key'     => { name => \&keyword, list => { value => \&string } },
     }
+};
+
+my $prereq_map = {
+  ':key' => {
+    name => \&phase,
+    'map' => {
+      ':key'  => {
+        name => \&relation,
+        'map' => $module_map1,
+      },
+    },
+  },
 };
 
 my %definitions = (
@@ -59,20 +75,14 @@ my %definitions = (
   'generated_by'        => { mandatory => 1, value => \&string  },
   'dynamic_config'      => { mandatory => 1, value => \&boolean },
 
-  'requires'            => $module_map1,
-  'recommends'          => $module_map1,
-  'build_requires'      => $module_map1,
-  'configure_requires'  => $module_map1,
-  'conflicts'           => $module_map2,
+  'prereqs' => $prereq_map,
 
   'optional_features'   => {
     'map'       => {
         ':key'  => { name => \&identifier,
-            'map'   => { description        => { value => \&string },
-                         requires           => $module_map1,
-                         recommends         => $module_map1,
-                         build_requires     => $module_map1,
-                         conflicts          => $module_map2,
+            'map'   => {
+              description        => { value => \&string },
+              prereqs => $prereq_map,
             }
         }
      }
@@ -288,9 +298,9 @@ my %definitions = (
   'name'                => { mandatory => 1, value => \&string  },
   'version'             => { mandatory => 1, value => \&version },
   'license'             => { mandatory => 1, value => \&license },
-  'license_uri'         => { mandatory => 0, value => \&url },
   'generated_by'        => { mandatory => 1, value => \&string  },
 
+  'license_uri'         => { value => \&url },
   'distribution_type'   => { value => \&string  },
   'dynamic_config'      => { value => \&boolean },
 
@@ -313,9 +323,9 @@ my %definitions = (
   'name'                => { mandatory => 1, value => \&string  },
   'version'             => { mandatory => 1, value => \&version },
   'license'             => { mandatory => 1, value => \&license },
-  'license_uri'         => { mandatory => 1, value => \&license },
   'generated_by'        => { mandatory => 1, value => \&string  },
 
+  'license_uri'         => { value => \&url },
   'distribution_type'   => { value => \&string  },
   'dynamic_config'      => { value => \&boolean },
 
@@ -555,10 +565,10 @@ keyword.
 =item * keyword($self,$key,$value)
 
 Validates that key is in an acceptable format for the META specification,
-i.e. any in the character class [-_a-z]. 
+i.e. any in the character class [-_a-z].
 
-For user defined keys, although not explicitly stated in the specifications 
-(v1.0 - v1.4), the convention is to precede the key with a pattern matching 
+For user defined keys, although not explicitly stated in the specifications
+(v1.0 - v1.4), the convention is to precede the key with a pattern matching
 qr{\Ax_}i. Following this any character from the character class [-_a-zA-Z]
 can be used. This clarification has been added to v2.0 of the specification.
 
@@ -566,7 +576,7 @@ can be used. This clarification has been added to v2.0 of the specification.
 
 Validates that key is in an acceptable format for the META specification,
 for an identifier, i.e. any that matches the regular expression
-qr/[a-z][a-z_]/i. 
+qr/[a-z][a-z_]/i.
 
 =item * module($self,$key,$value)
 
@@ -754,7 +764,7 @@ sub license {
 sub resource {
     my ($self,$key) = @_;
     if(defined $key) {
-        # a valid user defined key should be alphabetic 
+        # a valid user defined key should be alphabetic
         # and contain at least one capital case letter.
         return 1    if($key && $key =~ /^[a-z]+$/i && $key =~ /[A-Z]/);
     } else {
@@ -795,6 +805,30 @@ sub module {
         $key = '<undef>';
     }
     $self->_error( "Key '$key' is not a legal module name." );
+    return 0;
+}
+
+my @valid_phases = qw/ configure build test runtime develop /;
+sub phase {
+    my ($self,$key) = @_;
+    if(defined $key) {
+        return 1 if( length $key && grep { $key eq $_ } @valid_phases );
+    } else {
+        $key = '<undef>';
+    }
+    $self->_error( "Key '$key' is not a legal phase." );
+    return 0;
+}
+
+my @valid_relations = qw/ requires recommends suggests conflicts /;
+sub relation {
+    my ($self,$key) = @_;
+    if(defined $key) {
+        return 1 if( length $key && grep { $key eq $_ } @valid_relations );
+    } else {
+        $key = '<undef>';
+    }
+    $self->_error( "Key '$key' is not a legal prereq relationship." );
     return 0;
 }
 
