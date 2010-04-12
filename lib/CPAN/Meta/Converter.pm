@@ -14,7 +14,6 @@ my %known_specs = (
     '1.0' => 'http://module-build.sourceforge.net/META-spec-v1.0.html'
 );
 
-
 #--------------------------------------------------------------------------#
 # converters
 #
@@ -142,9 +141,21 @@ sub new {
 }
 
 sub convert_to {
-  my ($self, $to_version) = @_;
+  my ($self, $new_version) = @_;
+  my ($old_version) = $self->{spec};
 
-  die "unimplemented";
+  if ( $old_version == $new_version ) {
+    return { %{$self->{data}} }
+  }
+  elsif ( $old_version > $new_version )  {
+    die "downconverting not yet supported";
+  }
+  else {
+    my $conversion_spec = $up_convert{"${old_version}_to_${new_version}"};
+    die "converting from $old_version to $new_version not supported"
+      unless $conversion_spec;
+    return _convert( $self->{data}, $conversion_spec );
+  }
 }
 
 1;

@@ -43,6 +43,8 @@ information on the meaning of individual fields, consult the spec.
 use Carp qw(carp confess);
 use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
+use CPAN::Meta::Converter;
+use CPAN::Meta::Validator;
 use JSON 2 ();
 use Parse::CPAN::Meta ();
 
@@ -192,13 +194,23 @@ sub _load_file {
 sub load {
   my ($class, $file) = @_;
 
+  # load
   confess "load() requires a valid, readable filename"
     unless -r $file;
-
   my $struct = $class->_load_file( $file )
     or confess "load() could not determine the filetype of '$file'";
 
-  return $class->new($struct);
+  # validate
+  my $cmv = CPAN::Meta::Validator->new( $struct );
+  unless ( ! $cmv->is_valid ) {
+    my $msg = "Invalid META file '$file'.  Errors found:\n";
+    $msg .= join( "\n", $cmv->errors );
+    confess $msg;
+  }
+
+  # return up-converted to version 2
+  my $cmc = CPAN::Meta::Converter->new( $struct );
+  return $class->new( $cmc->convert_to(2) );
 }
 
 =method save
