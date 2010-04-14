@@ -1,5 +1,32 @@
+# vi:tw=72
+use 5.006;
+use strict;
+use warnings;
+use autodie;
+package CPAN::Meta::History;
+# ABSTRACT: history of CPAN Meta Spec changes
+1;
 
-Version 2
+=head1 DESCRIPTION
+
+The CPAN Meta Spec has gone through several evolutionary staged.  It was
+originally written in HTML and later revised into POD (though published
+in HTML generated from the POD).
+
+This document reconstructs the changes in the CPAN Meta Spec based on
+change logs, repository commit messages and the published HTML files.
+In some cases, particularly prior to version 1.2, the exact sequence
+when certain fields were introduced or changed is inconsistent between
+sources.  When in doubt, the published HTML files for versions 1.0 to
+1.4 as they existed when verison 2 was developed are used as the
+definitive source.
+
+Starting with version 2, the specification is part of the CPAN-Meta
+distribution and will be published on CPAN as L<CPAN::Meta::Spec>.
+
+=head1 HISTORY
+
+=head2 Version 2
 
   - Revised spec examples as perl data structures rather than YAML
 
@@ -39,7 +66,7 @@ Version 2
   - Formalized use of "x_" or "X_" for all custom keys not listed in the
     official spec
 
-Version 1.4
+=head2 Version 1.4
 
   - Noted explicit support for 'perl' in prerequisites
 
@@ -51,7 +78,7 @@ Version 1.4
       - removed 'requires_packages', 'requires_os' and 'excluded_os'
         as valid subkeys
 
-Version 1.3
+=head2 Version 1.3
 
   - Clarified that all prerequisites take version range specifications
 
@@ -60,7 +87,7 @@ Version 1.3
 
   - Added a 'repository' subkey to 'resources'
 
-Version 1.2
+=head2 Version 1.2
 
   - Re-wrote and restructured spec in POD syntax
 
@@ -91,16 +118,21 @@ Version 1.2
 
   - Removed 'license_uri' field
 
-Version 1.1
+=head2 Version 1.1
 
-  - Added 'dynamic_config'
+  - Changed 'version' to be mandatory
 
   - Added 'private' field
 
   - Added 'license_uri' field
 
-Version 1.0 March 14, 2003 (Pi day)
+=head2 Version 1.0
 
   - Original release (in HTML format only)
 
+  - Included 'name', 'version', 'license', 'distribution_type',
+    'requires', 'recommends', 'build_requires', 'conflicts',
+    'dynamic_config', 'generated_by'
+
+=cut
 
