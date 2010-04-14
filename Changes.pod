@@ -1,203 +1,106 @@
-package CPAN::Meta::Spec::History;
 
-=head1 HISTORY
+Version 2
 
-=over 4
+  - Revised spec examples as perl data structures rather than YAML
 
-=item March 14, 2003 (Pi day)
+  - Switched to JSON serialization from YAML
 
-=over 2
+  - Specified allowed version number formats
 
-=item *
+  - Replaced 'requires', 'build_requires', 'configure_requires',
+    'recommends' and 'conflicts' with new 'prereqs' data structure
+    divided by _phase_ (configure, build, test, runtime, etc.) and
+    _relationship_ (requires, recommends, suggests, conflicts)
 
-Created version 1.0 of this document.
+  - Added support for 'develop' phase for requirements for maintaining
+    a list of authoring tools
 
-=back
+  - Changed 'license' to a list and revised the set of valid licenses
 
-=item May 8, 2003
+  - Made dynamic_config mandatory to reduce confusion
 
-=over 2
+  - Changed 'resources' subkey 'repository' to a hash that clarifies
+    repository type, url for browsing and url for checkout
 
-=item *
+  - Changed 'resources' subkey 'bugtracker' to a hash for either web
+    or mailto resource
 
-Added the L</"dynamic_config"> field, which was missing from the initial
-version.
+  - Changed specification of 'optional_features':
+      - Added formal specification and usage guide instead of just example
+      - Changed to use new prereqs data structure instead of individual keys
 
-=back
+  - Clarified intended use of 'author' as generalized contact list
 
-=item November 13, 2003
+  - Added 'release_status' field to indicate stable, testing or unstable
+    status to provide hints to indexers
 
-=over 2
+  - Added 'description' field for a longer description of the distribution
 
-=item *
+  - Formalized use of "x_" or "X_" for all custom keys not listed in the
+    official spec
 
-Added more YAML rationale articles.
+Version 1.4
 
-=item *
+  - Noted explicit support for 'perl' in prerequisites
 
-Fixed existing link to YAML discussion thread to point to new
-L<http://nntp.x.perl.org/group/> site.
+  - Added 'configure_requires' prerequisite type
 
-=item *
+  - Changed 'optional_features'
+      - example corrected to show map of maps instead of list of maps
+        (though descriptive text said 'map' even in v1.3)
+      - removed 'requires_packages', 'requires_os' and 'excluded_os'
+        as valid subkeys
 
-Added and deprecated the L<"private"> field.
+Version 1.3
 
-=item *
+  - Clarified that all prerequisites take version range specifications
 
-Added L<"abstract">, L<"configure">, L<"requires_packages">,
-L<"requires_os">, L<"excludes_os">, and L<"no_index"> fields.
+  - Added 'no_index' subkey 'directory' and removed 'dir' to match
+    actual usage in the wild
 
-=item *
+  - Added a 'repository' subkey to 'resources'
 
-Bumped version.
+Version 1.2
 
-=back
+  - Re-wrote and restructured spec in POD syntax
 
-=item November 16, 2003
+  - Changed 'name' to be mandatory
 
-=over 2
+  - Changed 'license' to be mandatory
 
-=item *
+  - Added required 'abstract' field
 
-Added L<"generation">, L<"authored_by"> fields.
+  - Added required 'author' field
 
-=item *
+  - Added required 'meta-spec' field to define 'version' (and 'url')
+    of the CPAN Meta Spec used for metadata
 
-Add alternative proposal to the L<"recommends"> field.
+  - Added 'provides' field
 
-=item *
+  - Added 'no_index' field and deprecated 'private' field.  'no_index'
+    subkeys include 'file', 'dir', 'package' and 'namespace'
 
-Add proposal for a L<"requires_build_tools"> field.
+  - Added 'keywords' field
 
-=back
+  - Added 'resources' field with subkeys 'homepage', 'license',
+    and 'bugtracker'
 
-=item December 9, 2003
+  - Added 'optional_features' field as an alterate under 'recommends'.
+    Includes 'description', 'requires', 'build_requires', 'conflicts',
+    'requires_packages', 'requires_os' and 'excluded_os' as valid subkeys
 
-=over 2
+  - Removed 'license_uri' field
 
-=item *
+Version 1.1
 
-Added link to latest version of this specification on CPAN.
+  - Added 'dynamic_config'
 
-=item *
+  - Added 'private' field
 
-Added section L<"VERSION SPECIFICATIONS">.
+  - Added 'license_uri' field
 
-=item *
+Version 1.0 March 14, 2003 (Pi day)
 
-Chang name from Module::Build::META-spec to CPAN::META::Specification.
+  - Original release (in HTML format only)
 
-=item *
-
-Add proposal for L<"auto_regenerate"> field.
-
-=back
-
-=item December 15, 2003
-
-=over 2
-
-=item *
-
-Add L<"index"> field as a compliment to L<"no_index">
-
-=item *
-
-Add L<"keywords"> field as a means to aid searching distributions.
-
-=item *
-
-Add L<"TERMINOLOGY"> section to explain certain terms that may be
-ambiguous.
-
-=back
-
-=item July 26, 2005
-
-=over 2
-
-=item *
-
-Removed a bunch of items (generation, requires_build_tools,
-requires_packages, configure, requires_os, excludes_os,
-auto_regenerate) that have never actually been supported, but were
-more like records of brainstorming.
-
-=item *
-
-Changed C<authored_by> to C<author>, since that's always been what
-it's actually called in actual F<META.yml> files.
-
-=item *
-
-Added the "==" operator to the list of supported version-checking
-operators.
-
-=item *
-
-Noted that the C<distribution_type> field is basically meaningless,
-and shouldn't really be used.
-
-=item *
-
-Clarified C<dynamic_config> a bit.
-
-=item *
-
-Version 1.2 published
-
-=back
-
-=item August 23, 2005
-
-=over 2
-
-=item *
-
-Removed the name C<CPAN::META::Specification>, since that implies a
-module that doesn't actually exist.
-
-=back
-
-=item October 14, 2006
-
-=over 2
-
-=item *
-
-'dir' was renamed to 'directory'.
-
-=back
-
-=item November 5, 2006
-
-=over 2
-
-=item *
-
-Version 1.3 published
-
-=back
-
-=item June 12, 2007
-
-=over 2
-
-=item *
-
-Added C<configure_requires>.
-
-=back
-
-=item June 25, 2008
-
-=over 2
-
-=item *
-
-Version 1.4 published
-
-=back
-
-=back
 
