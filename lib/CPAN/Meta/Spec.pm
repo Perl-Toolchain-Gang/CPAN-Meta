@@ -1,12 +1,10 @@
+# vi:tw=72
 use 5.006;
 use strict;
+use warnings;
 package CPAN::Meta::Spec;
-# vi:tw=72
+# ABSTRACT: Specification for CPAN distribution metadata
 1;
-
-=head1 NAME
-
-META-spec - Specification for CPAN distribution metadata
 
 =head1 SYNOPSIS
 
@@ -1039,4 +1037,6 @@ Module::Install, L<http://search.cpan.org/dist/Module-Install/>
 JSON, L<http://json.org/>
 
 YAML, L<http://www.yaml.org/>
+
+=cut
 

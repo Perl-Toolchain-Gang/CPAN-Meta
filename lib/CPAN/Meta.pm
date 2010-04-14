@@ -187,7 +187,7 @@ sub new {
 
 =cut
 
-# private to help tests conversion/validation -- dagolden, 2010-04-12 
+# XXX private to help tests conversion/validation -- dagolden, 2010-04-12 
 sub _load_file {
   my ($class, $file) = @_;
 
@@ -272,6 +272,7 @@ structure.  It is equivalent to:
 
 =cut
 
+# XXX Do we need this if we always upconvert? -- dagolden, 2010-04-14
 sub meta_spec_version {
   my ($self) = @_;
   return $self->meta_spec->{version};

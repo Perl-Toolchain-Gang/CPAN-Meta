@@ -4,6 +4,25 @@ use warnings;
 package CPAN::Meta::Validator;
 # ABSTRACT: validate CPAN distribution metadata structures
 
+=head1 SYNOPSIS
+
+  my $struct = decode_json_file('META.json');
+
+  my $cmv = CPAN::Meta::Validator->new( $struct );
+
+  unless ( $cmv->is_valid ) {
+    my $msg = "Invalid META structure.  Errors found:\n";
+    $msg .= join( "\n", $cmv->errors );
+    confess $msg;
+  }
+
+=head1 DESCRIPTION
+
+This module validates a CPAN Meta structure against the version of the
+the specification claimed in the C<meta-spec> field of the structure.
+
+=cut
+
 use Carp qw(confess);
 
 #--------------------------------------------------------------------------#
@@ -12,9 +31,9 @@ use Carp qw(confess);
 # L<http://www.missbarbell.co.uk>
 #--------------------------------------------------------------------------#
 
-#############################################################################
-#Specification Definitions													#
-#############################################################################
+#--------------------------------------------------------------------------#
+# Specification Definitions
+#--------------------------------------------------------------------------#
 
 my %known_specs = (
     '1.4' => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
@@ -341,20 +360,15 @@ my %definitions = (
 },
 );
 
-#############################################################################
-#Code               														#
-#############################################################################
+#--------------------------------------------------------------------------# 
+# Code
+#--------------------------------------------------------------------------#
 
-=head1 CLASS CONSTRUCTOR
+=method new
 
-=over
+  my $cmv = CPAN::Meta::Validator->new( $struct )
 
-=item * new( $metadata )
-
-The constructor must be passed a metadata structure
-
-
-=back
+The constructor must be passed a metadata structure.
 
 =cut
 
@@ -372,6 +386,17 @@ sub new {
   return bless $self, $class;
 }
 
+=method is_valid
+
+  if ( $cmv->is_valid ) {
+    ...
+  }
+
+Returns a boolean value indicating whether the metadata provided
+is valid.
+
+=cut
+
 sub is_valid {
     my $self = shift;
     my $data = $self->{data};
@@ -379,6 +404,12 @@ sub is_valid {
     $self->check_map($definitions{$spec_version},$data);
     return ! $self->errors;
 }
+
+=method errors
+
+  warn( join "\n", $cmv->errors );
+
+=cut
 
 sub errors {
     my $self = shift;
