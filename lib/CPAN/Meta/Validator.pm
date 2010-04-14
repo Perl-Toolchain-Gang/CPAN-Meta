@@ -14,7 +14,7 @@ package CPAN::Meta::Validator;
   unless ( $cmv->is_valid ) {
     my $msg = "Invalid META structure.  Errors found:\n";
     $msg .= join( "\n", $cmv->errors );
-    confess $msg;
+    die $msg;
   }
 
 =head1 DESCRIPTION
@@ -410,6 +410,8 @@ sub is_valid {
 
   warn( join "\n", $cmv->errors );
 
+Returns a list of errors seen during validation.
+
 =cut
 
 sub errors {
@@ -417,6 +419,8 @@ sub errors {
     return ()   unless(defined $self->{errors});
     return @{$self->{errors}};
 }
+
+=begin internals
 
 =head2 Check Methods
 
@@ -617,6 +621,8 @@ Validates that a given key is in an acceptable module name format, e.g.
 'Test::CPAN::Meta::Version'.
 
 =back
+
+=end internals
 
 =cut
 

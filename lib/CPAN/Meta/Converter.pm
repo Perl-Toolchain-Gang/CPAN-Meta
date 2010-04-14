@@ -5,6 +5,21 @@ use autodie;
 package CPAN::Meta::Converter;
 # ABSTRACT: Convert CPAN distribution metadata structures
 
+=head1 SYNOPSIS
+
+  my $struct = decode_json_file('META.json');
+
+  my $cmc = CPAN::Meta::Converter->new( $struct );
+
+  my $new_struct = $cmc->convert_to("2");
+
+=head1 DESCRIPTION
+
+This module converts a CPAN Meta structure of a particular version to a
+new version.
+
+=cut
+
 use Carp qw(carp confess);
 
 my %known_specs = (
@@ -149,6 +164,17 @@ my %up_convert = (
   },
 );
 
+#--------------------------------------------------------------------------#
+# Code
+#--------------------------------------------------------------------------#
+
+=method new
+
+  my $cmc = CPAN::Meta::Converter->new( $struct );
+
+The constructor must be passed a B<valid> metadata structure.
+
+=cut
 
 sub new {
   my ($class,$data) = @_;
@@ -162,6 +188,20 @@ sub new {
   # create the object
   return bless $self, $class;
 }
+
+=method convert_to
+
+  my $new_struct = $cmc->convert_to("2");
+
+Returns a new hash reference with the metadata converted to to a
+different specification version.
+
+Currently, only upconverting older versions is supported.  Converting a
+file to its own version will standardize the format. For exmaple, if
+C<author> is given as a scalar, it will converted to an array reference
+containing the item.
+
+=cut
 
 sub convert_to {
   my ($self, $new_version) = @_;
