@@ -1,3 +1,4 @@
+use 5.006;
 use strict;
 package CPAN::Meta::Spec;
 # vi:tw=72
