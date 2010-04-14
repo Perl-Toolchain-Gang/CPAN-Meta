@@ -11,12 +11,15 @@ package CPAN::Meta::Converter;
 
   my $cmc = CPAN::Meta::Converter->new( $struct );
 
-  my $new_struct = $cmc->convert_to("2");
+  my $new_struct = $cmc->convert( version => "2" );
 
 =head1 DESCRIPTION
 
-This module converts a CPAN Meta structure of a particular version to a
-new version.
+This module converts CPAN Meta structures from one form to another.  The
+primary use is to convert older structures to the most modern version of
+the specification, but other transformations may be implemented in the
+future as needed.  (E.g. stripping all custom fields or stripping all
+optional fields.)
 
 =cut
 
@@ -30,6 +33,9 @@ my %known_specs = (
     '1.1' => 'http://module-build.sourceforge.net/META-spec-v1.1.html',
     '1.0' => 'http://module-build.sourceforge.net/META-spec-v1.0.html'
 );
+
+my @spec_list = sort { $a <=> $b } keys %known_specs;
+my ($LOWEST, $HIGHEST) = @spec_list[0,-1];
 
 #--------------------------------------------------------------------------#
 # converters
@@ -189,12 +195,16 @@ sub new {
   return bless $self, $class;
 }
 
-=method convert_to
+=method convert
 
-  my $new_struct = $cmc->convert_to("2");
+  my $new_struct = $cmc->convert( version => "2" );
 
-Returns a new hash reference with the metadata converted to to a
-different specification version.
+Returns a new hash reference with the metadata converted to a
+different form.
+
+Valid parameters include:
+
+=head3 version
 
 Currently, only upconverting older versions is supported.  Converting a
 file to its own version will standardize the format. For exmaple, if
@@ -203,8 +213,12 @@ containing the item.
 
 =cut
 
-sub convert_to {
-  my ($self, $new_version) = @_;
+sub convert {
+  my ($self, %args) = @_;
+  my $args = { %args };
+
+  my $new_version = $args->{version} || $HIGHEST;
+
   my ($old_version) = $self->{spec};
 
   if ( $old_version == $new_version ) {

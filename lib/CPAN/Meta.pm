@@ -176,7 +176,7 @@ sub new {
 
   # return up-converted to version 2
   my $cmc = CPAN::Meta::Converter->new( $struct );
-  my $self = $cmc->convert_to( 2 );
+  my $self = $cmc->convert( version => 2 );
 
   bless $self => $class;
 }
