@@ -1,6 +1,7 @@
 use 5.006;
 use strict;
 use warnings;
+use autodie;
 package CPAN::Meta::Prereqs;
 # ABSTRACT: a set of distribution prerequisites by phase and type
 

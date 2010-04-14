@@ -1,6 +1,7 @@
 use 5.006;
 use strict;
 use warnings;
+use autodie;
 package CPAN::Meta::Validator;
 # ABSTRACT: validate CPAN distribution metadata structures
 
