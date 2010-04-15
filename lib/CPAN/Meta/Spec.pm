@@ -720,9 +720,27 @@ to work with the repository, e.g. git, svn, cvs, darcs, bzr or hg.
 
 =head2 DEPRECATED FIELDS
 
+=head3 build_requires
+
+I<(Deprecated)> (Spec 1.0) [optional] {String}
+
+Replaced by C<prereqs>
+
+=head3 configure_requires
+
+I<(Deprecated)> (Spec 1.4) [optional] {String}
+
+Replaced by C<prereqs>
+
+=head3 conflicts
+
+I<(Deprecated)> (Spec 1.0) [optional] {String}
+
+Replaced by C<prereqs>
+
 =head3 distribution_type
 
-I<Deprecated> (Spec 1.0) [optional] {String}
+I<(Deprecated)> (Spec 1.0) [optional] {String}
 
 This field indicated 'module' or 'script' but was considered
 meaningless, since many distributions are hybrids of several kinds of
@@ -733,6 +751,18 @@ things.
 I<(Deprecated)> (Spec 1.0) [optional] {Map}
 
 This field has been renamed to L</"no_index">.
+
+=head3 recommends
+
+I<(Deprecated)> (Spec 1.0) [optional] {String}
+
+Replaced by C<prereqs>
+
+=head3 requires
+
+I<(Deprecated)> (Spec 1.0) [optional] {String}
+
+Replaced by C<prereqs>
 
 =head1 VERSION NUMBERS
 
