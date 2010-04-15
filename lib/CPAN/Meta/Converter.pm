@@ -185,7 +185,10 @@ my %up_convert = (
     'resources'           => \&_resources_2,
 
     # drop these deprecated fields, but only after we convert
-    ':drop' => [ qw/ private distribution_type / ],
+    ':drop' => [ qw(
+        requires build_requires recommends conflicts configure_requires
+        private distribution_type
+    ) ],
 
     # other random keys need x_ prefixing
     ':custom'              => \&_prefix_custom,
