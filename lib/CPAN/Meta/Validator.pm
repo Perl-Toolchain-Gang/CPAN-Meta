@@ -83,62 +83,62 @@ my $prereq_map = {
 };
 
 my %definitions = (
-'2' => {
-#  'header'              => { mandatory => 1, value => \&header },
-  'meta-spec'           => { mandatory => 1, 'map' => { version => { mandatory => 1, value => \&version},
-                                                        url     => { value => \&url } } },
+  '2' => {
+    # REQUIRED
+    'abstract'            => { mandatory => 1, value => \&string  },
+    'author'              => { mandatory => 1, lazylist => { value => \&string } },
+    'dynamic_config'      => { mandatory => 1, value => \&boolean },
+    'generated_by'        => { mandatory => 1, value => \&string  },
+    'license'             => { mandatory => 1, lazylist => { value => \&license } },
+    'meta-spec' => {
+      mandatory => 1,
+      'map' => {
+        version => { mandatory => 1, value => \&version},
+        url     => { value => \&url }
+      }
+    },
+    'name'                => { mandatory => 1, value => \&string  },
+    'version'             => { mandatory => 1, value => \&version },
 
-  'name'                => { mandatory => 1, value => \&string  },
-  'version'             => { mandatory => 1, value => \&version },
-  'abstract'            => { mandatory => 1, value => \&string  },
-  'author'              => { mandatory => 1, lazylist => { value => \&string } },
-  'license'             => { mandatory => 1, lazylist => { value => \&license } },
-  'generated_by'        => { mandatory => 1, value => \&string  },
-  'dynamic_config'      => { mandatory => 1, value => \&boolean },
-
-  'prereqs' => $prereq_map,
-
-  'optional_features'   => {
-    'map'       => {
+    # OPTIONAL
+    'keywords'    => { lazylist => { value => \&string } },
+    'no_index'    => $no_index_1_3,
+    'optional_features'   => {
+      'map'       => {
         ':key'  => { name => \&identifier,
-            'map'   => {
-              description        => { value => \&string },
-              prereqs => $prereq_map,
-            }
+          'map'   => {
+            description        => { value => \&string },
+            prereqs => $prereq_map,
+          }
         }
-     }
+      }
+    },
+    'prereqs' => $prereq_map,
+    'provides'    => {
+      'map'       => { ':key' => { name  => \&module,
+          'map' => { file    => { mandatory => 1, value => \&file },
+            version => { value => \&version } } } }
+    },
+    'resources'   => {
+      'map'       => { license    => { lazylist => { value => \&url } },
+        homepage   => { value => \&url },
+        bugtracker => { 'map' => {
+            web => { value => \&url },
+            mailto => { value => \&string},
+          }},
+        repository => { 'map' => {
+            web => { value => \&url },
+            url => { value => \&url },
+            type => { value => \&string },
+          }},
+        ':key'     => { value => \&string, name => \&resource_2 },
+      }
+    },
+
+    # CUSTOM -- additional user defined key/value pairs
+    # note we can only validate the key name, as the structure is user defined
+    ':key'        => { name => \&keyword },
   },
-
-  'provides'    => {
-    'map'       => { ':key' => { name  => \&module,
-                                 'map' => { file    => { mandatory => 1, value => \&file },
-                                            version => { value => \&version } } } }
-  },
-
-  'no_index'    => $no_index_1_3,
-
-  'keywords'    => { lazylist => { value => \&string } },
-
-  'resources'   => {
-    'map'       => { license    => { lazylist => { value => \&url } },
-                     homepage   => { value => \&url },
-                     bugtracker => { 'map' => {
-                         web => { value => \&url },
-                         mailto => { value => \&string},
-                     }},
-                     repository => { 'map' => {
-                         web => { value => \&url },
-                         url => { value => \&url },
-                         type => { value => \&string },
-                     }},
-                     ':key'     => { value => \&string, name => \&resource_2 },
-    }
-  },
-
-  # additional user defined key/value pairs
-  # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&keyword },
-},
 
 '1.4' => {
 #  'header'              => { mandatory => 1, value => \&header },
@@ -368,7 +368,7 @@ my %definitions = (
 },
 );
 
-#--------------------------------------------------------------------------# 
+#--------------------------------------------------------------------------#
 # Code
 #--------------------------------------------------------------------------#
 
