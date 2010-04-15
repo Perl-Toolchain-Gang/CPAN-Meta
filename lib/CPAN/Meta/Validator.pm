@@ -122,9 +122,16 @@ my %definitions = (
   'resources'   => {
     'map'       => { license    => { lazylist => { value => \&url } },
                      homepage   => { value => \&url },
-                     bugtracker => { value => \&url },
-                     repository => { value => \&url },
-                     ':key'     => { value => \&string, name => \&resource },
+                     bugtracker => { 'map' => {
+                         web => { value => \&url },
+                         mailto => { value => \&string},
+                     }},
+                     repository => { 'map' => {
+                         web => { value => \&url },
+                         url => { value => \&url },
+                         type => { value => \&string },
+                     }},
+                     ':key'     => { value => \&string, name => \&resource_2 },
     }
   },
 
@@ -809,7 +816,20 @@ sub resource {
     } else {
         $key = '<undef>';
     }
-    $self->_error( "Resource '$key' must be in CamelCase." );
+    $self->_error( "Custom resource '$key' must be in CamelCase." );
+    return 0;
+}
+
+sub resource_2 {
+    my ($self,$key) = @_;
+    if(defined $key) {
+        # a valid user defined key should be alphabetic
+        # and begin with x_ or X_
+        return 1    if($key && $key =~ /^x_([-_a-z]+)$/i);  # user defined
+    } else {
+        $key = '<undef>';
+    }
+    $self->_error( "Custom resource '$key' must begin with 'x_' or 'X_'." );
     return 0;
 }
 
