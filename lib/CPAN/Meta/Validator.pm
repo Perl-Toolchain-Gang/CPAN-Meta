@@ -101,6 +101,7 @@ my %definitions = (
     'version'             => { mandatory => 1, value => \&version },
 
     # OPTIONAL
+    'description' => { value => \&string },
     'keywords'    => { lazylist => { value => \&string } },
     'no_index'    => $no_index_1_3,
     'optional_features'   => {
