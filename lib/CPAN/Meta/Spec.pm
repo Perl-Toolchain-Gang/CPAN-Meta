@@ -135,7 +135,7 @@ primitive types: Boolean, String, List and Map.  Other types are
 subtypes of primitives and define compound data structures or define
 constraints on the values of the data element.
 
-=head1 Boolean
+=head2 Boolean
 
 A I<Boolean> is used to provide a true or false value.  It B<must> be
 represented as a defined value.
