@@ -1085,17 +1085,17 @@ during the proposal process.
 Several others have contributed patches over the years.  The full list
 of contributors in the repository history currently includes:
 
-  2shortplanks <mark@twoshortplanks.com>
-  Christopher J. Madsen <github@cjmweb.net>
-  Damyan Ivanov <dmn@debian.org>
-  David Golden <dagolden@cpan.org>
-  Eric Wilhelm <ewilhelm@cpan.org>
-  Ken Williams <kwilliams@cpan.org>
-  Lars DIECKOW <daxim@cpan.org>
-  Michael G. Schwern <schwern@pobox.com>
-  Randy Sims <randys@thepierianspring.org>
-  Ricardo Signes <rjbs@cpan.org>
-  Avar Arnfjord Bjarmason <avarab@gmail.com>
+  2shortplanks
+  Avar Arnfjord Bjarmason
+  Christopher J. Madsen
+  Damyan Ivanov
+  David Golden
+  Eric Wilhelm
+  Ken Williams
+  Lars DIECKOW
+  Michael G. Schwern
+  Randy Sims
+  Ricardo Signes
 
 =cut
 
