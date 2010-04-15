@@ -717,25 +717,25 @@ to work with the repository, e.g. git, svn, cvs, darcs, bzr or hg.
 
 =head3 build_requires
 
-I<(Deprecated in Spec 2) [optional] {String}
+I<(Deprecated in Spec 2)> [optional] {String}
 
 Replaced by C<prereqs>
 
 =head3 configure_requires
 
-I<(Deprecated in Spec 2) [optional] {String}
+I<(Deprecated in Spec 2)> [optional] {String}
 
 Replaced by C<prereqs>
 
 =head3 conflicts
 
-I<(Deprecated in Spec 2) [optional] {String}
+I<(Deprecated in Spec 2)> [optional] {String}
 
 Replaced by C<prereqs>
 
 =head3 distribution_type
 
-I<(Deprecated in Spec 2) [optional] {String}
+I<(Deprecated in Spec 2)> [optional] {String}
 
 This field indicated 'module' or 'script' but was considered
 meaningless, since many distributions are hybrids of several kinds of
@@ -743,25 +743,25 @@ things.
 
 =head3 license_uri
 
-I<(Deprecated in Spec 1.2) [optional] {URL}
+I<(Deprecated in Spec 1.2)> [optional] {URL}
 
 Replaced by C<license> in C<resources>
 
 =head3 private
 
-I<(Deprecated in Spec 1.2) [optional] {Map}
+I<(Deprecated in Spec 1.2)> [optional] {Map}
 
 This field has been renamed to L</"no_index">.
 
 =head3 recommends
 
-I<(Deprecated in Spec 2) [optional] {String}
+I<(Deprecated in Spec 2)> [optional] {String}
 
 Replaced by C<prereqs>
 
 =head3 requires
 
-I<(Deprecated in Spec 2) [optional] {String}
+I<(Deprecated in Spec 2)> [optional] {String}
 
 Replaced by C<prereqs>
 
