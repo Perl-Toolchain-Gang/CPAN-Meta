@@ -12,9 +12,9 @@ package CPAN::Meta::Spec;
   my $distmeta = {
     name => 'Module-Build',
     abstract => 'Build and install Perl modules',
-    description =>  "Module::Build is a system for building, testing, "
-                .   "and installing Perl modules.  It is meant to be an "
-                .   "alternative to ExtUtils::MakeMaker... blah blah blah",
+    description =>  "Module::Build is a system for "
+      . "building, testing, and installing Perl modules. "  
+      . "It is meant to ... blah blah blah ...",
     version  => '0.36',
     author   => [
       'Ken Williams <kwilliams@cpan.org>',
@@ -25,24 +25,15 @@ package CPAN::Meta::Spec;
       runtime => {
         requires => {
           'perl'   => '5.006',
-          'Config' => '0',
-          'Cwd'    => '0',
-          'Data::Dumper' => '0',
           'ExtUtils::Install' => '0',
           'File::Basename' => '0',
           'File::Compare'  => '0',
-          'File::Copy' => '0',
-          'File::Find' => '0',
-          'File::Path' => '0',
-          'File::Spec' => '0',
           'IO::File'   => '0',
         },
         recommends => {
           'Archive::Tar' => '1.00',
           'ExtUtils::Install' => '0.3',
           'ExtUtils::ParseXS' => '2.02',
-          'Pod::Text' => '0',
-          'YAML' => '0.35',
         },
       },
       build => {
@@ -75,7 +66,7 @@ package CPAN::Meta::Spec;
 =head1 DESCRIPTION
 
 This document describes version 2 of the CPAN distribution metadata
-specification, also knows as the "CPAN Meta Spec".
+specification, also known as the "CPAN Meta Spec".
 
 Distribution metadata describe important properties of Perl
 distributions. Distribution building tools like Module::Build,
@@ -101,7 +92,7 @@ or C<DBI>.
 This refers to a reusable library of code contained in a single file.
 Modules usually contain one or more packages and are often referred
 to by the name of a primary package that can be mapped to the file
-name. For example, one would refer to C<File::Spec> instead of
+name. For example, one might refer to C<File::Spec> instead of
 F<File/Spec.pm>
 
 =item package
@@ -112,14 +103,14 @@ C<$VERSION> variable in the namespace.
 
 =item consumer
 
-The term I<consumer> refers to code that reads a metafile, deserializes a
-metafile into a data structure in memory, or interprets the data
-structure of metadata elements.
+This refers to code that reads a metadata file, deserializes it into a
+data structure in memory, or interprets a data structure of metadata
+elements.
 
 =item producer
 
-The term I<producer> refers to code that constructs a metadata data
-structure, serializes into a bytestream and writes it to disk.
+This refers to code that constructs a metadata data structure,
+serializes into a bytestream and/or writes it to disk.
 
 =item must, should, may, etc.
 
@@ -133,7 +124,7 @@ Fields in the L</STRUCTURE> section describe data elements, each of
 which has an associated data type as described herein.  There are four
 primitive types: Boolean, String, List and Map.  Other types are
 subtypes of primitives and define compound data structures or define
-constraints on the values of the data element.
+constraints on the values of a data element.
 
 =head2 Boolean
 
@@ -167,7 +158,8 @@ value elements may be of mixed types.
 =head2 License String
 
 A I<License String> is a subtype of String with a restricted set of
-values.  It is described in detail under L</license>.
+values.  Valid values are described in detail in the description of
+the L</license> field.
 
 =head2 URL
 
@@ -176,20 +168,20 @@ Identifier.  [ This type is called URL and not URI for historical reasons. ]
 
 =head2 Version
 
-A I<Version> is a subtype of String.  It descibes the values that may be
-used as versions of packages or distributions.  It is described in
-detail under L</Version Formats>.
+A I<Version> is a subtype of String containing a value that describes
+the version number of packages or distributions.  Restrictions on format
+are described in detail in the L</Version Formats> section.
 
 =head2 Version Range
 
 The I<Version Range> type is a subtype of String.  It describes a range
-of versions that may be present or installed to fulfill prerequisites.
-It is specified below under L</Version Ranges>
+of Versions that may be present or installed to fulfill prerequisites.
+It is specified in detail in the L</Version Ranges> section.
 
 =head1 STRUCTURE
 
-The distribution metadata structure is a data element of type Map.
-This section describes valid keys within the Map.
+The metadata structure is a data element of type Map.  This section
+describes valid keys within the Map.
 
 Any keys not described in this specification document (whether top-level
 or within compound data structures described herein) are considered
@@ -198,8 +190,9 @@ underscore; i.e. they must match the pattern: C<< qr{\Ax_}i >>.  If a
 custom key refers to a compound data structure, subkeys within it do not
 need an "x_" or "X_" prefix.
 
-Consumers of metadata information B<may> ignore any or all custom keys.
-All other keys not described herein are invalid and should be ignored.
+Consumers of metadata may ignore any or all custom keys.  All other keys
+not described herein are invalid and should be ignored by consumers.
+Producers must not generate or output invalid keys.
 
 For each key, an example is provided followed by a description.  The
 description begins with the version of spec in which the key was added
@@ -207,8 +200,8 @@ or in which the definition was modified, whether the key is I<required>
 or I<optional> and the data type of the corresponding data element.
 These items are in parentheses, brackets and braces, respectively.
 
-If a data type is a Map or Map subtype, subkeys will be described
-similarly.
+If a data type is a Map or Map subtype, valid subkeys will be described
+as well.
 
 Some fields are marked I<Deprecated>.  These are shown for historical
 context and must not be produced in or consumed from any metadata structure
@@ -222,7 +215,7 @@ Example:
 
   abstract => 'Build and install Perl modules'
 
-(Spec 1.1) [required] {String}
+(Spec 1.2) [required] {String}
 
 This is a short description of the purpose of the distribution.
 
@@ -232,7 +225,7 @@ Example:
 
   author => [ 'Ken Williams <kwilliams@cpan.org>' ]
 
-(Spec 1.1) [required] {List of one or more Strings}
+(Spec 1.2) [required] {List of one or more Strings}
 
 This List indicates the person(s) to contact concerning the
 distribution. The prefered form of the contact string is:
@@ -254,7 +247,7 @@ of the original author.
 
 Example:
 
-  dynamic_config => 0
+  dynamic_config => 1
 
 (Spec 2) [required] {Boolean}
 
@@ -265,14 +258,14 @@ This field should be set to a true value if the distribution performs
 some dynamic configuration (asking questions, sensing the environment,
 etc.) as part of its configuration.  This field should be set to a false
 value to indicate that prerequisites included in metadata may be
-considered valid for static analysis.
+considered final and valid for static analysis.
 
 This field explicitly B<does not> indicate whether installation may be
 safely performed without using a Makefile or Build file, as there may be
 special files to install or custom installation targets (e.g. for
 dual-life modules that exist on CPAN as well as in the Perl core).  This
 field only defines whether prerequisites are complete as given in the
-metadata file.
+metadata.
 
 =head3 generated_by
 
@@ -299,7 +292,7 @@ Example:
 
 One or more licenses that apply to some or all of the files in the
 distribution.  If multiple licenses are listed, the distribution
-documentation must be consulted to clarify the interpretation of
+documentation should be consulted to clarify the interpretation of
 multiple licenses.
 
 The following list of license strings are valid:
@@ -351,14 +344,14 @@ Example:
     url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
   }
 
-(Spec 1.1) [required] {Map}
+(Spec 1.2) [required] {Map}
 
 This field indicates the version of the CPAN Meta Spec that should be
 used to interpret the metadata.  Consumers must check this key as soon
 as possible and abort further metadata processing if the meta-spec
 version is not supported by the consumer.
 
-It B<must> include entries for the following:
+The following keys are valid, but only C<version> is required.
 
 =over
 
@@ -383,10 +376,10 @@ Example:
 
 (Spec 1.0) [required] {String}
 
-This field is name of the distribution.  This is often created by taking
-the "main package" in the distribution and changing C<::> to C<->, but
-the name may be completely unrelated to the packages within the
-distribution.  C.f. L<http://search.cpan.org/dist/libwww-perl/>.
+This field is the name of the distribution.  This is often created by
+taking the "main package" in the distribution and changing C<::> to
+C<->, but the name may be completely unrelated to the packages within
+the distribution.  C.f. L<http://search.cpan.org/dist/libwww-perl/>.
 
 =head3 release_status
 
@@ -448,9 +441,9 @@ structure refers.
 
 Example:
 
-    description =>  "Module::Build is a system for building, testing, "
-                .   "and installing Perl modules.  It is meant to be an "
-                .   "alternative to "ExtUtils::MakeMaker... blah blah blah"
+    description =>  "Module::Build is a system for "
+      . "building, testing, and installing Perl modules. "  
+      . "It is meant to ... blah blah blah ...",
 
 (Spec 2) [optional] {String}
 
@@ -479,7 +472,7 @@ Example:
     namespace => [ 'My::Module::Sample' ],
   }
 
-(Spec 1.1) [optional] {Map}
+(Spec 1.2) [optional] {Map}
 
 This Map describes any files, directories, packages, and namespaces that
 are private to the packaging or implementation of the distribution and
@@ -595,9 +588,11 @@ Example:
     },
     build => {
       requires => {
-        'Test::More'    => '0.94',
+        'Alien::SDL'    => '1.00',
       },
-      recommendss => {
+    },
+    test => {
+      recommends => {
         'Test::Deep'    => '0.10',
       },
     }
@@ -634,7 +629,7 @@ Example:
     },
   }
 
-(Spec 1.1) [optional] {Map}
+(Spec 1.2) [optional] {Map}
 
 This describes all packages provided by this distribution.  This
 information is used by distribution and automation mechanisms like
@@ -653,7 +648,7 @@ from the root of the distribution to the module containing the package.
 
 =item version
 
-This field contains the I<Version> String of the package.
+This field contains a I<Version> String for the package, if one exists.
 
 =back
 
@@ -690,9 +685,9 @@ The official home of this project on the web.
 
 =item license
 
-A List of URL's that relate to this distribution's license.  As with the
-top-level C<license> field, distribution documentation must be consulted
-to clarify the interpretation of multiple licenses.
+A List of I<URL>'s that relate to this distribution's license.  As with the
+top-level C<license> field, distribution documentation should be consulted
+to clarify the interpretation of multiple licenses provided here.
 
 =item bugtracker
 
@@ -722,45 +717,51 @@ to work with the repository, e.g. git, svn, cvs, darcs, bzr or hg.
 
 =head3 build_requires
 
-I<(Deprecated)> (Spec 1.0) [optional] {String}
+I<(Deprecated in Spec 2) [optional] {String}
 
 Replaced by C<prereqs>
 
 =head3 configure_requires
 
-I<(Deprecated)> (Spec 1.4) [optional] {String}
+I<(Deprecated in Spec 2) [optional] {String}
 
 Replaced by C<prereqs>
 
 =head3 conflicts
 
-I<(Deprecated)> (Spec 1.0) [optional] {String}
+I<(Deprecated in Spec 2) [optional] {String}
 
 Replaced by C<prereqs>
 
 =head3 distribution_type
 
-I<(Deprecated)> (Spec 1.0) [optional] {String}
+I<(Deprecated in Spec 2) [optional] {String}
 
 This field indicated 'module' or 'script' but was considered
 meaningless, since many distributions are hybrids of several kinds of
 things.
 
+=head3 license_uri
+
+I<(Deprecated in Spec 1.2) [optional] {URL}
+
+Replaced by C<license> in C<resources>
+
 =head3 private
 
-I<(Deprecated)> (Spec 1.0) [optional] {Map}
+I<(Deprecated in Spec 1.2) [optional] {Map}
 
 This field has been renamed to L</"no_index">.
 
 =head3 recommends
 
-I<(Deprecated)> (Spec 1.0) [optional] {String}
+I<(Deprecated in Spec 2) [optional] {String}
 
 Replaced by C<prereqs>
 
 =head3 requires
 
-I<(Deprecated)> (Spec 1.0) [optional] {String}
+I<(Deprecated in Spec 2) [optional] {String}
 
 Replaced by C<prereqs>
 
@@ -870,8 +871,8 @@ C<test> phase, this entry would appear in the distribution metadata:
 Requirements for regular use must be listed in the C<runtime> phase.
 Other requirements should be listed in the earliest stage in which they
 are required and consumers must accumulate and satisfy requirements
-across phases before executing the activity. For example, I<build>
-requirements must also be available during the I<test> phase.
+across phases before executing the activity. For example, C<build>
+requirements must also be available during the C<test> phase.
 
   before action       requirements that must be met
   ----------------    --------------------------------
@@ -898,8 +899,9 @@ dependencies from other phases.
 =item configure
 
 The configure phase occurs before any dynamic configuration has been
-attempted.  Libraries required by the configure phase B<must> be installed
-before the distribution building tool has been executed.
+attempted.  Libraries required by the configure phase B<must> be
+available for use before the distribution building tool has been
+executed.
 
 =item build
 
@@ -983,7 +985,7 @@ it could result in Class-MOP-0.36.tar.gz being installed, overwriting
 any files from Class-MOP-0.94.tar.gz.
 
 Consumers of metadata B<should> test whether prerequisites would result
-in installed module files being "owngraded" to an older version and
+in installed module files being "downgraded" to an older version and
 B<may> warn users or ignore the prerequisite that would cause such a
 result.
 
@@ -994,10 +996,10 @@ JSON-encoded data and packaged with distributions as the file
 F<META.json>.
 
 In the past, the distribution metadata structure had been packed with
-library distributions as F<META.yml>, a file in the YAML Tiny format
-(for which, see L<YAML::Tiny>).  Tools that look for distribution
-metadata should be capable of loading F<META.yml>, but F<META.json>
-should be preferred if both are found.
+distributions as F<META.yml>, a file in the YAML Tiny format (for which,
+see L<YAML::Tiny>).  Tools that consume distribution metadata from disk
+should be capable of loading F<META.yml>, but should prefer F<META.json>
+if both are found.
 
 =head1 NOTES FOR IMPLEMENTORS
 

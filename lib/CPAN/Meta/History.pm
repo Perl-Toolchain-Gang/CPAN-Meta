@@ -20,7 +20,7 @@ change logs, repository commit messages and the published HTML files.
 In some cases, particularly prior to version 1.2, the exact version
 when certain fields were introduced or changed is inconsistent between
 sources.  When in doubt, the published HTML files for versions 1.0 to
-1.4 as they existed when verison 2 was developed are used as the
+1.4 as they existed when version 2 was developed are used as the
 definitive source.
 
 Starting with version 2, the specification document is part of the
