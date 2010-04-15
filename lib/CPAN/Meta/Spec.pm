@@ -256,7 +256,7 @@ Example:
 
   dynamic_config => 0
 
-(Spec 2) [required] {Boolean} 
+(Spec 2) [required] {Boolean}
 
 A boolean flag indicating whether a F<Build.PL> or F<Makefile.PL> (or
 similar) must be executed to determine prerequisites.
@@ -394,7 +394,7 @@ Example:
 
   release_status => 'stable'
 
-(Spec 2) [required] {String} 
+(Spec 2) [required] {String}
 
 This field provides the  release status of this distribution.  If the
 C<version> field contains an underscore character, then
@@ -611,7 +611,7 @@ or C<runtime>.  Values are Maps in which the keys name the type of
 prerequisite relationship such as C<requires>, C<recommends>, or
 C<suggests> and the value provides a set of prerequisite relations.  The
 set of relations B<must> be specified as a Map of package names to
-version ranges.  
+version ranges.
 
 The full definition for this field is given in the L</Prereq Spec>
 section.
@@ -722,7 +722,7 @@ to work with the repository, e.g. git, svn, cvs, darcs, bzr or hg.
 
 =head3 distribution_type
 
-I<Deprecated> (Spec 1.0) [optional] {String} 
+I<Deprecated> (Spec 1.0) [optional] {String}
 
 This field indicated 'module' or 'script' but was considered
 meaningless, since many distributions are hybrids of several kinds of
@@ -730,7 +730,7 @@ things.
 
 =head3 private
 
-I<(Deprecated)> (Spec 1.0) [optional] {Map} 
+I<(Deprecated)> (Spec 1.0) [optional] {Map}
 
 This field has been renamed to L</"no_index">.
 
@@ -1038,6 +1038,32 @@ Module::Install, L<http://search.cpan.org/dist/Module-Install/>
 JSON, L<http://json.org/>
 
 YAML, L<http://www.yaml.org/>
+
+=head1 AUTHORS AND CONTRIBUTORS
+
+Ken Williams wrote the original CPAN Meta Spec (also known as the
+"META.yml spec") in 2003 and maintained it through several revisions
+with input from various members of the community.  In 2005, Randy
+Sims redrafted it from HTML to POD for the version 1.2 release.
+
+In late 2009, David Golden organized the version 2 proposal review
+process.  David and Ricardo Signes assembled the final version 2 draft
+in April 2010.
+
+Several others have added patches over the years.  The full list
+of contributors in the repository history includes:
+
+  2shortplanks <mark@twoshortplanks.com>
+  Christopher J. Madsen <github@cjmweb.net>
+  Damyan Ivanov <dmn@debian.org>
+  David Golden <dagolden@cpan.org>
+  Eric Wilhelm <ewilhelm@cpan.org>
+  Ken Williams <kwilliams@cpan.org>
+  Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>
+  Michael G. Schwern <schwern@pobox.com>
+  Randy Sims <randys@thepierianspring.org>
+  Ricardo Signes <rjbs@cpan.org>
+  Ævar Arnfjörð Bjarmason <avarab@gmail.com>
 
 =cut
 
