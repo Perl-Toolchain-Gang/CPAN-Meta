@@ -66,7 +66,7 @@ my $no_index_1_2 = {
 };
 
 my $no_index_1_1 = {
-    'map'       => { ':key'     => { name => \&keyword, list => { value => \&string } },
+    'map'       => { ':key'     => { name => \&string, list => { value => \&string } },
     }
 };
 
@@ -131,13 +131,13 @@ my %definitions = (
             url => { value => \&url },
             type => { value => \&string },
           }},
-        ':key'     => { value => \&string, name => \&resource_2 },
+        ':key'     => { value => \&string, name => \&custom_2 },
       }
     },
 
     # CUSTOM -- additional user defined key/value pairs
     # note we can only validate the key name, as the structure is user defined
-    ':key'        => { name => \&keyword },
+    ':key'        => { name => \&custom_2 },
   },
 
 '1.4' => {
@@ -190,13 +190,13 @@ my %definitions = (
                      homepage   => { value => \&url },
                      bugtracker => { value => \&url },
                      repository => { value => \&url },
-                     ':key'     => { value => \&string, name => \&resource },
+                     ':key'     => { value => \&string, name => \&custom_1 },
     }
   },
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&keyword },
+  ':key'        => { name => \&custom_1 },
 },
 
 '1.3' => {
@@ -248,13 +248,13 @@ my %definitions = (
                      homepage   => { value => \&url },
                      bugtracker => { value => \&url },
                      repository => { value => \&url },
-                     ':key'     => { value => \&string, name => \&resource },
+                     ':key'     => { value => \&string, name => \&custom_1 },
     }
   },
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&keyword },
+  ':key'        => { name => \&custom_1 },
 },
 
 # v1.2 is misleading, it seems to assume that a number of fields where created
@@ -310,13 +310,13 @@ my %definitions = (
                      homepage   => { value => \&url },
                      bugtracker => { value => \&url },
                      repository => { value => \&url },
-                     ':key'     => { value => \&string, name => \&resource },
+                     ':key'     => { value => \&string, name => \&custom_1 },
     }
   },
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&keyword },
+  ':key'        => { name => \&custom_1 },
 },
 
 # note that the 1.1 spec doesn't specify optional or mandatory fields, what
@@ -341,7 +341,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&keyword },
+  ':key'        => { name => \&custom_1 },
 },
 
 # note that the 1.0 spec doesn't specify optional or mandatory fields, what
@@ -364,7 +364,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&keyword },
+  ':key'        => { name => \&custom_1 },
 },
 );
 
@@ -601,20 +601,18 @@ Validates for a boolean value. Currently these values are '1', '0', 'true',
 Validates that a value is given for the license. Returns 1 if an known license
 type, or 2 if a value is given but the license type is not a recommended one.
 
-=item * resource($self,$key,$value)
+=item * custom_1($self,$key,$value)
 
 Validates that the given key is in CamelCase, to indicate a user defined
-keyword.
+keyword and only has characters in the class [-_a-zA-Z].  In version 1.X
+of the spec, this was only explicitly stated for 'resources', but
+the validation will allow it elsewhere as it was not specifically
+prohibited either.
 
-=item * keyword($self,$key,$value)
+=item * custom_2($self,$key,$value)
 
-Validates that key is in an acceptable format for the META specification,
-i.e. any in the character class [-_a-z].
-
-For user defined keys, although not explicitly stated in the specifications
-(v1.0 - v1.4), the convention is to precede the key with a pattern matching
-qr{\Ax_}i. Following this any character from the character class [-_a-zA-Z]
-can be used. This clarification has been added to v2.0 of the specification.
+Validates that the given key begins with 'x_' or 'X_', to indicate a user
+defined keyword and only has characters in the class [-_a-zA-Z]
 
 =item * identifier($self,$key,$value)
 
@@ -807,7 +805,7 @@ sub license {
     return 0;
 }
 
-sub resource {
+sub custom_1 {
     my ($self,$key) = @_;
     if(defined $key) {
         # a valid user defined key should be alphabetic
@@ -820,7 +818,7 @@ sub resource {
     return 0;
 }
 
-sub resource_2 {
+sub custom_2 {
     my ($self,$key) = @_;
     if(defined $key) {
         # a valid user defined key should be alphabetic
@@ -830,18 +828,6 @@ sub resource_2 {
         $key = '<undef>';
     }
     $self->_error( "Custom resource '$key' must begin with 'x_' or 'X_'." );
-    return 0;
-}
-
-sub keyword {
-    my ($self,$key) = @_;
-    if(defined $key) {
-        return 1    if($key && $key =~ /^([-_a-z]+)$/);     # spec defined
-        return 1    if($key && $key =~ /^x_([-_a-z]+)$/i);  # user defined
-    } else {
-        $key = '<undef>';
-    }
-    $self->_error( "Key '$key' is not a legal keyword." );
     return 0;
 }
 
