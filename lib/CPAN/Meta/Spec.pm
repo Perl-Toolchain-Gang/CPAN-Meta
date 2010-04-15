@@ -1039,19 +1039,21 @@ JSON, L<http://json.org/>
 
 YAML, L<http://www.yaml.org/>
 
-=head1 AUTHORS AND CONTRIBUTORS
+=head1 CONTRIBUTORS
 
 Ken Williams wrote the original CPAN Meta Spec (also known as the
 "META.yml spec") in 2003 and maintained it through several revisions
 with input from various members of the community.  In 2005, Randy
-Sims redrafted it from HTML to POD for the version 1.2 release.
+Sims redrafted it from HTML to POD for the version 1.2 release.  Ken
+continued to maintain the spec through version 1.4.
 
 In late 2009, David Golden organized the version 2 proposal review
-process.  David and Ricardo Signes assembled the final version 2 draft
-in April 2010.
+process.  David and Ricardo Signes drafted the final version 2 spec
+in April 2010 based on the version 1.4 spec and patches contributed
+during the proposal process.
 
-Several others have added patches over the years.  The full list
-of contributors in the repository history includes:
+Several others have contributed patches over the years.  The full list
+of contributors in the repository history currently includes:
 
   2shortplanks <mark@twoshortplanks.com>
   Christopher J. Madsen <github@cjmweb.net>
@@ -1059,11 +1061,11 @@ of contributors in the repository history includes:
   David Golden <dagolden@cpan.org>
   Eric Wilhelm <ewilhelm@cpan.org>
   Ken Williams <kwilliams@cpan.org>
-  Lars Dɪᴇᴄᴋᴏᴡ 迪拉斯 <daxim@cpan.org>
+  Lars DIECKOW <daxim@cpan.org>
   Michael G. Schwern <schwern@pobox.com>
   Randy Sims <randys@thepierianspring.org>
   Ricardo Signes <rjbs@cpan.org>
-  Ævar Arnfjörð Bjarmason <avarab@gmail.com>
+  Avar Arnfjord Bjarmason <avarab@gmail.com>
 
 =cut
 
