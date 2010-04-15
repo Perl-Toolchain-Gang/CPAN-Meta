@@ -127,15 +127,15 @@ sub _optional_features_2 {
 my $resource_conversion_spec = {
   license    => \&_listify,
   homepage   => \&_keep,
-  bugtracker => sub { return { web => $_[0] } },
-  repository => sub { return { web => $_[0] } },
+  bugtracker => sub { return $_[0] ? { web => $_[0] } : undef },
+  repository => sub { return $_[0] ? { web => $_[0] } : undef },
   ':custom'  => \&_prefix_custom,
 };
 
 sub _resources_2 {
   my (undef, undef, $meta) = @_;
   return undef unless exists $meta->{resources};
-  return _convert($meta->{resource}, $resource_conversion_spec);
+  return _convert($meta->{resources}, $resource_conversion_spec);
 }
 
 sub _convert {
