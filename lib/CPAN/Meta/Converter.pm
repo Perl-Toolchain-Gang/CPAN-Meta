@@ -145,7 +145,8 @@ sub _convert {
   for my $key ( %$spec ) {
     next if $key eq ':custom' || $key eq ':drop';
     next unless my $fcn = $spec->{$key};
-    $new_data->{$key} = $fcn->($data->{$key}, $key, $data, $to_version);
+    my $new_value = $fcn->($data->{$key}, $key, $data, $to_version);
+    $new_data->{$key} = $new_value if defined $new_value;
   }
 
   my $drop_list   = $spec->{':drop'};
@@ -153,6 +154,7 @@ sub _convert {
 
   for my $key ( keys %$data ) {
     next if $drop_list && grep { $key eq $_ } @$drop_list;
+    next if $spec->{$key}; # we handled it
     $new_data->{ $customizer->($key) } = $data->{$key};
   }
 
