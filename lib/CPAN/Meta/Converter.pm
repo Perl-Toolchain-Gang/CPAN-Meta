@@ -188,6 +188,32 @@ my %up_convert = (
     # other random keys need x_ prefixing
     ':custom'              => \&_prefix_custom,
   },
+  '1.4-from-1.3' => {
+    'meta-spec'           => \&_change_meta_spec,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
+    'abstract'            => \&_keep,
+    'author'              => \&_keep,
+    'license'             => \&_keep,
+    'generated_by'        => \&_generated_by,
+    'dynamic_config'      => \&_keep_or_one,
+#    configure_requires -- didn't exist prior to 1.4
+    'build_requires'      => \&_keep,
+    'requires'            => \&_keep,
+    'recommends'          => \&_keep,
+    'conflicts'           => \&_keep,
+    'optional_features'   => \&_optional_features_1,
+    'provides'            => \&_keep,
+    'no_index'            => \&_keep,
+    'keywords'            => \&_keep,
+    'resources'           => \&_resources_1,
+
+    # drop these deprecated fields, but only after we convert
+    ':drop' => [ qw/ private / ],
+
+    # other random keys are OK if already valid
+    ':custom'              => \&_keep
+  },
 );
 
 #--------------------------------------------------------------------------#
