@@ -15,6 +15,7 @@ my $distmeta = {
     'Ken Williams <kwilliams@cpan.org>',
     'Module-Build List <module-build@perl.org>', # additional contact
   ],
+  release_status => 'stable',
   license  => [ 'perl_5' ],
   prereqs => {
     runtime => {

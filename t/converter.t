@@ -29,8 +29,8 @@ for my $f ( @files ) {
     is ( _spec_version($converted), 2, "converted $original_v to spec version 2");
     my $cmv = CPAN::Meta::Validator->new( $converted );
     ok ( $cmv->is_valid, "converted META is valid" )
-      or diag( "ERRORS:\n" . join( "\n", $cmv->errors ) . "\nMETA:\n"
-      . Dumper($converted)
+      or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
+#      . "\nMETA:\n" . Dumper($converted)
     );
   }
 }

@@ -138,6 +138,12 @@ sub _resources_2 {
   return _convert($meta->{resources}, $resource_conversion_spec);
 }
 
+sub _release_status {
+  my (undef, undef, $meta) = @_;
+  my $version = $meta->{version} || '';
+  return ( $version =~ /_/ ) ? 'testing' : 'stable';
+}
+
 sub _convert {
   my ($data, $spec, $to_version) = @_;
 
@@ -177,6 +183,7 @@ my %up_convert = (
     'license'             => \&_license_2,
     'meta-spec'           => \&_change_meta_spec,
     'name'                => \&_keep,
+    'release_status'      => \&_release_status,
     'version'             => \&_keep,
     # OPTIONAL - from pre-existing
     'keywords'            => \&_keep,

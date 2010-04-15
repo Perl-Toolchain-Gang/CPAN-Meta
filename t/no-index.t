@@ -9,6 +9,7 @@ my %distmeta = (
   abstract => 'inscrutable',
   version  => '1',
   author   => 'Joe',
+  release_status => 'stable',
   license  => 'perl_5',
   'meta-spec' => {
     version => '2',

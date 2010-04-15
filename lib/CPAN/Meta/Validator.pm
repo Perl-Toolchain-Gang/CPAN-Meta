@@ -98,6 +98,7 @@ my %definitions = (
       }
     },
     'name'                => { mandatory => 1, value => \&string  },
+    'release_status'      => { mandatory => 1, value => \&release_status },
     'version'             => { mandatory => 1, value => \&version },
 
     # OPTIONAL
@@ -197,7 +198,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&custom_1 },
+  ':key'        => { name => \&string },
 },
 
 '1.3' => {
@@ -255,7 +256,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&custom_1 },
+  ':key'        => { name => \&string },
 },
 
 # v1.2 is misleading, it seems to assume that a number of fields where created
@@ -317,7 +318,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&custom_1 },
+  ':key'        => { name => \&string },
 },
 
 # note that the 1.1 spec doesn't specify optional or mandatory fields, what
@@ -342,7 +343,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&custom_1 },
+  ':key'        => { name => \&string },
 },
 
 # note that the 1.0 spec doesn't specify optional or mandatory fields, what
@@ -365,7 +366,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&custom_1 },
+  ':key'        => { name => \&string },
 },
 );
 
@@ -606,9 +607,7 @@ type, or 2 if a value is given but the license type is not a recommended one.
 
 Validates that the given key is in CamelCase, to indicate a user defined
 keyword and only has characters in the class [-_a-zA-Z].  In version 1.X
-of the spec, this was only explicitly stated for 'resources', but
-the validation will allow it elsewhere as it was not specifically
-prohibited either.
+of the spec, this was only explicitly stated for 'resources'.
 
 =item * custom_2($self,$key,$value)
 
@@ -639,6 +638,25 @@ sub header {
     }
     $self->_error( "file does not have a valid YAML header." );
     return 0;
+}
+
+sub release_status {
+  my ($self,$key,$value) = @_;
+  if(defined $value) {
+    my $version = $self->{data}{version} || '';
+    if ( $version =~ /_/ ) {
+      return 1 if ( $value =~ /\A(?:testing|unstable)\z/ );
+      $self->_error( "'$value' for '$key' is invalid for version '$version'" );
+    }
+    else {
+      return 1 if ( $value =~ /\A(?:stable|testing|unstable)\z/ );
+      $self->_error( "'$value' for '$key' is invalid" );
+    }
+  }
+  else {
+    $self->_error( "'$key' is not defined" );
+  }
+  return 0;
 }
 
 #my $protocol = qr¬(?:http|https|ftp|afs|news|nntp|mid|cid|mailto|wais|prospero|telnet|gopher)¬;

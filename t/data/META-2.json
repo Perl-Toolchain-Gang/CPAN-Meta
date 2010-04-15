@@ -16,6 +16,7 @@
       "Ken Williams <kwilliams@cpan.org>",
       "Module-Build List <module-build@perl.org>"
    ],
+   "release_status" : "stable",
    "license" : [
       "perl_5"
    ],
