@@ -169,19 +169,21 @@ sub _convert {
 # special ":custom" field is used for keys not recognized in spec
 my %up_convert = (
   '2-from-1.4' => {
+    # MANDATORY
+    'abstract'            => \&_keep,
+    'author'              => \&_listify,
+    'dynamic_config'      => \&_keep_or_one,
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_license_2,
     'meta-spec'           => \&_change_meta_spec,
     'name'                => \&_keep,
     'version'             => \&_keep,
-    'abstract'            => \&_keep,
-    'author'              => \&_listify,
-    'license'             => \&_license_2,
-    'generated_by'        => \&_generated_by,
-    'dynamic_config'      => \&_keep_or_one,
-    'prereqs'             => \&_prereqs,
-    'optional_features'   => \&_optional_features_2,
-    'provides'            => \&_keep,
-    'no_index'            => \&_keep,
+    # OPTIONAL - from pre-existing
     'keywords'            => \&_keep,
+    'no_index'            => \&_keep,
+    'optional_features'   => \&_optional_features_2,
+    'prereqs'             => \&_prereqs,
+    'provides'            => \&_keep,
     'resources'           => \&_resources_2,
 
     # drop these deprecated fields, but only after we convert
