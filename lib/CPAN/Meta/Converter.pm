@@ -63,6 +63,26 @@ sub _change_meta_spec {
   return $element;
 }
 
+my %license_map_2 = (
+  apache => 'apache_2_0',
+  artistic => 'artistic_1',
+  gpl => 'gpl_1',
+  lgpl => 'lgpl_2_1',
+  mozilla => 'mozilla_1_0',
+  perl => 'perl_5',
+);
+
+sub _license_2 {
+  my $element = ref $_[0] eq 'ARRAY' ? $_[0] : [$_[0]];
+  for my $lic ( @$element ) {
+    if ( my $new = $license_map_2{$lic} ) {
+      $lic = $new;
+    }
+  }
+  return $element;
+}
+
+
 sub _prereqs {
   my (undef, undef, $meta) = @_;
   my $prereqs = {};
@@ -152,7 +172,7 @@ my %up_convert = (
     'version'             => \&_keep,
     'abstract'            => \&_keep,
     'author'              => \&_listify,
-    'license'             => \&_listify,
+    'license'             => \&_license_2,
     'generated_by'        => \&_generated_by,
     'dynamic_config'      => \&_keep_or_one,
     'prereqs'             => \&_prereqs,
