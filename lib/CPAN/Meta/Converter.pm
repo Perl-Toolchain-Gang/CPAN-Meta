@@ -24,6 +24,7 @@ optional fields.)
 =cut
 
 use Carp qw(carp confess);
+use CPAN::Meta::Validator;
 
 my %known_specs = (
     '2'   => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
@@ -49,6 +50,10 @@ my ($LOWEST, $HIGHEST) = @spec_list[0,-1];
 sub _keep { $_[0] }
 
 sub _keep_or_one { defined($_[0]) ? $_[0] : 1 }
+
+sub _keep_or_zero { defined($_[0]) ? $_[0] : 0 }
+
+sub _keep_or_unknown { defined($_[0]) ? $_[0] : "unknown" }
 
 sub _generated_by { __PACKAGE__ . " version " . (__PACKAGE__->VERSION || "<dev>") }
 
@@ -82,6 +87,18 @@ sub _license_2 {
   return $element;
 }
 
+sub _no_index_1_2 {
+  my (undef, undef, $meta) = @_;
+  return $meta->{private};
+}
+
+sub _no_index_directory {
+  my ($element) = @_;
+  return unless $element;
+  return $element unless exists $element->{dir};
+  $element->{directory} = delete $element->{dir};
+  return $element;
+}
 
 sub _prereqs {
   my (undef, undef, $meta) = @_;
@@ -111,6 +128,15 @@ sub _optional_features_2 {
   return $features;
 }
 
+sub _optional_features_1_4 {
+  my ($element) = @_;
+  return unless $element;
+  for my $drop ( qw/requires_packages requires_os excluded_os/ ) {
+    delete $element->{$drop};
+  }
+  return $element;
+}
+
 #  resources => {
 #    license     => [ 'http://dev.perl.org/licenses/' ],
 #    homepage    => 'http://sourceforge.net/projects/module-build',
@@ -124,7 +150,7 @@ sub _optional_features_2 {
 #      type => 'git',
 #    },
 
-my $resource_conversion_spec = {
+my $resource2_spec = {
   license    => \&_listify,
   homepage   => \&_keep,
   bugtracker => sub { return $_[0] ? { web => $_[0] } : undef },
@@ -133,9 +159,15 @@ my $resource_conversion_spec = {
 };
 
 sub _resources_2 {
-  my (undef, undef, $meta) = @_;
+  my (undef, undef, $meta, $version) = @_;
   return undef unless exists $meta->{resources};
-  return _convert($meta->{resources}, $resource_conversion_spec);
+  return _convert($meta->{resources}, $resource2_spec);
+}
+
+sub _resources_1_2 {
+  my (undef, undef, $meta) = @_;
+  return undef unless exists $meta->{license_url};
+  return { license => $meta->{license_url} };
 }
 
 sub _release_status {
@@ -175,55 +207,157 @@ sub _convert {
 # special ":custom" field is used for keys not recognized in spec
 my %up_convert = (
   '2-from-1.4' => {
-    # MANDATORY
+    # PRIOR MANDATORY
     'abstract'            => \&_keep,
     'author'              => \&_listify,
-    'dynamic_config'      => \&_keep_or_one,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_2,
     'meta-spec'           => \&_change_meta_spec,
     'name'                => \&_keep,
-    'release_status'      => \&_release_status,
     'version'             => \&_keep,
-    # OPTIONAL - from pre-existing
+    # CHANGED TO MANDATORY
+    'dynamic_config'      => \&_keep_or_one,
+    # ADDED MANDATORY
+    'release_status'      => \&_release_status,
+    # PRIOR OPTIONAL
     'keywords'            => \&_keep,
     'no_index'            => \&_keep,
     'optional_features'   => \&_optional_features_2,
-    'prereqs'             => \&_prereqs,
     'provides'            => \&_keep,
     'resources'           => \&_resources_2,
+    # ADDED OPTIONAL
+    'description'         => \&_keep,
+    'prereqs'             => \&_prereqs,
 
     # drop these deprecated fields, but only after we convert
     ':drop' => [ qw(
-        requires build_requires recommends conflicts configure_requires
-        private distribution_type
+        build_requires
+        configure_requires
+        conflicts
+        distribution_type
+        license_url
+        private
+        recommends
+        requires
     ) ],
 
     # other random keys need x_ prefixing
     ':custom'              => \&_prefix_custom,
   },
   '1.4-from-1.3' => {
+    # PRIOR MANDATORY
+    'abstract'            => \&_keep,
+    'author'              => \&_keep,
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_keep,
     'meta-spec'           => \&_change_meta_spec,
     'name'                => \&_keep,
     'version'             => \&_keep,
-    'abstract'            => \&_keep,
-    'author'              => \&_keep,
-    'license'             => \&_keep,
-    'generated_by'        => \&_generated_by,
-    'dynamic_config'      => \&_keep_or_one,
-#    configure_requires -- didn't exist prior to 1.4
+    # PRIOR OPTIONAL
     'build_requires'      => \&_keep,
-    'requires'            => \&_keep,
-    'recommends'          => \&_keep,
     'conflicts'           => \&_keep,
-    'optional_features'   => \&_optional_features_1,
-    'provides'            => \&_keep,
-    'no_index'            => \&_keep,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
     'keywords'            => \&_keep,
-    'resources'           => \&_resources_1,
+    'no_index'            => \&_keep,
+    'optional_features'   => \&_optional_features_1_4,
+    'provides'            => \&_keep,
+    'recommends'          => \&_keep,
+    'requires'            => \&_keep,
+    'resources'           => \&_keep,
+    # ADDED OPTIONAL
+    'configure_requires'  => \&_keep,
 
     # drop these deprecated fields, but only after we convert
-    ':drop' => [ qw/ private / ],
+    ':drop' => [ qw(
+      license_url
+      private
+    )],
+
+    # other random keys are OK if already valid
+    ':custom'              => \&_keep
+  },
+  '1.3-from-1.2' => {
+    # PRIOR MANDATORY
+    'abstract'            => \&_keep,
+    'author'              => \&_keep,
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_keep,
+    'meta-spec'           => \&_change_meta_spec,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
+    # PRIOR OPTIONAL
+    'build_requires'      => \&_keep,
+    'conflicts'           => \&_keep,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'keywords'            => \&_keep,
+    'no_index'            => \&_no_index_directory,
+    'optional_features'   => \&_keep,
+    'provides'            => \&_keep,
+    'recommends'          => \&_keep,
+    'requires'            => \&_keep,
+    'resources'           => \&_keep,
+
+    # drop these deprecated fields, but only after we convert
+    ':drop' => [ qw(
+      license_url
+      private
+    )],
+
+    # other random keys are OK if already valid
+    ':custom'              => \&_keep
+  },
+  '1.2-from-1.1' => {
+    # PRIOR MANDATORY
+    'version'             => \&_keep,
+    # CHANGED TO MANDATORY
+    'license'             => \&_keep,
+    'name'                => \&_keep,
+    'generated_by'        => \&_generated_by,
+    # ADDED MANDATORY
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'meta-spec'           => \&_change_meta_spec,
+    # PRIOR OPTIONAL
+    'build_requires'      => \&_keep,
+    'conflicts'           => \&_keep,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'recommends'          => \&_keep,
+    'requires'            => \&_keep,
+    # ADDED OPTIONAL
+    'keywords'            => \&_keep,
+    'no_index'            => \&_no_index_1_2,
+    'optional_features'   => \&_keep,
+    'provides'            => \&_keep,
+    'resources'           => \&_resources_1_2,
+
+    # drop these deprecated fields, but only after we convert
+    ':drop' => [ qw(
+      license_url
+      private
+    )],
+
+    # other random keys are OK if already valid
+    ':custom'              => \&_keep
+  },
+  '1.1-from-1.0' => {
+    # CHANGED TO MANDATORY
+    'version'             => \&_keep_or_zero,
+    # PRIOR OPTIONAL
+    'build_requires'      => \&_keep,
+    'conflicts'           => \&_keep,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_keep,
+    'name'                => \&_keep,
+    'recommends'          => \&_keep,
+    'requires'            => \&_keep,
+    # ADDED OPTIONAL
+    'license_url'         => \&_keep,
+    'private'             => \&_keep,
 
     # other random keys are OK if already valid
     ':custom'              => \&_keep
@@ -288,10 +422,19 @@ sub convert {
     die "downconverting not yet supported";
   }
   else {
-    my $conversion_spec = $up_convert{"${new_version}-from-${old_version}"};
-    die "converting from $old_version to $new_version not supported"
-      unless $conversion_spec;
-    return _convert( $self->{data}, $conversion_spec, $new_version );
+    my @vers = sort { $a <=> $b } keys %known_specs;
+    my $converted = { %{$self->{data}} };
+    for my $i ( 0 .. $#vers-1 ) {
+      next if $vers[$i] < $old_version;
+      my $spec_string = "$vers[$i+1]-from-$vers[$i]";
+      $converted = _convert( $converted, $up_convert{$spec_string}, $vers[$i+1] );
+      my $cmv = CPAN::Meta::Validator->new( $converted );
+      unless ( $cmv->is_valid ) {
+        my $errs = join("\n", $cmv->errors);
+        confess "Failed to upconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+      }
+    }
+    return $converted;
   }
 }
 
