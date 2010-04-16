@@ -533,7 +533,7 @@ sub check_list {
     }
 
     for my $value (@$data) {
-        push @{$self->{stack}}, $value;
+        push @{$self->{stack}}, $value || "<undef>";
         if(defined $spec->{value}) {
             $spec->{value}->($self,'list',$value);
         } elsif(defined $spec->{'map'}) {
