@@ -188,6 +188,10 @@ Changed 'name' to be mandatory
 
 =item *
 
+Changed 'generated_by' to be mandatory
+
+=item *
+
 Changed 'license' to be mandatory
 
 =item *
