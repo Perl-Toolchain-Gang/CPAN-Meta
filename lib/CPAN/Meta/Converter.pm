@@ -57,7 +57,7 @@ sub _keep_or_unknown { defined($_[0]) ? $_[0] : "unknown" }
 
 sub _generated_by { __PACKAGE__ . " version " . (__PACKAGE__->VERSION || "<dev>") }
 
-sub _listify { ref $_[0] eq 'ARRAY' ? $_[0] : [$_[0]] }
+sub _listify { ! defined $_[0] ? undef : ref $_[0] eq 'ARRAY' ? $_[0] : [$_[0]] }
 
 sub _prefix_custom { "x_" . $_[0] }
 
@@ -91,10 +91,10 @@ my %license_map_1 = ( map { $_ => 1 } @valid_licenses_1 );
 sub _license_1 {
   my ($element) = @_;
   return 'unknown' unless defined $element;
-  if ( my $new = $license_map_1{lc $element} ) {
-    return $new;
+  if ( $license_map_1{lc $element} ) {
+    return lc $element;
   }
-  return $element;
+  return 'unknown';
 }
 
 my @valid_licenses_2 = qw(
@@ -228,6 +228,22 @@ sub _resources_2 {
   return _convert($meta->{resources}, $resource2_spec);
 }
 
+my $resource1_spec = {
+  license    => \&_keep,
+  homepage   => \&_keep,
+  bugtracker => \&_keep,
+  repository => \&_keep,
+  ':custom'  => \&_prefix_custom,
+};
+
+sub _resources_1_3 {
+  my (undef, undef, $meta, $version) = @_;
+  return undef unless exists $meta->{resources};
+  return _convert($meta->{resources}, $resource1_spec);
+}
+
+*_resources_1_4 = *_resources_1_3;
+
 sub _resources_1_2 {
   my (undef, undef, $meta) = @_;
   return undef unless exists $meta->{license_url};
@@ -313,7 +329,7 @@ my %up_convert = (
     'abstract'            => \&_keep_or_unknown,
     'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
     'generated_by'        => \&_generated_by,
-    'license'             => \&_keep_or_unknown,
+    'license'             => \&_license_1,
     'meta-spec'           => \&_change_meta_spec,
     'name'                => \&_keep_or_unknown,
     'version'             => \&_keep_or_zero,
@@ -328,7 +344,7 @@ my %up_convert = (
     'provides'            => \&_keep,
     'recommends'          => \&_keep,
     'requires'            => \&_keep,
-    'resources'           => \&_keep,
+    'resources'           => \&_resources_1_4,
     # ADDED OPTIONAL
     'configure_requires'  => \&_keep,
 
@@ -346,7 +362,7 @@ my %up_convert = (
     'abstract'            => \&_keep_or_unknown,
     'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
     'generated_by'        => \&_generated_by,
-    'license'             => \&_keep_or_unknown,
+    'license'             => \&_license_1,
     'meta-spec'           => \&_change_meta_spec,
     'name'                => \&_keep_or_unknown,
     'version'             => \&_keep_or_zero,
@@ -361,7 +377,7 @@ my %up_convert = (
     'provides'            => \&_keep,
     'recommends'          => \&_keep,
     'requires'            => \&_keep,
-    'resources'           => \&_keep,
+    'resources'           => \&_resources_1_3,
 
     # drop these deprecated fields, but only after we convert
     ':drop' => [ qw(
@@ -376,7 +392,7 @@ my %up_convert = (
     # PRIOR MANDATORY
     'version'             => \&_keep_or_zero,
     # CHANGED TO MANDATORY
-    'license'             => \&_keep_or_unknown,
+    'license'             => \&_license_1,
     'name'                => \&_keep_or_unknown,
     'generated_by'        => \&_generated_by,
     # ADDED MANDATORY
@@ -415,7 +431,7 @@ my %up_convert = (
     'distribution_type'   => \&_keep,
     'dynamic_config'      => \&_keep_or_one,
     'generated_by'        => \&_generated_by,
-    'license'             => \&_keep,
+    'license'             => \&_license_1,
     'name'                => \&_keep,
     'recommends'          => \&_keep,
     'requires'            => \&_keep,
