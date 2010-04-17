@@ -143,7 +143,6 @@ my %definitions = (
   },
 
 '1.4' => {
-#  'header'              => { mandatory => 1, value => \&header },
   'meta-spec'           => { mandatory => 1, 'map' => { version => { mandatory => 1, value => \&version},
                                                         url     => { mandatory => 1, value => \&urlspec } } },
 
@@ -202,7 +201,6 @@ my %definitions = (
 },
 
 '1.3' => {
-#  'header'              => { mandatory => 1, value => \&header },
   'meta-spec'           => { mandatory => 1, 'map' => { version => { mandatory => 1, value => \&version},
                                                         url     => { mandatory => 1, value => \&urlspec } } },
 
@@ -264,7 +262,6 @@ my %definitions = (
 # original mistake, and that a v1.1 was retro fitted into the timeline, when
 # v1.2 was originally slated as v1.1. But I could be wrong ;)
 '1.2' => {
-#  'header'              => { mandatory => 1, value => \&header },
   'meta-spec'           => { mandatory => 1, 'map' => { version => { mandatory => 1, value => \&version},
                                                         url     => { mandatory => 1, value => \&urlspec } } },
 
@@ -321,14 +318,12 @@ my %definitions = (
   ':key'        => { name => \&string },
 },
 
-# note that the 1.1 spec doesn't specify optional or mandatory fields, what
-# appears below is assumed from later specifications.
+# note that the 1.1 spec only specifies 'version' as mandatory
 '1.1' => {
-#  'header'              => { mandatory => 1, value => \&header },
-  'name'                => { mandatory => 1, value => \&string  },
+  'name'                => { value => \&string  },
   'version'             => { mandatory => 1, value => \&version },
-  'license'             => { mandatory => 1, value => \&license },
-  'generated_by'        => { mandatory => 1, value => \&string  },
+  'license'             => { value => \&license },
+  'generated_by'        => { value => \&string  },
 
   'license_uri'         => { value => \&url },
   'distribution_type'   => { value => \&string  },
@@ -346,14 +341,12 @@ my %definitions = (
   ':key'        => { name => \&string },
 },
 
-# note that the 1.0 spec doesn't specify optional or mandatory fields, what
-# appears below is assumed from later specifications.
+# note that the 1.0 spec doesn't specify optional or mandatory fields
 '1.0' => {
-#  'header'              => { mandatory => 1, value => \&header },
-  'name'                => { mandatory => 1, value => \&string  },
-  'version'             => { mandatory => 1, value => \&version },
-  'license'             => { mandatory => 1, value => \&license },
-  'generated_by'        => { mandatory => 1, value => \&string  },
+  'name'                => { value => \&string  },
+  'version'             => { value => \&version },
+  'license'             => { value => \&license },
+  'generated_by'        => { value => \&string  },
 
   'license_uri'         => { value => \&url },
   'distribution_type'   => { value => \&string  },
