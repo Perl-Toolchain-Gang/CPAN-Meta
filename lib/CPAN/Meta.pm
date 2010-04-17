@@ -166,14 +166,6 @@ BEGIN {
 sub new {
   my ($class, $struct) = @_;
 
-  # validate
-  my $cmv = CPAN::Meta::Validator->new( $struct );
-  unless ( $cmv->is_valid ) {
-    my $msg = "Invalid META structure.  Errors found:\n";
-    $msg .= join( "\n", $cmv->errors );
-    confess $msg;
-  }
-
   # return up-converted to version 2
   my $cmc = CPAN::Meta::Converter->new( $struct );
   my $self = $cmc->convert( version => 2 );
