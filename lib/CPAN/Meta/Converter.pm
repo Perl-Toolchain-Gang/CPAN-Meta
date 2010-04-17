@@ -299,7 +299,7 @@ sub _convert {
   }
 
   my $drop_list   = $spec->{':drop'};
-  my $customizer  = $spec->{':custom'};
+  my $customizer  = $spec->{':custom'} || \&_keep;
 
   for my $key ( keys %$data ) {
     next if $drop_list && grep { $key eq $_ } @$drop_list;
