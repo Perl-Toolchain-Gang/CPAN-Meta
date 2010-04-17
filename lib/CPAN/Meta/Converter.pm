@@ -23,7 +23,7 @@ optional fields.)
 
 =cut
 
-use Carp qw(carp confess);
+use Carp qw(carp confess croak);
 use CPAN::Meta::Validator;
 
 my %known_specs = (
@@ -79,6 +79,7 @@ my %license_map_2 = (
 
 sub _license_2 {
   my $element = ref $_[0] eq 'ARRAY' ? $_[0] : [$_[0]];
+  return [ 'unknown' ] unless @$element;
   for my $lic ( @$element ) {
     if ( my $new = $license_map_2{$lic} ) {
       $lic = $new;
@@ -208,13 +209,13 @@ sub _convert {
 my %up_convert = (
   '2-from-1.4' => {
     # PRIOR MANDATORY
-    'abstract'            => \&_keep,
-    'author'              => \&_listify,
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_2,
     'meta-spec'           => \&_change_meta_spec,
-    'name'                => \&_keep,
-    'version'             => \&_keep,
+    'name'                => \&_keep_or_unknown,
+    'version'             => \&_keep_or_zero,
     # CHANGED TO MANDATORY
     'dynamic_config'      => \&_keep_or_one,
     # ADDED MANDATORY
@@ -246,13 +247,13 @@ my %up_convert = (
   },
   '1.4-from-1.3' => {
     # PRIOR MANDATORY
-    'abstract'            => \&_keep,
-    'author'              => \&_keep,
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
     'generated_by'        => \&_generated_by,
-    'license'             => \&_keep,
+    'license'             => \&_keep_or_unknown,
     'meta-spec'           => \&_change_meta_spec,
-    'name'                => \&_keep,
-    'version'             => \&_keep,
+    'name'                => \&_keep_or_unknown,
+    'version'             => \&_keep_or_zero,
     # PRIOR OPTIONAL
     'build_requires'      => \&_keep,
     'conflicts'           => \&_keep,
@@ -279,13 +280,13 @@ my %up_convert = (
   },
   '1.3-from-1.2' => {
     # PRIOR MANDATORY
-    'abstract'            => \&_keep,
-    'author'              => \&_keep,
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
     'generated_by'        => \&_generated_by,
-    'license'             => \&_keep,
+    'license'             => \&_keep_or_unknown,
     'meta-spec'           => \&_change_meta_spec,
-    'name'                => \&_keep,
-    'version'             => \&_keep,
+    'name'                => \&_keep_or_unknown,
+    'version'             => \&_keep_or_zero,
     # PRIOR OPTIONAL
     'build_requires'      => \&_keep,
     'conflicts'           => \&_keep,
@@ -310,10 +311,10 @@ my %up_convert = (
   },
   '1.2-from-1.1' => {
     # PRIOR MANDATORY
-    'version'             => \&_keep,
+    'version'             => \&_keep_or_zero,
     # CHANGED TO MANDATORY
-    'license'             => \&_keep,
-    'name'                => \&_keep,
+    'license'             => \&_keep_or_unknown,
+    'name'                => \&_keep_or_unknown,
     'generated_by'        => \&_generated_by,
     # ADDED MANDATORY
     'abstract'            => \&_keep_or_unknown,
@@ -431,7 +432,7 @@ sub convert {
       my $cmv = CPAN::Meta::Validator->new( $converted );
       unless ( $cmv->is_valid ) {
         my $errs = join("\n", $cmv->errors);
-        confess "Failed to upconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+        croak "Failed to upconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
       }
     }
     return $converted;
