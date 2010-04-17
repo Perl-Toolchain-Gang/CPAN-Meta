@@ -151,17 +151,44 @@ sub _license_2 {
   return @new_list ? \@new_list : [ 'unknown' ];
 }
 
+my $no_index_spec_1_2 = {
+  'file' => \&_listify,
+  'dir' => \&_listify,
+  'package' => \&_listify,
+  'namespace' => \&_listify,
+};
+
+my $no_index_spec_1_3 = {
+  'file' => \&_listify,
+  'directory' => \&_listify,
+  'package' => \&_listify,
+  'namespace' => \&_listify,
+};
+
 sub _no_index_1_2 {
   my (undef, undef, $meta) = @_;
-  return $meta->{private};
+  return _convert($meta->{private}, $no_index_spec_1_2);
 }
 
 sub _no_index_directory {
   my ($element) = @_;
   return unless $element;
-  return $element unless exists $element->{dir};
-  $element->{directory} = delete $element->{dir};
-  return $element;
+  if ( exists $element->{dir} ) {
+    $element->{directory} = delete $element->{dir};
+  }
+  return _convert($element, $no_index_spec_1_3);
+}
+
+sub _version_map {
+  my ($element) = @_;
+  return undef unless defined $element;
+  return $element unless ref $element eq 'HASH';
+  my $new_map = {};
+  for my $k ( keys %$element ) {
+    my $value = $element->{$k};
+    $new_map->{$k} = defined $value ? $value : 0;
+  }
+  return $new_map;
 }
 
 sub _prereqs {
@@ -169,10 +196,12 @@ sub _prereqs {
   my $prereqs = {};
   for my $phase ( qw/build configure/ ) {
     my $key = "${phase}_requires";
-    $prereqs->{$phase}{requires} = $meta->{$key} if $meta->{$key};
+    $prereqs->{$phase}{requires} = _version_map($meta->{$key})
+      if $meta->{$key};
   }
   for my $rel ( qw/requires recommends conflicts/ ) {
-    $prereqs->{runtime}{$rel} = $meta->{$rel} if $meta->{$rel};
+    $prereqs->{runtime}{$rel} = _version_map($meta->{$rel})
+      if $meta->{$rel};
   }
   return $prereqs;
 }
@@ -263,6 +292,8 @@ sub _convert {
   for my $key ( %$spec ) {
     next if $key eq ':custom' || $key eq ':drop';
     next unless my $fcn = $spec->{$key};
+    die "spec for '$key' is not a coderef"
+      unless ref $fcn && ref $fcn eq 'CODE';
     my $new_value = $fcn->($data->{$key}, $key, $data, $to_version);
     $new_data->{$key} = $new_value if defined $new_value;
   }
@@ -301,7 +332,7 @@ my %up_convert = (
     'release_status'      => \&_release_status,
     # PRIOR OPTIONAL
     'keywords'            => \&_keep,
-    'no_index'            => \&_keep,
+    'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_optional_features_2,
     'provides'            => \&_keep,
     'resources'           => \&_resources_2,
@@ -334,16 +365,16 @@ my %up_convert = (
     'name'                => \&_keep_or_unknown,
     'version'             => \&_keep_or_zero,
     # PRIOR OPTIONAL
-    'build_requires'      => \&_keep,
-    'conflicts'           => \&_keep,
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
     'distribution_type'   => \&_keep,
     'dynamic_config'      => \&_keep_or_one,
     'keywords'            => \&_keep,
-    'no_index'            => \&_keep,
+    'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_optional_features_1_4,
     'provides'            => \&_keep,
-    'recommends'          => \&_keep,
-    'requires'            => \&_keep,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
     'resources'           => \&_resources_1_4,
     # ADDED OPTIONAL
     'configure_requires'  => \&_keep,
@@ -367,16 +398,16 @@ my %up_convert = (
     'name'                => \&_keep_or_unknown,
     'version'             => \&_keep_or_zero,
     # PRIOR OPTIONAL
-    'build_requires'      => \&_keep,
-    'conflicts'           => \&_keep,
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
     'distribution_type'   => \&_keep,
     'dynamic_config'      => \&_keep_or_one,
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_keep,
     'provides'            => \&_keep,
-    'recommends'          => \&_keep,
-    'requires'            => \&_keep,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
     'resources'           => \&_resources_1_3,
 
     # drop these deprecated fields, but only after we convert
@@ -400,12 +431,12 @@ my %up_convert = (
     'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
     'meta-spec'           => \&_change_meta_spec,
     # PRIOR OPTIONAL
-    'build_requires'      => \&_keep,
-    'conflicts'           => \&_keep,
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
     'distribution_type'   => \&_keep,
     'dynamic_config'      => \&_keep_or_one,
-    'recommends'          => \&_keep,
-    'requires'            => \&_keep,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
     # ADDED OPTIONAL
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_1_2,
@@ -426,15 +457,15 @@ my %up_convert = (
     # CHANGED TO MANDATORY
     'version'             => \&_keep_or_zero,
     # PRIOR OPTIONAL
-    'build_requires'      => \&_keep,
-    'conflicts'           => \&_keep,
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
     'distribution_type'   => \&_keep,
     'dynamic_config'      => \&_keep_or_one,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_1,
     'name'                => \&_keep,
-    'recommends'          => \&_keep,
-    'requires'            => \&_keep,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
     # ADDED OPTIONAL
     'license_url'         => \&_keep,
     'private'             => \&_keep,
