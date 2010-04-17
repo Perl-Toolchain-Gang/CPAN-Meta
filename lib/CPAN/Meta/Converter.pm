@@ -68,7 +68,67 @@ sub _change_meta_spec {
   return $element;
 }
 
+my @valid_licenses_1 = (
+  'perl',
+  'gpl',
+  'apache',
+  'artistic',
+  'artistic2',
+  'artistic-2.0',
+  'lgpl',
+  'bsd',
+  'gpl',
+  'mit',
+  'mozilla',
+  'open_source',
+  'unrestricted',
+  'restrictive',
+  'unknown',
+);
+
+my %license_map_1 = ( map { $_ => 1 } @valid_licenses_1 );
+
+sub _license_1 {
+  my ($element) = @_;
+  return 'unknown' unless defined $element;
+  if ( my $new = $license_map_1{lc $element} ) {
+    return $new;
+  }
+  return $element;
+}
+
+my @valid_licenses_2 = qw(
+  agpl_3
+  apache_1_1
+  apache_2_0
+  artistic_1
+  artistic_2
+  bsd
+  freebsd
+  gfdl_1_2
+  gfdl_1_3
+  gpl_1
+  gpl_2
+  gpl_3
+  lgpl_2_1
+  lgpl_3_0
+  mit
+  mozilla_1_0
+  mozilla_1_1
+  openssl
+  perl_5
+  qpl_1_0
+  ssleay
+  sun
+  zlib
+  open_source
+  restricted
+  unrestricted
+  unknown
+);
+
 my %license_map_2 = (
+  ( map { $_ => $_ } @valid_licenses_2 ),
   apache => 'apache_2_0',
   artistic => 'artistic_1',
   gpl => 'gpl_1',
@@ -78,14 +138,17 @@ my %license_map_2 = (
 );
 
 sub _license_2 {
-  my $element = ref $_[0] eq 'ARRAY' ? $_[0] : [$_[0]];
-  return [ 'unknown' ] unless @$element;
+  my ($element) = @_;
+  return [ 'unknown' ] unless defined $element;
+  $element = [ $element ] unless ref $element eq 'ARRAY';
+  my @new_list;
   for my $lic ( @$element ) {
-    if ( my $new = $license_map_2{$lic} ) {
-      $lic = $new;
+    next unless defined $lic;
+    if ( my $new = $license_map_2{lc $lic} ) {
+      push @new_list, $new;
     }
   }
-  return $element;
+  return @new_list ? \@new_list : [ 'unknown' ];
 }
 
 sub _no_index_1_2 {
