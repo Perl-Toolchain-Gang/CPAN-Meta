@@ -652,20 +652,20 @@ sub release_status {
   return 0;
 }
 
-#my $protocol = qr¬(?:http|https|ftp|afs|news|nntp|mid|cid|mailto|wais|prospero|telnet|gopher)¬;
-my $protocol = qr¬(?:ftp|http|https|git)¬;
-my $badproto = qr¬(\w+)://¬;
-my $proto    = qr¬$protocol://(?:[\w]+:\w+@)?¬;
-my $atom     = qr¬[a-z\d]¬i;
-my $domain   = qr¬((($atom(($atom|-)*$atom)?)\.)*([a-zA-Z](($atom|-)*$atom)?))¬;
-my $ip       = qr¬((\d+)(\.(\d+)){3})(:(\d+))?¬;
-my $enc      = qr¬%[a-fA-F\d]{2}¬;
-my $legal1   = qr¬[a-zA-Z\d\$\-_.+!*'(),#]¬; #' - this comment is to avoid syntax highlighting issues
-my $legal2   = qr¬[;:@&=]¬;
-my $legal3   = qr¬((($legal1|$enc)|$legal2)*)¬;
-my $path     = qr¬\/$legal3(\/$legal3)*¬;
-my $query    = qr¬\?$legal3¬;
-my $urlregex = qr¬(($proto)?($domain|$ip)(($path)?($query)?)?)¬;
+#my $protocol = qr{(?:http|https|ftp|afs|news|nntp|mid|cid|mailto|wais|prospero|telnet|gopher)};
+my $protocol = qr{(?:ftp|http|https|git)};
+my $badproto = qr{(\w+)://};
+my $proto    = qr{$protocol://(?:[\w]+:\w+@)?};
+my $atom     = qr{[a-z\d]}i;
+my $domain   = qr{((($atom(($atom|-)*$atom)?)\.)*([a-zA-Z](($atom|-)*$atom)?))};
+my $ip       = qr{((\d+)(\.(\d+)){3})(:(\d+))?};
+my $enc      = qr{%[a-fA-F\d]{2}};
+my $legal1   = qr{[a-zA-Z\d\$\-_.+!*'(),#]}; #' - this comment is to avoid syntax highlighting issues
+my $legal2   = qr{[;:@&=]};
+my $legal3   = qr{((($legal1|$enc)|$legal2)*)};
+my $path     = qr{\/$legal3(\/$legal3)*};
+my $query    = qr{\?$legal3};
+my $urlregex = qr{(($proto)?($domain|$ip)(($path)?($query)?)?)};
 
 sub url {
     my ($self,$key,$value) = @_;
