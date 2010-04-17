@@ -186,7 +186,7 @@ sub _version_map {
   my $new_map = {};
   for my $k ( keys %$element ) {
     my $value = $element->{$k};
-    $new_map->{$k} = defined $value ? $value : 0;
+    $new_map->{$k} = (defined $value && length $value) ? $value : 0;
   }
   return $new_map;
 }
