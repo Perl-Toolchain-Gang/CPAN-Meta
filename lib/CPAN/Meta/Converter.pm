@@ -214,7 +214,7 @@ sub _optional_features_2 {
   for my $name ( keys %$origin ) {
     $features->{$name} = {
       description => $origin->{$name}{description},
-      prereqs => _prereqs->(undef, undef, $origin->{$name}),
+      prereqs => _prereqs(undef, undef, $origin->{$name}),
     };
     delete $features->{$name}{prereqs}{configure};
   }
@@ -262,7 +262,7 @@ my $resource1_spec = {
   homepage   => \&_keep,
   bugtracker => \&_keep,
   repository => \&_keep,
-  ':custom'  => \&_prefix_custom,
+  ':custom'  => \&_keep,
 };
 
 sub _resources_1_3 {
