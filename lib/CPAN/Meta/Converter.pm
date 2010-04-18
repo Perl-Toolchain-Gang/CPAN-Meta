@@ -243,11 +243,19 @@ sub _optional_features_1_4 {
 #      type => 'git',
 #    },
 
+sub _is_urlish { defined $_[0] && $_[0] =~ m{\A[-+.a-z0-9]+:.+}i }
+
+sub _url_or_drop {
+  my ($element) = @_;
+  return $element if _is_urlish($element);
+  return;
+}
+
 my $resource2_spec = {
-  license    => \&_listify,
-  homepage   => \&_keep,
-  bugtracker => sub { return $_[0] ? { web => $_[0] } : undef },
-  repository => sub { return $_[0] ? { web => $_[0] } : undef },
+  license    => sub { return _is_urlish($_[0]) ? _listify( $_[0] ) : undef },
+  homepage   => \&_url_or_drop,
+  bugtracker => sub { return _is_urlish($_[0]) ? { web => $_[0] } : undef },
+  repository => sub { return _is_urlish($_[0]) ? { web => $_[0] } : undef },
   ':custom'  => \&_prefix_custom,
 };
 
@@ -258,10 +266,10 @@ sub _resources_2 {
 }
 
 my $resource1_spec = {
-  license    => \&_keep,
-  homepage   => \&_keep,
-  bugtracker => \&_keep,
-  repository => \&_keep,
+  license    => \&_url_or_drop,
+  homepage   => \&_url_or_drop,
+  bugtracker => \&_url_or_drop,
+  repository => \&_url_or_drop,
   ':custom'  => \&_keep,
 };
 
@@ -275,7 +283,7 @@ sub _resources_1_3 {
 
 sub _resources_1_2 {
   my (undef, undef, $meta) = @_;
-  return undef unless exists $meta->{license_url};
+  return undef unless _is_urlish($meta->{license_url});
   return { license => $meta->{license_url} };
 }
 
