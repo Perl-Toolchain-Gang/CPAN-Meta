@@ -7,9 +7,7 @@ package CPAN::Meta;
 
 =head1 SYNOPSIS
 
-  my $struct = decode_json_file('META.json');
-
-  my $meta = CPAN::Meta->new($struct);
+  my $meta = CPAN::Meta->load('META.json');
 
   printf "testing requirements for %s version %s\n",
     $meta->name,
@@ -386,3 +384,23 @@ sub feature {
 }
 
 1;
+
+__END__
+
+=head1 BUGS
+
+Please report any bugs or feature using the CPAN Request Tracker.
+Bugs can be submitted through the web interface at
+L<http://rt.cpan.org/Dist/Display.html?Queue=CPAN-Meta>
+
+When submitting a bug or request, please include a test-file or a patch to an
+existing test-file that illustrates the bug or desired feature.
+
+=head1 SEE ALSO
+
+=for :list
+* L<CPAN::Meta::Converter>
+* L<CPAN::Meta::Validator>
+
+=cut
+
