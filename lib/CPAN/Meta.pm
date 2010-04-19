@@ -159,25 +159,69 @@ BEGIN {
 
   my $meta = CPAN::Meta->new($distmeta_struct);
 
+Returns a valid CPAN::Meta object or dies if the supplied hash reference
+fails to validate.  Older version of the spec will be up-converted to 2.0
+if they validate against their stated specification.
+
+For a more liberal treatment, manually upcovert older metadata versions
+using L<CPAN::Meta::Converter> before calling C<new()>
+
 =cut
+
+sub _new {
+  my ($class, $struct) = @_;
+
+  # validate original struct
+  my $cmv = CPAN::Meta::Validator->new( $struct );
+  unless ( $cmv->is_valid) {
+    die "Invalid metadata structure. Errors: "
+      . join(", ", $cmv->errors) . "\n";
+  }
+
+  # upconvert to version 2
+  my $cmc = CPAN::Meta::Converter->new( $struct );
+  my $self = $cmc->convert( version => 2 );
+  return bless $self => $class;
+}
 
 sub new {
   my ($class, $struct) = @_;
+  my $self = eval { $class->_new($struct) };
+  confess($@) if $@;
+  return $self;
+}
 
-  # return up-converted to version 2
-  my $cmc = CPAN::Meta::Converter->new( $struct );
-  my $self = $cmc->convert( version => 2 );
+=method create
 
-  bless $self => $class;
+  my $meta = CPAN::Meta->create($distmeta_struct);
+
+This is same as C<new()>, except that C<generated_by> and C<meta-spec> will
+be generated if not provided.
+
+=cut
+
+sub create {
+  my ($class, $struct) = @_;
+  my $version = __PACKAGE__->VERSION || 2;
+  $struct->{generated_by} ||= __PACKAGE__ . " version $version" ;
+  $struct->{'meta-spec'}{version} ||= int($version);
+  my $self = eval { $class->_new($struct) };
+  confess($@) if $@;
+  return $self;
 }
 
 =method load
 
   my $meta = CPAN::Meta->load($distmeta_file);
 
+Given a pathname to a file containing metadata, this deserializes the file
+according to its file suffix and construct a new C<CPAN::Meta> object, just
+like C<new()>.  It will die if the deserialized version fails to validate
+against its stated specification version.
+
 =cut
 
-# XXX private to help tests conversion/validation -- dagolden, 2010-04-12 
+# XXX private to help tests conversion/validation -- dagolden, 2010-04-12
 sub _load_file {
   my ($class, $file) = @_;
 
@@ -204,7 +248,9 @@ sub load_file {
   my $struct = $class->_load_file( $file )
     or confess "load() could not determine the filetype of '$file'";
 
-  return $class->new($struct);
+  my $self = eval { $class->_new($struct) };
+  confess($@) if $@;
+  return $self;
 }
 
 =method load_yaml_string
@@ -212,14 +258,16 @@ sub load_file {
   my $meta = CPAN::Meta->load_yaml_string($yaml);
 
 This method returns a new CPAN::Meta object using the first document in the
-given YAML string.
+given YAML string.  In other respects it is identical to C<load_file()>.
 
 =cut
 
 sub load_yaml_string {
   my ($class, $yaml) = @_;
   my ($struct) = Parse::CPAN::Meta::Load( $yaml );
-  return $class->new($struct);
+  my $self = eval { $class->_new($struct) };
+  confess($@) if $@;
+  return $self;
 }
 
 =method load_json_string
@@ -227,19 +275,24 @@ sub load_yaml_string {
   my $meta = CPAN::Meta->load_json_string($json);
 
 This method returns a new CPAN::Meta object using the structure represented by
-the given JSON string.
+the given JSON string.  In other respects it is identical to C<load_file()>.
 
 =cut
 
 sub load_json_string {
   my ($class, $json) = @_;
   my $struct = JSON->new->utf8->decode($json);
-  return $class->new($struct);
+  my $self = eval { $class->_new($struct) };
+  confess($@) if $@;
+  return $self;
 }
 
 =method save
 
   $meta->save($distmeta_file);
+
+Serializes the object as JSON and writes it to the given file.  The filename
+should end in '.json'.
 
 =cut
 
