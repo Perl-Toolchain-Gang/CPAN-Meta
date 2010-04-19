@@ -1,6 +1,8 @@
+improve validation/conversion testing of valid/invalid specs
 
 move the distmeta struct to $self->{distmeta} or something rather than having
 it be the entire gits of the CPAN::Meta
 
 validate version numbers with version::is_lax
 
+use dclone more in converting structures
