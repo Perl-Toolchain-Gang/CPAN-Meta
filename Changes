@@ -2,3 +2,5 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - keep the old specs from getting indexed so as not to confuse people
+
