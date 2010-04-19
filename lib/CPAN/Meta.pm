@@ -160,8 +160,8 @@ BEGIN {
   my $meta = CPAN::Meta->new($distmeta_struct);
 
 Returns a valid CPAN::Meta object or dies if the supplied hash reference
-fails to validate.  Older version of the spec will be up-converted to 2.0
-if they validate against their stated specification.
+fails to validate.  Older format metadata will be up-converted to version 2
+if if validates against the original stated specification.
 
 For a more liberal treatment, manually upcovert older metadata versions
 using L<CPAN::Meta::Converter> before calling C<new()>
@@ -195,8 +195,8 @@ sub new {
 
   my $meta = CPAN::Meta->create($distmeta_struct);
 
-This is same as C<new()>, except that C<generated_by> and C<meta-spec> will
-be generated if not provided.
+This is same as C<new()>, except that C<generated_by> and C<meta-spec> fields
+will be generated if not provided.
 
 =cut
 
@@ -215,7 +215,7 @@ sub create {
   my $meta = CPAN::Meta->load($distmeta_file);
 
 Given a pathname to a file containing metadata, this deserializes the file
-according to its file suffix and construct a new C<CPAN::Meta> object, just
+according to its file suffix and constructs a new C<CPAN::Meta> object, just
 like C<new()>.  It will die if the deserialized version fails to validate
 against its stated specification version.
 
@@ -417,7 +417,7 @@ sub features {
   return @features;
 }
 
-=method features
+=method feature
 
   my $feature_object = $meta->feature( $identifier );
 
