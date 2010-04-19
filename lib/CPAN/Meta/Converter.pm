@@ -23,8 +23,9 @@ optional fields.)
 
 =cut
 
-use Carp qw(carp confess croak);
+use Carp qw(carp confess);
 use CPAN::Meta::Validator;
+use Storable qw/dclone/;
 
 my %known_specs = (
     '2'   => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
@@ -491,7 +492,9 @@ my %up_convert = (
 
   my $cmc = CPAN::Meta::Converter->new( $struct );
 
-The constructor must be passed a B<valid> metadata structure.
+The constructor should be passed a valid metadata structure but invalid
+structures are accepted.  If no meta-spec version is provided, version 1.0 will
+be assumed.
 
 =cut
 
@@ -517,12 +520,19 @@ different form.
 
 Valid parameters include:
 
-=head3 version
-
+=for :list
+* version
 Currently, only upconverting older versions is supported.  Converting a
-file to its own version will standardize the format. For exmaple, if
-C<author> is given as a scalar, it will converted to an array reference
-containing the item.
+structure to its own version will just return a copy of the structure.
+Defaults to the latest version of the CPAN Meta Spec.
+
+The conversion process attempts to clean-up and standardize data during
+converstion.  For example, if C<author> is given as a scalar, it will converted
+to an array reference containing the item.
+
+Conversion proceeds through each version in turn.  For example, a version 1.2
+structure is converted to 1.3 then 1.4 then finally version 2.  C<convert> will
+die if any conversion results in an invalid structure.
 
 =cut
 
@@ -533,16 +543,16 @@ sub convert {
   my $new_version = $args->{version} || $HIGHEST;
 
   my ($old_version) = $self->{spec};
+  my $converted = dclone $self->{data};
 
   if ( $old_version == $new_version ) {
-    return { %{$self->{data}} }
+    return $converted;
   }
   elsif ( $old_version > $new_version )  {
     die "downconverting not yet supported";
   }
   else {
     my @vers = sort { $a <=> $b } keys %known_specs;
-    my $converted = { %{$self->{data}} };
     for my $i ( 0 .. $#vers-1 ) {
       next if $vers[$i] < $old_version;
       my $spec_string = "$vers[$i+1]-from-$vers[$i]";
@@ -550,7 +560,7 @@ sub convert {
       my $cmv = CPAN::Meta::Validator->new( $converted );
       unless ( $cmv->is_valid ) {
         my $errs = join("\n", $cmv->errors);
-        croak "Failed to upconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+        confess "Failed to upconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
       }
     }
     return $converted;
