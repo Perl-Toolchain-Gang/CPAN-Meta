@@ -68,6 +68,10 @@ package CPAN::Meta::Spec;
 This document describes version 2 of the CPAN distribution metadata
 specification, also known as the "CPAN Meta Spec".
 
+Revisions of this specification for typo corrections and prose clarifications 
+may be issued as CPAN::Meta::Spec 2.I<x>.  These revisions will never
+change the meaning or add or remove specified behavior.
+
 Distribution metadata describe important properties of Perl
 distributions. Distribution building tools like Module::Build,
 Module::Install, ExtUtils::MakeMaker or Dist::Zilla should create a
@@ -357,8 +361,8 @@ The following keys are valid, but only C<version> is required.
 
 =item version
 
-This subkey gives the I<Version> of the CPAN Meta Spec against which the
-document was generated.
+This subkey gives the integer I<Version> of the CPAN Meta Spec against
+which the document was generated.
 
 =item url
 
