@@ -71,14 +71,16 @@ my $no_index_1_1 = {
 };
 
 my $prereq_map = {
-  ':key' => {
-    name => \&phase,
-    'map' => {
-      ':key'  => {
-        name => \&relation,
-        'map' => $module_map1,
+  map => {
+    ':key' => {
+      name => \&phase,
+      'map' => {
+        ':key'  => {
+          name => \&relation,
+          %$module_map1,
+        },
       },
-    },
+    }
   },
 };
 
@@ -107,7 +109,8 @@ my %definitions = (
     'no_index'    => $no_index_1_3,
     'optional_features'   => {
       'map'       => {
-        ':key'  => { name => \&identifier,
+        ':key'  => {
+          name => \&identifier,
           'map'   => {
             description        => { value => \&string },
             prereqs => $prereq_map,
@@ -117,29 +120,40 @@ my %definitions = (
     },
     'prereqs' => $prereq_map,
     'provides'    => {
-      'map'       => { ':key' => { name  => \&module,
-          'map' => { file    => { mandatory => 1, value => \&file },
-            version => { value => \&version } } } }
+      'map'       => {
+        ':key' => {
+          name  => \&module,
+          'map' => {
+            file    => { mandatory => 1, value => \&file },
+            version => { value => \&version }
+          }
+        }
+      }
     },
     'resources'   => {
-      'map'       => { license    => { lazylist => { value => \&url } },
+      'map'       => {
+        license    => { lazylist => { value => \&url } },
         homepage   => { value => \&url },
-        bugtracker => { 'map' => {
+        bugtracker => {
+          'map' => {
             web => { value => \&url },
             mailto => { value => \&string},
-          }},
-        repository => { 'map' => {
+          }
+        },
+        repository => {
+          'map' => {
             web => { value => \&url },
             url => { value => \&url },
             type => { value => \&string },
-          }},
+          }
+        },
         ':key'     => { value => \&string, name => \&custom_2 },
       }
     },
 
     # CUSTOM -- additional user defined key/value pairs
     # note we can only validate the key name, as the structure is user defined
-    ':key'        => { name => \&custom_2 },
+    ':key'        => { name => \&custom_2, value => \&anything },
   },
 
 '1.4' => {
@@ -197,7 +211,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&string },
+  ':key'        => { name => \&string, value => \&anything },
 },
 
 '1.3' => {
@@ -254,7 +268,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&string },
+  ':key'        => { name => \&string, value => \&anything },
 },
 
 # v1.2 is misleading, it seems to assume that a number of fields where created
@@ -315,7 +329,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&string },
+  ':key'        => { name => \&string, value => \&anything },
 },
 
 # note that the 1.1 spec only specifies 'version' as mandatory
@@ -338,7 +352,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&string },
+  ':key'        => { name => \&string, value => \&anything },
 },
 
 # note that the 1.0 spec doesn't specify optional or mandatory fields
@@ -359,7 +373,7 @@ my %definitions = (
 
   # additional user defined key/value pairs
   # note we can only validate the key name, as the structure is user defined
-  ':key'        => { name => \&string },
+  ':key'        => { name => \&string, value => \&anything },
 },
 );
 
@@ -446,6 +460,9 @@ Checks whether a list conforms, but converts strings to a single-element list
 
 =cut
 
+my $spec_error = "Missing validation action in specification. "
+  . "Must be one of 'map', 'list', 'lazylist', or 'value'";
+
 sub check_map {
     my ($self,$spec,$data) = @_;
 
@@ -478,6 +495,8 @@ sub check_map {
                 $self->check_list($spec->{$key}{'list'},$data->{$key});
             } elsif($spec->{$key}{'lazylist'}) {
                 $self->check_lazylist($spec->{$key}{'lazylist'},$data->{$key});
+            } else {
+                $self->_error( "$spec_error for '$key'" );
             }
 
         } elsif ($spec->{':key'}) {
@@ -490,6 +509,8 @@ sub check_map {
                 $self->check_list($spec->{':key'}{'list'},$data->{$key});
             } elsif($spec->{':key'}{'lazylist'}) {
                 $self->check_lazylist($spec->{':key'}{'lazylist'},$data->{$key});
+            } else {
+                $self->_error( "$spec_error for ':key'" );
             }
 
 
@@ -538,7 +559,7 @@ sub check_list {
         } elsif ($spec->{':key'}) {
             $self->check_map($spec,$value);
         } else {
-            $self->_error( "Unknown value type, '$value', found in list structure" );
+          $self->_error( "$spec_error associated with '$self->{stack}[-2]'" );
         }
         pop @{$self->{stack}};
     }
@@ -697,6 +718,8 @@ sub urlspec {
     $self->_error( 'Unknown META specification' );
     return 0;
 }
+
+sub anything { return 1 }
 
 sub string {
     my ($self,$key,$value) = @_;
