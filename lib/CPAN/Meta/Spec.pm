@@ -807,8 +807,9 @@ positive integers separated by full stop characters (i.e. "dots",
 "periods" or "decimal points").  This are equivalent in format to Perl
 "v-strings", with some additional restrictions on form.  They must be
 given in "normal" form, which has a leading "v" character and at least
-three integer components.  All components after the first are restricted
-to the range 0 to 999.  The final component B<may> be separated by an
+three integer components.  To retain a one-to-one mapping with decimal
+versions, all components after the first B<should> be restricted to the
+range 0 to 999.  The final component B<may> be separated by an
 underscore character instead of a period.
 
    version => 'v1.2.3'      # OK
@@ -820,7 +821,7 @@ underscore character instead of a period.
    version => 'v1.2'          # Illegal
    version => '1.2.3'         # Illegal
    version => 'v1.2_3_4'      # Illegal
-   version => 'v1.2009.10.31' # Illegal
+   version => 'v1.2009.10.31' # Not recommended
 
 =back
 
