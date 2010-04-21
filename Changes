@@ -2,6 +2,13 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - clarified that .XXXXXX versions of the CPAN-Meta will not change
+    the meaning of the CPAN::Meta::Spec, but may fix typos or clarify
+    prose
+
+  - fixed a typo regarding dotted-integer versions: keeping components 
+    in the range 0-999 was corrected to a "should" instead of a "must"
+
 2.101091  2010-04-19 06:32:13 EST5EDT
 
   - keep the old specs from getting indexed so as not to confuse people
