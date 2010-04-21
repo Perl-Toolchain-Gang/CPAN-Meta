@@ -13,7 +13,7 @@ package CPAN::Meta::Spec;
     name => 'Module-Build',
     abstract => 'Build and install Perl modules',
     description =>  "Module::Build is a system for "
-      . "building, testing, and installing Perl modules. "  
+      . "building, testing, and installing Perl modules. "
       . "It is meant to ... blah blah blah ...",
     version  => '0.36',
     author   => [
@@ -68,9 +68,10 @@ package CPAN::Meta::Spec;
 This document describes version 2 of the CPAN distribution metadata
 specification, also known as the "CPAN Meta Spec".
 
-Revisions of this specification for typo corrections and prose clarifications 
-may be issued as CPAN::Meta::Spec 2.I<x>.  These revisions will never
-change the meaning or add or remove specified behavior.
+Revisions of this specification for typo corrections and prose
+clarifications may be issued as CPAN::Meta::Spec 2.I<x>.  These
+revisions will never change semantics or add or remove specified
+behavior.
 
 Distribution metadata describe important properties of Perl
 distributions. Distribution building tools like Module::Build,
@@ -446,7 +447,7 @@ structure refers.
 Example:
 
     description =>  "Module::Build is a system for "
-      . "building, testing, and installing Perl modules. "  
+      . "building, testing, and installing Perl modules. "
       . "It is meant to ... blah blah blah ...",
 
 (Spec 2) [optional] {String}
