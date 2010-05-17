@@ -441,8 +441,8 @@ my %up_convert = (
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_2,
     'meta-spec'           => \&_change_meta_spec,
-    'name'                => \&_keep_or_unknown,
-    'version'             => \&_keep_or_zero,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
     # CHANGED TO MANDATORY
     'dynamic_config'      => \&_keep_or_one,
     # ADDED MANDATORY
@@ -479,8 +479,8 @@ my %up_convert = (
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_1,
     'meta-spec'           => \&_change_meta_spec,
-    'name'                => \&_keep_or_unknown,
-    'version'             => \&_keep_or_zero,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
     # PRIOR OPTIONAL
     'build_requires'      => \&_version_map,
     'conflicts'           => \&_version_map,
@@ -512,8 +512,8 @@ my %up_convert = (
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_1,
     'meta-spec'           => \&_change_meta_spec,
-    'name'                => \&_keep_or_unknown,
-    'version'             => \&_keep_or_zero,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
     # PRIOR OPTIONAL
     'build_requires'      => \&_version_map,
     'conflicts'           => \&_version_map,
@@ -538,10 +538,10 @@ my %up_convert = (
   },
   '1.2-from-1.1' => {
     # PRIOR MANDATORY
-    'version'             => \&_keep_or_zero,
+    'version'             => \&_keep,
     # CHANGED TO MANDATORY
     'license'             => \&_license_1,
-    'name'                => \&_keep_or_unknown,
+    'name'                => \&_keep,
     'generated_by'        => \&_generated_by,
     # ADDED MANDATORY
     'abstract'            => \&_keep_or_unknown,
@@ -572,7 +572,9 @@ my %up_convert = (
   },
   '1.1-from-1.0' => {
     # CHANGED TO MANDATORY
-    'version'             => \&_keep_or_zero,
+    'version'             => \&_keep,
+    # IMPLIED MANDATORY
+    'name'                => \&_keep,
     # PRIOR OPTIONAL
     'build_requires'      => \&_version_map,
     'conflicts'           => \&_version_map,
@@ -580,7 +582,6 @@ my %up_convert = (
     'dynamic_config'      => \&_keep_or_one,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_1,
-    'name'                => \&_keep,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
     # ADDED OPTIONAL
