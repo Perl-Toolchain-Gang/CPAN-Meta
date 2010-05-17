@@ -62,10 +62,10 @@ sub _listify { ! defined $_[0] ? undef : ref $_[0] eq 'ARRAY' ? $_[0] : [$_[0]] 
 
 sub _prefix_custom { "x_" . $_[0] }
 
-sub _camelcase_custom { 
+sub _camelcase_custom {
   my $key = shift;
   $key =~ s{[^a-zA-Z]}{}g; # delete non-alphabetical chars
-  $key = ucfirst $key unless $key =~ /[A-Z]/; 
+  $key = ucfirst $key unless $key =~ /[A-Z]/;
   return $key;
 }
 
@@ -281,7 +281,7 @@ BEGIN {
       $type = $phase;
       $phase = 'runtime';
     }
-    no strict 'refs'; 
+    no strict 'refs';
     *{$sub} = sub { _extract_prereqs($_[2]->{prereqs},$phase,$type) };
   }
 }

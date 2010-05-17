@@ -32,7 +32,7 @@ for my $f ( reverse sort @files ) {
     );
   }
   # UPCONVERSION - partial
-  if ( _spec_version( $original ) < 2 ) { 
+  if ( _spec_version( $original ) < 2 ) {
     my $cmc = CPAN::Meta::Converter->new( $original );
     my $converted = $cmc->convert( version => '1.4' );
     is ( _spec_version($converted), 1.4, "up converted spec version $original_v to spec version 1.4");
@@ -43,7 +43,7 @@ for my $f ( reverse sort @files ) {
     );
   }
   # DOWNCONVERSION - partial
-  if ( _spec_version( $original ) >= 1.2 ) { 
+  if ( _spec_version( $original ) >= 1.2 ) {
     my $cmc = CPAN::Meta::Converter->new( $original );
     my $converted = $cmc->convert( version => '1.2' );
     is ( _spec_version($converted), '1.2', "down converted spec version $original_v to spec version 1.2");
@@ -54,7 +54,7 @@ for my $f ( reverse sort @files ) {
     );
   }
   # DOWNCONVERSION
-  { 
+  {
     my $cmc = CPAN::Meta::Converter->new( $original );
     my $converted = $cmc->convert( version => '1.0' );
     is ( _spec_version($converted), '1.0', "down converted spec version $original_v to spec version 1.0");
