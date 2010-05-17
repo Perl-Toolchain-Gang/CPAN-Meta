@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - added support for down-converting to older versions of the spec
+
 2.101110  2010-04-21 11:06:52 EST5EDT
 
   - clarified that .XXXXXX versions of the CPAN-Meta distribution will not

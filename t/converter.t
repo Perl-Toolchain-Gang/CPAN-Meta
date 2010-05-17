@@ -20,12 +20,46 @@ for my $f ( reverse sort @files ) {
   my $original = CPAN::Meta->_load_file( $path  );
   ok( $original, "loaded $f" );
   my $original_v = _spec_version($original);
-  SKIP: {
+  # UPCONVERSION
+  {
     my $cmc = CPAN::Meta::Converter->new( $original );
     my $converted = $cmc->convert( version => 2 );
-    is ( _spec_version($converted), 2, "converted spec version $original_v to spec version 2");
+    is ( _spec_version($converted), 2, "up converted spec version $original_v to spec version 2");
     my $cmv = CPAN::Meta::Validator->new( $converted );
-    ok ( $cmv->is_valid, "converted META is valid" )
+    ok ( $cmv->is_valid, "up converted META is valid" )
+      or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
+#      . "\nMETA:\n" . Dumper($converted)
+    );
+  }
+  # UPCONVERSION - partial
+  if ( _spec_version( $original ) < 2 ) { 
+    my $cmc = CPAN::Meta::Converter->new( $original );
+    my $converted = $cmc->convert( version => '1.4' );
+    is ( _spec_version($converted), 1.4, "up converted spec version $original_v to spec version 1.4");
+    my $cmv = CPAN::Meta::Validator->new( $converted );
+    ok ( $cmv->is_valid, "up converted META is valid" )
+      or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
+#      . "\nMETA:\n" . Dumper($converted)
+    );
+  }
+  # DOWNCONVERSION - partial
+  if ( _spec_version( $original ) >= 1.2 ) { 
+    my $cmc = CPAN::Meta::Converter->new( $original );
+    my $converted = $cmc->convert( version => '1.2' );
+    is ( _spec_version($converted), '1.2', "down converted spec version $original_v to spec version 1.2");
+    my $cmv = CPAN::Meta::Validator->new( $converted );
+    ok ( $cmv->is_valid, "down converted META is valid" )
+      or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
+#      . "\nMETA:\n" . Dumper($converted)
+    );
+  }
+  # DOWNCONVERSION
+  { 
+    my $cmc = CPAN::Meta::Converter->new( $original );
+    my $converted = $cmc->convert( version => '1.0' );
+    is ( _spec_version($converted), '1.0', "down converted spec version $original_v to spec version 1.0");
+    my $cmv = CPAN::Meta::Validator->new( $converted );
+    ok ( $cmv->is_valid, "down converted META is valid" )
       or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
 #      . "\nMETA:\n" . Dumper($converted)
     );

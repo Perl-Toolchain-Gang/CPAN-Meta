@@ -62,6 +62,13 @@ sub _listify { ! defined $_[0] ? undef : ref $_[0] eq 'ARRAY' ? $_[0] : [$_[0]] 
 
 sub _prefix_custom { "x_" . $_[0] }
 
+sub _camelcase_custom { 
+  my $key = shift;
+  $key =~ s{[^a-zA-Z]}{}g; # delete non-alphabetical chars
+  $key = ucfirst $key unless $key =~ /[A-Z]/; 
+  return $key;
+}
+
 sub _change_meta_spec {
   my ($element, undef, undef, $version) = @_;
   $element->{version} = $version;
@@ -152,6 +159,57 @@ sub _license_2 {
   return @new_list ? \@new_list : [ 'unknown' ];
 }
 
+my %license_downgrade_map = qw(
+  agpl_3            open_source
+  apache_1_1        apache
+  apache_2_0        apache
+  artistic_1        artistic
+  artistic_2        artistic2
+  bsd               bsd
+  freebsd           open_source
+  gfdl_1_2          open_source
+  gfdl_1_3          open_source
+  gpl_1             gpl
+  gpl_2             gpl
+  gpl_3             gpl
+  lgpl_2_1          lgpl
+  lgpl_3_0          lgpl
+  mit               mit
+  mozilla_1_0       mozilla
+  mozilla_1_1       mozilla
+  openssl           open_source
+  perl_5            perl
+  qpl_1_0           open_source
+  ssleay            open_source
+  sun               open_source
+  zlib              open_source
+  open_source       open_source
+  restricted        restricted
+  unrestricted      unrestricted
+  unknown           unknown
+);
+
+sub _downgrade_license {
+  my ($element) = @_;
+  if ( ! defined $element ) {
+    return "unknown";
+  }
+  elsif( ref $element eq 'ARRAY' ) {
+    if ( @$element == 1 ) {
+      return $license_downgrade_map{$element->[0]};
+    }
+    else {
+      return 'unknown';
+    }
+  }
+  elsif ( ! ref $element ) {
+    return $license_downgrade_map{$element};
+  }
+  else {
+    return "unknown";
+  }
+}
+
 my $no_index_spec_1_2 = {
   'file' => \&_listify,
   'dir' => \&_listify,
@@ -207,6 +265,55 @@ sub _prereqs {
   return $prereqs;
 }
 
+BEGIN {
+  my @old_prereqs = qw(
+    requires
+    build_requires
+    configure_requires
+    recommends
+    conflicts
+  );
+
+  for ( @old_prereqs ) {
+    my $sub = "_get_$_";
+    my ($phase,$type) = split qr/_/, $_;
+    if ( ! defined $type ) {
+      $type = $phase;
+      $phase = 'runtime';
+    }
+    no strict 'refs'; 
+    *{$sub} = sub { _extract_prereqs($_[2]->{prereqs},$phase,$type) };
+  }
+}
+
+sub _extract_prereqs {
+  my ($prereqs, $phase, $type) = @_;
+  return unless ref $prereqs eq 'HASH';
+  return $prereqs->{$phase}{$type};
+}
+
+sub _downgrade_optional_features {
+  my (undef, undef, $meta) = @_;
+  return undef unless exists $meta->{optional_features};
+  my $origin = $meta->{optional_features};
+  my $features = {};
+  for my $name ( keys %$origin ) {
+    $features->{$name} = {
+      description => $origin->{$name}{description},
+      requires => _extract_prereqs($origin->{$name}{prereqs},'runtime','requires'),
+      configure_requires => _extract_prereqs($origin->{$name}{prereqs},'runtime','configure_requires'),
+      build_requires => _extract_prereqs($origin->{$name}{prereqs},'runtime','build_requires'),
+      recommends => _extract_prereqs($origin->{$name}{prereqs},'runtime','recommends'),
+      conflicts => _extract_prereqs($origin->{$name}{prereqs},'runtime','conflicts'),
+    };
+    for my $k (keys %{$features->{$name}} ) {
+      delete $features->{$name}{$k} unless defined $features->{$name}{$k};
+    }
+  }
+  return $features;
+}
+
+
 sub _optional_features_2 {
   my (undef, undef, $meta) = @_;
   return undef unless exists $meta->{optional_features};
@@ -230,19 +337,6 @@ sub _optional_features_1_4 {
   }
   return $element;
 }
-
-#  resources => {
-#    license     => [ 'http://dev.perl.org/licenses/' ],
-#    homepage    => 'http://sourceforge.net/projects/module-build',
-#    bugtracker  => {
-#      web    => 'http://github.com/dagolden/cpan-meta-spec/issues',
-#      mailto => 'meta-bugs@example.com',
-#    },
-#    repository  => {
-#      url  => 'git://github.com/dagolden/cpan-meta-spec.git',
-#      web  => 'http://github.com/dagolden/cpan-meta-spec',
-#      type => 'git',
-#    },
 
 sub _is_urlish { defined $_[0] && $_[0] =~ m{\A[-+.a-z0-9]+:.+}i }
 
@@ -286,6 +380,20 @@ sub _resources_1_2 {
   my (undef, undef, $meta) = @_;
   return undef unless _is_urlish($meta->{license_url});
   return { license => $meta->{license_url} };
+}
+
+my $resource_downgrade_spec = {
+  license    => sub { return ref $_[0] ? $_[0]->[0] : $_[0] },
+  homepage   => \&_url_or_drop,
+  bugtracker => sub { return $_[0]->{web} },
+  repository => sub { return $_[0]->{url} || $_[0]->{web} },
+  ':custom'  => \&_camelcase_custom,
+};
+
+sub _downgrade_resources {
+  my (undef, undef, $meta, $version) = @_;
+  return undef unless exists $meta->{resources};
+  return _convert($meta->{resources}, $resource_downgrade_spec);
 }
 
 sub _release_status {
@@ -484,6 +592,145 @@ my %up_convert = (
   },
 );
 
+my %down_convert = (
+  '1.4-from-2' => {
+    # MANDATORY
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_downgrade_license,
+    'meta-spec'           => \&_change_meta_spec,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
+    # OPTIONAL
+    'build_requires'      => \&_get_build_requires,
+    'configure_requires'  => \&_get_configure_requires,
+    'conflicts'           => \&_get_conflicts,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'keywords'            => \&_keep,
+    'no_index'            => \&_no_index_directory,
+    'optional_features'   => \&_downgrade_optional_features,
+    'provides'            => \&_keep,
+    'recommends'          => \&_get_recommends,
+    'requires'            => \&_get_requires,
+    'resources'           => \&_downgrade_resources,
+
+    # drop these unsupported fields (after conversion)
+    ':drop' => [ qw(
+      description
+      prereqs
+      release_status
+    )],
+
+    # custom keys must be changed to CamelCase
+    ':custom'              => \&_camelcase_custom
+  },
+  '1.3-from-1.4' => {
+    # MANDATORY
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_license_1,
+    'meta-spec'           => \&_change_meta_spec,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
+    # OPTIONAL
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'keywords'            => \&_keep,
+    'no_index'            => \&_no_index_directory,
+    'optional_features'   => \&_keep,
+    'provides'            => \&_keep,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
+    'resources'           => \&_resources_1_3,
+
+    # drop these unsupported fields, but only after we convert
+    ':drop' => [ qw(
+      configure_requires
+    )],
+
+    # other random keys are OK if already valid
+    ':custom'              => \&_camelcase_custom,
+  },
+  '1.2-from-1.3' => {
+    # MANDATORY
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_license_1,
+    'meta-spec'           => \&_change_meta_spec,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
+    # OPTIONAL
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'keywords'            => \&_keep,
+    'no_index'            => \&_no_index_1_2,
+    'optional_features'   => \&_keep,
+    'provides'            => \&_keep,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
+    'resources'           => \&_resources_1_2,
+
+    # other random keys are OK if already valid
+    ':custom'              => \&_camelcase_custom,
+  },
+  '1.1-from-1.2' => {
+    # MANDATORY
+    'version'             => \&_keep,
+    # IMPLIED MANDATORY
+    'name'                => \&_keep,
+    'meta-spec'           => \&_change_meta_spec,
+    # OPTIONAL
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_license_1,
+    'private'             => \&_keep,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
+
+    # drop unsupported fields
+    ':drop' => [ qw(
+      abstract
+      author
+      provides
+      no_index
+      keywords
+      resources
+    )],
+
+    # other random keys are OK if already valid
+    ':custom'              => \&_camelcase_custom,
+  },
+  '1.0-from-1.1' => {
+    # IMPLIED MANDATORY
+    'name'                => \&_keep,
+    'meta-spec'           => \&_change_meta_spec,
+    'version'             => \&_keep,
+    # PRIOR OPTIONAL
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_license_1,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
+
+    # other random keys are OK if already valid
+    ':custom'              => \&_camelcase_custom,
+  },
+);
+
 #--------------------------------------------------------------------------#
 # Code
 #--------------------------------------------------------------------------#
@@ -549,12 +796,25 @@ sub convert {
     return $converted;
   }
   elsif ( $old_version > $new_version )  {
-    die "downconverting not yet supported";
+    my @vers = sort { $b <=> $a } keys %known_specs;
+    for my $i ( 0 .. $#vers-1 ) {
+      next if $vers[$i] > $old_version;
+      last if $vers[$i+1] < $new_version;
+      my $spec_string = "$vers[$i+1]-from-$vers[$i]";
+      $converted = _convert( $converted, $down_convert{$spec_string}, $vers[$i+1] );
+      my $cmv = CPAN::Meta::Validator->new( $converted );
+      unless ( $cmv->is_valid ) {
+        my $errs = join("\n", $cmv->errors);
+        confess "Failed to downconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+      }
+    }
+    return $converted;
   }
   else {
     my @vers = sort { $a <=> $b } keys %known_specs;
     for my $i ( 0 .. $#vers-1 ) {
       next if $vers[$i] < $old_version;
+      last if $vers[$i+1] > $new_version;
       my $spec_string = "$vers[$i+1]-from-$vers[$i]";
       $converted = _convert( $converted, $up_convert{$spec_string}, $vers[$i+1] );
       my $cmv = CPAN::Meta::Validator->new( $converted );
