@@ -770,9 +770,9 @@ Valid parameters include:
 
 =for :list
 * version
-Currently, only upconverting older versions is supported.  Converting a
-structure to its own version will just return a copy of the structure.
-Defaults to the latest version of the CPAN Meta Spec.
+Indicates the desired specification version (e.g. "1.0", "1.1" ... "1.4", "2").
+Converting a structure to its own version will just return a copy of the
+structure. Defaults to the latest version of the CPAN Meta Spec.
 
 The conversion process attempts to clean-up and standardize data during
 converstion.  For example, if C<author> is given as a scalar, it will converted
