@@ -63,6 +63,13 @@ for my $f ( reverse sort @files ) {
       or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
 #      . "\nMETA:\n" . Dumper($converted)
     );
+
+    unless ($original_v eq '1.0') {
+      like ( $converted->{generated_by},
+        qr(\Q$original->{generated_by}\E, CPAN::Meta::Converter version \S+$),
+        "added converter mark to generated_by",
+      );
+    }
   }
 }
 
