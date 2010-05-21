@@ -52,6 +52,18 @@ for my $f ( reverse sort @files ) {
       or diag( "ERRORS:\n" . join( "\n", $cmv->errors )
 #      . "\nMETA:\n" . Dumper($converted)
     );
+
+    if (_spec_version( $original ) == 2) {
+      is_deeply(
+        $converted->{build_requires},
+        {
+          'Test::More'      => '0.88',
+          'Build::Requires' => '1.1',
+          'Test::Requires'  => '1.2',
+        },
+        "downconversion from 2 merge test and build requirements",
+      );
+    }
   }
   # DOWNCONVERSION
   {

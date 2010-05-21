@@ -52,7 +52,14 @@
       },
       "build" : {
          "requires" : {
+            "Build::Requires": "1.1",
             "Test::More" : "0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0.88",
+            "Test::Requires" : "1.2"
          }
       }
    },
