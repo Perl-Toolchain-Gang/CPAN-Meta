@@ -80,5 +80,6 @@
          "description" : "Take over the world"
       }
    },
-   "abstract" : "Build and install Perl modules"
+   "abstract" : "Build and install Perl modules",
+   "x_whatever" : "Custom key"
 }

@@ -103,5 +103,17 @@ for my $f ( reverse sort @files ) {
   ) or diag join("\n", keys %$up_converted);
 }
 
+# specific test for custom key handling
+{
+  my $path = File::Spec->catfile('t','data','META-2.json');
+  my $original = CPAN::Meta->_load_file( $path  );
+  ok( $original, "loaded META-2.json" );
+  my $cmc = CPAN::Meta::Converter->new( $original );
+  my $up_converted = $cmc->convert( version => 1.4 );
+  ok ( $up_converted->{x_whatever},
+    "down converted 'x_' as 'x_'"
+  );
+}
+
 done_testing;
 
