@@ -2,6 +2,9 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - when downconverting from 2, leave custom keys unchanged
+    (except in resources, where x_ is changed to X_)
+
 2.101410  2010-05-21 10:39:18 EST5EDT
 
   - when downconverting from 2, merge test requirements into build requirements
