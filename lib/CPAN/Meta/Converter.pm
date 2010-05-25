@@ -67,7 +67,13 @@ sub _generated_by {
 
 sub _listify { ! defined $_[0] ? undef : ref $_[0] eq 'ARRAY' ? $_[0] : [$_[0]] }
 
-sub _prefix_custom { "x_" . $_[0] }
+sub _prefix_custom {
+  my $key = shift;
+  $key =~ s/^(?!x_)   # Unless it already starts with x_
+             (?:x-?)? # Remove leading x- or x (if present)
+           /x_/ix;    # and prepend x_
+  return $key;
+}
 
 sub _ucfirst_custom {
   my $key = shift;
