@@ -127,3 +127,6 @@ resources:
   license: http://dev.perl.org/licenses/
   repository: http://github.com/dagolden/module-build/
 version: 0.36_08
+x-whatever: this is a custom field
+x_whatelse: so is this
+XWhatNow: and this

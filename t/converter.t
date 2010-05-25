@@ -85,5 +85,23 @@ for my $f ( reverse sort @files ) {
   }
 }
 
+# specific test for custom key handling
+{
+  my $path = File::Spec->catfile('t','data','META-1_4.yml');
+  my $original = CPAN::Meta->_load_file( $path  );
+  ok( $original, "loaded META-1_4.yml" );
+  my $cmc = CPAN::Meta::Converter->new( $original );
+  my $up_converted = $cmc->convert( version => 2 );
+  ok ( $up_converted->{x_whatever} && ! $up_converted->{'x-whatever'},
+    "up converted 'x-' to 'x_'"
+  );
+  ok ( $up_converted->{x_whatelse},
+    "up converted 'x_' as 'x_'"
+  );
+  ok ( $up_converted->{x_WhatNow} && ! $up_converted->{XWhatNow},
+    "up converted 'XFoo' to 'x_Foo'"
+  ) or diag join("\n", keys %$up_converted);
+}
+
 done_testing;
 
