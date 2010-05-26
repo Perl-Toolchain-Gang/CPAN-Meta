@@ -70,6 +70,8 @@ my $distmeta = {
 
 my $meta = CPAN::Meta->new($distmeta);
 
+isnt( $meta->resources, $meta->{resources}, "map values are deep cloned");
+
 is($meta->name,     'Module-Build', '->name');
 is($meta->abstract, 'Build and install Perl modules', '->abstract');
 

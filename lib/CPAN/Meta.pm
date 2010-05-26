@@ -46,6 +46,7 @@ use CPAN::Meta::Converter;
 use CPAN::Meta::Validator;
 use JSON 2 ();
 use Parse::CPAN::Meta ();
+use Storable ();
 
 =head1 STRING DATA
 
@@ -109,7 +110,7 @@ BEGIN {
       my $value = $_[0]{ $attr };
       confess "$attr must be called in list context"
         unless wantarray;
-      return @$value if ref $value;
+      return @{ Storable::dclone($value) } if ref $value;
       return $value;
     };
   }
@@ -149,7 +150,7 @@ BEGIN {
     (my $subname = $attr) =~ s/-/_/;
     *$subname = sub {
       my $value = $_[0]{ $attr };
-      return $value if $value;
+      return Storable::dclone($value) if $value;
       return {};
     };
   }
