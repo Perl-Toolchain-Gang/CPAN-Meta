@@ -2,6 +2,9 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - loosen URL validation -- only a scheme and authority are required
+    without restrictions on either
+
 2.101450  2010-05-25 17:59:32 America/New_York
 
   - when downconverting from 2, leave custom keys unchanged

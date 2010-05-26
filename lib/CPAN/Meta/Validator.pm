@@ -675,33 +675,24 @@ sub release_status {
   return 0;
 }
 
-#my $protocol = qr{(?:http|https|ftp|afs|news|nntp|mid|cid|mailto|wais|prospero|telnet|gopher)};
-my $protocol = qr{(?:ftp|http|https|git)};
-my $badproto = qr{(\w+)://};
-my $proto    = qr{$protocol://(?:[\w]+:\w+@)?};
-my $atom     = qr{[a-z\d]}i;
-my $domain   = qr{((($atom(($atom|-)*$atom)?)\.)*([a-zA-Z](($atom|-)*$atom)?))};
-my $ip       = qr{((\d+)(\.(\d+)){3})(:(\d+))?};
-my $enc      = qr{%[a-fA-F\d]{2}};
-my $legal1   = qr{[a-zA-Z\d\$\-_.+!*'(),#]}; #' - this comment is to avoid syntax highlighting issues
-my $legal2   = qr{[;:@&=]};
-my $legal3   = qr{((($legal1|$enc)|$legal2)*)};
-my $path     = qr{\/$legal3(\/$legal3)*};
-my $query    = qr{\?$legal3};
-my $urlregex = qr{(($proto)?($domain|$ip)(($path)?($query)?)?)};
+# _uri_split taken from URI::Split by Gisle Aas, Copyright 2003
+sub _uri_split {
+     return $_[0] =~ m,(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?,;
+}
 
 sub url {
     my ($self,$key,$value) = @_;
     if(defined $value) {
-        if($value && $value =~ /^$badproto$/) {
-            $self->_error( "Domain name required for a valid URL." );
-            return 0;
-        }
-        if($value && $value =~ /^$badproto/ && $1 !~ $protocol) {
-            $self->_error( "Unknown protocol used in URL." );
-            return 0;
-        }
-        return 1    if($value && $value =~ /^$urlregex$/);
+      my ($scheme, $auth, $path, $query, $frag) = _uri_split($value);
+      unless ( defined $scheme && length $scheme ) {
+        $self->_error( "'$value' for '$key' does not have a URL scheme" );
+        return 0;
+      }
+      unless ( defined $auth && length $auth ) {
+        $self->_error( "'$value' for '$key' does not have a URL authority" );
+        return 0;
+      }
+      return 1;
     }
     $value ||= '';
     $self->_error( "'$value' for '$key' is not a valid URL." );

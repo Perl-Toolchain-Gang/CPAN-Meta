@@ -2,7 +2,11 @@
    "resources" : {
       "license" : [
          "http://dev.perl.org/licenses/"
-      ]
+      ],
+      "repository" : {
+        "url" : "svn://repo.example.com/foo-bar#fakeanchor",
+        "web" : "http://www.example.com"
+      }
    },
    "generated_by" : "Module::Build version 0.36",
    "meta-spec" : {
