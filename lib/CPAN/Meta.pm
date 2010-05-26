@@ -156,6 +156,28 @@ BEGIN {
   }
 }
 
+=head1 CUSTOM DATA
+
+A list of custom keys are available from the C<custom_keys> method and
+particular keys may be retrieved with the C<custom> method.
+
+  say $meta->custom($_) for $meta->custom_keys;
+
+If a custom key refers to a data structure, a deep clone is returned.
+
+=cut
+
+sub custom_keys {
+  return grep { /^x_/i } keys %{$_[0]};
+}
+
+sub custom {
+  my ($self, $attr) = @_;
+  my $value = $self->{$attr};
+  return Storable::dclone($value) if ref $value;
+  return $value;
+}
+
 =method new
 
   my $meta = CPAN::Meta->new($distmeta_struct);

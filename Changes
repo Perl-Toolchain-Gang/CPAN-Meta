@@ -4,6 +4,8 @@ Revision history for CPAN-Meta
 
   - accessors deep clone list and map keys before returning them
 
+  - add custom_keys() and custom() methods
+
 2.101460  2010-05-25 23:12:27 America/New_York
 
   - loosen URL validation -- only a scheme and authority are required

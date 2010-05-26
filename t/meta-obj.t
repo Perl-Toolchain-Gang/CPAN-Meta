@@ -66,6 +66,8 @@ my $distmeta = {
     url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
   },
   generated_by => 'Module::Build version 0.36',
+  x_authority => 'cpan:FLORA',
+  X_deep => { deep => 'structure' },
 };
 
 my $meta = CPAN::Meta->new($distmeta);
@@ -142,6 +144,20 @@ is_deeply(
   $basic->as_string_hash,
   $distmeta->{prereqs},
   "->effective_prereqs()"
+);
+
+is_deeply( [ sort $meta->custom_keys ] , [ 'X_deep', 'x_authority' ],
+  "->custom_keys"
+);
+
+is( $meta->custom('x_authority'), 'cpan:FLORA', "->custom(X)" );
+
+is_deeply( $meta->custom('X_deep'), $distmeta->{'X_deep'},
+  "->custom(X) [is_deeply]"
+);
+
+isnt( $meta->custom('X_deep'), $distmeta->{'X_deep'},
+  "->custom(x) [is a deep clone]"
 );
 
 my $with_features = $meta->effective_prereqs([ qw(domination) ]);
