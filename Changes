@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.101461  2010-05-26 16:57:02 America/New_York
+
   - accessors deep clone list and map keys before returning them
 
   - add custom_keys() and custom() methods
