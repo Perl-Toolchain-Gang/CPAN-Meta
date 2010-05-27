@@ -233,7 +233,7 @@ Example:
 (Spec 1.2) [required] {List of one or more Strings}
 
 This List indicates the person(s) to contact concerning the
-distribution. The prefered form of the contact string is:
+distribution. The preferred form of the contact string is:
 
   contact-name <email-address>
 
