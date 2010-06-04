@@ -110,7 +110,7 @@ my %definitions = (
     'optional_features'   => {
       'map'       => {
         ':key'  => {
-          name => \&identifier,
+          name => \&string,
           'map'   => {
             description        => { value => \&string },
             prereqs => $prereq_map,
@@ -178,7 +178,7 @@ my %definitions = (
 
   'optional_features'   => {
     'map'       => {
-        ':key'  => { name => \&identifier,
+        ':key'  => { name => \&string,
             'map'   => { description        => { value => \&string },
                          requires           => $module_map1,
                          recommends         => $module_map1,
@@ -235,7 +235,7 @@ my %definitions = (
 
   'optional_features'   => {
     'map'       => {
-        ':key'  => { name => \&identifier,
+        ':key'  => { name => \&string,
             'map'   => { description        => { value => \&string },
                          requires           => $module_map1,
                          recommends         => $module_map1,
@@ -301,7 +301,7 @@ my %definitions = (
 
   'optional_features'   => {
     'map'       => {
-        ':key'  => { name => \&identifier,
+        ':key'  => { name => \&string,
             'map'   => { description        => { value => \&string },
                          requires           => $module_map1,
                          recommends         => $module_map1,
