@@ -838,7 +838,7 @@ sub custom_1 {
     if(defined $key) {
         # a valid user defined key should be alphabetic
         # and contain at least one capital case letter.
-        return 1    if($key && $key =~ /^[a-z]+$/i && $key =~ /[A-Z]/);
+        return 1    if($key && $key =~ /^[_a-z]+$/i && $key =~ /[A-Z]/);
     } else {
         $key = '<undef>';
     }
