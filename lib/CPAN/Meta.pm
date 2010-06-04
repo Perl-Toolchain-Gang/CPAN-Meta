@@ -7,7 +7,7 @@ package CPAN::Meta;
 
 =head1 SYNOPSIS
 
-  my $meta = CPAN::Meta->load('META.json');
+  my $meta = CPAN::Meta->load_file('META.json');
 
   printf "testing requirements for %s version %s\n",
     $meta->name,
@@ -233,9 +233,9 @@ sub create {
   return $self;
 }
 
-=method load
+=method load_file
 
-  my $meta = CPAN::Meta->load($distmeta_file);
+  my $meta = CPAN::Meta->load_file($distmeta_file, \%options);
 
 Given a pathname to a file containing metadata, this deserializes the file
 according to its file suffix and constructs a new C<CPAN::Meta> object, just
@@ -266,10 +266,10 @@ sub load_file {
   my ($class, $file) = @_;
 
   # load
-  confess "load() requires a valid, readable filename"
+  confess "load_file() requires a valid, readable filename"
     unless -r $file;
   my $struct = $class->_load_file( $file )
-    or confess "load() could not determine the filetype of '$file'";
+    or confess "load_file() could not determine the filetype of '$file'";
 
   my $self = eval { $class->_new($struct) };
   confess($@) if $@;
