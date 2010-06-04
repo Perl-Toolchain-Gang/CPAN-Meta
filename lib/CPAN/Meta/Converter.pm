@@ -356,8 +356,25 @@ sub _optional_features_2 {
 sub _optional_features_1_4 {
   my ($element) = @_;
   return unless $element;
-  for my $drop ( qw/requires_packages requires_os excluded_os/ ) {
-    delete $element->{$drop};
+  $element = _optional_features_as_map($element);
+  for my $name ( keys %$element ) {
+    for my $drop ( qw/requires_packages requires_os excluded_os/ ) {
+      delete $element->{$name}{$drop};
+    }
+  }
+  return $element;
+}
+
+sub _optional_features_as_map {
+  my ($element) = @_;
+  return unless $element;
+  if ( ref $element eq 'ARRAY' ) {
+    my %map;
+    for my $feature ( @$element ) {
+      my (@parts) = %$feature;
+      $map{$parts[0]} = $parts[1];
+    }
+    $element = \%map;
   }
   return $element;
 }
@@ -545,7 +562,7 @@ my %up_convert = (
     'dynamic_config'      => \&_keep_or_one,
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
-    'optional_features'   => \&_keep,
+    'optional_features'   => \&_optional_features_as_map,
     'provides'            => \&_keep,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
@@ -581,7 +598,7 @@ my %up_convert = (
     # ADDED OPTIONAL
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_1_2,
-    'optional_features'   => \&_keep,
+    'optional_features'   => \&_optional_features_as_map,
     'provides'            => \&_keep,
     'resources'           => \&_resources_1_2,
 
@@ -667,7 +684,7 @@ my %down_convert = (
     'dynamic_config'      => \&_keep_or_one,
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
-    'optional_features'   => \&_keep,
+    'optional_features'   => \&_optional_features_as_map,
     'provides'            => \&_keep,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
@@ -697,7 +714,7 @@ my %down_convert = (
     'dynamic_config'      => \&_keep_or_one,
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_1_2,
-    'optional_features'   => \&_keep,
+    'optional_features'   => \&_optional_features_as_map,
     'provides'            => \&_keep,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
