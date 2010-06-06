@@ -238,7 +238,8 @@ my $no_index_spec_1_3 = {
 
 sub _no_index_1_2 {
   my (undef, undef, $meta) = @_;
-  return _convert($meta->{private}, $no_index_spec_1_2);
+  my $no_index = $meta->{no_index} || $meta->{private};
+  return _convert($no_index, $no_index_spec_1_2);
 }
 
 sub _no_index_directory {
@@ -262,7 +263,7 @@ sub _version_map {
   return $new_map;
 }
 
-sub _prereqs {
+sub _prereqs_from_1 {
   my (undef, undef, $meta) = @_;
   my $prereqs = {};
   for my $phase ( qw/build configure/ ) {
@@ -276,6 +277,36 @@ sub _prereqs {
   }
   return $prereqs;
 }
+
+my $prereqs_spec = {
+  configure => \&_prereqs_rel,
+  build     => \&_prereqs_rel,
+  test      => \&_prereqs_rel,
+  runtime   => \&_prereqs_rel,
+  develop   => \&_prereqs_rel,
+  ':custom'  => \&_prefix_custom,
+};
+
+my $relation_spec = {
+  requires   => \&_version_map,
+  recommends => \&_version_map,
+  suggests   => \&_version_map,
+  conflicts  => \&_version_map,
+  ':custom'  => \&_prefix_custom,
+};
+
+sub _cleanup_prereqs {
+  my ($prereqs, $key, $meta, $to_version) = @_;
+  return unless $prereqs && ref $prereqs eq 'HASH';
+  return _convert( $prereqs, $prereqs_spec, $to_version );
+}
+
+sub _prereqs_rel {
+  my ($relation, $key, $meta, $to_version) = @_;
+  return unless $relation && ref $relation eq 'HASH';
+  return _convert( $relation, $relation_spec, $to_version );
+}
+
 
 BEGIN {
   my @old_prereqs = qw(
@@ -337,8 +368,7 @@ sub _downgrade_optional_features {
   return $features;
 }
 
-
-sub _optional_features_2 {
+sub _upgrade_optional_features {
   my (undef, undef, $meta) = @_;
   return undef unless exists $meta->{optional_features};
   my $origin = $meta->{optional_features};
@@ -346,11 +376,34 @@ sub _optional_features_2 {
   for my $name ( keys %$origin ) {
     $features->{$name} = {
       description => $origin->{$name}{description},
-      prereqs => _prereqs(undef, undef, $origin->{$name}),
+      prereqs => _prereqs_from_1(undef, undef, $origin->{$name}),
     };
     delete $features->{$name}{prereqs}{configure};
   }
   return $features;
+}
+
+my $optional_features_2_spec = {
+  description => \&_keep_or_unknown,
+  prereqs => \&_cleanup_prereqs,
+  ':custom'  => \&_keep,
+};
+
+sub _feature_2 {
+  my ($element, $key, $meta, $to_version) = @_;
+  return unless $element && ref $element eq 'HASH';
+  _convert( $element, $optional_features_2_spec, $to_version );
+}
+
+sub _cleanup_optional_features_2 {
+  my ($element, $key, $meta, $to_version) = @_;
+  return unless $element && ref $element eq 'HASH';
+  my $new_data = {};
+  for my $k ( keys %$element ) {
+    $new_data->{$k} = _feature_2( $element->{$k}, $k, $meta, $to_version );
+  }
+  return unless keys %$new_data;
+  return $new_data;
 }
 
 sub _optional_features_1_4 {
@@ -387,7 +440,16 @@ sub _url_or_drop {
   return;
 }
 
-my $resource2_spec = {
+sub _url_list {
+  my ($element) = @_;
+  return unless $element;
+  $element = _listify( $element );
+  $element = [ grep { _is_urlish($_) } @$element ];
+  return unless @$element;
+  return $element;
+}
+
+my $resource2_upgrade = {
   license    => sub { return _is_urlish($_[0]) ? _listify( $_[0] ) : undef },
   homepage   => \&_url_or_drop,
   bugtracker => sub { return _is_urlish($_[0]) ? { web => $_[0] } : undef },
@@ -395,10 +457,37 @@ my $resource2_spec = {
   ':custom'  => \&_prefix_custom,
 };
 
-sub _resources_2 {
+sub _upgrade_resources_2 {
   my (undef, undef, $meta, $version) = @_;
   return undef unless exists $meta->{resources};
-  return _convert($meta->{resources}, $resource2_spec);
+  return _convert($meta->{resources}, $resource2_upgrade);
+}
+
+my $bugtracker2_spec = {
+  web => \&_url_or_drop,
+  mailto => \&_keep,
+  ':custom'  => \&_prefix_custom,
+};
+
+my $repository2_spec = {
+  web => \&_url_or_drop,
+  url => \&_url_or_drop,
+  type => \&_keep_or_unknown,
+  ':custom'  => \&_prefix_custom,
+};
+
+my $resources2_cleanup = {
+  license    => \&_url_list,
+  homepage   => \&_url_or_drop,
+  bugtracker => sub { ref $_[0] ? _convert( $_[0], $bugtracker2_spec ) : undef },
+  repository => sub { ref $_[0] ? _convert( $_[0], $repository2_spec ) : undef },
+  ':custom'  => \&_prefix_custom,
+};
+
+sub _cleanup_resources_2 {
+  my ($resources, $key, $meta, $to_version) = @_;
+  return undef unless $resources && ref $resources eq 'HASH';
+  return _convert($resources, $resources2_cleanup, $to_version);
 }
 
 my $resource1_spec = {
@@ -419,8 +508,13 @@ sub _resources_1_3 {
 
 sub _resources_1_2 {
   my (undef, undef, $meta) = @_;
-  return undef unless _is_urlish($meta->{license_url});
-  return { license => $meta->{license_url} };
+  my $resources = $meta->{resources} || {};
+  if ( $meta->{license_url} && ! $resources->{license} ) {
+    $resources->{license} = $meta->license_url
+      if _is_urlish($meta->{license_url});
+  }
+  return undef unless keys %$resources;
+  return _convert($resources, $resource1_spec);
 }
 
 my $resource_downgrade_spec = {
@@ -438,6 +532,12 @@ sub _downgrade_resources {
 }
 
 sub _release_status {
+  my ($element, undef, $meta) = @_;
+  return $element if $element =~ m{\A(?:stable|testing|unstable)\z};
+  return _release_status_from_version(undef, undef, $meta);
+}
+
+sub _release_status_from_version {
   my (undef, undef, $meta) = @_;
   my $version = $meta->{version} || '';
   return ( $version =~ /_/ ) ? 'testing' : 'stable';
@@ -487,16 +587,16 @@ my %up_convert = (
     # CHANGED TO MANDATORY
     'dynamic_config'      => \&_keep_or_one,
     # ADDED MANDATORY
-    'release_status'      => \&_release_status,
+    'release_status'      => \&_release_status_from_version,
     # PRIOR OPTIONAL
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
-    'optional_features'   => \&_optional_features_2,
+    'optional_features'   => \&_upgrade_optional_features,
     'provides'            => \&_keep,
-    'resources'           => \&_resources_2,
+    'resources'           => \&_upgrade_resources_2,
     # ADDED OPTIONAL
     'description'         => \&_keep,
-    'prereqs'             => \&_prereqs,
+    'prereqs'             => \&_prereqs_from_1,
 
     # drop these deprecated fields, but only after we convert
     ':drop' => [ qw(
@@ -626,7 +726,7 @@ my %up_convert = (
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
     # ADDED OPTIONAL
-    'license_url'         => \&_keep,
+    'license_url'         => \&_url_or_drop,
     'private'             => \&_keep,
 
     # other random keys are OK if already valid
@@ -718,7 +818,7 @@ my %down_convert = (
     'provides'            => \&_keep,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
-    'resources'           => \&_resources_1_2,
+    'resources'           => \&_resources_1_3,
 
     # other random keys are OK if already valid
     ':custom'              => \&_keep,
@@ -773,6 +873,167 @@ my %down_convert = (
   },
 );
 
+my %cleanup = (
+  '2' => {
+    # PRIOR MANDATORY
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_license_2,
+    'meta-spec'           => \&_change_meta_spec,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
+    # CHANGED TO MANDATORY
+    'dynamic_config'      => \&_keep_or_one,
+    # ADDED MANDATORY
+    'release_status'      => \&_release_status,
+    # PRIOR OPTIONAL
+    'keywords'            => \&_keep,
+    'no_index'            => \&_no_index_directory,
+    'optional_features'   => \&_cleanup_optional_features_2,
+    'provides'            => \&_keep,
+    'resources'           => \&_cleanup_resources_2,
+    # ADDED OPTIONAL
+    'description'         => \&_keep,
+    'prereqs'             => \&_cleanup_prereqs,
+
+    # drop these deprecated fields, but only after we convert
+    ':drop' => [ qw(
+        build_requires
+        configure_requires
+        conflicts
+        distribution_type
+        license_url
+        private
+        recommends
+        requires
+    ) ],
+
+    # other random keys need x_ prefixing
+    ':custom'              => \&_prefix_custom,
+  },
+  '1.4' => {
+    # PRIOR MANDATORY
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_license_1,
+    'meta-spec'           => \&_change_meta_spec,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
+    # PRIOR OPTIONAL
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'keywords'            => \&_keep,
+    'no_index'            => \&_no_index_directory,
+    'optional_features'   => \&_optional_features_1_4,
+    'provides'            => \&_keep,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
+    'resources'           => \&_resources_1_4,
+    # ADDED OPTIONAL
+    'configure_requires'  => \&_keep,
+
+    # other random keys are OK if already valid
+    ':custom'             => \&_keep
+  },
+  '1.3' => {
+    # PRIOR MANDATORY
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_license_1,
+    'meta-spec'           => \&_change_meta_spec,
+    'name'                => \&_keep,
+    'version'             => \&_keep,
+    # PRIOR OPTIONAL
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'keywords'            => \&_keep,
+    'no_index'            => \&_no_index_directory,
+    'optional_features'   => \&_optional_features_as_map,
+    'provides'            => \&_keep,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
+    'resources'           => \&_resources_1_3,
+
+    # other random keys are OK if already valid
+    ':custom'             => \&_keep
+  },
+  '1.2' => {
+    # PRIOR MANDATORY
+    'version'             => \&_keep,
+    # CHANGED TO MANDATORY
+    'license'             => \&_license_1,
+    'name'                => \&_keep,
+    'generated_by'        => \&_generated_by,
+    # ADDED MANDATORY
+    'abstract'            => \&_keep_or_unknown,
+    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'meta-spec'           => \&_change_meta_spec,
+    # PRIOR OPTIONAL
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
+    # ADDED OPTIONAL
+    'keywords'            => \&_keep,
+    'no_index'            => \&_no_index_1_2,
+    'optional_features'   => \&_optional_features_as_map,
+    'provides'            => \&_keep,
+    'resources'           => \&_resources_1_2,
+
+    # other random keys are OK if already valid
+    ':custom'             => \&_keep
+  },
+  '1.1' => {
+    # CHANGED TO MANDATORY
+    'version'             => \&_keep,
+    # IMPLIED MANDATORY
+    'name'                => \&_keep,
+    'meta-spec'           => \&_change_meta_spec,
+    # PRIOR OPTIONAL
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_license_1,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
+    # ADDED OPTIONAL
+    'license_url'         => \&_url_or_drop,
+    'private'             => \&_keep,
+
+    # other random keys are OK if already valid
+    ':custom'             => \&_keep
+  },
+  '1.0' => {
+    # IMPLIED MANDATORY
+    'name'                => \&_keep,
+    'meta-spec'           => \&_change_meta_spec,
+    'version'             => \&_keep,
+    # IMPLIED OPTIONAL
+    'build_requires'      => \&_version_map,
+    'conflicts'           => \&_version_map,
+    'distribution_type'   => \&_keep,
+    'dynamic_config'      => \&_keep_or_one,
+    'generated_by'        => \&_generated_by,
+    'license'             => \&_license_1,
+    'recommends'          => \&_version_map,
+    'requires'            => \&_version_map,
+
+    # other random keys are OK if already valid
+    ':custom'             => \&_keep,
+  },
+);
+
 #--------------------------------------------------------------------------#
 # Code
 #--------------------------------------------------------------------------#
@@ -812,16 +1073,19 @@ Valid parameters include:
 =for :list
 * version
 Indicates the desired specification version (e.g. "1.0", "1.1" ... "1.4", "2").
-Converting a structure to its own version will just return a copy of the
-structure. Defaults to the latest version of the CPAN Meta Spec.
+Defaults to the latest version of the CPAN Meta Spec.
 
-The conversion process attempts to clean-up and standardize data during
-converstion.  For example, if C<author> is given as a scalar, it will converted
-to an array reference containing the item.
+The conversion process attempts to clean-up simple errors and standardize data
+during converstion.  For example, if C<author> is given as a scalar, it will
+converted to an array reference containing the item, or if a mandatory
+C<license> field is missing, it will be added as "unknown".
 
 Conversion proceeds through each version in turn.  For example, a version 1.2
-structure is converted to 1.3 then 1.4 then finally version 2.  C<convert> will
-die if any conversion results in an invalid structure.
+structure is converted to 1.3 then 1.4 then finally version 2.  Converting a
+structure to its own version will still clean-up and standardize the structure.
+
+C<convert> will die if any conversion/standardization still results in an
+invalid structure.
 
 =cut
 
@@ -835,6 +1099,12 @@ sub convert {
   my $converted = dclone $self->{data};
 
   if ( $old_version == $new_version ) {
+    $converted = _convert( $converted, $cleanup{$old_version}, $old_version );
+    my $cmv = CPAN::Meta::Validator->new( $converted );
+    unless ( $cmv->is_valid ) {
+      my $errs = join("\n", $cmv->errors);
+      confess "Failed to clean-up $old_version metadata. Errors:\n$errs\n";
+    }
     return $converted;
   }
   elsif ( $old_version > $new_version )  {

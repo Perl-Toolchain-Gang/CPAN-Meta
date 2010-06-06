@@ -136,7 +136,7 @@ is_deeply(
 
 is($meta->meta_spec_version, '2', '->meta_spec_version');
 
-is($meta->generated_by, 'Module::Build version 0.36', '->generated_by');
+like($meta->generated_by, qr/Module::Build version 0.36/, '->generated_by');
 
 my $basic = $meta->effective_prereqs;
 
