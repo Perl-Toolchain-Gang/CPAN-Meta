@@ -243,6 +243,10 @@ sub _no_index_1_2 {
   if ( exists $no_index->{files} ) {
     $no_index->{file} = delete $no_index->{file};
   }
+  # common mistake: modules -> module
+  if ( exists $no_index->{modules} ) {
+    $no_index->{module} = delete $no_index->{module};
+  }
   return _convert($no_index, $no_index_spec_1_2);
 }
 
@@ -256,7 +260,17 @@ sub _no_index_directory {
   if ( exists $element->{files} ) {
     $element->{file} = delete $element->{file};
   }
+  # common mistake: modules -> module
+  if ( exists $element->{modules} ) {
+    $element->{module} = delete $element->{module};
+  }
   return _convert($element, $no_index_spec_1_3);
+}
+
+sub _is_module_name {
+  my $key = shift;
+  return unless defined $key && length $key;
+  return $key =~ m{^[A-Za-z][A-Za-z0-9_]*(?:::[A-Za-z0-9_]+)*$};
 }
 
 sub _version_map {
@@ -266,8 +280,19 @@ sub _version_map {
     my $new_map = {};
     for my $k ( keys %$element ) {
       my $value = $element->{$k};
-      $value = 0 if defined $value && $value eq 'undef'; # heuristic
-      $new_map->{$k} = (defined $value && length $value) ? $value : 0;
+      if ( ! ( defined $value && length $value ) ) {
+        $new_map->{$k} = 0; 
+      }
+      elsif ( $value eq 'undef' ) {
+        $new_map->{$k} = 0; 
+      }
+      elsif ( _is_module_name( $value ) ) { # some weird, old META have this 
+        $new_map->{$k} = 0;
+        $new_map->{$value} = 0;
+      }
+      else { 
+        $new_map->{$k} = $value;
+      }
     }
     return $new_map;
   }
