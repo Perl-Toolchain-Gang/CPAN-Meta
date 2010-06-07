@@ -253,13 +253,21 @@ sub _no_index_directory {
 sub _version_map {
   my ($element) = @_;
   return undef unless defined $element;
-  return $element unless ref $element eq 'HASH';
-  my $new_map = {};
-  for my $k ( keys %$element ) {
-    my $value = $element->{$k};
-    $new_map->{$k} = (defined $value && length $value) ? $value : 0;
+  if ( ref $element eq 'HASH' ) {
+    my $new_map = {};
+    for my $k ( keys %$element ) {
+      my $value = $element->{$k};
+      $new_map->{$k} = (defined $value && length $value) ? $value : 0;
+    }
+    return $new_map;
   }
-  return $new_map;
+  elsif ( ref $element eq 'ARRAY' ) {
+    return { map { $_ => 0 } @$element };
+  }
+  elsif ( ref $element eq '' && length $element ) {
+    return { $element => 0 }
+  }
+  return;
 }
 
 sub _prereqs_from_1 {
