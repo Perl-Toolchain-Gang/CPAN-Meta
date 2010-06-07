@@ -47,11 +47,21 @@ my $module_map1 = { 'map' => { ':key' => { name => \&module, value => \&exversio
 
 my $module_map2 = { 'map' => { ':key' => { name => \&module, value => \&version   } } };
 
+my $no_index_2 = {
+    'map'       => { file       => { list => { value => \&string } },
+                     directory  => { list => { value => \&string } },
+                     'package'  => { list => { value => \&string } },
+                     namespace  => { list => { value => \&string } },
+                    ':key'      => { name => \&custom_2, value => \&anything },
+    }
+};
+
 my $no_index_1_3 = {
     'map'       => { file       => { list => { value => \&string } },
                      directory  => { list => { value => \&string } },
                      'package'  => { list => { value => \&string } },
                      namespace  => { list => { value => \&string } },
+                     ':key'     => { name => \&string, value => \&anything },
     }
 };
 
@@ -60,6 +70,7 @@ my $no_index_1_2 = {
                      dir        => { list => { value => \&string } },
                      'package'  => { list => { value => \&string } },
                      namespace  => { list => { value => \&string } },
+                     ':key'     => { name => \&string, value => \&anything },
     }
 };
 
@@ -94,7 +105,8 @@ my %definitions = (
       mandatory => 1,
       'map' => {
         version => { mandatory => 1, value => \&version},
-        url     => { value => \&url }
+        url     => { value => \&url },
+        ':key' => { name => \&custom_2, value => \&anything },
       }
     },
     'name'                => { mandatory => 1, value => \&string  },
@@ -104,7 +116,7 @@ my %definitions = (
     # OPTIONAL
     'description' => { value => \&string },
     'keywords'    => { lazylist => { value => \&string } },
-    'no_index'    => $no_index_1_3,
+    'no_index'    => $no_index_2,
     'optional_features'   => {
       'map'       => {
         ':key'  => {
@@ -112,6 +124,7 @@ my %definitions = (
           'map'   => {
             description        => { value => \&string },
             prereqs => $prereq_map,
+            ':key' => { name => \&custom_2, value => \&anything },
           }
         }
       }
@@ -123,7 +136,8 @@ my %definitions = (
           name  => \&module,
           'map' => {
             file    => { mandatory => 1, value => \&file },
-            version => { value => \&version }
+            version => { value => \&version },
+            ':key' => { name => \&custom_2, value => \&anything },
           }
         }
       }
@@ -136,6 +150,7 @@ my %definitions = (
           'map' => {
             web => { value => \&url },
             mailto => { value => \&string},
+            ':key' => { name => \&custom_2, value => \&anything },
           }
         },
         repository => {
@@ -143,6 +158,7 @@ my %definitions = (
             web => { value => \&url },
             url => { value => \&url },
             type => { value => \&string },
+            ':key' => { name => \&custom_2, value => \&anything },
           }
         },
         ':key'     => { value => \&string, name => \&custom_2 },
@@ -155,8 +171,14 @@ my %definitions = (
   },
 
 '1.4' => {
-  'meta-spec'           => { mandatory => 1, 'map' => { version => { mandatory => 1, value => \&version},
-                                                        url     => { mandatory => 1, value => \&urlspec } } },
+  'meta-spec'           => {
+    mandatory => 1,
+    'map' => {
+      version => { mandatory => 1, value => \&version},
+      url     => { mandatory => 1, value => \&urlspec },
+      ':key'  => { name => \&string, value => \&anything },
+    },
+  },
 
   'name'                => { mandatory => 1, value => \&string  },
   'version'             => { mandatory => 1, value => \&version },
@@ -182,15 +204,22 @@ my %definitions = (
                          recommends         => $module_map1,
                          build_requires     => $module_map1,
                          conflicts          => $module_map2,
+                         ':key'  => { name => \&string, value => \&anything },
             }
         }
      }
   },
 
   'provides'    => {
-    'map'       => { ':key' => { name  => \&module,
-                                 'map' => { file    => { mandatory => 1, value => \&file },
-                                            version => { value => \&version } } } }
+    'map'       => {
+      ':key' => { name  => \&module,
+        'map' => {
+          file    => { mandatory => 1, value => \&file },
+          version => { value => \&version },
+          ':key'  => { name => \&string, value => \&anything },
+        }
+      }
+    }
   },
 
   'no_index'    => $no_index_1_3,
@@ -213,8 +242,14 @@ my %definitions = (
 },
 
 '1.3' => {
-  'meta-spec'           => { mandatory => 1, 'map' => { version => { mandatory => 1, value => \&version},
-                                                        url     => { mandatory => 1, value => \&urlspec } } },
+  'meta-spec'           => {
+    mandatory => 1,
+    'map' => {
+      version => { mandatory => 1, value => \&version},
+      url     => { mandatory => 1, value => \&urlspec },
+      ':key'  => { name => \&string, value => \&anything },
+    },
+  },
 
   'name'                => { mandatory => 1, value => \&string  },
   'version'             => { mandatory => 1, value => \&version },
@@ -239,16 +274,24 @@ my %definitions = (
                          recommends         => $module_map1,
                          build_requires     => $module_map1,
                          conflicts          => $module_map2,
+                         ':key'  => { name => \&string, value => \&anything },
             }
         }
      }
   },
 
   'provides'    => {
-    'map'       => { ':key' => { name  => \&module,
-                                 'map' => { file    => { mandatory => 1, value => \&file },
-                                            version => { value => \&version } } } }
+    'map'       => {
+      ':key' => { name  => \&module,
+        'map' => {
+          file    => { mandatory => 1, value => \&file },
+          version => { value => \&version },
+          ':key'  => { name => \&string, value => \&anything },
+        }
+      }
+    }
   },
+
 
   'no_index'    => $no_index_1_3,
   'private'     => $no_index_1_3,
@@ -274,8 +317,15 @@ my %definitions = (
 # original mistake, and that a v1.1 was retro fitted into the timeline, when
 # v1.2 was originally slated as v1.1. But I could be wrong ;)
 '1.2' => {
-  'meta-spec'           => { mandatory => 1, 'map' => { version => { mandatory => 1, value => \&version},
-                                                        url     => { mandatory => 1, value => \&urlspec } } },
+  'meta-spec'           => {
+    mandatory => 1,
+    'map' => {
+      version => { mandatory => 1, value => \&version},
+      url     => { mandatory => 1, value => \&urlspec },
+      ':key'  => { name => \&string, value => \&anything },
+    },
+  },
+
 
   'name'                => { mandatory => 1, value => \&string  },
   'version'             => { mandatory => 1, value => \&version },
@@ -305,15 +355,22 @@ my %definitions = (
                          recommends         => $module_map1,
                          build_requires     => $module_map1,
                          conflicts          => $module_map2,
+                         ':key'  => { name => \&string, value => \&anything },
             }
         }
      }
   },
 
   'provides'    => {
-    'map'       => { ':key' => { name  => \&module,
-                                 'map' => { file    => { mandatory => 1, value => \&file },
-                                            version => { value => \&version } } } }
+    'map'       => {
+      ':key' => { name  => \&module,
+        'map' => {
+          file    => { mandatory => 1, value => \&file },
+          version => { value => \&version },
+          ':key'  => { name => \&string, value => \&anything },
+        }
+      }
+    }
   },
 
   'resources'   => {
@@ -853,7 +910,7 @@ sub custom_2 {
     } else {
         $key = '<undef>';
     }
-    $self->_error( "Custom resource '$key' must begin with 'x_' or 'X_'." );
+    $self->_error( "Custom key '$key' must begin with 'x_' or 'X_'." );
     return 0;
 }
 
@@ -884,6 +941,7 @@ sub phase {
     my ($self,$key) = @_;
     if(defined $key) {
         return 1 if( length $key && grep { $key eq $_ } @valid_phases );
+        return 1 if $key =~ /x_/i;
     } else {
         $key = '<undef>';
     }
@@ -896,6 +954,7 @@ sub relation {
     my ($self,$key) = @_;
     if(defined $key) {
         return 1 if( length $key && grep { $key eq $_ } @valid_relations );
+        return 1 if $key =~ /x_/i;
     } else {
         $key = '<undef>';
     }

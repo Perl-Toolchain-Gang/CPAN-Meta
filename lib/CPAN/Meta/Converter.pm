@@ -235,6 +235,14 @@ my $no_index_spec_1_3 = {
   'namespace' => \&_listify,
 };
 
+my $no_index_spec_2 = {
+  'file' => \&_listify,
+  'directory' => \&_listify,
+  'package' => \&_listify,
+  'namespace' => \&_listify,
+  ':custom'  => \&_prefix_custom,
+};
+
 sub _no_index_1_2 {
   my (undef, undef, $meta) = @_;
   my $no_index = $meta->{no_index} || $meta->{private};
@@ -251,7 +259,7 @@ sub _no_index_1_2 {
 }
 
 sub _no_index_directory {
-  my ($element) = @_;
+  my ($element, $key, $meta, $version) = @_;
   return unless $element;
   if ( exists $element->{dir} ) {
     $element->{directory} = delete $element->{dir};
@@ -264,7 +272,8 @@ sub _no_index_directory {
   if ( exists $element->{modules} ) {
     $element->{module} = delete $element->{module};
   }
-  return _convert($element, $no_index_spec_1_3);
+  my $spec = $version == 2 ? $no_index_spec_2 : $no_index_spec_1_3;
+  return _convert($element, $spec);
 }
 
 sub _is_module_name {
@@ -428,7 +437,7 @@ sub _upgrade_optional_features {
 my $optional_features_2_spec = {
   description => \&_keep_or_unknown,
   prereqs => \&_cleanup_prereqs,
-  ':custom'  => \&_keep,
+  ':custom'  => \&_prefix_custom,
 };
 
 sub _feature_2 {
