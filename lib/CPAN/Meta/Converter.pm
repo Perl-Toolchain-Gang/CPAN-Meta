@@ -25,6 +25,7 @@ optional fields.)
 
 use CPAN::Meta::Validator;
 use Storable qw/dclone/;
+use version 0.82 ();
 
 my %known_specs = (
     '2'   => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
@@ -304,6 +305,26 @@ sub _is_module_name {
   return $key =~ m{^[A-Za-z][A-Za-z0-9_]*(?:::[A-Za-z0-9_]+)*$};
 }
 
+sub _clean_version {
+  my ($element, $key, $meta, $to_version) = @_;
+  if ( ! ( defined $element && length $element ) ) {
+    return 0;
+  }
+  elsif ( $element eq 'undef' || $element eq '<undef>' ) {
+    return 0;
+  }
+  elsif ( $element =~ m{^[\x{0}-\x{10}]} ) { # literal v-string
+    return "v" . join(".", map { ord($_) } split //, $element);
+  }
+  elsif ( version::is_lax($element) ) {
+    my $v = version->new($element);
+    return $v->is_qv ? $v->normal : $element;
+  }
+  else {
+    return 0;
+  }
+}
+
 sub _version_map {
   my ($element) = @_;
   return undef unless defined $element;
@@ -313,20 +334,17 @@ sub _version_map {
       next unless _is_module_name($k);
       my $value = $element->{$k};
       if ( ! ( defined $value && length $value ) ) {
-        $new_map->{$k} = 0; 
+        $new_map->{$k} = 0;
       }
-      elsif ( $value eq 'undef' ) {
-        $new_map->{$k} = 0; 
+      elsif ( $value eq 'undef' || $value eq '<undef>' ) {
+        $new_map->{$k} = 0;
       }
-      elsif ( _is_module_name( $value ) ) { # some weird, old META have this 
+      elsif ( _is_module_name( $value ) ) { # some weird, old META have this
         $new_map->{$k} = 0;
         $new_map->{$value} = 0;
       }
-      elsif ( $value =~ m{^\s*-} ) { # negative number ?!?
-        $new_map->{$k} = 0;
-      }
-      else { 
-        $new_map->{$k} = $value;
+      else {
+        $new_map->{$k} = _clean_version($value);
       }
     }
     return $new_map;
@@ -635,6 +653,28 @@ sub _release_status_from_version {
   return ( $version =~ /_/ ) ? 'testing' : 'stable';
 }
 
+my $provides_spec = {
+  file => \&_keep,
+  version => \&_clean_version,
+};
+
+my $provides_spec_2 = {
+  file => \&_keep,
+  version => \&_clean_version,
+  ':custom'  => \&_prefix_custom,
+};
+
+sub _provides {
+  my ($element, $key, $meta, $to_version) = @_;
+  return unless defined $element && ref $element eq 'HASH';
+  my $spec = $to_version == 2 ? $provides_spec_2 : $provides_spec;
+  my $new_data = {};
+  for my $k ( keys %$element ) {
+    $new_data->{$k} = _convert($element->{$k}, $spec, $to_version);
+  }
+  return $new_data;
+}
+
 sub _convert {
   my ($data, $spec, $to_version) = @_;
 
@@ -684,7 +724,7 @@ my %up_convert = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_upgrade_optional_features,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'resources'           => \&_upgrade_resources_2,
     # ADDED OPTIONAL
     'description'         => \&_keep,
@@ -722,7 +762,7 @@ my %up_convert = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_optional_features_1_4,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
     'resources'           => \&_resources_1_4,
@@ -755,7 +795,7 @@ my %up_convert = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_optional_features_as_map,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
     'resources'           => \&_resources_1_3,
@@ -791,7 +831,7 @@ my %up_convert = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_1_2,
     'optional_features'   => \&_optional_features_as_map,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'resources'           => \&_resources_1_2,
 
     # drop these deprecated fields, but only after we convert
@@ -845,7 +885,7 @@ my %down_convert = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_downgrade_optional_features,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'recommends'          => \&_get_recommends,
     'requires'            => \&_get_requires,
     'resources'           => \&_downgrade_resources,
@@ -877,7 +917,7 @@ my %down_convert = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_optional_features_as_map,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
     'resources'           => \&_resources_1_3,
@@ -907,7 +947,7 @@ my %down_convert = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_1_2,
     'optional_features'   => \&_optional_features_as_map,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
     'resources'           => \&_resources_1_3,
@@ -983,7 +1023,7 @@ my %cleanup = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_cleanup_optional_features_2,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'resources'           => \&_cleanup_resources_2,
     # ADDED OPTIONAL
     'description'         => \&_keep,
@@ -1021,7 +1061,7 @@ my %cleanup = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_optional_features_1_4,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
     'resources'           => \&_resources_1_4,
@@ -1048,7 +1088,7 @@ my %cleanup = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
     'optional_features'   => \&_optional_features_as_map,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'recommends'          => \&_version_map,
     'requires'            => \&_version_map,
     'resources'           => \&_resources_1_3,
@@ -1078,7 +1118,7 @@ my %cleanup = (
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_1_2,
     'optional_features'   => \&_optional_features_as_map,
-    'provides'            => \&_keep,
+    'provides'            => \&_provides,
     'resources'           => \&_resources_1_2,
 
     # other random keys are OK if already valid
