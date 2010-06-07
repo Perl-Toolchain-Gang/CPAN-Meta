@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.101580  2010-06-07 16:44:13 EST5EDT
+
   - add "lazy_validation" option to constructors
 
   - add ability to "convert" to same version and clean-up any fixable
