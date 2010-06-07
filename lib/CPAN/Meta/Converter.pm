@@ -247,6 +247,17 @@ sub _no_index_1_2 {
   my (undef, undef, $meta) = @_;
   my $no_index = $meta->{no_index} || $meta->{private};
   return unless $no_index;
+
+  # cleanup wrong format
+  if ( ! ref $no_index ) {
+    my $item = $no_index;
+    $no_index = { dir => [ $item ], file => [ $item ] };
+  }
+  elsif ( ref $no_index eq 'ARRAY' ) {
+    my $list = $no_index;
+    $no_index = { dir => [ @$list ], file => [ @$list ] };
+  }
+
   # common mistake: files -> file
   if ( exists $no_index->{files} ) {
     $no_index->{file} = delete $no_index->{file};
@@ -261,6 +272,17 @@ sub _no_index_1_2 {
 sub _no_index_directory {
   my ($element, $key, $meta, $version) = @_;
   return unless $element;
+
+  # cleanup wrong format
+  if ( ! ref $element ) {
+    my $item = $element;
+    $element = { directory => [ $item ], file => [ $item ] };
+  }
+  elsif ( ref $element eq 'ARRAY' ) {
+    my $list = $element;
+    $element = { directory => [ @$list ], file => [ @$list ] };
+  }
+
   if ( exists $element->{dir} ) {
     $element->{directory} = delete $element->{dir};
   }
