@@ -2,6 +2,15 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - add "lazy_validation" option to constructors
+
+  - add ability to "convert" to same version and clean-up any fixable
+    errors
+
+  - fix validation bugs (adhere closer to the spec)
+
+  - improve lots of heuristics during conversion
+
 2.101461  2010-05-26 16:57:02 America/New_York
 
   - accessors deep clone list and map keys before returning them
