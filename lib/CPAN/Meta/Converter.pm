@@ -468,10 +468,10 @@ sub _url_list {
 
 sub _author_list {
   my ($element) = @_;
-  return unless $element;
+  return [ 'unknown' ] unless $element;
   $element = _listify( $element );
   $element = [ map { defined $_ && length $_ ? $_ : 'unknown' } @$element ];
-  return unless @$element;
+  return [ 'unknown' ] unless @$element;
   return $element;
 }
 
