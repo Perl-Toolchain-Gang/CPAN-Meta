@@ -299,6 +299,9 @@ sub _version_map {
         $new_map->{$k} = 0;
         $new_map->{$value} = 0;
       }
+      elsif ( $value =~ m{^\s*-} ) { # negative number ?!?
+        $new_map->{$k} = 0;
+      }
       else { 
         $new_map->{$k} = $value;
       }
