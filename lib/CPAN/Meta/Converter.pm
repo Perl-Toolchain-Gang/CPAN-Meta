@@ -310,7 +310,8 @@ sub _version_map {
     return $new_map;
   }
   elsif ( ref $element eq 'ARRAY' ) {
-    return { map { $_ => 0 } @$element };
+    my $hashref = { map { $_ => 0 } @$element };
+    return _version_map($hashref); # cleanup any weird stuff
   }
   elsif ( ref $element eq '' && length $element ) {
     return { $element => 0 }
