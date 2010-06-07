@@ -904,9 +904,7 @@ sub custom_1 {
 sub custom_2 {
     my ($self,$key) = @_;
     if(defined $key) {
-        # a valid user defined key should be alphabetic
-        # and begin with x_ or X_
-        return 1    if($key && $key =~ /^x_([-_a-z]+)$/i);  # user defined
+        return 1    if($key && $key =~ /^x_/i);  # user defined
     } else {
         $key = '<undef>';
     }
