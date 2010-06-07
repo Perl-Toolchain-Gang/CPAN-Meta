@@ -307,15 +307,17 @@ sub _is_module_name {
 
 sub _clean_version {
   my ($element, $key, $meta, $to_version) = @_;
-  if ( ! ( defined $element && length $element ) ) {
-    return 0;
-  }
-  elsif ( $element eq 'undef' || $element eq '<undef>' ) {
-    return 0;
-  }
-  elsif ( my $v = eval { version->new($element) } ) {
-    return $v->is_qv                    ? $v->normal    :
-           substr($element,0,1) eq '.'  ? "0$element"   : $element;
+  return 0 if ! defined $element;
+
+  $element =~ s{^\s*}{};
+  $element =~ s{\s*$}{};
+  $element =~ s{^\.}{0.};
+
+  return 0 if ! length $element;
+  return 0 if ( $element eq 'undef' || $element eq '<undef>' );
+
+  if ( my $v = eval { version->new($element) } ) {
+    return $v->is_qv ? $v->normal : $element;
   }
   else {
     return 0;
