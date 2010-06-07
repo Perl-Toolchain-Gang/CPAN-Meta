@@ -265,6 +265,7 @@ sub _version_map {
     my $new_map = {};
     for my $k ( keys %$element ) {
       my $value = $element->{$k};
+      $value = 0 if $value eq 'undef'; # heuristic
       $new_map->{$k} = (defined $value && length $value) ? $value : 0;
     }
     return $new_map;
