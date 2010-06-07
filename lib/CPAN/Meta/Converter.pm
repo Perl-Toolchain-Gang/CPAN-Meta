@@ -503,7 +503,12 @@ sub _author_list {
 my $resource2_upgrade = {
   license    => sub { return _is_urlish($_[0]) ? _listify( $_[0] ) : undef },
   homepage   => \&_url_or_drop,
-  bugtracker => sub { return _is_urlish($_[0]) ? { web => $_[0] } : undef },
+  bugtracker => sub {
+    my $item = @_;
+    if ( $item =~ m{^mailto:(.*)$} ) { return { mailto => $1 } }
+    elsif( _is_urlish($item) ) { return { web => $_[0] } }
+    else { return undef }
+  },
   repository => sub { return _is_urlish($_[0]) ? { web => $_[0] } : undef },
   ':custom'  => \&_prefix_custom,
 };
