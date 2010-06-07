@@ -39,7 +39,7 @@ information on the meaning of individual fields, consult the spec.
 
 =cut
 
-use Carp qw(carp confess);
+use Carp qw(carp croak);
 use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
 use CPAN::Meta::Converter;
@@ -108,7 +108,7 @@ BEGIN {
   for my $attr (@LIST_READERS) {
     *$attr = sub {
       my $value = $_[0]{ $attr };
-      confess "$attr must be called in list context"
+      croak "$attr must be called in list context"
         unless wantarray;
       return @{ Storable::dclone($value) } if ref $value;
       return $value;
@@ -210,7 +210,7 @@ sub _new {
 sub new {
   my ($class, $struct) = @_;
   my $self = eval { $class->_new($struct) };
-  confess($@) if $@;
+  croak($@) if $@;
   return $self;
 }
 
@@ -229,7 +229,7 @@ sub create {
   $struct->{generated_by} ||= __PACKAGE__ . " version $version" ;
   $struct->{'meta-spec'}{version} ||= int($version);
   my $self = eval { $class->_new($struct) };
-  confess($@) if $@;
+  croak ($@) if $@;
   return $self;
 }
 
@@ -266,13 +266,13 @@ sub load_file {
   my ($class, $file) = @_;
 
   # load
-  confess "load_file() requires a valid, readable filename"
+  croak "load_file() requires a valid, readable filename"
     unless -r $file;
   my $struct = $class->_load_file( $file )
     or confess "load_file() could not determine the filetype of '$file'";
 
   my $self = eval { $class->_new($struct) };
-  confess($@) if $@;
+  croak($@) if $@;
   return $self;
 }
 
@@ -306,7 +306,7 @@ sub load_json_string {
   my ($class, $json) = @_;
   my $struct = JSON->new->utf8->decode($json);
   my $self = eval { $class->_new($struct) };
-  confess($@) if $@;
+  croak($@) if $@;
   return $self;
 }
 
@@ -453,7 +453,7 @@ exception will be raised.
 sub feature {
   my ($self, $ident) = @_;
 
-  confess "no feature named $ident"
+  croak "no feature named $ident"
     unless my $f = $self->optional_features->{ $ident };
 
   return CPAN::Meta::Feature->new($ident, $f);

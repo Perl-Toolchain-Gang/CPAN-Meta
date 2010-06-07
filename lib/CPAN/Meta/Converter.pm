@@ -23,7 +23,6 @@ optional fields.)
 
 =cut
 
-use Carp qw(carp confess);
 use CPAN::Meta::Validator;
 use Storable qw/dclone/;
 
@@ -1103,7 +1102,7 @@ sub convert {
     my $cmv = CPAN::Meta::Validator->new( $converted );
     unless ( $cmv->is_valid ) {
       my $errs = join("\n", $cmv->errors);
-      confess "Failed to clean-up $old_version metadata. Errors:\n$errs\n";
+      die "Failed to clean-up $old_version metadata. Errors:\n$errs\n";
     }
     return $converted;
   }
@@ -1117,7 +1116,7 @@ sub convert {
       my $cmv = CPAN::Meta::Validator->new( $converted );
       unless ( $cmv->is_valid ) {
         my $errs = join("\n", $cmv->errors);
-        confess "Failed to downconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+        die "Failed to downconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
       }
     }
     return $converted;
@@ -1132,7 +1131,7 @@ sub convert {
       my $cmv = CPAN::Meta::Validator->new( $converted );
       unless ( $cmv->is_valid ) {
         my $errs = join("\n", $cmv->errors);
-        confess "Failed to upconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+        die "Failed to upconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
       }
     }
     return $converted;

@@ -24,8 +24,6 @@ the specification claimed in the C<meta-spec> field of the structure.
 
 =cut
 
-use Carp qw(confess);
-
 #--------------------------------------------------------------------------#
 # This code copied and adapted from Test::CPAN::Meta
 # by Barbie, <barbie@cpan.org> for Miss Barbell Productions,
