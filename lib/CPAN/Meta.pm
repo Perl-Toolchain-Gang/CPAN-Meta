@@ -285,7 +285,9 @@ sub _load_file {
     $struct = JSON->new->utf8->decode($guts);
   }
   elsif ( $file =~ m{\.ya?ml} ) {
-    my @yaml = Parse::CPAN::Meta::LoadFile( $file );
+    my $guts = do { local (@ARGV,$/) = $file; <> };
+    $guts =~ s{\n?\z}{\n}ms;
+    my @yaml = Parse::CPAN::Meta::Load( $guts );
     $struct = $yaml[0];
   }
   else {
