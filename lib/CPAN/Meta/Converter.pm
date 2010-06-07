@@ -238,9 +238,10 @@ my $no_index_spec_1_3 = {
 sub _no_index_1_2 {
   my (undef, undef, $meta) = @_;
   my $no_index = $meta->{no_index} || $meta->{private};
+  return unless $no_index;
   # common mistake: files -> file
-  if ( exists $element->{files} ) {
-    $element->{file} = delete $element->{file};
+  if ( exists $no_index->{files} ) {
+    $no_index->{file} = delete $no_index->{file};
   }
   return _convert($no_index, $no_index_spec_1_2);
 }
