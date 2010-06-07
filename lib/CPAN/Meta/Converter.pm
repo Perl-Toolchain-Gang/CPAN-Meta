@@ -288,6 +288,7 @@ sub _version_map {
   if ( ref $element eq 'HASH' ) {
     my $new_map = {};
     for my $k ( keys %$element ) {
+      next unless _is_module_name($k);
       my $value = $element->{$k};
       if ( ! ( defined $value && length $value ) ) {
         $new_map->{$k} = 0; 
