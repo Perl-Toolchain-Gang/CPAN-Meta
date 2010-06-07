@@ -466,6 +466,15 @@ sub _url_list {
   return $element;
 }
 
+sub _author_list {
+  my ($element) = @_;
+  return unless $element;
+  $element = _listify( $element );
+  $element = [ map { defined $_ && length $_ ? $_ : 'unknown' } @$element ];
+  return unless @$element;
+  return $element;
+}
+
 my $resource2_upgrade = {
   license    => sub { return _is_urlish($_[0]) ? _listify( $_[0] ) : undef },
   homepage   => \&_url_or_drop,
@@ -595,7 +604,7 @@ my %up_convert = (
   '2-from-1.4' => {
     # PRIOR MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_2,
     'meta-spec'           => \&_change_meta_spec,
@@ -633,7 +642,7 @@ my %up_convert = (
   '1.4-from-1.3' => {
     # PRIOR MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_1,
     'meta-spec'           => \&_change_meta_spec,
@@ -666,7 +675,7 @@ my %up_convert = (
   '1.3-from-1.2' => {
     # PRIOR MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_1,
     'meta-spec'           => \&_change_meta_spec,
@@ -703,7 +712,7 @@ my %up_convert = (
     'generated_by'        => \&_generated_by,
     # ADDED MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'meta-spec'           => \&_change_meta_spec,
     # PRIOR OPTIONAL
     'build_requires'      => \&_version_map,
@@ -755,7 +764,7 @@ my %down_convert = (
   '1.4-from-2' => {
     # MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'generated_by'        => \&_generated_by,
     'license'             => \&_downgrade_license,
     'meta-spec'           => \&_change_meta_spec,
@@ -788,7 +797,7 @@ my %down_convert = (
   '1.3-from-1.4' => {
     # MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_1,
     'meta-spec'           => \&_change_meta_spec,
@@ -818,7 +827,7 @@ my %down_convert = (
   '1.2-from-1.3' => {
     # MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_1,
     'meta-spec'           => \&_change_meta_spec,
@@ -894,7 +903,7 @@ my %cleanup = (
   '2' => {
     # PRIOR MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_2,
     'meta-spec'           => \&_change_meta_spec,
@@ -932,7 +941,7 @@ my %cleanup = (
   '1.4' => {
     # PRIOR MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_1,
     'meta-spec'           => \&_change_meta_spec,
@@ -959,7 +968,7 @@ my %cleanup = (
   '1.3' => {
     # PRIOR MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'generated_by'        => \&_generated_by,
     'license'             => \&_license_1,
     'meta-spec'           => \&_change_meta_spec,
@@ -990,7 +999,7 @@ my %cleanup = (
     'generated_by'        => \&_generated_by,
     # ADDED MANDATORY
     'abstract'            => \&_keep_or_unknown,
-    'author'              => sub { _listify( _keep_or_unknown( @_ ) ) },
+    'author'              => \&_author_list,
     'meta-spec'           => \&_change_meta_spec,
     # PRIOR OPTIONAL
     'build_requires'      => \&_version_map,
