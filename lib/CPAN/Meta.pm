@@ -180,36 +180,63 @@ sub custom {
 
 =method new
 
-  my $meta = CPAN::Meta->new($distmeta_struct);
+  my $meta = CPAN::Meta->new($distmeta_struct, \%options);
 
-Returns a valid CPAN::Meta object or dies if the supplied hash reference
-fails to validate.  Older format metadata will be up-converted to version 2
-if if validates against the original stated specification.
+Returns a valid CPAN::Meta object or dies if the supplied metadata hash
+reference fails to validate.  Older-format metadata will be up-converted to
+version 2 if they validate against the original stated specification.
 
-For a more liberal treatment, manually upcovert older metadata versions
-using L<CPAN::Meta::Converter> before calling C<new()>
+Valid options include:
+
+=over
+
+=item *
+
+lazy_validation -- if true, new will attempt to convert the given metadata
+to version 2 before attempting to validate it.  This means than any
+fixable errors will be handled by CPAN::Meta::Converter before validation.
+(Note that this might result in invalid optional data being silently
+dropped.)  The default is false.
+
+=back
 
 =cut
 
 sub _new {
-  my ($class, $struct) = @_;
+  my ($class, $struct, $options) = @_;
+  my $self;
 
-  # validate original struct
-  my $cmv = CPAN::Meta::Validator->new( $struct );
-  unless ( $cmv->is_valid) {
-    die "Invalid metadata structure. Errors: "
-      . join(", ", $cmv->errors) . "\n";
+  if ( $options->{lazy_validation} ) {
+    # try to convert to a valid structure; if succeeds, then return it
+    my $cmc = CPAN::Meta::Converter->new( $struct );
+    $self = $cmc->convert( version => 2 ); # valid or dies
+    return bless $self, $class;
+  }
+  else {
+    # validate original struct
+    my $cmv = CPAN::Meta::Validator->new( $struct );
+    unless ( $cmv->is_valid) {
+      die "Invalid metadata structure. Errors: "
+        . join(", ", $cmv->errors) . "\n";
+    }
   }
 
-  # upconvert to version 2
-  my $cmc = CPAN::Meta::Converter->new( $struct );
-  my $self = $cmc->convert( version => 2 );
-  return bless $self => $class;
+  # up-convert older spec versions
+  my $version = $struct->{'meta-spec'}{version} || '1.0';
+  if ( $version == 2 ) {
+    $self = $struct;
+  }
+  else {
+    my $cmc = CPAN::Meta::Converter->new( $struct );
+    $self = $cmc->convert( version => 2 );
+  }
+
+  return bless $self, $class;
 }
 
 sub new {
-  my ($class, $struct) = @_;
-  my $self = eval { $class->_new($struct) };
+  my ($class, $struct, $options) = @_;
+  my $self = eval { $class->_new($struct, $options) };
   croak($@) if $@;
   return $self;
 }
@@ -219,16 +246,17 @@ sub new {
   my $meta = CPAN::Meta->create($distmeta_struct);
 
 This is same as C<new()>, except that C<generated_by> and C<meta-spec> fields
-will be generated if not provided.
+will be generated if not provided.  This means the metadata structure is
+assumed to otherwise follow the latest L<CPAN::Meta::Spec>.
 
 =cut
 
 sub create {
-  my ($class, $struct) = @_;
+  my ($class, $struct, $options) = @_;
   my $version = __PACKAGE__->VERSION || 2;
   $struct->{generated_by} ||= __PACKAGE__ . " version $version" ;
   $struct->{'meta-spec'}{version} ||= int($version);
-  my $self = eval { $class->_new($struct) };
+  my $self = eval { $class->_new($struct, $options) };
   croak ($@) if $@;
   return $self;
 }
@@ -241,6 +269,9 @@ Given a pathname to a file containing metadata, this deserializes the file
 according to its file suffix and constructs a new C<CPAN::Meta> object, just
 like C<new()>.  It will die if the deserialized version fails to validate
 against its stated specification version.
+
+It takes the same options as C<new()> but C<lazy_validation> defaults to
+true.
 
 =cut
 
@@ -257,28 +288,32 @@ sub _load_file {
     my @yaml = Parse::CPAN::Meta::LoadFile( $file );
     $struct = $yaml[0];
   }
+  else {
+    die "Could not determine the filetype of '$file'\n";
+  }
   return $struct;
 }
 
 # XXX: Much of this can be simplified when we can rely on a JSON-speaking
 # upstream Parse::CPAN::Meta. -- rjbs, 2010-04-12
 sub load_file {
-  my ($class, $file) = @_;
+  my ($class, $file, $options) = @_;
+  $options->{lazy_validation} = 1 unless exists $options->{lazy_validation};
 
-  # load
   croak "load_file() requires a valid, readable filename"
     unless -r $file;
-  my $struct = $class->_load_file( $file )
-    or confess "load_file() could not determine the filetype of '$file'";
-
-  my $self = eval { $class->_new($struct) };
+  my $self;
+  eval {
+    my $struct = $class->_load_file( $file );
+    $self = $class->_new($struct, $options);
+  };
   croak($@) if $@;
   return $self;
 }
 
 =method load_yaml_string
 
-  my $meta = CPAN::Meta->load_yaml_string($yaml);
+  my $meta = CPAN::Meta->load_yaml_string($yaml, \%options);
 
 This method returns a new CPAN::Meta object using the first document in the
 given YAML string.  In other respects it is identical to C<load_file()>.
@@ -286,16 +321,21 @@ given YAML string.  In other respects it is identical to C<load_file()>.
 =cut
 
 sub load_yaml_string {
-  my ($class, $yaml) = @_;
-  my ($struct) = Parse::CPAN::Meta::Load( $yaml );
-  my $self = eval { $class->_new($struct) };
-  confess($@) if $@;
+  my ($class, $yaml, $options) = @_;
+  $options->{lazy_validation} = 1 unless exists $options->{lazy_validation};
+
+  my $self;
+  eval {
+    my ($struct) = Parse::CPAN::Meta::Load( $yaml );
+    $self = $class->_new($struct, $options);
+  };
+  croak($@) if $@;
   return $self;
 }
 
 =method load_json_string
 
-  my $meta = CPAN::Meta->load_json_string($json);
+  my $meta = CPAN::Meta->load_json_string($json, \%options);
 
 This method returns a new CPAN::Meta object using the structure represented by
 the given JSON string.  In other respects it is identical to C<load_file()>.
@@ -303,9 +343,14 @@ the given JSON string.  In other respects it is identical to C<load_file()>.
 =cut
 
 sub load_json_string {
-  my ($class, $json) = @_;
-  my $struct = JSON->new->utf8->decode($json);
-  my $self = eval { $class->_new($struct) };
+  my ($class, $json, $options) = @_;
+  $options->{lazy_validation} = 1 unless exists $options->{lazy_validation};
+
+  my $self;
+  eval {
+    my $struct = JSON->new->utf8->decode($json);
+    $self = $class->_new($struct, $options);
+  };
   croak($@) if $@;
   return $self;
 }
