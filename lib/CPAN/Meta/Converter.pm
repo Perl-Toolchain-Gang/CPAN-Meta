@@ -53,7 +53,7 @@ sub _keep_or_one { defined($_[0]) ? $_[0] : 1 }
 
 sub _keep_or_zero { defined($_[0]) ? $_[0] : 0 }
 
-sub _keep_or_unknown { defined($_[0]) ? $_[0] : "unknown" }
+sub _keep_or_unknown { defined($_[0]) && length($_[0]) ? $_[0] : "unknown" }
 
 sub _generated_by {
   my $gen = shift;
