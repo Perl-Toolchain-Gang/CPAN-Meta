@@ -313,12 +313,9 @@ sub _clean_version {
   elsif ( $element eq 'undef' || $element eq '<undef>' ) {
     return 0;
   }
-  elsif ( $element =~ m{^[\x{0}-\x{10}]} ) { # literal v-string
-    return "v" . join(".", map { ord($_) } split //, $element);
-  }
-  elsif ( version::is_lax($element) ) {
-    my $v = version->new($element);
-    return $v->is_qv ? $v->normal : $element;
+  elsif ( my $v = eval { version->new($element) } ) {
+    return $v->is_qv                    ? $v->normal    :
+           substr($element,0,1) eq '.'  ? "0$element"   : $element;
   }
   else {
     return 0;
