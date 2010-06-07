@@ -238,6 +238,10 @@ my $no_index_spec_1_3 = {
 sub _no_index_1_2 {
   my (undef, undef, $meta) = @_;
   my $no_index = $meta->{no_index} || $meta->{private};
+  # common mistake: files -> file
+  if ( exists $element->{files} ) {
+    $element->{file} = delete $element->{file};
+  }
   return _convert($no_index, $no_index_spec_1_2);
 }
 
@@ -246,6 +250,10 @@ sub _no_index_directory {
   return unless $element;
   if ( exists $element->{dir} ) {
     $element->{directory} = delete $element->{dir};
+  }
+  # common mistake: files -> file
+  if ( exists $element->{files} ) {
+    $element->{file} = delete $element->{file};
   }
   return _convert($element, $no_index_spec_1_3);
 }
