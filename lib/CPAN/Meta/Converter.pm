@@ -653,7 +653,7 @@ sub _downgrade_resources {
 
 sub _release_status {
   my ($element, undef, $meta) = @_;
-  return $element if $element =~ m{\A(?:stable|testing|unstable)\z};
+  return $element if $element && $element =~ m{\A(?:stable|testing|unstable)\z};
   return _release_status_from_version(undef, undef, $meta);
 }
 
