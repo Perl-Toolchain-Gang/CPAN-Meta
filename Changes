@@ -2,6 +2,9 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - added 'as_struct' method to CPAN::Meta to get a deep copy of
+    the metadata hash_ref
+
   - won't add an optional_features 'description' field if missing
 
   - improved documentation of CPAN::Meta::Converter and how it deals

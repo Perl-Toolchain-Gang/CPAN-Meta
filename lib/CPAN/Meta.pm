@@ -506,6 +506,24 @@ sub feature {
   return CPAN::Meta::Feature->new($ident, $f);
 }
 
+=method as_struct
+
+  my $copy = $meta->as_struct;
+
+This method returns a deep copy of the object's metadata as an unblessed has
+reference.  This is useful for raw analysis or for passing to a converter
+object.  For example:
+
+  my $cmc = CPAN::Meta::Converter->new( $meta->as_struct );
+  my $meta_1_4 = $cmc->convert( version => "1.4" );
+
+=cut
+
+sub as_struct {
+  my ($self) = @_;
+  return Storable::dclone($self);
+}
+
 1;
 
 __END__
