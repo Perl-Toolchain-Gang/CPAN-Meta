@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.101590  2010-06-07 21:49:36 EST5EDT
+
   - won't automatically add 'unknown' as repository type when converting; 
     instead, will only add a repository type if a repository 'url' is
     present and it is of the 'svn:' or 'git:' scheme.
