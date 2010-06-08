@@ -300,9 +300,9 @@ sub _no_index_directory {
 }
 
 sub _is_module_name {
-  my $key = shift;
-  return unless defined $key && length $key;
-  return $key =~ m{^[A-Za-z][A-Za-z0-9_]*(?:::[A-Za-z0-9_]+)*$};
+  my $mod = shift;
+  return unless defined $mod && length $mod;
+  return $mod =~ m{^[A-Za-z][A-Za-z0-9_]*(?:::[A-Za-z0-9_]+)*$};
 }
 
 sub _clean_version {
@@ -678,7 +678,7 @@ sub _convert {
   my ($data, $spec, $to_version) = @_;
 
   my $new_data = {};
-  for my $key ( %$spec ) {
+  for my $key ( keys %$spec ) {
     next if $key eq ':custom' || $key eq ':drop';
     next unless my $fcn = $spec->{$key};
     die "spec for '$key' is not a coderef"
@@ -692,7 +692,7 @@ sub _convert {
 
   for my $key ( keys %$data ) {
     next if $drop_list && grep { $key eq $_ } @$drop_list;
-    next if $spec->{$key}; # we handled it
+    next if exists $spec->{$key}; # we handled it
     $new_data->{ $customizer->($key) } = $data->{$key};
   }
 
