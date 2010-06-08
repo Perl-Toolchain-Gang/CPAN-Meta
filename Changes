@@ -4,6 +4,9 @@ Revision history for CPAN-Meta
 
   - won't add an optional_features 'description' field if missing
 
+  - improved documentation of CPAN::Meta::Converter and how it deals
+    with bad/missing data
+
 2.101590  2010-06-07 21:49:36 EST5EDT
 
   - won't automatically add 'unknown' as repository type when converting; 

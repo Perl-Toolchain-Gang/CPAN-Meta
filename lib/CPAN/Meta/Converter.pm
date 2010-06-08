@@ -1207,27 +1207,47 @@ sub new {
 
   my $new_struct = $cmc->convert( version => "2" );
 
-Returns a new hash reference with the metadata converted to a
-different form.
+Returns a new hash reference with the metadata converted to a different form.
+C<convert> will die if any conversion/standardization still results in an
+invalid structure.
 
 Valid parameters include:
 
-=for :list
-* version
-Indicates the desired specification version (e.g. "1.0", "1.1" ... "1.4", "2").
+=over
+
+=item *
+
+C<version> -- Indicates the desired specification version (e.g. "1.0", "1.1" ... "1.4", "2").
 Defaults to the latest version of the CPAN Meta Spec.
 
-The conversion process attempts to clean-up simple errors and standardize data
-during converstion.  For example, if C<author> is given as a scalar, it will
-converted to an array reference containing the item, or if a mandatory
-C<license> field is missing, it will be added as "unknown".
+=back
 
 Conversion proceeds through each version in turn.  For example, a version 1.2
-structure is converted to 1.3 then 1.4 then finally version 2.  Converting a
-structure to its own version will still clean-up and standardize the structure.
+structure might be converted to 1.3 then 1.4 then finally to version 2. The
+conversion process attempts to clean-up simple errors and standardize data.
+For example, if C<author> is given as a scalar, it will converted to an array
+reference containing the item. (Converting a structure to its own version will
+also clean-up and standardize.)
 
-C<convert> will die if any conversion/standardization still results in an
-invalid structure.
+When data are cleaned and standardized, missing or invalid fields will be
+replaced with sensible defaults when possible.  This may be lossy or imprecise.
+For example, some badly structured META.yml files on CPAN have prerequisite
+modules listed as both keys and values:
+
+  requires => { 'Foo::Bar' => 'Bam::Baz' }
+
+These would be split and each converted to a prerequisite with a minimum
+version of zero.
+
+When some mandatory fields are missing or invalid, the conversion will attempt
+to provide a sensible default or will fill them with a value of 'unknown'.  For
+example a missing or unrecognized C<license> field will result in a C<license>
+field of 'unknown'.  Fields that may get an 'unknown' include:
+
+=for :list
+* abstract
+* author
+* license
 
 =cut
 
