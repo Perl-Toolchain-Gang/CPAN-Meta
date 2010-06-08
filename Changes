@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.101591  2010-06-08 09:56:17 EST5EDT
+
   - added 'as_struct' method to CPAN::Meta to get a deep copy of
     the metadata hash_ref
 
