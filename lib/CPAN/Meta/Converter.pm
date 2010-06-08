@@ -578,10 +578,21 @@ my $bugtracker2_spec = {
   ':custom'  => \&_prefix_custom,
 };
 
+sub _repo_type {
+  my ($element, $key, $meta, $to_version) = @_;
+  return $element if defined $element;
+  return unless exists $meta->{url};
+  my $repo_url = $meta->{url};
+  for my $type ( qw/git svn/ ) {
+    return $type if $repo_url =~ m{\A$type};
+  }
+  return;
+}
+
 my $repository2_spec = {
   web => \&_url_or_drop,
   url => \&_url_or_drop,
-  type => \&_keep_or_unknown,
+  type => \&_repo_type,
   ':custom'  => \&_prefix_custom,
 };
 
@@ -589,7 +600,7 @@ my $resources2_cleanup = {
   license    => \&_url_list,
   homepage   => \&_url_or_drop,
   bugtracker => sub { ref $_[0] ? _convert( $_[0], $bugtracker2_spec ) : undef },
-  repository => sub { ref $_[0] ? _convert( $_[0], $repository2_spec ) : undef },
+  repository => sub { my $data = shift; ref $data ? _convert( $data, $repository2_spec ) : undef },
   ':custom'  => \&_prefix_custom,
 };
 
