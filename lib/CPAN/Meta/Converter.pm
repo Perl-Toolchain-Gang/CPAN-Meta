@@ -479,7 +479,7 @@ sub _upgrade_optional_features {
 }
 
 my $optional_features_2_spec = {
-  description => \&_keep_or_unknown,
+  description => \&_keep,
   prereqs => \&_cleanup_prereqs,
   ':custom'  => \&_prefix_custom,
 };
