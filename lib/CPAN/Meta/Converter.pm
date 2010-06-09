@@ -155,6 +155,7 @@ my %license_map_2 = (
   lgpl => 'lgpl_2_1',
   mozilla => 'mozilla_1_0',
   perl => 'perl_5',
+  restrictive => 'restricted',
 );
 
 sub _license_2 {
@@ -196,7 +197,7 @@ my %license_downgrade_map = qw(
   sun               open_source
   zlib              open_source
   open_source       open_source
-  restricted        restricted
+  restricted        restrictive
   unrestricted      unrestricted
   unknown           unknown
 );
@@ -208,18 +209,13 @@ sub _downgrade_license {
   }
   elsif( ref $element eq 'ARRAY' ) {
     if ( @$element == 1 ) {
-      return $license_downgrade_map{$element->[0]};
-    }
-    else {
-      return 'unknown';
+      return $license_downgrade_map{$element->[0]} || "unknown";
     }
   }
   elsif ( ! ref $element ) {
-    return $license_downgrade_map{$element};
+    return $license_downgrade_map{$element} || "unknown";
   }
-  else {
-    return "unknown";
-  }
+  return "unknown";
 }
 
 my $no_index_spec_1_2 = {

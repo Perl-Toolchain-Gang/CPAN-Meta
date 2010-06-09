@@ -2,6 +2,9 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - improve conversion of restricted/restrictive license keys between
+    spec versions 1.4 and 2 [reported by Alexander Hartmaier]
+
 2.101591  2010-06-08 09:56:17 EST5EDT
 
   - added 'as_struct' method to CPAN::Meta to get a deep copy of
