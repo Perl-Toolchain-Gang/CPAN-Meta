@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.101600  2010-06-09 10:07:31 EST5EDT
+
   - improve conversion of restricted/restrictive license keys between
     spec versions 1.4 and 2 [reported by Alexander Hartmaier]
 
