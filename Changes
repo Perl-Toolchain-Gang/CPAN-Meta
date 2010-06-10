@@ -2,6 +2,13 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - fixed converter bug that output 'artistic2' instead of 'artistic_2'
+    for license in 1.X specs
+
+  - 'artistic2' is now converted to 'artistic_2' if it occurs
+
+  - corrected validation for 'artistic_2' and disallowed 'artistic-2.0'
+
 2.101600  2010-06-09 10:07:31 EST5EDT
 
   - improve conversion of restricted/restrictive license keys between
