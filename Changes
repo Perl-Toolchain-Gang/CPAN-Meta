@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.101610  2010-06-10 18:51:30 EST5EDT
+
   - fixed converter bug that output 'artistic2' instead of 'artistic_2'
     for license in 1.X specs
 
