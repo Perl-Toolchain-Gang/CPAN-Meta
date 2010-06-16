@@ -6,7 +6,7 @@ use CPAN::Meta;
 
 # 1.4 repository upgrade
 {
-  my $label = "(version 1.4) old repository winds up in 'web'";
+  my $label = "(version 1.4) old repository winds up in 'url'";
   my $meta = CPAN::Meta->new(
     {
       name     => 'Module-Billed',
@@ -32,7 +32,7 @@ use CPAN::Meta;
     $meta->resources,
     {
       repository => {
-        web => 'http://example.com/',
+        url => 'http://example.com/',
       },
     },
     $label,

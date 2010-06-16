@@ -561,7 +561,7 @@ my $resource2_upgrade = {
     elsif( _is_urlish($item) ) { return { web => $_[0] } }
     else { return undef }
   },
-  repository => sub { return _is_urlish($_[0]) ? { web => $_[0] } : undef },
+  repository => sub { return _is_urlish($_[0]) ? { url => $_[0] } : undef },
   ':custom'  => \&_prefix_custom,
 };
 

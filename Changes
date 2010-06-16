@@ -2,6 +2,9 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - converting 1.x 'repository' field now puts converted url into the
+    'url' sub-field of 'repository' instead of the 'web' sub-field
+
 2.101610  2010-06-10 18:51:30 EST5EDT
 
   - fixed converter bug that output 'artistic2' instead of 'artistic_2'
