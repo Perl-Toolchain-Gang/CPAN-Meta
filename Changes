@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - Fix bugtracker conversion bug (RT#60017)
+    
 2.101670  2010-06-15 21:02:42 EST5EDT
 
   - converting 1.x 'repository' field now puts converted url into the
