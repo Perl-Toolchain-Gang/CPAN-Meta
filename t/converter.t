@@ -115,5 +115,24 @@ for my $f ( reverse sort @files ) {
   );
 }
 
+# specific test for upconverting resources
+{
+  my $path = File::Spec->catfile('t','data','resources.yml');
+  my $original = CPAN::Meta->_load_file( $path  );
+  ok( $original, "loaded resources.yml" );
+  my $cmc = CPAN::Meta::Converter->new( $original );
+  my $converted = $cmc->convert( version => 2 );
+  is_deeply(
+    $converted->{resources},
+    { x_MailingList => 'http://groups.google.com/group/www-mechanize-users',
+      x_Repository  => 'http://code.google.com/p/www-mechanize/source',
+      homepage      => 'http://code.google.com/p/www-mechanize/',
+      bugtracker    => {web => 'http://code.google.com/p/www-mechanize/issues/list',},
+      license       => ['http://dev.perl.org/licenses/'],
+    },
+    "upconversion of resources"
+  );
+}
+
 done_testing;
 

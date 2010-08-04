@@ -556,9 +556,10 @@ my $resource2_upgrade = {
   license    => sub { return _is_urlish($_[0]) ? _listify( $_[0] ) : undef },
   homepage   => \&_url_or_drop,
   bugtracker => sub {
-    my $item = @_;
+    my ($item) = @_;
+    return unless $item;
     if ( $item =~ m{^mailto:(.*)$} ) { return { mailto => $1 } }
-    elsif( _is_urlish($item) ) { return { web => $_[0] } }
+    elsif( _is_urlish($item) ) { return { web => $item } }
     else { return undef }
   },
   repository => sub { return _is_urlish($_[0]) ? { url => $_[0] } : undef },
