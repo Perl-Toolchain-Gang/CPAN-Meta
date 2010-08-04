@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.102160  2010-08-04 12:27:10 EST5EDT
+
   - Fix bugtracker conversion bug (RT#60017)
     
 2.101670  2010-06-15 21:02:42 EST5EDT
