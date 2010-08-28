@@ -4,6 +4,8 @@ use Test::More 0.88;
 
 use CPAN::Meta;
 
+use Scalar::Util qw(blessed);
+
 my $distmeta = {
   name     => 'Module-Build',
   abstract => 'Build and install Perl modules',
@@ -71,6 +73,12 @@ my $distmeta = {
 };
 
 my $meta = CPAN::Meta->new($distmeta);
+
+is(
+  blessed($meta->as_struct),
+  undef,
+  "the result of ->as_struct is unblessed",
+);
 
 is_deeply( $meta->as_struct, $distmeta, "->as_struct (deep comparison)" );
 isnt( $meta->as_struct, $distmeta, "->as_struct (is a deep clone)" );

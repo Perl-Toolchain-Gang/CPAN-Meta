@@ -521,7 +521,11 @@ object.  For example:
 
 sub as_struct {
   my ($self) = @_;
-  return Storable::dclone($self);
+  return JSON->new->decode( JSON->new->convert_blessed->encode( $self ) )
+}
+
+sub TO_JSON {
+  return { %{ $_[0] } };
 }
 
 1;
