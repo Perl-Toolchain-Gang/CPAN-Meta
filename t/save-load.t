@@ -4,6 +4,7 @@ use Test::More 0.88;
 
 use CPAN::Meta;
 use File::Temp 0.20 ();
+use Parse::CPAN::Meta 1.4200;
 
 my $distmeta = {
   name     => 'Module-Build',
@@ -77,11 +78,11 @@ my $metafile = File::Spec->catfile( $tmpdir, 'META.json' );
 $meta->save($metafile);
 ok( -f $metafile, "save meta to file" );
 
-ok( $meta = CPAN::Meta->_load_file($metafile), 'load saved file' );
+ok( $meta = Parse::CPAN::Meta->load_file($metafile), 'load saved file' );
 is($meta->{name},     'Module-Build', 'name correct');
 
 
-ok( $meta = CPAN::Meta->_load_file('t/data/META-1_4.yml'), 'load META-1.4' );
+ok( $meta = Parse::CPAN::Meta->load_file('t/data/META-1_4.yml'), 'load META-1.4' );
 is($meta->{name},     'Module-Build', 'name correct');
 
 done_testing;

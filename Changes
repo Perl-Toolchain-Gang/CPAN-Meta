@@ -2,6 +2,14 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  - Reading JSON/YAML is delegated entirely to Parse::CPAN::Meta (1.4200)
+  
+  - JSON.pm is dropped as a prerequisite and JSON::PP is added to prepare
+    for CPAN::Meta to be added to the Perl core
+
+  - JSON writing uses the same JSON backend selection as Parse::CPAN::Meta
+    to allow "upgrading" to a non-core JSON backend module if desired
+
 2.102400  2010-08-28 14:06:34 America/New_York
 
   - 'as_struct' method now returns unblessed data (reported by Chris Prather)

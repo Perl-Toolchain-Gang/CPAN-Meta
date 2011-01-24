@@ -7,6 +7,7 @@ use CPAN::Meta::Validator;
 use CPAN::Meta::Converter;
 use File::Spec;
 use IO::Dir;
+use Parse::CPAN::Meta 1.4200;
 
 my $data_dir = IO::Dir->new( 't/data-bad' );
 my @files = sort grep { /^\w/ } $data_dir->read;
@@ -17,7 +18,7 @@ use Data::Dumper;
 
 for my $f ( reverse sort @files ) {
   my $path = File::Spec->catfile('t','data-bad',$f);
-  my $original = CPAN::Meta->_load_file( $path  );
+  my $original = Parse::CPAN::Meta->load_file( $path  );
   ok( $original, "loaded $f" );
   my $original_v = _spec_version($original);
   # UPCONVERSION

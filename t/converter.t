@@ -7,6 +7,7 @@ use CPAN::Meta::Validator;
 use CPAN::Meta::Converter;
 use File::Spec;
 use IO::Dir;
+use Parse::CPAN::Meta 1.4200;
 
 my $data_dir = IO::Dir->new( 't/data' );
 my @files = sort grep { /^\w/ } $data_dir->read;
@@ -17,7 +18,7 @@ use Data::Dumper;
 
 for my $f ( reverse sort @files ) {
   my $path = File::Spec->catfile('t','data',$f);
-  my $original = CPAN::Meta->_load_file( $path  );
+  my $original = Parse::CPAN::Meta->load_file( $path  );
   ok( $original, "loaded $f" );
   my $original_v = _spec_version($original);
   # UPCONVERSION
@@ -88,7 +89,7 @@ for my $f ( reverse sort @files ) {
 # specific test for custom key handling
 {
   my $path = File::Spec->catfile('t','data','META-1_4.yml');
-  my $original = CPAN::Meta->_load_file( $path  );
+  my $original = Parse::CPAN::Meta->load_file( $path  );
   ok( $original, "loaded META-1_4.yml" );
   my $cmc = CPAN::Meta::Converter->new( $original );
   my $up_converted = $cmc->convert( version => 2 );
@@ -106,7 +107,7 @@ for my $f ( reverse sort @files ) {
 # specific test for custom key handling
 {
   my $path = File::Spec->catfile('t','data','META-2.json');
-  my $original = CPAN::Meta->_load_file( $path  );
+  my $original = Parse::CPAN::Meta->load_file( $path  );
   ok( $original, "loaded META-2.json" );
   my $cmc = CPAN::Meta::Converter->new( $original );
   my $up_converted = $cmc->convert( version => 1.4 );
@@ -118,7 +119,7 @@ for my $f ( reverse sort @files ) {
 # specific test for upconverting resources
 {
   my $path = File::Spec->catfile('t','data','resources.yml');
-  my $original = CPAN::Meta->_load_file( $path  );
+  my $original = Parse::CPAN::Meta->load_file( $path  );
   ok( $original, "loaded resources.yml" );
   my $cmc = CPAN::Meta::Converter->new( $original );
   my $converted = $cmc->convert( version => 2 );

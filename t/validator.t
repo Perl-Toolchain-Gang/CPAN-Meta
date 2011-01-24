@@ -6,13 +6,14 @@ use CPAN::Meta;
 use CPAN::Meta::Validator;
 use File::Spec;
 use IO::Dir;
+use Parse::CPAN::Meta 1.4200;
 
 {
   my $data_dir = IO::Dir->new( 't/data' );
   my @files = sort grep { /^\w/ } $data_dir->read;
 
   for my $f ( @files ) {
-    my $meta = CPAN::Meta->_load_file( File::Spec->catfile('t','data',$f) );
+    my $meta = Parse::CPAN::Meta->load_file( File::Spec->catfile('t','data',$f) );
     my $cmv = CPAN::Meta::Validator->new({%$meta});
     ok( $cmv->is_valid, "$f validates" )
       or diag( "ERRORS:\n" . join( "\n", $cmv->errors ) );
@@ -24,7 +25,7 @@ use IO::Dir;
   my @files = sort grep { /^\w/ } $data_dir->read;
 
   for my $f ( @files ) {
-    my $meta = CPAN::Meta->_load_file( File::Spec->catfile('t','data-fail',$f) );
+    my $meta = Parse::CPAN::Meta->load_file( File::Spec->catfile('t','data-fail',$f) );
     my $cmv = CPAN::Meta::Validator->new({%$meta});
     ok( ! $cmv->is_valid, "invalid $f doesn't validate" );
   }

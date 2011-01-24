@@ -44,8 +44,7 @@ use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
 use CPAN::Meta::Converter;
 use CPAN::Meta::Validator;
-use JSON 2 ();
-use Parse::CPAN::Meta ();
+use Module::Load::Conditional qw(can_load);
 use Storable ();
 
 =head1 STRING DATA
@@ -275,38 +274,20 @@ true.
 
 =cut
 
-# XXX private to help tests conversion/validation -- dagolden, 2010-04-12
-sub _load_file {
-  my ($class, $file) = @_;
-
-  my $struct;
-  if ( $file =~ m{\.json} ) {
-    my $guts = do { local (@ARGV,$/) = $file; <> };
-    $struct = JSON->new->utf8->decode($guts);
-  }
-  elsif ( $file =~ m{\.ya?ml} ) {
-    my $guts = do { local (@ARGV,$/) = $file; <> };
-    $guts =~ s{\n?\z}{\n}ms;
-    my @yaml = Parse::CPAN::Meta::Load( $guts );
-    $struct = $yaml[0];
-  }
-  else {
-    die "Could not determine the filetype of '$file'\n";
-  }
-  return $struct;
-}
-
-# XXX: Much of this can be simplified when we can rely on a JSON-speaking
-# upstream Parse::CPAN::Meta. -- rjbs, 2010-04-12
 sub load_file {
   my ($class, $file, $options) = @_;
   $options->{lazy_validation} = 1 unless exists $options->{lazy_validation};
 
+  local $Module::Load::Conditional::CHECK_INC_HASH = 1;
+  can_load( modules => { 'Parse::CPAN::Meta' => 1.4200 } )
+    or croak "CPAN::Meta requires Parse::CPAN::Meta 1.4200 or later\n";
+
   croak "load_file() requires a valid, readable filename"
     unless -r $file;
+
   my $self;
   eval {
-    my $struct = $class->_load_file( $file );
+    my $struct = Parse::CPAN::Meta->load_file( $file );
     $self = $class->_new($struct, $options);
   };
   croak($@) if $@;
@@ -328,7 +309,7 @@ sub load_yaml_string {
 
   my $self;
   eval {
-    my ($struct) = Parse::CPAN::Meta::Load( $yaml );
+    my ($struct) = Parse::CPAN::Meta->load_yaml_string( $yaml );
     $self = $class->_new($struct, $options);
   };
   croak($@) if $@;
@@ -350,7 +331,7 @@ sub load_json_string {
 
   my $self;
   eval {
-    my $struct = JSON->new->utf8->decode($json);
+    my $struct = Parse::CPAN::Meta->load_json_string( $json );
     $self = $class->_new($struct, $options);
   };
   croak($@) if $@;
@@ -362,7 +343,9 @@ sub load_json_string {
   $meta->save($distmeta_file);
 
 Serializes the object as JSON and writes it to the given file.  The filename
-should end in '.json'.
+should end in '.json'.  L<JSON::PP> is the default JSON backend. Using another
+JSON backend requires L<JSON> 2.5 or later and you must set the
+C<$ENV{PERL_JSON_BACKEND}> to a supported alternate backend like L<JSON::XS>.
 
 =cut
 
@@ -373,7 +356,23 @@ sub save {
     unless $file =~ m{\.json$};
 
   open my $fh, ">", $file;
-  print {$fh} JSON->new->utf8->pretty->encode({%$self});
+  print {$fh} _choose_json_backend()->new->utf8->pretty->encode({%$self});
+}
+
+# Copied from Parse::CPAN::Meta
+sub _choose_json_backend {
+  local $Module::Load::Conditional::CHECK_INC_HASH = 1;
+  if (! $ENV{PERL_JSON_BACKEND} or $ENV{PERL_JSON_BACKEND} eq 'JSON::PP') {
+    can_load( modules => {'JSON::PP' => 2.27103}, verbose => 0 )
+      or croak "JSON::PP 2.27103 is not available\n";
+    return 'JSON::PP';
+  }
+  else {
+    can_load( modules => {'JSON' => 2.5}, verbose => 0 )
+      or croak  "JSON 2.5 is required for " .
+                "\$ENV{PERL_JSON_BACKEND} = '$ENV{PERL_JSON_BACKEND}'\n";
+    return "JSON";
+  }
 }
 
 =method meta_spec_version
@@ -521,9 +520,11 @@ object.  For example:
 
 sub as_struct {
   my ($self) = @_;
-  return JSON->new->decode( JSON->new->convert_blessed->encode( $self ) )
+  my $json = _choose_json_backend();
+  return $json->new->decode( $json->new->convert_blessed->encode( $self ) )
 }
 
+# Used by JSON::PP, etc. for "convert_blessed"
 sub TO_JSON {
   return { %{ $_[0] } };
 }
