@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.110240  2011-01-24 16:28:25 EST5EDT
+
   - Reading JSON/YAML is delegated entirely to Parse::CPAN::Meta (1.4200)
   
   - JSON.pm is dropped as a prerequisite and JSON::PP is added to prepare
