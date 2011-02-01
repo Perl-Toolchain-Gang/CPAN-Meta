@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.110320  2011-01-31 23:14:30 EST5EDT
+
   [ENHANCEMENTS]
 
   - The 'save' method now allows an optional hashref argument, which can be
