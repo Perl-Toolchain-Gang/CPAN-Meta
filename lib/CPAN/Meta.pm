@@ -340,23 +340,58 @@ sub load_json_string {
 
 =method save
 
-  $meta->save($distmeta_file);
+  $meta->save($distmeta_file, \%options);
 
-Serializes the object as JSON and writes it to the given file.  The filename
-should end in '.json'.  L<JSON::PP> is the default JSON backend. Using another
-JSON backend requires L<JSON> 2.5 or later and you must set the
-C<$ENV{PERL_JSON_BACKEND}> to a supported alternate backend like L<JSON::XS>.
+Serializes the object as JSON and writes it to the given file.  The only valid
+option is C<version>, which defaults to '2'.
+
+For C<version> 2 (or higher), the filename should end in '.json'.  L<JSON::PP>
+is the default JSON backend. Using another JSON backend requires L<JSON> 2.5 or
+later and you must set the C<$ENV{PERL_JSON_BACKEND}> to a supported alternate
+backend like L<JSON::XS>.
+
+For C<version> less than 2, the filename should end in '.yml'.
+L<CPAN::Meta::Converter> is used to generate an older metadata structure, which
+is serialized to YAML.  CPAN::Meta::YAML is the default YAML backend.  You may
+set the C<$ENV{PERL_YAML_BACKEND}> to a supported alternative backend, though
+this is not recommended due to subtle incompatibilities between YAML parsers
+on CPAN.
 
 =cut
 
 sub save {
-  my ($self, $file) = @_;
+  my ($self, $file, $options) = @_;
 
-  carp "'$file' should end in '.json'"
-    unless $file =~ m{\.json$};
+  my $version = $options->{version} || '2';
+
+  my $struct;
+  if ( $self->version ne $version ) {
+    my $cmc = CPAN::Meta::Converter->new( $self->as_struct );
+    $struct = $cmc->convert( version => $version );
+  }
+  else {
+    $struct = $self->as_struct;
+  }
+
+  my $data;
+  if ( $version ge '2' ) {
+    carp "'$file' should end in '.json'"
+      unless $file =~ m{\.json$};
+    $data = _choose_json_backend()->new->utf8->pretty->encode($struct);
+  }
+  else {
+    carp "'$file' should end in '.yml'"
+      unless $file =~ m{\.yml$};
+    my $backend = _choose_yaml_backend();
+    $data = eval { no strict 'refs'; &{"$backend\::Dump"}($struct) };
+    if ( $@ ) {
+      croak $backend->can('errstr') ? $backend->errstr : $@
+    }
+  }
 
   open my $fh, ">", $file;
-  print {$fh} _choose_json_backend()->new->utf8->pretty->encode({%$self});
+  print {$fh} $data;
+  close $fh;
 }
 
 # Copied from Parse::CPAN::Meta
@@ -372,6 +407,23 @@ sub _choose_json_backend {
       or croak  "JSON 2.5 is required for " .
                 "\$ENV{PERL_JSON_BACKEND} = '$ENV{PERL_JSON_BACKEND}'\n";
     return "JSON";
+  }
+}
+
+sub _choose_yaml_backend {
+  local $Module::Load::Conditional::CHECK_INC_HASH = 1;
+  if (! defined $ENV{PERL_YAML_BACKEND} ) {
+    can_load( modules => {'CPAN::Meta::YAML' => 0.002}, verbose => 0 )
+      or croak "CPAN::Meta::YAML 0.002 is not available\n";
+    return "CPAN::Meta::YAML";
+  }
+  else {
+    my $backend = $ENV{PERL_YAML_BACKEND};
+    can_load( modules => {$backend => undef}, verbose => 0 )
+      or croak "Could not load PERL_YAML_BACKEND '$backend'\n";
+    $backend->can("Dump")
+      or croak "PERL_YAML_BACKEND '$backend' does not implement Dump()\n";
+    return $backend;
   }
 }
 

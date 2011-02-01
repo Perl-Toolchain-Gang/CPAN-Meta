@@ -2,6 +2,12 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [ENHANCEMENTS]
+
+  - The 'save' method now allows an optional hashref argument, which can be
+    used to set the desired meta spec version.  Metadata is automatically
+    converted to the specified output.
+
 2.110240  2011-01-24 16:28:25 EST5EDT
 
   - Reading JSON/YAML is delegated entirely to Parse::CPAN::Meta (1.4200)

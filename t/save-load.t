@@ -78,11 +78,22 @@ my $metafile = File::Spec->catfile( $tmpdir, 'META.json' );
 $meta->save($metafile);
 ok( -f $metafile, "save meta to file" );
 
-ok( $meta = Parse::CPAN::Meta->load_file($metafile), 'load saved file' );
-is($meta->{name},     'Module-Build', 'name correct');
+ok( my $loaded = Parse::CPAN::Meta->load_file($metafile), 'load saved file' );
+is($loaded->{name},     'Module-Build', 'name correct');
 
 
-ok( $meta = Parse::CPAN::Meta->load_file('t/data/META-1_4.yml'), 'load META-1.4' );
-is($meta->{name},     'Module-Build', 'name correct');
+ok( $loaded = Parse::CPAN::Meta->load_file('t/data/META-1_4.yml'), 'load META-1.4' );
+is($loaded->{name},     'Module-Build', 'name correct');
+
+# Test saving with conversion
+
+my $metayml = File::Spec->catfile( $tmpdir, 'META.yml' );
+
+$meta->save($metayml, {version => "1.4"});
+ok( -f $metayml, "save meta to META.yml with conversion" );
+
+ok( $loaded = Parse::CPAN::Meta->load_file($metayml), 'load saved file' );
+is( $loaded->{name},     'Module-Build', 'name correct');
+is( $loaded->{requires}{perl}, "5.006", 'prereq correct' );
 
 done_testing;
