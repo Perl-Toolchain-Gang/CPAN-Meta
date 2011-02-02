@@ -83,6 +83,9 @@ is(
 is_deeply( $meta->as_struct, $distmeta, "->as_struct (deep comparison)" );
 isnt( $meta->as_struct, $distmeta, "->as_struct (is a deep clone)" );
 
+my $old_copy = $meta->as_struct( {version => "1.4"} );
+is( $old_copy->{'meta-spec'}{version}, "1.4", "->as_struct (downconversion)" );
+
 isnt( $meta->resources, $meta->{resources}, "->resource (map values are deep cloned)");
 
 is($meta->name,     'Module-Build', '->name');

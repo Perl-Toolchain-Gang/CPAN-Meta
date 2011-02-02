@@ -559,21 +559,26 @@ sub feature {
 
 =method as_struct
 
-  my $copy = $meta->as_struct;
+  my $copy = $meta->as_struct( \%options );
 
 This method returns a deep copy of the object's metadata as an unblessed has
-reference.  This is useful for raw analysis or for passing to a converter
-object.  For example:
+reference.  It takes an optional hashref of options.  If the hashref contains
+a C<version> argument, the copied metadata will be converted to the version
+of the specification and returned.  For example:
 
-  my $cmc = CPAN::Meta::Converter->new( $meta->as_struct );
-  my $meta_1_4 = $cmc->convert( version => "1.4" );
+  my $old_spec = $meta->as_struct( {version => "1.4"} );
 
 =cut
 
 sub as_struct {
-  my ($self) = @_;
+  my ($self, $options) = @_;
   my $json = _choose_json_backend();
-  return $json->new->decode( $json->new->convert_blessed->encode( $self ) )
+  my $struct = $json->new->decode($json->new->convert_blessed->encode($self));
+  if ( $options->{version} ) {
+    my $cmc = CPAN::Meta::Converter->new( $struct );
+    $struct = $cmc->convert( version => $options->{version} );
+  }
+  return $struct;
 }
 
 # Used by JSON::PP, etc. for "convert_blessed"
