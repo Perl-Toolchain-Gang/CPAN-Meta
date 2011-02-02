@@ -377,7 +377,7 @@ sub save {
   if ( $version ge '2' ) {
     carp "'$file' should end in '.json'"
       unless $file =~ m{\.json$};
-    $data = _choose_json_backend()->new->utf8->pretty->encode($struct);
+    $data = _choose_json_backend()->new->utf8->pretty->canonical->encode($struct);
   }
   else {
     carp "'$file' should end in '.yml'"

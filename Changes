@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [ENHANCEMENTS]
+
+  - Saved META.json files are now sorted by key
+
 2.110320  2011-01-31 23:14:30 EST5EDT
 
   [ENHANCEMENTS]
