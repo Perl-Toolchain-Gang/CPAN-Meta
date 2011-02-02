@@ -185,7 +185,7 @@ Returns a valid CPAN::Meta object or dies if the supplied metadata hash
 reference fails to validate.  Older-format metadata will be up-converted to
 version 2 if they validate against the original stated specification.
 
-Valid options include:
+It takes an optional hashref of options. Valid options include:
 
 =over
 
@@ -242,7 +242,7 @@ sub new {
 
 =method create
 
-  my $meta = CPAN::Meta->create($distmeta_struct);
+  my $meta = CPAN::Meta->create($distmeta_struct, \%options);
 
 This is same as C<new()>, except that C<generated_by> and C<meta-spec> fields
 will be generated if not provided.  This means the metadata structure is
