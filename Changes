@@ -2,6 +2,17 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [ENHANCEMENTS]
+
+  - Added "as_string" method similar to "as_struct"
+
+  [OTHER]
+
+  - Bumped Parse::CPAN::Meta prereq to 1.43 and uses that to
+    determine proper YAML/JSON backends
+
+  - Removed unused prereqs
+
 2.110330  2011-02-02 09:42:57 EST5EDT
 
   [ENHANCEMENTS]

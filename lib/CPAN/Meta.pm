@@ -44,8 +44,7 @@ use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
 use CPAN::Meta::Converter;
 use CPAN::Meta::Validator;
-use Module::Load::Conditional qw(can_load);
-use Storable ();
+use Parse::CPAN::Meta 1.43 ();
 
 =head1 STRING DATA
 
@@ -278,10 +277,6 @@ sub load_file {
   my ($class, $file, $options) = @_;
   $options->{lazy_validation} = 1 unless exists $options->{lazy_validation};
 
-  local $Module::Load::Conditional::CHECK_INC_HASH = 1;
-  can_load( modules => { 'Parse::CPAN::Meta' => 1.4200 } )
-    or croak "CPAN::Meta requires Parse::CPAN::Meta 1.4200 or later\n";
-
   croak "load_file() requires a valid, readable filename"
     unless -r $file;
 
@@ -364,67 +359,20 @@ sub save {
 
   my $version = $options->{version} || '2';
 
-  my $struct;
-  if ( $self->version ne $version ) {
-    my $cmc = CPAN::Meta::Converter->new( $self->as_struct );
-    $struct = $cmc->convert( version => $version );
-  }
-  else {
-    $struct = $self->as_struct;
-  }
-
-  my $data;
   if ( $version ge '2' ) {
     carp "'$file' should end in '.json'"
       unless $file =~ m{\.json$};
-    $data = _choose_json_backend()->new->utf8->pretty->canonical->encode($struct);
   }
   else {
     carp "'$file' should end in '.yml'"
       unless $file =~ m{\.yml$};
-    my $backend = _choose_yaml_backend();
-    $data = eval { no strict 'refs'; &{"$backend\::Dump"}($struct) };
-    if ( $@ ) {
-      croak $backend->can('errstr') ? $backend->errstr : $@
-    }
   }
+
+  my $data = $self->as_string( $options );
 
   open my $fh, ">", $file;
   print {$fh} $data;
   close $fh;
-}
-
-# Copied from Parse::CPAN::Meta
-sub _choose_json_backend {
-  local $Module::Load::Conditional::CHECK_INC_HASH = 1;
-  if (! $ENV{PERL_JSON_BACKEND} or $ENV{PERL_JSON_BACKEND} eq 'JSON::PP') {
-    can_load( modules => {'JSON::PP' => 2.27103}, verbose => 0 )
-      or croak "JSON::PP 2.27103 is not available\n";
-    return 'JSON::PP';
-  }
-  else {
-    can_load( modules => {'JSON' => 2.5}, verbose => 0 )
-      or croak  "JSON 2.5 is required for " .
-                "\$ENV{PERL_JSON_BACKEND} = '$ENV{PERL_JSON_BACKEND}'\n";
-    return "JSON";
-  }
-}
-
-sub _choose_yaml_backend {
-  local $Module::Load::Conditional::CHECK_INC_HASH = 1;
-  if (! defined $ENV{PERL_YAML_BACKEND} ) {
-    can_load( modules => {'CPAN::Meta::YAML' => 0.002}, verbose => 0 )
-      or croak "CPAN::Meta::YAML 0.002 is not available\n";
-    return "CPAN::Meta::YAML";
-  }
-  else {
-    my $backend = $ENV{PERL_YAML_BACKEND};
-    can_load( modules => {$backend => undef}, verbose => 0 )
-      or croak "Could not load PERL_YAML_BACKEND '$backend'\n";
-    $backend->can("Dump")
-      or croak "PERL_YAML_BACKEND '$backend' does not implement Dump()\n";
-    return $backend;
-  }
 }
 
 =method meta_spec_version
@@ -572,13 +520,63 @@ of the specification and returned.  For example:
 
 sub as_struct {
   my ($self, $options) = @_;
-  my $json = _choose_json_backend();
-  my $struct = $json->new->decode($json->new->convert_blessed->encode($self));
+  my $backend = Parse::CPAN::Meta->json_backend();
+  my $struct = $backend->new->decode(
+    $backend->new->convert_blessed->encode($self)
+  );
   if ( $options->{version} ) {
     my $cmc = CPAN::Meta::Converter->new( $struct );
     $struct = $cmc->convert( version => $options->{version} );
   }
   return $struct;
+}
+
+=method as_string
+
+  my $string = $meta->as_string( \%options );
+
+This method returns a serialized copy of the object's metadata.
+reference.  It takes an optional hashref of options.  If the hashref contains
+a C<version> argument, the copied metadata will be converted to the version
+of the specification and returned.  For example:
+
+  my $string = $meta->as_struct( {version => "1.4"} );
+
+For C<version> greater than or equal to 2, the string will be serialized
+as JSON.  For C<version> less than 2, the string will be serialized as YAML.
+In both cases, the same rules are followed as in the C<save()> method for
+choosing a serialization backend.
+
+=cut
+
+sub as_string {
+  my ($self, $options) = @_;
+
+  my $version = $options->{version} || '2';
+
+  my $struct;
+  if ( $self->version ne $version ) {
+    my $cmc = CPAN::Meta::Converter->new( $self->as_struct );
+    $struct = $cmc->convert( version => $version );
+  }
+  else {
+    $struct = $self->as_struct;
+  }
+
+  my ($data, $backend);
+  if ( $version ge '2' ) {
+    $backend = Parse::CPAN::Meta->json_backend();
+    $data = $backend->new->utf8->pretty->canonical->encode($struct);
+  }
+  else {
+    $backend = Parse::CPAN::Meta->yaml_backend();
+    $data = eval { no strict 'refs'; &{"$backend\::Dump"}($struct) };
+    if ( $@ ) {
+      croak $backend->can('errstr') ? $backend->errstr : $@
+    }
+  }
+
+  return $data;
 }
 
 # Used by JSON::PP, etc. for "convert_blessed"
