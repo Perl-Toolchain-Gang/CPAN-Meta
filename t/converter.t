@@ -14,7 +14,7 @@ my @files = sort grep { /^\w/ } $data_dir->read;
 
 sub _spec_version { return $_[0]->{'meta-spec'}{version} || "1.0" }
 
-use Data::Dumper;
+#use Data::Dumper;
 
 for my $f ( reverse sort @files ) {
   my $path = File::Spec->catfile('t','data',$f);

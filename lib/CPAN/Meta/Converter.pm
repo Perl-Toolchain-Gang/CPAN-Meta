@@ -1,7 +1,6 @@
 use 5.006;
 use strict;
 use warnings;
-use autodie;
 package CPAN::Meta::Converter;
 # ABSTRACT: Convert CPAN distribution metadata structures
 

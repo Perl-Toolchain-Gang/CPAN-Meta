@@ -1,7 +1,6 @@
 use 5.006;
 use strict;
 use warnings;
-use autodie;
 package CPAN::Meta::Feature;
 # ABSTRACT: an optional feature provided by a CPAN distribution
 

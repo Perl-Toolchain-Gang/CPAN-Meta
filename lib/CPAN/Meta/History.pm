@@ -2,7 +2,6 @@
 use 5.006;
 use strict;
 use warnings;
-use autodie;
 package CPAN::Meta::History;
 # ABSTRACT: history of CPAN Meta Spec changes
 1;
