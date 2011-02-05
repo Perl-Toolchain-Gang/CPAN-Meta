@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.110360  2011-02-04 19:46:21 America/New_York
+
   [OTHER]
 
   - Remove autodie dependency so CPAN::Meta can be used on older Perls
