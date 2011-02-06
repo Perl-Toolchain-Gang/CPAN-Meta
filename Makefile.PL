@@ -4,6 +4,7 @@
 #
 # Real development should happen via Dist::Zilla
 
+use lib 'inc';
 use ExtUtils::MakeMaker::Dist::Zilla::Develop;
 
 WriteMakefile(
