@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.110390  2011-02-07 21:00:47 EST5EDT
+
   [BUG FIXES]
 
   - Release 2.110360 had a regression where the save() method would no
