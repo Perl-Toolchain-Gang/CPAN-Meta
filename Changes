@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUG FIXES]
+
+  - Release 2.110360 had a regression where the save() method would no
+    longer return true on success.  That has been fixed.
+
 2.110360  2011-02-04 19:46:21 America/New_York
 
   [OTHER]

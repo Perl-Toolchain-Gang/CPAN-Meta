@@ -75,7 +75,7 @@ my $meta = CPAN::Meta->new( $distmeta );
 my $tmpdir = File::Temp->newdir();
 my $metafile = File::Spec->catfile( $tmpdir, 'META.json' );
 
-$meta->save($metafile);
+ok( $meta->save($metafile), "save returns true" );
 ok( -f $metafile, "save meta to file" );
 
 ok( my $loaded = Parse::CPAN::Meta->load_file($metafile), 'load saved file' );

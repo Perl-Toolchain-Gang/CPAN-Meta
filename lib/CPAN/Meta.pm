@@ -375,7 +375,7 @@ sub save {
   close $fh
     or die "Error closing '$file': $!\n";
 
-  return;
+  return 1;
 }
 
 =method meta_spec_version
