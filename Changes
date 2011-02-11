@@ -2,6 +2,14 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUG FIXES]
+
+  - The as_string() method now always returns a character string;
+    previously, JSON strings were UTF-8 encoded.
+
+  - The save() method now always saves with UTF-8 encoding for
+    Perl 5.8.1 or greater; previously, YAML was not encoded
+
 2.110390  2011-02-07 21:00:47 EST5EDT
 
   [BUG FIXES]

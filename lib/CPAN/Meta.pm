@@ -337,7 +337,8 @@ sub load_json_string {
   $meta->save($distmeta_file, \%options);
 
 Serializes the object as JSON and writes it to the given file.  The only valid
-option is C<version>, which defaults to '2'.
+option is C<version>, which defaults to '2'. On Perl 5.8.1 or later, the file
+is saved with UTF-8 encoding.
 
 For C<version> 2 (or higher), the filename should end in '.json'.  L<JSON::PP>
 is the default JSON backend. Using another JSON backend requires L<JSON> 2.5 or
@@ -348,8 +349,8 @@ For C<version> less than 2, the filename should end in '.yml'.
 L<CPAN::Meta::Converter> is used to generate an older metadata structure, which
 is serialized to YAML.  CPAN::Meta::YAML is the default YAML backend.  You may
 set the C<$ENV{PERL_YAML_BACKEND}> to a supported alternative backend, though
-this is not recommended due to subtle incompatibilities between YAML parsers
-on CPAN.
+this is not recommended due to subtle incompatibilities between YAML parsers on
+CPAN.
 
 =cut
 
@@ -357,6 +358,7 @@ sub save {
   my ($self, $file, $options) = @_;
 
   my $version = $options->{version} || '2';
+  my $layer = $] ge '5.008001' ? ':utf8' : '';
 
   if ( $version ge '2' ) {
     carp "'$file' should end in '.json'"
@@ -368,9 +370,9 @@ sub save {
   }
 
   my $data = $self->as_string( $options );
-
-  open my $fh, ">", $file
+  open my $fh, ">$layer", $file
     or die "Error opening '$file' for writing: $!\n";
+
   print {$fh} $data;
   close $fh
     or die "Error closing '$file': $!\n";
@@ -538,17 +540,18 @@ sub as_struct {
 
   my $string = $meta->as_string( \%options );
 
-This method returns a serialized copy of the object's metadata.
-reference.  It takes an optional hashref of options.  If the hashref contains
-a C<version> argument, the copied metadata will be converted to the version
-of the specification and returned.  For example:
+This method returns a serialized copy of the object's metadata as a character
+string.  (The strings are B<not> UTF-8 encoded.)  It takes an optional hashref
+of options.  If the hashref contains a C<version> argument, the copied metadata
+will be converted to the version of the specification and returned.  For
+example:
 
   my $string = $meta->as_struct( {version => "1.4"} );
 
-For C<version> greater than or equal to 2, the string will be serialized
-as JSON.  For C<version> less than 2, the string will be serialized as YAML.
-In both cases, the same rules are followed as in the C<save()> method for
-choosing a serialization backend.
+For C<version> greater than or equal to 2, the string will be serialized as
+JSON.  For C<version> less than 2, the string will be serialized as YAML.  In
+both cases, the same rules are followed as in the C<save()> method for choosing
+a serialization backend.
 
 =cut
 
@@ -569,7 +572,7 @@ sub as_string {
   my ($data, $backend);
   if ( $version ge '2' ) {
     $backend = Parse::CPAN::Meta->json_backend();
-    $data = $backend->new->utf8->pretty->canonical->encode($struct);
+    $data = $backend->new->pretty->canonical->encode($struct);
   }
   else {
     $backend = Parse::CPAN::Meta->yaml_backend();
