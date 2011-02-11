@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.110420  2011-02-11 15:40:36 EST5EDT
+
   [BUG FIXES]
 
   - The as_string() method now always returns a character string;
