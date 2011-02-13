@@ -4,7 +4,7 @@ use Test::More 0.88;
 
 use CPAN::Meta;
 use File::Temp 0.20 ();
-use Parse::CPAN::Meta 1.4200;
+use Parse::CPAN::Meta 1.4400;
 
 my $distmeta = {
   name     => 'Module-Build',

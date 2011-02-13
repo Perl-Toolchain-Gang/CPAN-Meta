@@ -43,7 +43,7 @@ use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
 use CPAN::Meta::Converter;
 use CPAN::Meta::Validator;
-use Parse::CPAN::Meta 1.43 ();
+use Parse::CPAN::Meta 1.44 ();
 
 =head1 STRING DATA
 

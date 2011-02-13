@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - Bump Parse::CPAN::Meta prereq to 1.44, as 1.43 was never released
+
 2.110420  2011-02-11 15:40:36 EST5EDT
 
   [BUG FIXES]

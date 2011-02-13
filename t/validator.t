@@ -6,7 +6,7 @@ use CPAN::Meta;
 use CPAN::Meta::Validator;
 use File::Spec;
 use IO::Dir;
-use Parse::CPAN::Meta 1.4200;
+use Parse::CPAN::Meta 1.4400;
 
 {
   my $data_dir = IO::Dir->new( 't/data' );
