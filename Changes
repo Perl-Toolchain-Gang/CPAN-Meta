@@ -2,6 +2,12 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - Had two different Parse::CPAN::Meta requirements, one in 'requires' and
+    the other in 'build_requires'. This confused some installers, so we
+    only inlude the 'requires' now.
+
 2.110440  2011-02-12 22:55:28 EST5EDT
 
   [BUGFIX]
