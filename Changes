@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [OTHER]
+
+  - Added required field 'release_status' to the synopsis of
+    CPAN::Meta::Spec (RT#66118) [Oliver Mengué]
+
 2.110540  2011-02-23 15:21:16 EST5EDT
 
   [BUGFIX]

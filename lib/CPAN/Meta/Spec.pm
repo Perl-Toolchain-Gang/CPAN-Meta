@@ -15,6 +15,7 @@ package CPAN::Meta::Spec;
       . "building, testing, and installing Perl modules. "
       . "It is meant to ... blah blah blah ...",
     version  => '0.36',
+    release_status => 'stable',
     author   => [
       'Ken Williams <kwilliams@cpan.org>',
       'Module-Build List <module-build@perl.org>', # additional contact
