@@ -23,8 +23,16 @@ optional fields.)
 =cut
 
 use CPAN::Meta::Validator;
-use Storable qw/dclone/;
 use version 0.82 ();
+use Parse::CPAN::Meta 1.4400 ();
+
+sub _dclone {
+  my $ref = shift;
+  my $backend = Parse::CPAN::Meta->json_backend();
+  return $backend->new->decode(
+    $backend->new->convert_blessed->encode($ref)
+  );
+}
 
 my %known_specs = (
     '2'   => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
@@ -1257,7 +1265,7 @@ sub convert {
   my $new_version = $args->{version} || $HIGHEST;
 
   my ($old_version) = $self->{spec};
-  my $converted = dclone $self->{data};
+  my $converted = _dclone($self->{data});
 
   if ( $old_version == $new_version ) {
     $converted = _convert( $converted, $cleanup{$old_version}, $old_version );
