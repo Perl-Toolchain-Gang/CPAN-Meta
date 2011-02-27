@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.110580  2011-02-27 07:58:06 EST5EDT
+
   [OTHER]
 
   - Add explicit dependencies on JSON::PP and CPAN::Meta::YAML instead
