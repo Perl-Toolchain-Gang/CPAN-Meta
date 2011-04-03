@@ -203,15 +203,27 @@ fixable errors will be handled by CPAN::Meta::Converter before validation.
 (Note that this might result in invalid optional data being silently
 dropped.)  The default is false.
 
+=item *
+
+convert -- if true, it will convert the metadata to version 2.
+The default is true.
+
 =back
 
 =cut
 
+my $defaults = {
+    lazy_validation     => 0,
+    convert             => 1
+};
 sub _new {
   my ($class, $struct, $options) = @_;
   my $self;
 
-  if ( $options->{lazy_validation} ) {
+  # Add default options
+  $options = {%$defaults, %{$options||{}}};
+
+  if ( $options->{lazy_validation} && $options->{convert} ) {
     # try to convert to a valid structure; if succeeds, then return it
     my $cmc = CPAN::Meta::Converter->new( $struct );
     $self = $cmc->convert( version => 2 ); # valid or dies
@@ -228,7 +240,7 @@ sub _new {
 
   # up-convert older spec versions
   my $version = $struct->{'meta-spec'}{version} || '1.0';
-  if ( $version == 2 ) {
+  if ( $version == 2 || !$options->{convert} ) {
     $self = $struct;
   }
   else {
