@@ -2,6 +2,12 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - Fixed a bug in the 'as_string' method that checked the module version
+    instead of the meta-spec version when conversion was requested
+    (RT #67188)
+
 2.110910  2011-04-01 08:55:30 America/New_York
 
   [ENHANCEMENTS]
