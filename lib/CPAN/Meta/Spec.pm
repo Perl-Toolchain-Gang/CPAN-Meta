@@ -668,12 +668,12 @@ Example:
     license     => [ 'http://dev.perl.org/licenses/' ],
     homepage    => 'http://sourceforge.net/projects/module-build',
     bugtracker  => {
-      web    => 'http://github.com/dagolden/cpan-meta-spec/issues',
+      web    => 'http://rt.cpan.org/Public/Dist/Display.html?Name=CPAN-Meta',
       mailto => 'meta-bugs@example.com',
     },
     repository  => {
-      url  => 'git://github.com/dagolden/cpan-meta-spec.git',
-      web  => 'http://github.com/dagolden/cpan-meta-spec',
+      url  => 'git://github.com/dagolden/cpan-meta.git',
+      web  => 'http://github.com/dagolden/cpan-meta',
       type => 'git',
     },
     x_twitter   => 'http://twitter.com/cpan_linked/',

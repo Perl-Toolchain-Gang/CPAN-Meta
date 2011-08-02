@@ -2,7 +2,10 @@ Revision history for CPAN-Meta
 
   [BUGFIX]
 
-  - Stringify any objects encountered during conversion. (RT#67295)
+  - Stringify any objects encountered during conversion. (RT #67295)
+
+  - Fixed some broken URLs in documentation and for LGPL in legacy
+    conversion (RT #68738)
 
 {{$NEXT}}
 
