@@ -1016,10 +1016,10 @@ if both are found.
 =head2 Extracting Version Numbers from Perl Modules
 
 To get the version number from a Perl module, consumers should use the
-C<< MM->parse_version($file) >> method provided by L<ExtUtils::MakeMaker> or
-the L<Module::Build::ModuleInfo> module provided with L<Module::Build>.  For
-example, for the module given by C<$mod>, the version may be retrieved in one
-of the following ways:
+C<< MM->parse_version($file) >> method provided by
+L<ExtUtils::MakeMaker> or L<Module::Metadata>.  For example, for the
+module given by C<$mod>, the version may be retrieved in one of the
+following ways:
 
   # via ExtUtils::MakeMaker
   my $file = MM->_installed_file_for_module($mod);
@@ -1028,14 +1028,14 @@ of the following ways:
 The private C<_installed_file_for_module> method may be replaced with
 other methods for locating a module in C<@INC>.
 
-  # via Module::Build
-  my $info = Module::Build::ModuleInfo->new_from_module($mod);
+  # via Module::Metadata
+  my $info = Module::Metadata->new_from_module($mod);
   my $version = $info->version;
 
 If only a filename is available, the following approach may be used:
 
   # via Module::Build
-  my $info = Module::Build::ModuleInfo->new_from_file($file);
+  my $info = Module::Metadata->new_from_file($file);
   my $version = $info->version;
 
 =head2 Comparing Version Numbers

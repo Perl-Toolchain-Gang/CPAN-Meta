@@ -12,6 +12,9 @@ Revision history for CPAN-Meta
   - Clarified that file paths in the 'provides' section must be in
     Unix-style (i.e. forward slashes) (RT #69045)
 
+  - Replaced examples using Module::Build::ModuleInfo with Module::Metadata
+    (RT #66135)
+
 {{$NEXT}}
 
 2.110930  2011-04-02 23:31:24 America/New_York
