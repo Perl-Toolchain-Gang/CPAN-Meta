@@ -1,5 +1,9 @@
 Revision history for CPAN-Meta
 
+  [BUGFIX]
+
+  - Stringify any objects encountered during conversion. (RT#67295)
+
 {{$NEXT}}
 
 2.110930  2011-04-02 23:31:24 America/New_York

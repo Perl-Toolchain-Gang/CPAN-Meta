@@ -45,13 +45,7 @@ use CPAN::Meta::Converter;
 use CPAN::Meta::Validator;
 use Parse::CPAN::Meta 1.4400 ();
 
-sub _dclone {
-  my $ref = shift;
-  my $backend = Parse::CPAN::Meta->json_backend();
-  return $backend->new->decode(
-    $backend->new->convert_blessed->encode($ref)
-  );
-}
+BEGIN { *_dclone = \&CPAN::Meta::Converter::_dclone }
 
 =head1 STRING DATA
 

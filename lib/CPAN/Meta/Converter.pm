@@ -28,9 +28,17 @@ use Parse::CPAN::Meta 1.4400 ();
 
 sub _dclone {
   my $ref = shift;
+
+  # if an object is in the data structure and doesn't specify how to
+  # turn itself into JSON, we just stringify the object.  That does the
+  # right thing for typical things that might be there, like version objects,
+  # Path::Class objects, etc.
+  no warnings 'once';
+  local *UNIVERSAL::TO_JSON = sub { return "$_[0]" };
+
   my $backend = Parse::CPAN::Meta->json_backend();
   return $backend->new->decode(
-    $backend->new->convert_blessed->encode($ref)
+    $backend->new->allow_blessed->convert_blessed->encode($ref)
   );
 }
 
