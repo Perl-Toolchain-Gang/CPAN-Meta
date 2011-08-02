@@ -2,7 +2,7 @@ use 5.006;
 use strict;
 use warnings;
 package CPAN::Meta::Converter;
-# ABSTRACT: Convert CPAN distribution metadata structures
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -1312,6 +1312,8 @@ sub convert {
 }
 
 1;
+
+# ABSTRACT: Convert CPAN distribution metadata structures
 
 __END__
 

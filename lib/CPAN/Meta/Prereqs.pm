@@ -2,7 +2,7 @@ use 5.006;
 use strict;
 use warnings;
 package CPAN::Meta::Prereqs;
-# ABSTRACT: a set of distribution prerequisites by phase and type
+# VERSION
 
 =head1 DESCRIPTION
 
@@ -228,6 +228,8 @@ sub clone {
 }
 
 1;
+
+# ABSTRACT: a set of distribution prerequisites by phase and type
 
 __END__
 

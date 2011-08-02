@@ -2,7 +2,7 @@ use 5.006;
 use strict;
 use warnings;
 package CPAN::Meta;
-# ABSTRACT: the distribution metadata for a CPAN dist
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -596,7 +596,15 @@ sub TO_JSON {
 
 1;
 
+# ABSTRACT: the distribution metadata for a CPAN dist
+
 __END__
+
+=for Pod::Coverage
+TO_JSON abstract author authors custom custom_keys description dynamic_config
+generated_by keywords license licenses meta_spec name no_index
+optional_features prereqs provides release_status resources version
+
 
 =head1 BUGS
 

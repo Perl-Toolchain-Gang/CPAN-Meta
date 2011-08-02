@@ -2,7 +2,7 @@ use 5.006;
 use strict;
 use warnings;
 package CPAN::Meta::Feature;
-# ABSTRACT: an optional feature provided by a CPAN distribution
+# VERSION
 
 use CPAN::Meta::Prereqs;
 
@@ -63,6 +63,8 @@ object.
 sub prereqs     { $_[0]{prereqs} }
 
 1;
+
+# ABSTRACT: an optional feature provided by a CPAN distribution
 
 __END__
 

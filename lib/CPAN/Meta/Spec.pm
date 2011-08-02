@@ -3,8 +3,11 @@ use 5.006;
 use strict;
 use warnings;
 package CPAN::Meta::Spec;
-# ABSTRACT: specification for CPAN distribution metadata
+# VERSION
+
 1;
+
+# ABSTRACT: specification for CPAN distribution metadata
 
 =head1 SYNOPSIS
 

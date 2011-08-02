@@ -3,8 +3,11 @@ use 5.006;
 use strict;
 use warnings;
 package CPAN::Meta::History;
-# ABSTRACT: history of CPAN Meta Spec changes
+# VERSION
+
 1;
+
+# ABSTRACT: history of CPAN Meta Spec changes
 
 =head1 DESCRIPTION
 

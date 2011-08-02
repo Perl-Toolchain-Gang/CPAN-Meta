@@ -2,7 +2,7 @@ use 5.006;
 use strict;
 use warnings;
 package CPAN::Meta::Validator;
-# ABSTRACT: validate CPAN distribution metadata structures
+# VERSION
 
 =head1 SYNOPSIS
 
@@ -970,7 +970,14 @@ sub _error {
 
 1;
 
+# ABSTRACT: validate CPAN distribution metadata structures
+
 __END__
+
+=for Pod::Coverage
+anything boolean check_lazylist check_list custom_1 custom_2 exversion file
+identifier license module phase relation release_status string string_or_undef
+url urlspec version
 
 =head1 BUGS
 
