@@ -7,6 +7,11 @@ Revision history for CPAN-Meta
   - Fixed some broken URLs in documentation and for LGPL in legacy
     conversion (RT #68738)
 
+  [SPEC]
+
+  - Clarified that file paths in the 'provides' section must be in
+    Unix-style (i.e. forward slashes) (RT #69045)
+
 {{$NEXT}}
 
 2.110930  2011-04-02 23:31:24 America/New_York

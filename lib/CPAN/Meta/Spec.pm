@@ -651,8 +651,9 @@ the distribution.  The values are Maps with the following valid subkeys:
 
 =item file
 
-This field is required.  The value must contain a relative file path
-from the root of the distribution to the module containing the package.
+This field is required.  The value must contain a Unix-style relative
+file path from the root of the distribution to the module containing the
+package.
 
 =item version
 
