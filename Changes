@@ -1,5 +1,7 @@
 Revision history for CPAN-Meta
 
+{{$NEXT}}
+
   [BUGFIX]
 
   - Stringify any objects encountered during conversion. (RT #67295)
@@ -16,8 +18,6 @@ Revision history for CPAN-Meta
 
   - Replaced examples using Module::Build::ModuleInfo with Module::Metadata
     (RT #66135)
-
-{{$NEXT}}
 
 2.110930  2011-04-02 23:31:24 America/New_York
 
