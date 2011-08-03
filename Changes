@@ -7,6 +7,8 @@ Revision history for CPAN-Meta
   - Fixed some broken URLs in documentation and for LGPL in legacy
     conversion (RT #68738)
 
+  - Fixed invalid private Pod in CPAN::Meta::Validator (RT #65925)
+
   [SPEC]
 
   - Clarified that file paths in the 'provides' section must be in
