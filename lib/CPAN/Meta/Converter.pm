@@ -37,8 +37,8 @@ sub _dclone {
   local *UNIVERSAL::TO_JSON = sub { return "$_[0]" };
 
   my $backend = Parse::CPAN::Meta->json_backend();
-  return $backend->new->decode(
-    $backend->new->allow_blessed->convert_blessed->encode($ref)
+  return $backend->new->utf8->decode(
+    $backend->new->utf8->allow_blessed->convert_blessed->encode($ref)
   );
 }
 
