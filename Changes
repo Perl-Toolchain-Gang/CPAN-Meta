@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.112600  2011-09-17 12:21:09 America/New_York
+
   [DOCUMENTATION]
 
   - Fixed spelling error in CPAN::Meta::Spec (RT #71036) [Gregor Hermann]
