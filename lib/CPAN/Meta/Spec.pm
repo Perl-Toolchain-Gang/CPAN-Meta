@@ -559,7 +559,7 @@ B<must not> include C<configure> phase prereqs.
 =back
 
 Consumers B<must not> include optional features as prerequisites without
-explict instruction from users (whether via interactive prompting,
+explicit instruction from users (whether via interactive prompting,
 a function parameter or a configuration value, etc. ).
 
 If an optional feature is used by a consumer to add additional
