@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - Spell BACKEND environment variables correctly this time
+    [noticed by Stevan Little]
+
 2.112620  2011-09-18 20:56:06 America/New_York
 
   [BUGFIX]

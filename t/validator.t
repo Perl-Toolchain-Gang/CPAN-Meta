@@ -8,7 +8,7 @@ use File::Spec;
 use IO::Dir;
 use Parse::CPAN::Meta 1.4400;
 
-delete $ENV{$_} for qw/PERL_JSON_BACKEN PERL_YAML_BACKEND/; # use defaults
+delete $ENV{$_} for qw/PERL_JSON_BACKEND PERL_YAML_BACKEND/; # use defaults
 
 {
   my $data_dir = IO::Dir->new( 't/data' );
