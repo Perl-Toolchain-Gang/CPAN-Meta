@@ -4,6 +4,8 @@ use Test::More 0.88;
 
 use CPAN::Meta::Prereqs;
 
+delete $ENV{$_} for qw/PERL_JSON_BACKEN PERL_YAML_BACKEND/; # use defaults
+
 my $prereq_struct = {
   runtime => {
     requires => {

@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - Protect tests against PERL_(YAML|JSON)_BACKEND settings that could
+    cause tests to fail. (RT #69979)
+
 2.112600  2011-09-17 12:21:09 America/New_York
 
   [DOCUMENTATION]
