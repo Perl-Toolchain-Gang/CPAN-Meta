@@ -14,7 +14,7 @@ organized by phase and type, as described in L<CPAN::Meta::Prereqs>.
 
 use Carp qw(confess);
 use Scalar::Util qw(blessed);
-use Version::Requirements 0.101020; # finalize
+use CPAN::Meta::Requirements;
 
 =method new
 
@@ -69,7 +69,7 @@ sub new {
 
       next TYPE unless keys %$spec;
 
-      $guts{prereqs}{$phase}{$type} = Version::Requirements->from_string_hash(
+      $guts{prereqs}{$phase}{$type} = CPAN::Meta::Requirements->from_string_hash(
         $spec
       );
     }
@@ -82,10 +82,10 @@ sub new {
 
   my $requirements = $prereqs->requirements_for( $phase, $type );
 
-This method returns a L<Version::Requirements> object for the given phase/type
-combination.  If no prerequisites are registered for that combination, a new
-Version::Requirements object will be returned, and it may be added to as
-needed.
+This method returns a L<CPAN::Meta::Requirements> object for the given
+phase/type combination.  If no prerequisites are registered for that
+combination, a new CPAN::Meta::Requirements object will be returned, and it may
+be added to as needed.
 
 If C<$phase> or C<$type> are undefined or otherwise invalid, an exception will
 be raised.
@@ -106,7 +106,7 @@ sub requirements_for {
     confess "requested requirements for unknown type: $type";
   }
 
-  my $req = ($self->{prereqs}{$phase}{$type} ||= Version::Requirements->new);
+  my $req = ($self->{prereqs}{$phase}{$type} ||= CPAN::Meta::Requirements->new);
 
   $req->finalize if $self->is_finalized;
 
@@ -140,7 +140,7 @@ sub with_merged_prereqs {
 
   for my $phase ($self->__legal_phases) {
     for my $type ($self->__legal_types) {
-      my $req = Version::Requirements->new;
+      my $req = CPAN::Meta::Requirements->new;
 
       for my $prereq (@prereq_objs) {
         my $this_req = $prereq->requirements_for($phase, $type);
@@ -162,7 +162,7 @@ sub with_merged_prereqs {
 
 This method returns a hashref containing structures suitable for dumping into a
 distmeta data structure.  It is made up of hashes and strings, only; there will
-be no Prereqs, Version::Requirements, or C<version> objects inside it.
+be no Prereqs, CPAN::Meta::Requirements, or C<version> objects inside it.
 
 =cut
 
