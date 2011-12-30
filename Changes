@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.101021  2011-12-30 15:39:56 America/New_York
           DEPRECATED DEPRECATED DEPRECATED DEPRECATED
 
           Version::Requirements is now DEPRECATED
