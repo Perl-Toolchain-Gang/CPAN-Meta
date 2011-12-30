@@ -1,2 +1,4 @@
 /.build
 /CPAN-Meta-*
+META.json
+README.pod
