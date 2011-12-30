@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 package CPAN::Meta::Requirements;
+# VERSION
 # ABSTRACT: a set of version requirements for a CPAN dist
 
 =head1 SYNOPSIS
