@@ -33,6 +33,10 @@ use Carp ();
 use Scalar::Util ();
 use version 0.77 (); # the ->parse method
 
+Carp::cluck(
+  "Version::Requirements is deprecated; replace with CPAN::Meta::Requirements"
+);
+
 =method new
 
   my $req = Version::Requirements->new;
