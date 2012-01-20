@@ -33,9 +33,12 @@ use Carp ();
 use Scalar::Util ();
 use version 0.77 (); # the ->parse method
 
+# We silence this warning during core tests, because this is only in core
+# because it has to be, and nobody wants to see this stupid warning.
+# -- rjbs, 2012-01-20
 Carp::cluck(
   "Version::Requirements is deprecated; replace with CPAN::Meta::Requirements"
-);
+) unless $ENV{PERL_CORE};
 
 =method new
 
