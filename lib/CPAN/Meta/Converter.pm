@@ -346,7 +346,7 @@ sub _clean_version {
 
 sub _version_map {
   my ($element) = @_;
-  return undef unless defined $element;
+  return unless defined $element;
   if ( ref $element eq 'HASH' ) {
     my $new_map = {};
     for my $k ( keys %$element ) {
@@ -464,7 +464,7 @@ sub _extract_prereqs {
 
 sub _downgrade_optional_features {
   my (undef, undef, $meta) = @_;
-  return undef unless exists $meta->{optional_features};
+  return unless exists $meta->{optional_features};
   my $origin = $meta->{optional_features};
   my $features = {};
   for my $name ( keys %$origin ) {
@@ -485,7 +485,7 @@ sub _downgrade_optional_features {
 
 sub _upgrade_optional_features {
   my (undef, undef, $meta) = @_;
-  return undef unless exists $meta->{optional_features};
+  return unless exists $meta->{optional_features};
   my $origin = $meta->{optional_features};
   my $features = {};
   for my $name ( keys %$origin ) {
@@ -581,7 +581,7 @@ my $resource2_upgrade = {
     return unless $item;
     if ( $item =~ m{^mailto:(.*)$} ) { return { mailto => $1 } }
     elsif( _is_urlish($item) ) { return { web => $item } }
-    else { return undef }
+    else { return }
   },
   repository => sub { return _is_urlish($_[0]) ? { url => $_[0] } : undef },
   ':custom'  => \&_prefix_custom,
@@ -589,7 +589,7 @@ my $resource2_upgrade = {
 
 sub _upgrade_resources_2 {
   my (undef, undef, $meta, $version) = @_;
-  return undef unless exists $meta->{resources};
+  return unless exists $meta->{resources};
   return _convert($meta->{resources}, $resource2_upgrade);
 }
 
@@ -627,7 +627,7 @@ my $resources2_cleanup = {
 
 sub _cleanup_resources_2 {
   my ($resources, $key, $meta, $to_version) = @_;
-  return undef unless $resources && ref $resources eq 'HASH';
+  return unless $resources && ref $resources eq 'HASH';
   return _convert($resources, $resources2_cleanup, $to_version);
 }
 
@@ -641,7 +641,7 @@ my $resource1_spec = {
 
 sub _resources_1_3 {
   my (undef, undef, $meta, $version) = @_;
-  return undef unless exists $meta->{resources};
+  return unless exists $meta->{resources};
   return _convert($meta->{resources}, $resource1_spec);
 }
 
@@ -654,7 +654,7 @@ sub _resources_1_2 {
     $resources->{license} = $meta->license_url
       if _is_urlish($meta->{license_url});
   }
-  return undef unless keys %$resources;
+  return unless keys %$resources;
   return _convert($resources, $resource1_spec);
 }
 
@@ -668,7 +668,7 @@ my $resource_downgrade_spec = {
 
 sub _downgrade_resources {
   my (undef, undef, $meta, $version) = @_;
-  return undef unless exists $meta->{resources};
+  return unless exists $meta->{resources};
   return _convert($meta->{resources}, $resource_downgrade_spec);
 }
 
