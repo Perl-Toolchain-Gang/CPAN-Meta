@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [OTHER]
+
+  - Fixed CPAN packaging errors
+
 2.120350  2012-02-03 22:46:59 America/New_York
 
   [BUGFIX]
