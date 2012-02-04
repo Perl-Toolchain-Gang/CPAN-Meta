@@ -493,12 +493,12 @@ Valid subkeys are as follows:
 =item file
 
 A I<List> of relative paths to files.  Paths B<must be> specified with
-unix convetions.
+unix conventions.
 
 =item directory
 
 A I<List> of relative paths to directories.  Paths B<must be> specified
-with unix convetions.
+with unix conventions.
 
 [ Note: previous editions of the spec had C<dir> instead of C<directory> ]
 
@@ -553,7 +553,7 @@ This entry is required and has the same structure as that of the
 C<L</prereqs>> key.  It provides a list of package requirements
 that must be satisfied for the feature to be supported or enabled.
 
-There is one crucial restriction:  the preqreqs of an optional feature
+There is one crucial restriction:  the prereqs of an optional feature
 B<must not> include C<configure> phase prereqs.
 
 =back

@@ -229,7 +229,7 @@ Added 'resources' field with subkeys 'homepage', 'license', and
 
 =item *
 
-Added 'optional_features' field as an alterate under 'recommends'.
+Added 'optional_features' field as an alternate under 'recommends'.
 Includes 'description', 'requires', 'build_requires', 'conflicts',
 'requires_packages', 'requires_os' and 'excluded_os' as valid subkeys
 
