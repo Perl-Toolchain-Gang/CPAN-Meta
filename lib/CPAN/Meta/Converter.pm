@@ -333,7 +333,10 @@ sub _clean_version {
   return 0 if ! length $element;
   return 0 if ( $element eq 'undef' || $element eq '<undef>' );
 
-  if ( my $v = eval { version->new($element) } ) {
+  my $v = eval { version->new($element) };
+  # XXX check defined $v and not just $v because version objects leak memory
+  # in boolean context -- dagolden, 2012-02-03
+  if ( defined $v ) {
     return $v->is_qv ? $v->normal : $element;
   }
   else {

@@ -2,7 +2,14 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - Work around a memory leak bug involving version objects
+    in boolean context.
+
 2.113640  2011-12-30 15:19:46 America/New_York
+
+  [OTHER]
 
   - Version::Requirements has now been merged as CPAN::Meta::Requirements,
     rendering Version::Requirements itself redundant
