@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [OTHER]
+
+  - Dialed back perl prereq to 5.006
+
 2.120351  2012-02-03 23:01:45 America/New_York
 
   [OTHER]
