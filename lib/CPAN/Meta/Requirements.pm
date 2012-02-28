@@ -130,6 +130,55 @@ BEGIN {
   }
 }
 
+=method add_string_requirement( $string_requirement)
+
+This method parses the passed in string and adds the appropriate requirement.
+It understands things like:
+
+=over 4
+
+=item >= 1.3
+
+=item <= 1.3
+
+=item == 1.3
+
+=item ! 1.3
+
+=item >= 1.3, ! 1.5, <= 2.0
+
+It will default to using minimum version if it runs out of options.  Extra
+whitepsace is allowed.
+
+=back
+
+=cut
+
+sub add_string_requirement {
+  my ($self, $package, $req) = @_;
+
+  my @reqs = split(/,/, $req);
+
+  foreach my $r (@reqs) {
+    if($r =~ /^\s*==\s*(\S+)\s*$/) {
+      # handle exact versions (==)
+      $self->exact_version($package => $1);
+    } elsif($r =~ /^\s*!=\s*(\S+)\s*$/) {
+      # handle exclusions (!)
+      $self->add_exclusion($package => $1);
+    } elsif($r =~ /^\s*\>=\s*(\S+)\s*$/) {
+      # handle minimums (>=)
+      $self->add_minimum($package => $1);
+    } elsif($r =~ /^\s*\<=\s*(\S+)\s*$/) {
+      # handle maximum (<=)
+      $self->add_maximum($package => $1);
+    } else {
+      # assume it's a minumum!
+      $self->add_minimum($package, $r);
+    }
+  }
+}
+
 =method add_requirements
 
   $req->add_requirements( $another_req_object );
