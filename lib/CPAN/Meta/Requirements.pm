@@ -332,13 +332,36 @@ sub as_string_hash {
   return \%hash;
 }
 
-=method from_string_hash
+=method add_string_requirement
 
-  my $req = CPAN::Meta::Requirements->from_string_hash( \%hash );
+  $req->add_string_requirement('Library::Foo' => '>= 1.208, <= 2.206');
 
-This is an alternate constructor for a CPAN::Meta::Requirements object.  It takes
-a hash of module names and version requirement strings and returns a new
-CPAN::Meta::Requirements object.
+This method parses the passed in string and adds the appropriate requirement
+for the given module.  It understands version ranges as described in the
+L<CPAN::Meta::Spec/Version Ranges>. For example:
+
+=over 4
+
+=item 1.3
+
+=item >= 1.3
+
+=item <= 1.3
+
+=item == 1.3
+
+=item ! 1.3
+
+=item > 1.3
+
+=item < 1.3
+
+=item >= 1.3, ! 1.5, <= 2.0
+
+A version number without an operator is equivalent to specifying a minimum
+(C<E<gt>=>).  Extra whitespace is allowed.
+
+=back
 
 =cut
 
@@ -351,25 +374,41 @@ my %methods_for_op = (
   '<'  => [ qw(add_maximum add_exclusion) ],
 );
 
+sub add_string_requirement {
+  my ($self, $module, $req) = @_;
+
+  my @parts = split qr{\s*,\s*}, $req;
+  for my $part (@parts) {
+    my ($op, $ver) = split /\s+/, $part, 2;
+
+    if (! defined $ver) {
+      $self->add_minimum($module => $op);
+    } else {
+      Carp::confess("illegal requirement string: $req")
+        unless my $methods = $methods_for_op{ $op };
+
+      $self->$_($module => $ver) for @$methods;
+    }
+  }
+}
+
+=method from_string_hash
+
+  my $req = CPAN::Meta::Requirements->from_string_hash( \%hash );
+
+This is an alternate constructor for a CPAN::Meta::Requirements object.  It takes
+a hash of module names and version requirement strings and returns a new
+CPAN::Meta::Requirements object.
+
+=cut
+
 sub from_string_hash {
   my ($class, $hash) = @_;
 
   my $self = $class->new;
 
   for my $module (keys %$hash) {
-    my @parts = split qr{\s*,\s*}, $hash->{ $module };
-    for my $part (@parts) {
-      my ($op, $ver) = split /\s+/, $part, 2;
-
-      if (! defined $ver) {
-        $self->add_minimum($module => $op);
-      } else {
-        Carp::confess("illegal requirement string: $hash->{ $module }")
-          unless my $methods = $methods_for_op{ $op };
-
-        $self->$_($module => $ver) for @$methods;
-      }
-    }
+    $self->add_string_requirement($module, $hash->{ $module });
   }
 
   return $self;
