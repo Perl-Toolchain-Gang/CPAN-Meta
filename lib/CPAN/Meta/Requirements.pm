@@ -130,55 +130,6 @@ BEGIN {
   }
 }
 
-=method add_string_requirement( $string_requirement)
-
-This method parses the passed in string and adds the appropriate requirement.
-It understands things like:
-
-=over 4
-
-=item >= 1.3
-
-=item <= 1.3
-
-=item == 1.3
-
-=item ! 1.3
-
-=item >= 1.3, ! 1.5, <= 2.0
-
-It will default to using minimum version if it runs out of options.  Extra
-whitepsace is allowed.
-
-=back
-
-=cut
-
-sub add_string_requirement {
-  my ($self, $package, $req) = @_;
-
-  my @reqs = split(/,/, $req);
-
-  foreach my $r (@reqs) {
-    if($r =~ /^\s*==\s*(\S+)\s*$/) {
-      # handle exact versions (==)
-      $self->exact_version($package => $1);
-    } elsif($r =~ /^\s*!=\s*(\S+)\s*$/) {
-      # handle exclusions (!)
-      $self->add_exclusion($package => $1);
-    } elsif($r =~ /^\s*\>=\s*(\S+)\s*$/) {
-      # handle minimums (>=)
-      $self->add_minimum($package => $1);
-    } elsif($r =~ /^\s*\<=\s*(\S+)\s*$/) {
-      # handle maximum (<=)
-      $self->add_maximum($package => $1);
-    } else {
-      # assume it's a minumum!
-      $self->add_minimum($package, $r);
-    }
-  }
-}
-
 =method add_requirements
 
   $req->add_requirements( $another_req_object );
@@ -381,13 +332,31 @@ sub as_string_hash {
   return \%hash;
 }
 
-=method from_string_hash
+=method add_string_requirement( $string_requirement)
 
-  my $req = CPAN::Meta::Requirements->from_string_hash( \%hash );
+This method parses the passed in string and adds the appropriate requirement.
+It understands things like:
 
-This is an alternate constructor for a CPAN::Meta::Requirements object.  It takes
-a hash of module names and version requirement strings and returns a new
-CPAN::Meta::Requirements object.
+=over 4
+
+=item >= 1.3
+
+=item <= 1.3
+
+=item == 1.3
+
+=item ! 1.3
+
+=item > 1.3
+
+=item < 1.3
+
+=item >= 1.3, ! 1.5, <= 2.0
+
+It will default to using minimum version if it runs out of options.  Extra
+whitepsace is allowed.
+
+=back
 
 =cut
 
@@ -400,25 +369,41 @@ my %methods_for_op = (
   '<'  => [ qw(add_maximum add_exclusion) ],
 );
 
+sub add_string_requirement {
+  my ($self, $module, $req) = @_;
+
+  my @parts = split qr{\s*,\s*}, $req;
+  for my $part (@parts) {
+    my ($op, $ver) = split /\s+/, $part, 2;
+
+    if (! defined $ver) {
+      $self->add_minimum($module => $op);
+    } else {
+      Carp::confess("illegal requirement string: $req")
+        unless my $methods = $methods_for_op{ $op };
+
+      $self->$_($module => $ver) for @$methods;
+    }
+  }
+}
+
+=method from_string_hash
+
+  my $req = CPAN::Meta::Requirements->from_string_hash( \%hash );
+
+This is an alternate constructor for a CPAN::Meta::Requirements object.  It takes
+a hash of module names and version requirement strings and returns a new
+CPAN::Meta::Requirements object.
+
+=cut
+
 sub from_string_hash {
   my ($class, $hash) = @_;
 
   my $self = $class->new;
 
   for my $module (keys %$hash) {
-    my @parts = split qr{\s*,\s*}, $hash->{ $module };
-    for my $part (@parts) {
-      my ($op, $ver) = split /\s+/, $part, 2;
-
-      if (! defined $ver) {
-        $self->add_minimum($module => $op);
-      } else {
-        Carp::confess("illegal requirement string: $hash->{ $module }")
-          unless my $methods = $methods_for_op{ $op };
-
-        $self->$_($module => $ver) for @$methods;
-      }
-    }
+    $self->add_string_requirement($module, $hash->{ $module });
   }
 
   return $self;
