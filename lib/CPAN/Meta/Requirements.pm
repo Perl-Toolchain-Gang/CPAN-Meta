@@ -38,24 +38,50 @@ use version 0.77 (); # the ->parse method
 
   my $req = CPAN::Meta::Requirements->new;
 
-This returns a new CPAN::Meta::Requirements object.  It ignores any arguments
-given.
+This returns a new CPAN::Meta::Requirements object.  It takes an optional
+hash reference argument.  The following keys are supported:
+
+=for :list
+* <bad_version_hook> -- if provided, when a version cannot be parsed into
+a version object, this code reference will be called with the invalid version
+string as an argument.  It must return a valid version object.
+
+All other keys are ignored.
 
 =cut
 
+my @valid_options = qw( bad_version_hook );
+
 sub new {
-  my ($class) = @_;
-  return bless {} => $class;
+  my ($class, $options) = @_;
+  $options ||= {};
+  Carp::croak "Argument to $class\->new() must be a hash reference"
+    unless ref $options eq 'HASH';
+  my %self = map {; $_ => $options->{$_}} @valid_options;
+
+  return bless \%self => $class;
 }
 
 sub _version_object {
   my ($self, $version) = @_;
 
-  $version = (! defined $version)                ? version->parse(0)
+  my $vobj;
+
+  eval {
+    $vobj  = (! defined $version)                ? version->parse(0)
            : (! Scalar::Util::blessed($version)) ? version->parse($version)
            :                                       $version;
+  };
 
-  return $version;
+  if ( my $err = $@ ) {
+    my $hook = $self->{bad_version_hook};
+    $vobj = eval { $hook->($version) }
+      if ref $hook eq 'CODE';
+    die $err
+      unless Scalar::Util::blessed($vobj) && $vobj->isa("version");
+  }
+
+  return $vobj;
 }
 
 =method add_minimum
