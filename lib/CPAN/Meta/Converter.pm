@@ -345,13 +345,22 @@ sub _clean_version {
   }
 }
 
+sub _bad_version_hook {
+  my ($v) = @_;
+  $v =~ s{[a-z]+$}{}; # strip trailing alphabetics
+  my $vobj = eval { version->parse($v) };
+  return defined($vobj) ? $vobj : version->parse(0); # or give up
+}
+
 sub _version_map {
   my ($element) = @_;
   return unless defined $element;
   if ( ref $element eq 'HASH' ) {
     # XXX turn this into CPAN::Meta::Requirements with bad version hook
     # and then turn it back into a hash
-    my $new_map = CPAN::Meta::Requirements->new;
+    my $new_map = CPAN::Meta::Requirements->new(
+      { bad_version_hook => sub { version->new(0) } } # punt
+    );
     while ( my ($k,$v) = each %$element ) {
       next unless _is_module_name($k);
       if ( !defined($v) || !length($v) || $v eq 'undef' || $v eq '<undef>'  ) {
@@ -448,7 +457,6 @@ sub _get_build_requires {
   my $test_h  = _extract_prereqs($_[2]->{prereqs}, qw(test  requires)) || {};
   my $build_h = _extract_prereqs($_[2]->{prereqs}, qw(build requires)) || {};
 
-  require CPAN::Meta::Requirements;
   my $test_req  = CPAN::Meta::Requirements->from_string_hash($test_h);
   my $build_req = CPAN::Meta::Requirements->from_string_hash($build_h);
 
@@ -458,7 +466,7 @@ sub _get_build_requires {
 sub _extract_prereqs {
   my ($prereqs, $phase, $type) = @_;
   return unless ref $prereqs eq 'HASH';
-  return $prereqs->{$phase}{$type};
+  return scalar _version_map($prereqs->{$phase}{$type});
 }
 
 sub _downgrade_optional_features {

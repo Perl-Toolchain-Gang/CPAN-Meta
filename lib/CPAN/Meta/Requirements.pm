@@ -83,6 +83,11 @@ sub _version_object {
     }
   }
 
+  # ensure no leading '.'
+  if ( $vobj =~ m{\A\.} ) {
+    $vobj = version->parse("0$vobj");
+  }
+
   return $vobj;
 }
 
@@ -407,9 +412,9 @@ sub add_string_requirement {
 
   my @parts = split qr{\s*,\s*}, $req;
   for my $part (@parts) {
-    my ($op, $ver) = $part =~ m{\A([^0-9v. ]+)(.*)\z};
+    my ($op, $ver) = $part =~ m{\A\s*(==|>=|>|<=|<|!=)\s*(.*)\z};
 
-    if (! defined $ver) {
+    if (! defined $op) {
       $self->add_minimum($module => $part);
     } else {
       Carp::confess("illegal requirement string: $req")
