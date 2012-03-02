@@ -348,9 +348,12 @@ sub _version_map {
   my ($element) = @_;
   return unless defined $element;
   if ( ref $element eq 'HASH' ) {
+    # XXX turn this into CPAN::Meta::Requirements with bad version hook
+    # and then turn it back into a hash
     my $new_map = {};
     for my $k ( keys %$element ) {
       next unless _is_module_name($k);
+      # XXX replace stuff with $req->add_string_requirements($module, $string)
       my $value = $element->{$k};
       if ( ! ( defined $value && length $value ) ) {
         $new_map->{$k} = 0;
@@ -358,10 +361,12 @@ sub _version_map {
       elsif ( $value eq 'undef' || $value eq '<undef>' ) {
         $new_map->{$k} = 0;
       }
+      # XXX pull this out earlier since CMR can't handle it
       elsif ( _is_module_name( $value ) ) { # some weird, old META have this
         $new_map->{$k} = 0;
         $new_map->{$value} = 0;
       }
+      # XXX let CMR handle this
       else {
         $new_map->{$k} = _clean_version($value);
       }
