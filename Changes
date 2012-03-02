@@ -2,6 +2,20 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [ADDED]
+
+  - CPAN::Meta::Requirements::add_string_requirements allows building
+    a requirements specification piecemeal [Cory G. Watson]
+
+  [BUGFIX]
+
+  - Version range handling fixed [rt.cpan.org #75424]
+
+  - CPAN::Meta::Converter handles bad version strings more gracefully,
+    truncating alphanumerics and otherwise falling back to "0".  This
+    is likely better than dropping a prerequisite or dying.
+    [rt.cpan.org #75427]
+
 2.120530  2012-02-22 16:15:31 EST5EDT
 
   [OTHER]
