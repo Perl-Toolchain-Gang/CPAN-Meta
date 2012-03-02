@@ -407,10 +407,10 @@ sub add_string_requirement {
 
   my @parts = split qr{\s*,\s*}, $req;
   for my $part (@parts) {
-    my ($op, $ver) = split /\s+/, $part, 2;
+    my ($op, $ver) = $part =~ m{\A([^0-9v. ]+)(.*)\z};
 
     if (! defined $ver) {
-      $self->add_minimum($module => $op);
+      $self->add_minimum($module => $part);
     } else {
       Carp::confess("illegal requirement string: $req")
         unless my $methods = $methods_for_op{ $op };
