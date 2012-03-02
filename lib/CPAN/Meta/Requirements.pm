@@ -77,8 +77,10 @@ sub _version_object {
     my $hook = $self->{bad_version_hook};
     $vobj = eval { $hook->($version) }
       if ref $hook eq 'CODE';
-    die $err
-      unless Scalar::Util::blessed($vobj) && $vobj->isa("version");
+    unless (Scalar::Util::blessed($vobj) && $vobj->isa("version")) {
+      $err =~ s{ at .* line \d+.*$}{};
+      die "Can't convert '$version': $err";
+    }
   }
 
   return $vobj;
