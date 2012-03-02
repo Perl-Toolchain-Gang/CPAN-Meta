@@ -194,8 +194,10 @@ for my $f ( reverse sort @files ) {
     prereqs requires build_requires configure_requires
     recommends conflicts
   );
-  for my $version ( qw/ 2 1.4 / ) {
-    my $suffix = $version eq 2 ? "$version.json" : "$version.yml";
+  for my $case ( qw/ 2 1_4 / ) {
+    my $suffix = $case eq 2 ? "$case.json" : "$case.yml";
+    my $version = $case;
+    $version =~ tr[_][.];
     my $path = File::Spec->catfile('t','data','version-ranges-' . $suffix);
     my $original = Parse::CPAN::Meta->load_file( $path  );
     ok( $original, "loaded " . basename $path );
