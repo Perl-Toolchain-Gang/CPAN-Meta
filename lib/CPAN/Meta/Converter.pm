@@ -23,7 +23,8 @@ optional fields.)
 =cut
 
 use CPAN::Meta::Validator;
-use version 0.82 ();
+use CPAN::Meta::Requirements;
+use version 0.88 ();
 use Parse::CPAN::Meta 1.4400 ();
 
 sub _dclone {
@@ -350,28 +351,21 @@ sub _version_map {
   if ( ref $element eq 'HASH' ) {
     # XXX turn this into CPAN::Meta::Requirements with bad version hook
     # and then turn it back into a hash
-    my $new_map = {};
-    for my $k ( keys %$element ) {
+    my $new_map = CPAN::Meta::Requirements->new;
+    while ( my ($k,$v) = each %$element ) {
       next unless _is_module_name($k);
-      # XXX replace stuff with $req->add_string_requirements($module, $string)
-      my $value = $element->{$k};
-      if ( ! ( defined $value && length $value ) ) {
-        $new_map->{$k} = 0;
+      if ( !defined($v) || !length($v) || $v eq 'undef' || $v eq '<undef>'  ) {
+        $v = 0;
       }
-      elsif ( $value eq 'undef' || $value eq '<undef>' ) {
-        $new_map->{$k} = 0;
+      # some weird, old META have bad yml with module => module
+      # so check if value is like a module name and not like a version
+      if ( _is_module_name($v) && ! version::is_lax($v) ) {
+        $new_map->add_minimum($k => 0);
+        $new_map->add_minimum($v => 0);
       }
-      # XXX pull this out earlier since CMR can't handle it
-      elsif ( _is_module_name( $value ) ) { # some weird, old META have this
-        $new_map->{$k} = 0;
-        $new_map->{$value} = 0;
-      }
-      # XXX let CMR handle this
-      else {
-        $new_map->{$k} = _clean_version($value);
-      }
+      $new_map->add_string_requirement($k => $v);
     }
-    return $new_map;
+    return $new_map->as_string_hash;
   }
   elsif ( ref $element eq 'ARRAY' ) {
     my $hashref = { map { $_ => 0 } @$element };
