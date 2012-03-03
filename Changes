@@ -2,6 +2,13 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - CPAN::Meta::Requirements now ensures that dotted-decimal versions are
+    represented in normalized form when stringified.  This fixes a
+    regression in META conversion in 2.120620.
+    [Reported by Kent Fredric; fixed by David Golden]
+
 2.120620  2012-03-02 12:28:59 EST5EDT
 
   [ADDED]

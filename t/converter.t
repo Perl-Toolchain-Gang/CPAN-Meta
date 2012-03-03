@@ -214,6 +214,17 @@ for my $f ( reverse sort @files ) {
   }
 }
 
+# specific test for version numbers
+{
+  my $path = File::Spec->catfile('t','data','version-not-normal.json');
+  my $original = Parse::CPAN::Meta->load_file( $path  );
+  ok( $original, "loaded " . basename $path );
+  my $cmc = CPAN::Meta::Converter->new( $original );
+  my $converted = $cmc->convert( version => 2 );
+  is( $converted->{prereqs}{runtime}{requires}{'File::Find'}, "v0.1.0", "normalize v0.1");
+  is( $converted->{prereqs}{runtime}{requires}{'File::Path'}, "v1.0.0", "normalize v1.0.0");
+}
+
 # CMR standardizes stuff in a way that makes it hard to test original vs final
 # so we remove spaces and >= to make them compare the same
 sub _normalize_reqs {

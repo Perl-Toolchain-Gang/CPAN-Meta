@@ -88,6 +88,11 @@ sub _version_object {
     $vobj = version->parse("0$vobj");
   }
 
+  # ensure normal v-string form
+  if ( $vobj->is_qv ) {
+    $vobj = version->parse($vobj->normal);
+  }
+
   return $vobj;
 }
 
