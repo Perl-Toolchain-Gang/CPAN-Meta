@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.120900  2012-03-30 13:15:15 Europe/Paris
+
   [BUGFIX]
 
   - CPAN::Meta::Requirements now treats undef requirements given to
