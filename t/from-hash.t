@@ -45,4 +45,25 @@ sub dies_ok (&@) {
     "we die when we can't understand a version spec";
 }
 
+{
+  my $string_hash = {
+    Left   => 10,
+    Shared => undef,
+    Right  => 18,
+  };
+
+  my $warning;
+  local $SIG{__WARN__} = sub { $warning = join("\n",@_) };
+
+  my $req = CPAN::Meta::Requirements->from_string_hash($string_hash);
+
+  is(
+    $req->as_string_hash->{Shared}, 0,
+    "undef requirement treated as '0'",
+  );
+
+  like ($warning, qr/Undefined requirement.*treated as '0'/, "undef requirement warns");
+
+}
+
 done_testing;

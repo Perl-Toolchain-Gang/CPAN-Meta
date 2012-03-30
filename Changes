@@ -2,6 +2,12 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - CPAN::Meta::Requirements now treats undef requirements given to
+    from_string_hash() as '0' and warns about it; add_string_requirements()
+    dies if it does not get a requirements string to parse
+
 2.120630  2012-03-03 14:48:35 EST5EDT
 
   [BUGFIX]
