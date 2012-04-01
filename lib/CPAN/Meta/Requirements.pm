@@ -258,7 +258,8 @@ L</accepts_module> instead.)
 sub requirements_for_module {
   my ($self, $module) = @_;
   my $entry = $self->__entry_for($module);
-  return $entry ? $entry->as_string : undef;
+  return unless $entry;
+  return $entry->as_string;
 }
 
 =method required_modules
