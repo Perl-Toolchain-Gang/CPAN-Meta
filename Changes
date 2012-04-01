@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.120921  2012-04-01 15:20:24 Europe/Paris
+
   [REMOVED]
 
   - CPAN::Meta::Requirements has been split out into its own distribution
