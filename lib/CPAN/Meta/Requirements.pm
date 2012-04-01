@@ -256,9 +256,9 @@ L</accepts_module> instead.)
 =cut
 
 sub requirements_for_module {
-	my ($self, $module) = @_;
-	my $entry = $self->__entry_for($module);
-	return $entry ? $entry->as_string : undef;
+  my ($self, $module) = @_;
+  my $entry = $self->__entry_for($module);
+  return $entry ? $entry->as_string : undef;
 }
 
 =method required_modules
@@ -677,3 +677,4 @@ sub from_string_hash {
 }
 
 1;
+# vim: ts=2 sts=2 sw=2 et:
