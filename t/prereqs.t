@@ -61,7 +61,6 @@ is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
     (! grep { 'Test' eq $_ } @req_mod),
     "...nor the build requirements",
   );
-  is($req->requirements_for_module('perl'), '5.005_03', 'Requires perl 5.005_03');
 }
 
 {
@@ -87,13 +86,6 @@ is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
     "...but not the build requirements",
   );
 
-  is($rec->requirements_for_module('ExtUtils::ParseXS'), '2.02', 'recommends ExtUtils');
-
-  # test empty/undef returns
-  my @list = $rec->requirements_for_module('FooBarBamBaz');
-  my $scalar = $rec->requirements_for_module('FooBarBamBaz');
-  is ( scalar @list, 0, "requirements_for_module() returns empty for not found (list)" );
-  is ( $scalar, undef, "requirements_for_module() returns undef for not found (scalar)" );
 }
 
 {

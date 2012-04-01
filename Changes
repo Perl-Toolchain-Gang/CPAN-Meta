@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [REMOVED]
+
+  - CPAN::Meta::Requirements has been split out into its own distribution
+    so it can be used by CPAN.pm without requiring all of CPAN::Meta
+
 2.120920  2012-04-01 11:30:43 Europe/Paris
 
   [ADDED]

@@ -14,7 +14,7 @@ organized by phase and type, as described in L<CPAN::Meta::Prereqs>.
 
 use Carp qw(confess);
 use Scalar::Util qw(blessed);
-use CPAN::Meta::Requirements;
+use CPAN::Meta::Requirements 2.121;
 
 =method new
 
