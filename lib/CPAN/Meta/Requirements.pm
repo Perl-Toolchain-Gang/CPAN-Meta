@@ -243,10 +243,13 @@ sub clear_requirement {
   return $self;
 }
 
-=method required_modules
+=method requested_version
 
-This method returns a list of all the modules for which requirements have been
-specified.
+  $req->requested_version( $module );
+
+This returns the required version for a given module. This should be used for
+informational purposes such as error message only and should not be
+interpreted in any way.
 
 =cut
 
@@ -256,13 +259,10 @@ sub requested_version {
 	return $entry ? $entry->as_string : undef;
 }
 
-=method requested_version
+=method required_modules
 
-  $req->requested_version( $module );
-
-This returns the required version for a given module. This should be used for
-informational purposes such as error message only and should not be
-interpreted in any way.
+This method returns a list of all the modules for which requirements have been
+specified.
 
 =cut
 
