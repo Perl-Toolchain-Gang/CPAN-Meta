@@ -250,6 +250,22 @@ specified.
 
 =cut
 
+sub requested_version {
+	my ($self, $module) = @_;
+	my $entry = $self->__entry_for($module);
+	return $entry ? $entry->as_string : undef;
+}
+
+=method requested_version
+
+  $req->requested_version( $module );
+
+This returns the required version for a given module. This should be used for
+informational purposes such as error message only and should not be
+interpreted in any way.
+
+=cut
+
 sub required_modules { keys %{ $_[0]{requirements} } }
 
 =method clone
