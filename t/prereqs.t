@@ -61,7 +61,7 @@ is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
     (! grep { 'Test' eq $_ } @req_mod),
     "...nor the build requirements",
   );
-  is($req->requested_version('perl'), '5.005_03', 'Requires perl 5.005_03');
+  is($req->requirements_for_module('perl'), '5.005_03', 'Requires perl 5.005_03');
 }
 
 {
@@ -87,7 +87,7 @@ is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
     "...but not the build requirements",
   );
 
-  is($rec->requested_version('ExtUtils::ParseXS'), '2.02', 'recommends ExtUtils');
+  is($rec->requirements_for_module('ExtUtils::ParseXS'), '2.02', 'recommends ExtUtils');
 }
 
 {

@@ -243,17 +243,19 @@ sub clear_requirement {
   return $self;
 }
 
-=method requested_version
+=method requirements_for_module
 
-  $req->requested_version( $module );
+  $req->requirements_for_module( $module );
 
-This returns the required version for a given module. This should be used for
-informational purposes such as error message only and should not be
-interpreted in any way.
+This returns a string containing the version requirements for a given module in
+the format described in L<CPAN::Meta::Spec> or undef if the given module has no
+requirements. This should only be used for informational purposes such as error
+messages and should not be interpreted or used for comparision (see
+L</accepts_module> instead.)
 
 =cut
 
-sub requested_version {
+sub requirements_for_module {
 	my ($self, $module) = @_;
 	my $entry = $self->__entry_for($module);
 	return $entry ? $entry->as_string : undef;
