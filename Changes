@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.120920  2012-04-01 11:30:43 Europe/Paris
+
   [ADDED]
 
   - CPAN::Meta::Requirements now has a 'requirements_for_module' method
