@@ -2,6 +2,16 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [ADDED]
+
+  - CPAN::Meta::Requirements now has a 'requirements_for_module' method
+    to retrieve a version requirements string for a specific module
+    [Leon Timmermans]
+
+  [OTHER]
+
+  - CPAN::Meta::YAML prerequisite bumped to 0.008
+
 2.120900  2012-03-30 13:15:15 Europe/Paris
 
   [BUGFIX]
