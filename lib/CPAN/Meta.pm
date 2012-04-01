@@ -43,7 +43,7 @@ use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
 use CPAN::Meta::Converter;
 use CPAN::Meta::Validator;
-use Parse::CPAN::Meta 1.4400 ();
+use Parse::CPAN::Meta 1.4403 ();
 
 BEGIN { *_dclone = \&CPAN::Meta::Converter::_dclone }
 

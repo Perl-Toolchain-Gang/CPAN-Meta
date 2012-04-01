@@ -10,6 +10,8 @@ Revision history for CPAN-Meta
 
   [OTHER]
 
+  - Parse::CPAN::Meta prerequisite bumped to 1.4403
+  - JSON::PP prerequisites bumped to 2.27200
   - CPAN::Meta::YAML prerequisite bumped to 0.008
 
 2.120900  2012-03-30 13:15:15 Europe/Paris
