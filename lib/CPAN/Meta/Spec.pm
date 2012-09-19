@@ -720,6 +720,18 @@ type, producers should provide a C<type> whenever a C<url> key is given.
 The C<type> field should be the name of the most common program used
 to work with the repository, e.g. git, svn, cvs, darcs, bzr or hg.
 
+=item integration
+
+This entry describes a continuous integration (CI)  environment or other automated
+testing system for this distribution. It is a Map with the following valid
+keys:
+
+  web  - a URL pointing to the CI web page or dashboard for the distribution
+  url  - a URL pointing to the CI project if different than the web page
+  type - a lowercase string indicating the type of CI system used
+
+Example values for the C<type> field are C<jenkins> or C<travis-ci>. 
+
 =back
 
 =head2 DEPRECATED FIELDS
