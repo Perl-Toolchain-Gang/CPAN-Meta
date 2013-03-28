@@ -1,0 +1,125 @@
+{
+   "abstract" : "the distribution metadata for a CPAN dist",
+   "author" : [
+      "David Golden <dagolden@cpan.org>",
+      "Ricardo Signes <rjbs@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300031, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "CPAN-Meta",
+   "no_index" : {
+      "directory" : [
+         "history"
+      ]
+   },
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.30"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Pod::Coverage::TrustPod" : "0",
+            "Test::CPAN::Meta" : "0",
+            "Test::Pod" : "1.41",
+            "Test::Pod::Coverage" : "1.08"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "CPAN::Meta::Requirements" : "2.121",
+            "CPAN::Meta::YAML" : "0.008",
+            "Carp" : "0",
+            "JSON::PP" : "2.27200",
+            "Parse::CPAN::Meta" : "1.4403",
+            "Scalar::Util" : "0",
+            "perl" : "5.006",
+            "strict" : "0",
+            "version" : "0.88",
+            "warnings" : "0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Data::Dumper" : "0",
+            "ExtUtils::MakeMaker" : "0",
+            "File::Basename" : "0",
+            "File::Find" : "0",
+            "File::Spec" : "0",
+            "File::Spec::Functions" : "0",
+            "File::Temp" : "0.20",
+            "IO::Dir" : "0",
+            "List::Util" : "0",
+            "Test::More" : "0.88",
+            "overload" : "0",
+            "utf8" : "0"
+         }
+      }
+   },
+   "provides" : {
+      "CPAN::Meta" : {
+         "file" : "lib/CPAN/Meta.pm",
+         "version" : "2.130870"
+      },
+      "CPAN::Meta::Converter" : {
+         "file" : "lib/CPAN/Meta/Converter.pm",
+         "version" : "2.130870"
+      },
+      "CPAN::Meta::Feature" : {
+         "file" : "lib/CPAN/Meta/Feature.pm",
+         "version" : "2.130870"
+      },
+      "CPAN::Meta::History" : {
+         "file" : "lib/CPAN/Meta/History.pm",
+         "version" : "2.130870"
+      },
+      "CPAN::Meta::Prereqs" : {
+         "file" : "lib/CPAN/Meta/Prereqs.pm",
+         "version" : "2.130870"
+      },
+      "CPAN::Meta::Spec" : {
+         "file" : "lib/CPAN/Meta/Spec.pm",
+         "version" : "2.130870"
+      },
+      "CPAN::Meta::Validator" : {
+         "file" : "lib/CPAN/Meta/Validator.pm",
+         "version" : "2.130870"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=CPAN-Meta"
+      },
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/dagolden/cpan-meta.git",
+         "web" : "http://github.com/dagolden/cpan-meta"
+      }
+   },
+   "version" : "2.130870",
+   "x_contributors" : [
+      "Ansgar Burchardt <ansgar@cpan.org>",
+      "Christopher J. Madsen <cjm@cpan.org>",
+      "Cory G Watson <gphat@cpan.org>",
+      "Damyan Ivanov <dam@cpan.org>",
+      "Eric Wilhelm <ewilhelm@cpan.org>",
+      "Gregor Hermann <gregoa@debian.org>",
+      "Ken Williams <kwilliams@cpan.org>",
+      "Lars D\u00c9\u00aa\u00e1\u00b4\u0087\u00e1\u00b4\u0084\u00e1\u00b4\u008b\u00e1\u00b4\u008f\u00e1\u00b4\u00a1 \u00e8\u00bf\u00aa\u00e6\u008b\u0089\u00e6\u0096\u00af <daxim@cpan.org>",
+      "Leon Timmermans <leont@cpan.org>",
+      "Mark Fowler <markf@cpan.org>",
+      "Michael G. Schwern <mschwern@cpan.org>",
+      "Randy Sims <randys@thepierianspring.org>",
+      "\u00c3\u0086var Arnfj\u00c3\u00b6r\u00c3\u00b0 Bjarmason <avar@cpan.org>"
+   ]
+}
+
