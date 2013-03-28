@@ -161,10 +161,6 @@ November 2006
 
 =item *
 
-Clarified that all prerequisites take version range specifications
-
-=item *
-
 Added 'no_index' subkey 'directory' and removed 'dir' to match actual
 usage in the wild
 
@@ -195,6 +191,10 @@ Changed 'generated_by' to be mandatory
 =item *
 
 Changed 'license' to be mandatory
+
+=item *
+
+Added version range specifications for prerequisites
 
 =item *
 
