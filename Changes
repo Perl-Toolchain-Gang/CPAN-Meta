@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.130870  2013-03-28 11:08:50 America/New_York
+
   [BUGFIX]
 
   - Don't add 'version' to 'provides' during conversion if one didn't
