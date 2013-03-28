@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - Don't add 'version' to 'provides' during conversion if one didn't
+    exist in the original [Reported by Miyagawa; fixed by David Golden]
+
 2.120921  2012-04-01 15:20:24 Europe/Paris
 
   [REMOVED]

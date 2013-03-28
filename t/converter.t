@@ -225,6 +225,18 @@ for my $f ( reverse sort @files ) {
   is( $converted->{prereqs}{runtime}{requires}{'File::Path'}, "v1.0.0", "normalize v1.0.0");
 }
 
+# specific test for missing provides version
+{
+  my $path = File::Spec->catfile('t','data','provides-version-missing.json');
+  my $original = Parse::CPAN::Meta->load_file( $path  );
+  ok( $original, "loaded " . basename $path );
+  my $cmc = CPAN::Meta::Converter->new( $original );
+  my $converted = $cmc->convert( version => 2 );
+  ok( exists $converted->{provides}{"Foo::Bar::Blah"}{file}, "found provides file" );
+  ok( ! exists $converted->{provides}{"Foo::Bar::Blah"}{version}, "missing version not added" )
+    or diag explain $converted;
+}
+
 # CMR standardizes stuff in a way that makes it hard to test original vs final
 # so we remove spaces and >= to make them compare the same
 sub _normalize_reqs {
