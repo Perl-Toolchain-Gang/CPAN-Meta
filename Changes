@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - Fix provides 'version' bug introduced in the 2.130870 fix
+
 2.130870  2013-03-28 11:08:50 America/New_York
 
   [BUGFIX]

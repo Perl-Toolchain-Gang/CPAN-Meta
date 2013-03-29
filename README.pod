@@ -8,7 +8,7 @@ CPAN::Meta - the distribution metadata for a CPAN dist
 
 =head1 VERSION
 
-version 2.130870
+version 2.130880
 
 =head1 SYNOPSIS
 
