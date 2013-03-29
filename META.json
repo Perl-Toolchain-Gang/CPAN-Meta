@@ -5,7 +5,7 @@
       "Ricardo Signes <rjbs@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300031, CPAN::Meta::Converter version 2.130870",
+   "generated_by" : "Dist::Zilla version 4.300031, CPAN::Meta::Converter version 2.130880",
    "license" : [
       "perl_5"
    ],
@@ -67,38 +67,31 @@
    "provides" : {
       "CPAN::Meta" : {
          "file" : "lib/CPAN/Meta.pm",
-         "version" : "2.130880",
-         "x_version" : "2.130880"
+         "version" : "2.130880"
       },
       "CPAN::Meta::Converter" : {
          "file" : "lib/CPAN/Meta/Converter.pm",
-         "version" : "2.130880",
-         "x_version" : "2.130880"
+         "version" : "2.130880"
       },
       "CPAN::Meta::Feature" : {
          "file" : "lib/CPAN/Meta/Feature.pm",
-         "version" : "2.130880",
-         "x_version" : "2.130880"
+         "version" : "2.130880"
       },
       "CPAN::Meta::History" : {
          "file" : "lib/CPAN/Meta/History.pm",
-         "version" : "2.130880",
-         "x_version" : "2.130880"
+         "version" : "2.130880"
       },
       "CPAN::Meta::Prereqs" : {
          "file" : "lib/CPAN/Meta/Prereqs.pm",
-         "version" : "2.130880",
-         "x_version" : "2.130880"
+         "version" : "2.130880"
       },
       "CPAN::Meta::Spec" : {
          "file" : "lib/CPAN/Meta/Spec.pm",
-         "version" : "2.130880",
-         "x_version" : "2.130880"
+         "version" : "2.130880"
       },
       "CPAN::Meta::Validator" : {
          "file" : "lib/CPAN/Meta/Validator.pm",
-         "version" : "2.130880",
-         "x_version" : "2.130880"
+         "version" : "2.130880"
       }
    },
    "release_status" : "stable",
