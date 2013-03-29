@@ -693,10 +693,12 @@ sub _release_status_from_version {
 
 my $provides_spec = {
   file => \&_keep,
+  version => \&_keep,
 };
 
 my $provides_spec_2 = {
   file => \&_keep,
+  version => \&_keep,
   ':custom'  => \&_prefix_custom,
 };
 
