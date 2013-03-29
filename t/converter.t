@@ -232,9 +232,15 @@ for my $f ( reverse sort @files ) {
   ok( $original, "loaded " . basename $path );
   my $cmc = CPAN::Meta::Converter->new( $original );
   my $converted = $cmc->convert( version => 2 );
-  ok( exists $converted->{provides}{"Foo::Bar::Blah"}{file}, "found provides file" );
-  ok( ! exists $converted->{provides}{"Foo::Bar::Blah"}{version}, "missing version not added" )
-    or diag explain $converted;
+  is_deeply( $converted->{provides}{"Foo::Bar"}, { file => "lib/Foo/Bar.pm", version => "0.27_02" },
+    "Foo::Bar provides correct"
+  );
+  is_deeply( $converted->{provides}{"Foo::Bar::Blah"}, { file => "lib/Foo/Bar/Blah.pm" },
+    "Foo::Bar::Blah provides correct"
+  );
+  is_deeply( $converted->{provides}{"Foo::Bar::Baz"}, { file => "lib/Foo/Bar/Baz.pm", version => "0.3" },
+    "Foo::Bar provides correct"
+  );
 }
 
 # CMR standardizes stuff in a way that makes it hard to test original vs final
