@@ -645,19 +645,22 @@ PAUSE, CPAN, and search.cpan.org to build indexes saying in which
 distribution various packages can be found.
 
 The keys of C<provides> are package names that can be found within
-the distribution.  The values are Maps with the following valid subkeys:
+the distribution.  If a package name key is provided, it must
+have a Map with the following valid subkeys:
 
 =over
 
 =item file
 
-This field is required.  The value must contain a Unix-style relative
-file path from the root of the distribution to the module containing the
-package.
+This field is required.  It must contain a Unix-style relative file path
+from the root of the distribution directory to a file that contains or
+generates the package.
 
 =item version
 
-This field contains a I<Version> String for the package, if one exists.
+If it exists, this field must contains a I<Version> String for the
+package.  If the package does not have a C<$VERSION>, this field must
+be omitted.
 
 =back
 

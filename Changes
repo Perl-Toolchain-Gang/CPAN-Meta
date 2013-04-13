@@ -2,6 +2,13 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [SPEC]
+
+  - Per the Lancaster Consensus, the 'file' subkey of a package listed in
+    'provides' must refer to an actual file in the distribution, either the
+    .pm file that provides the package or another file (*.PL) that
+    generates it
+
 2.130880  2013-03-29 09:51:00 America/New_York
 
   [BUGFIX]
