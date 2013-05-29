@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.131490  2013-05-29 14:15:16 America/New_York
+
   [BUGFIX]
 
   - Downconversion of custom resources was not dropping the leading "x_".
