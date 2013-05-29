@@ -5,7 +5,7 @@
       "Ricardo Signes <rjbs@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300031, CPAN::Meta::Converter version 2.130880",
+   "generated_by" : "Dist::Zilla version 4.300034, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -67,31 +67,31 @@
    "provides" : {
       "CPAN::Meta" : {
          "file" : "lib/CPAN/Meta.pm",
-         "version" : "2.130880"
+         "version" : "2.131490"
       },
       "CPAN::Meta::Converter" : {
          "file" : "lib/CPAN/Meta/Converter.pm",
-         "version" : "2.130880"
+         "version" : "2.131490"
       },
       "CPAN::Meta::Feature" : {
          "file" : "lib/CPAN/Meta/Feature.pm",
-         "version" : "2.130880"
+         "version" : "2.131490"
       },
       "CPAN::Meta::History" : {
          "file" : "lib/CPAN/Meta/History.pm",
-         "version" : "2.130880"
+         "version" : "2.131490"
       },
       "CPAN::Meta::Prereqs" : {
          "file" : "lib/CPAN/Meta/Prereqs.pm",
-         "version" : "2.130880"
+         "version" : "2.131490"
       },
       "CPAN::Meta::Spec" : {
          "file" : "lib/CPAN/Meta/Spec.pm",
-         "version" : "2.130880"
+         "version" : "2.131490"
       },
       "CPAN::Meta::Validator" : {
          "file" : "lib/CPAN/Meta/Validator.pm",
-         "version" : "2.130880"
+         "version" : "2.131490"
       }
    },
    "release_status" : "stable",
@@ -105,21 +105,22 @@
          "web" : "http://github.com/dagolden/cpan-meta"
       }
    },
-   "version" : "2.130880",
+   "version" : "2.131490",
    "x_contributors" : [
       "Ansgar Burchardt <ansgar@cpan.org>",
+      "Avar Arnfjord Bjarmason <avar@cpan.org>",
       "Christopher J. Madsen <cjm@cpan.org>",
       "Cory G Watson <gphat@cpan.org>",
       "Damyan Ivanov <dam@cpan.org>",
       "Eric Wilhelm <ewilhelm@cpan.org>",
       "Gregor Hermann <gregoa@debian.org>",
       "Ken Williams <kwilliams@cpan.org>",
-      "Lars D\u00c9\u00aa\u00e1\u00b4\u0087\u00e1\u00b4\u0084\u00e1\u00b4\u008b\u00e1\u00b4\u008f\u00e1\u00b4\u00a1 \u00e8\u00bf\u00aa\u00e6\u008b\u0089\u00e6\u0096\u00af <daxim@cpan.org>",
+      "Kenichi Ishigaki <ishigaki@cpan.org>",
+      "Lars Dieckow <daxim@cpan.org>",
       "Leon Timmermans <leont@cpan.org>",
       "Mark Fowler <markf@cpan.org>",
       "Michael G. Schwern <mschwern@cpan.org>",
-      "Randy Sims <randys@thepierianspring.org>",
-      "\u00c3\u0086var Arnfj\u00c3\u00b6r\u00c3\u00b0 Bjarmason <avar@cpan.org>"
+      "Randy Sims <randys@thepierianspring.org>"
    ]
 }
 

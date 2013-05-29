@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [BUGFIX]
+
+  - Downconversion of custom resources was not dropping the leading "x_".
+    Now "x_MailingList" will downconvert correctly to "MailingList".
+
   [SPEC]
 
   - Per the Lancaster Consensus, the 'file' subkey of a package listed in
