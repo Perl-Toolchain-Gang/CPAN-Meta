@@ -97,6 +97,12 @@ sub _ucfirst_custom {
   return $key;
 }
 
+sub _no_prefix_ucfirst_custom {
+  my $key = shift;
+  $key =~ s/^x_//;
+  return _ucfirst_custom($key);
+}
+
 sub _change_meta_spec {
   my ($element, undef, undef, $version) = @_;
   $element->{version} = $version;
@@ -670,7 +676,7 @@ my $resource_downgrade_spec = {
   homepage   => \&_url_or_drop,
   bugtracker => sub { return $_[0]->{web} },
   repository => sub { return $_[0]->{url} || $_[0]->{web} },
-  ':custom'  => \&_ucfirst_custom,
+  ':custom'  => \&_no_prefix_ucfirst_custom,
 };
 
 sub _downgrade_resources {
