@@ -982,7 +982,7 @@ described in the L<Version Ranges> section.
 Another subtle error that can occur in resolving prerequisites comes from
 the way that modules in prerequisites are indexed to distribution files on
 CPAN.  When a module is deleted from a distribution, prerequisites calling
-for that module could indicate an older distribution should installed,
+for that module could indicate an older distribution should be installed,
 potentially overwriting files from a newer distribution.
 
 For example, as of Oct 31, 2009, the CPAN index file contained these
