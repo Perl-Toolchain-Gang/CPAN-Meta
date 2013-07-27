@@ -626,14 +626,14 @@ Example:
   provides => {
     'Foo::Bar' => {
       file    => 'lib/Foo/Bar.pm',
-      version => 0.27_02
+      version => '0.27_02',
     },
     'Foo::Bar::Blah' => {
       file    => 'lib/Foo/Bar/Blah.pm',
     },
     'Foo::Bar::Baz' => {
       file    => 'lib/Foo/Bar/Baz.pm',
-      version => 0.3,
+      version => '0.3',
     },
   }
 
