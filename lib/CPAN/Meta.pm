@@ -529,7 +529,7 @@ sub feature {
 
   my $copy = $meta->as_struct( \%options );
 
-This method returns a deep copy of the object's metadata as an unblessed has
+This method returns a deep copy of the object's metadata as an unblessed hash
 reference.  It takes an optional hashref of options.  If the hashref contains
 a C<version> argument, the copied metadata will be converted to the version
 of the specification and returned.  For example:
