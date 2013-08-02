@@ -576,7 +576,7 @@ I<Suggestion for disuse:> Because there is currently no way for a
 distribution to specify a dependency on an optional feature of another
 dependency, the use of C<optional_feature> is discouraged.  Instead,
 create a separate, installable distribution that ensures the desired
-feature is available.  For example, if C<Foo::Bar> has a "Baz" feature,
+feature is available.  For example, if C<Foo::Bar> has a C<Baz> feature,
 release a separate C<Foo-Bar-Baz> distribution that satisfies
 requirements for the feature.
 
@@ -725,7 +725,8 @@ is a Map with the following valid keys:
 Because a url like C<http://myrepo.example.com/> is ambiguous as to
 type, producers should provide a C<type> whenever a C<url> key is given.
 The C<type> field should be the name of the most common program used
-to work with the repository, e.g. git, svn, cvs, darcs, bzr or hg.
+to work with the repository, e.g. C<git>, C<svn>, C<cvs>, C<darcs>,
+C<bzr> or C<hg>.
 
 =back
 
