@@ -5,7 +5,7 @@
       "Ricardo Signes <rjbs@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300034, CPAN::Meta::Converter version 2.131490",
+   "generated_by" : "Dist::Zilla version 4.300035, CPAN::Meta::Converter version 2.131560",
    "license" : [
       "perl_5"
    ],
@@ -16,7 +16,14 @@
    "name" : "CPAN-Meta",
    "no_index" : {
       "directory" : [
+         "t",
+         "xt",
+         "examples",
+         "corpus",
          "history"
+      ],
+      "package" : [
+         "DB"
       ]
    },
    "prereqs" : {
@@ -41,7 +48,7 @@
             "JSON::PP" : "2.27200",
             "Parse::CPAN::Meta" : "1.4403",
             "Scalar::Util" : "0",
-            "perl" : "5.006",
+            "perl" : "5.008",
             "strict" : "0",
             "version" : "0.88",
             "warnings" : "0"
@@ -67,45 +74,47 @@
    "provides" : {
       "CPAN::Meta" : {
          "file" : "lib/CPAN/Meta.pm",
-         "version" : "2.131560"
+         "version" : "2.132140"
       },
       "CPAN::Meta::Converter" : {
          "file" : "lib/CPAN/Meta/Converter.pm",
-         "version" : "2.131560"
+         "version" : "2.132140"
       },
       "CPAN::Meta::Feature" : {
          "file" : "lib/CPAN/Meta/Feature.pm",
-         "version" : "2.131560"
+         "version" : "2.132140"
       },
       "CPAN::Meta::History" : {
          "file" : "lib/CPAN/Meta/History.pm",
-         "version" : "2.131560"
+         "version" : "2.132140"
       },
       "CPAN::Meta::Prereqs" : {
          "file" : "lib/CPAN/Meta/Prereqs.pm",
-         "version" : "2.131560"
+         "version" : "2.132140"
       },
       "CPAN::Meta::Spec" : {
          "file" : "lib/CPAN/Meta/Spec.pm",
-         "version" : "2.131560"
+         "version" : "2.132140"
       },
       "CPAN::Meta::Validator" : {
          "file" : "lib/CPAN/Meta/Validator.pm",
-         "version" : "2.131560"
+         "version" : "2.132140"
       }
    },
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
-         "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=CPAN-Meta"
+         "web" : "https://github.com/Perl-Toolchain-Gang/cpan-meta/issues"
       },
+      "homepage" : "https://metacpan.org/release/CPAN-Meta",
       "repository" : {
          "type" : "git",
          "url" : "git://github.com/dagolden/cpan-meta.git",
-         "web" : "http://github.com/dagolden/cpan-meta"
+         "web" : "https://github.com/dagolden/cpan-meta"
       }
    },
-   "version" : "2.131560",
+   "version" : "2.132140",
+   "x_authority" : "cpan:DAGOLDEN",
    "x_contributors" : [
       "Ansgar Burchardt <ansgar@cpan.org>",
       "Avar Arnfjord Bjarmason <avar@cpan.org>",
@@ -114,12 +123,15 @@
       "Damyan Ivanov <dam@cpan.org>",
       "Eric Wilhelm <ewilhelm@cpan.org>",
       "Gregor Hermann <gregoa@debian.org>",
+      "Karen Etheridge <ether@cpan.org>",
       "Ken Williams <kwilliams@cpan.org>",
       "Kenichi Ishigaki <ishigaki@cpan.org>",
       "Lars Dieckow <daxim@cpan.org>",
       "Leon Timmermans <leont@cpan.org>",
       "Mark Fowler <markf@cpan.org>",
       "Michael G. Schwern <mschwern@cpan.org>",
+      "Olaf Alders <olaf@wundersolutions.com>",
+      "Olivier Mengu\u00e9 <dolmen@cpan.org>",
       "Randy Sims <randys@thepierianspring.org>"
    ]
 }
