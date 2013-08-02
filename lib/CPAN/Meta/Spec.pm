@@ -1,4 +1,8 @@
-# vi:tw=72
+# XXX RULES FOR PATCHING THIS FILE XXX
+# Patches that fix typos or formatting are acceptable.  Patches
+# that change semantics are not acceptable without prior approval
+# by David Golden or Ricardo Signes.
+
 use 5.006;
 use strict;
 use warnings;
@@ -1114,3 +1118,4 @@ of contributors in the repository history currently includes:
 
 =cut
 
+# vi:tw=72
