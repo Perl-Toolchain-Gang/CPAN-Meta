@@ -1089,7 +1089,7 @@ JSON, L<http://json.org/>
 
 YAML, L<http://www.yaml.org/>
 
-=head1 CONTRIBUTORS
+=head1 HISTORY
 
 Ken Williams wrote the original CPAN Meta Spec (also known as the
 "META.yml spec") in 2003 and maintained it through several revisions
@@ -1101,21 +1101,6 @@ In late 2009, David Golden organized the version 2 proposal review
 process.  David and Ricardo Signes drafted the final version 2 spec
 in April 2010 based on the version 1.4 spec and patches contributed
 during the proposal process.
-
-Several others have contributed patches over the years.  The full list
-of contributors in the repository history currently includes:
-
-  2shortplanks
-  Avar Arnfjord Bjarmason
-  Christopher J. Madsen
-  Damyan Ivanov
-  David Golden
-  Eric Wilhelm
-  Ken Williams
-  Lars DIECKOW
-  Michael G. Schwern
-  Randy Sims
-  Ricardo Signes
 
 =cut
 
