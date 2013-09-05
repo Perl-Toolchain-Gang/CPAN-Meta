@@ -574,9 +574,9 @@ merging prerequisites.
 
 I<Suggestion for disuse:> Because there is currently no way for a
 distribution to specify a dependency on an optional feature of another
-dependency, the use of C<optional_feature> is discouraged.  Instead,
-create a separate, installable distribution that ensures the desired
-feature is available.  For example, if C<Foo::Bar> has a C<Baz> feature,
+dependency, caution should be taken when using C<optional_feature>.  Instead,
+consider creating a separate, installable distribution that ensures the desired
+feature is available.  For example, if C<Foo::Bar> has a "Baz" feature,
 release a separate C<Foo-Bar-Baz> distribution that satisfies
 requirements for the feature.
 
