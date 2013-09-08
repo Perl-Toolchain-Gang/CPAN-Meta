@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [FIXED]
+
+  - Fixed incorrectly encoded META.yml
+
 2.132140  2013-08-02 11:54:17 America/New_York
 
   [DOCUMENTATION]
