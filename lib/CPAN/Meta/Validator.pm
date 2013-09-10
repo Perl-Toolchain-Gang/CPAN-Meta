@@ -96,10 +96,10 @@ my %definitions = (
   '2' => {
     # REQUIRED
     'abstract'            => { mandatory => 1, value => \&string  },
-    'author'              => { mandatory => 1, lazylist => { value => \&string } },
+    'author'              => { mandatory => 1, list => { value => \&string } },
     'dynamic_config'      => { mandatory => 1, value => \&boolean },
     'generated_by'        => { mandatory => 1, value => \&string  },
-    'license'             => { mandatory => 1, lazylist => { value => \&license } },
+    'license'             => { mandatory => 1, list => { value => \&license } },
     'meta-spec' => {
       mandatory => 1,
       'map' => {
@@ -114,7 +114,7 @@ my %definitions = (
 
     # OPTIONAL
     'description' => { value => \&string },
-    'keywords'    => { lazylist => { value => \&string } },
+    'keywords'    => { list => { value => \&string } },
     'no_index'    => $no_index_2,
     'optional_features'   => {
       'map'       => {
@@ -143,7 +143,7 @@ my %definitions = (
     },
     'resources'   => {
       'map'       => {
-        license    => { lazylist => { value => \&url } },
+        license    => { list => { value => \&url } },
         homepage   => { value => \&url },
         bugtracker => {
           'map' => {
