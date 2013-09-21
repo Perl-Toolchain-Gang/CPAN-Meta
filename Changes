@@ -1,6 +1,8 @@
 Revision history for CPAN-Meta
 
 {{$NEXT}}
+  - added check at install time for conflicting versions of Dist::Zilla, that
+    produce non-compliant meta files
 
 2.132620  2013-09-19 11:18:33 America/New_York
 
