@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [PREREQS]
+
+  - Dropped ExtUtils::MakeMaker configure_requires dependency
+    to 6.17
+
 2.132660  2013-09-23 06:04:04 America/New_York
 
   [FIXED]
