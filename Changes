@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [FIXED]
+
+  - updated Makefile.PL logic to support PERL_NO_HIGHLANDER
+
   [PREREQS]
 
   - Dropped ExtUtils::MakeMaker configure_requires dependency
