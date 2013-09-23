@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.132661  2013-09-23 13:27:46 America/New_York
+
   [FIXED]
 
   - updated Makefile.PL logic to support PERL_NO_HIGHLANDER
