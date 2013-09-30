@@ -558,7 +558,7 @@ of options.  If the hashref contains a C<version> argument, the copied metadata
 will be converted to the version of the specification and returned.  For
 example:
 
-  my $string = $meta->as_struct( {version => "1.4"} );
+  my $string = $meta->as_string( {version => "1.4"} );
 
 For C<version> greater than or equal to 2, the string will be serialized as
 JSON.  For C<version> less than 2, the string will be serialized as YAML.  In
