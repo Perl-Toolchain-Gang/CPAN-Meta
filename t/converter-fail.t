@@ -14,7 +14,7 @@ delete $ENV{$_} for qw/PERL_JSON_BACKEND PERL_YAML_BACKEND/; # use defaults
 my $data_dir = IO::Dir->new( 't/data-fail' );
 my @files = sort grep { /^\w/ } $data_dir->read;
 
-sub _spec_version { return $_[0]->{'meta-spec'}{version} || "1.0" }
+sub _spec_version { return eval { $_[0]->{'meta-spec'}{version} || "1.0" } || 0}
 
 use Data::Dumper;
 
