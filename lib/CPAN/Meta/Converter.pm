@@ -1226,7 +1226,7 @@ sub new {
   # create an attributes hash
   my $self = {
     'data'    => $data,
-    'spec'    => $data->{'meta-spec'}{'version'} || "1.0",
+    'spec'    => eval { $data->{'meta-spec'}{'version'} || "1.0" } || 0,
   };
 
   # create the object
