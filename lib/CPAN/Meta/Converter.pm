@@ -77,7 +77,7 @@ sub _generated_by {
   my $sig = __PACKAGE__ . " version " . (__PACKAGE__->VERSION || "<dev>");
 
   return $sig unless defined $gen and length $gen;
-  return $gen if $gen =~ /(, )\Q$sig/;
+  return $gen if $gen =~ /\Q$sig/;
   return "$gen, $sig";
 }
 
