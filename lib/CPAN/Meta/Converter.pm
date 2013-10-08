@@ -105,10 +105,10 @@ sub _no_prefix_ucfirst_custom {
 
 sub _change_meta_spec {
   my ($element, undef, undef, $version) = @_;
-  $element = {} unless ref $element eq 'HASH';
-  $element->{version} = $version;
-  $element->{url} = $known_specs{$version};
-  return $element;
+  return {
+    version => $version,
+    url => $known_specs{$version},
+  };
 }
 
 my @valid_licenses_1 = (
@@ -1233,11 +1233,31 @@ sub new {
   # create an attributes hash
   my $self = {
     'data'    => $data,
-    'spec'    => eval { $data->{'meta-spec'}{'version'} } || "1.0",
+    'spec'    => _extract_spec_version($data),
   };
 
   # create the object
   return bless $self, $class;
+}
+
+sub _extract_spec_version {
+    my ($data) = @_;
+    my $spec = $data->{'meta-spec'};
+
+    # is meta-spec there and valid?
+    return "1.0" unless defined $spec && ref $spec eq 'HASH'; # before meta-spec?
+
+    # does the version key look like a valid version?
+    my $v = $spec->{version};
+    if ( defined $v && $v =~ /^\d+(?:\.\d+)?$/ ) {
+        return $v if defined $v && grep { $v eq $_ } keys %known_specs; # known spec
+        return $v+0 if defined $v && grep { $v == $_ } keys %known_specs; # 2.0 => 2
+    }
+
+    # otherwise, use heuristics: look for 1.x vs 2.0 fields
+    return "2" if exists $data->{prereqs};
+    return "1.4" if exists $data->{configure_requires};
+    return "1.2"; # when meta-spec was first defined
 }
 
 =method convert
