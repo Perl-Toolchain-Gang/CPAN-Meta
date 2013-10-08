@@ -105,6 +105,7 @@ sub _no_prefix_ucfirst_custom {
 
 sub _change_meta_spec {
   my ($element, undef, undef, $version) = @_;
+  $element = {} unless ref $element eq 'HASH';
   $element->{version} = $version;
   $element->{url} = $known_specs{$version};
   return $element;
@@ -1232,7 +1233,7 @@ sub new {
   # create an attributes hash
   my $self = {
     'data'    => $data,
-    'spec'    => eval { $data->{'meta-spec'}{'version'} || "1.0" } || 0,
+    'spec'    => eval { $data->{'meta-spec'}{'version'} } || "1.0",
   };
 
   # create the object

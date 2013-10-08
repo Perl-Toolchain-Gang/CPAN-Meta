@@ -30,7 +30,7 @@ package main;
 my $data_dir = IO::Dir->new( 't/data' );
 my @files = sort grep { /^\w/ } $data_dir->read;
 
-sub _spec_version { return $_[0]->{'meta-spec'}{version} || "1.0" }
+sub _spec_version { return eval { $_[0]->{'meta-spec'}{version} } || "1.0" }
 
 #use Data::Dumper;
 

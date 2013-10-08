@@ -451,7 +451,7 @@ sub new {
   # create an attributes hash
   my $self = {
     'data'    => $data,
-    'spec'    => eval { $data->{'meta-spec'}{'version'} || "1.0" } || 0,
+    'spec'    => eval { $data->{'meta-spec'}{'version'} } || "1.0",
     'errors'  => undef,
   };
 
