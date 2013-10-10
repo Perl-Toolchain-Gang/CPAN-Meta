@@ -158,6 +158,49 @@ sub with_merged_prereqs {
   return (ref $self)->new(\%new_arg);
 }
 
+=method merged_requirements
+
+    my $new_reqs = $prereqs->merged_requirements( \@phases, \@types );
+    my $new_reqs = $prereqs->merged_requirements( \@phases );
+    my $new_reqs = $preerqs->merged_requirements();
+
+This method joins together all requirements across a number of phases
+and types into a new L<CPAN::Meta::Requirements> object.  If arguments
+are omitted, it defaults to "runtime", "build" and "test" for phases
+and "requires" and "recommends" for types.
+
+=cut
+
+sub merged_requirements {
+  my ($self, $phases, $types) = @_;
+  $phases = [qw/runtime build test/] unless defined $phases;
+  $types = [qw/requires recommends/] unless defined $types;
+
+  confess "merged_requirements phases argument must be an arrayref"
+    unless ref $phases eq 'ARRAY';
+  confess "merged_requirements types argument must be an arrayref"
+    unless ref $types eq 'ARRAY';
+
+  my $req = CPAN::Meta::Requirements->new;
+
+  for my $phase ( @$phases ) {
+    unless ($phase =~ /\Ax_/i or grep { $phase eq $_ } $self->__legal_phases) {
+        confess "requested requirements for unknown phase: $phase";
+    }
+    for my $type ( @$types ) {
+      unless ($type =~ /\Ax_/i or grep { $type eq $_ } $self->__legal_types) {
+          confess "requested requirements for unknown type: $type";
+      }
+      $req->add_requirements( $self->requirements_for($phase, $type) );
+    }
+  }
+
+  $req->finalize if $self->is_finalized;
+
+  return $req;
+}
+
+
 =method as_string_hash
 
 This method returns a hashref containing structures suitable for dumping into a
