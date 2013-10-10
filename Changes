@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [ADDED]
+
+  - CPAN::Meta::Prereqs now has a 'merged_requirements' method for
+    combining requirements across multiple phases and types
+
   [FIXED]
 
   - Invalid 'meta-spec' is no longer a fatal error: instead, it will
