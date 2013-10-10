@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.132830  2013-10-10 16:04:30 America/New_York
+
   [ADDED]
 
   - CPAN::Meta::Prereqs now has a 'merged_requirements' method for
