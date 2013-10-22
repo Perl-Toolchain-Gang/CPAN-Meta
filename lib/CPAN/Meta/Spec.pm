@@ -298,7 +298,7 @@ Example:
 
   license => [ 'perl_5' ]
 
-  license => [ 'apache_2', 'mozilla_1_0' ]
+  license => [ 'apache_2_0', 'mozilla_1_0' ]
 
 (Spec 2) [required] {List of one or more License Strings}
 
