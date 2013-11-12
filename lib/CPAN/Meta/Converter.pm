@@ -366,7 +366,7 @@ sub _version_map {
     # XXX turn this into CPAN::Meta::Requirements with bad version hook
     # and then turn it back into a hash
     my $new_map = CPAN::Meta::Requirements->new(
-      { bad_version_hook => sub { version->new(0) } } # punt
+      { bad_version_hook => \&_bad_version_hook } # punt
     );
     while ( my ($k,$v) = each %$element ) {
       next unless _is_module_name($k);
