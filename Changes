@@ -7,6 +7,10 @@ Revision history for CPAN-Meta
   - Added ability for CPAN::Meta::Converter to convert metadata fragments
     (incomplete portions of a metadata structure)
 
+  - CPAN::Meta::Merge is a new class for merging two possibly overlapping
+    instances of metadata. It will accept both CPAN::Meta objects and
+    (possibly incomplete) hashrefs of metadata.
+
   [DOCUMENTED]
 
   - Clarified language around 'dynamic_config' in the Spec
