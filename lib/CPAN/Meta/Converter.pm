@@ -26,6 +26,7 @@ use CPAN::Meta::Validator;
 use CPAN::Meta::Requirements;
 use version 0.88 ();
 use Parse::CPAN::Meta 1.4400 ();
+use List::Util qw/all/;
 
 sub _dclone {
   my $ref = shift;
@@ -111,7 +112,7 @@ sub _change_meta_spec {
   };
 }
 
-my @valid_licenses_1 = (
+my @open_source = (
   'perl',
   'gpl',
   'apache',
@@ -123,6 +124,12 @@ my @valid_licenses_1 = (
   'mit',
   'mozilla',
   'open_source',
+);
+
+my %is_open_source = map {; $_ => 1 } @open_source;
+
+my @valid_licenses_1 = (
+  @open_source,
   'unrestricted',
   'restrictive',
   'unknown',
@@ -139,7 +146,9 @@ sub _license_1 {
   if ( $license_map_1{lc $element} ) {
     return $license_map_1{lc $element};
   }
-  return 'unknown';
+  else {
+    return 'unknown';
+  }
 }
 
 my @valid_licenses_2 = qw(
@@ -237,12 +246,21 @@ sub _downgrade_license {
     return "unknown";
   }
   elsif( ref $element eq 'ARRAY' ) {
+    if ( @$element > 1) {
+      $DB::single = 1;
+      if ( all { $is_open_source{ $license_downgrade_map{lc $_} || 'unknown' } } @$element ) {
+        return 'open_source';
+      }
+      else {
+        return 'unknown';
+      }
+    }
     if ( @$element == 1 ) {
-      return $license_downgrade_map{$element->[0]} || "unknown";
+      return $license_downgrade_map{lc $element->[0]} || "unknown";
     }
   }
   elsif ( ! ref $element ) {
-    return $license_downgrade_map{$element} || "unknown";
+    return $license_downgrade_map{lc $element} || "unknown";
   }
   return "unknown";
 }

@@ -284,7 +284,14 @@ sub _normalize_reqs {
   is_deeply(
       $cleaned_up->{license},
       [ 'perl_5', 'bsd' ],
-      "multiple license preserved"
+      "multiple license preserved (v2)"
+  );
+
+  $cleaned_up = $cmc->convert( version => "1.4" );
+  is(
+      $cleaned_up->{license},
+      'open_source',
+      "multiple license converted to open_source (v1.4)"
   );
 }
 
