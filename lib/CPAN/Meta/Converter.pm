@@ -26,7 +26,7 @@ use CPAN::Meta::Validator;
 use CPAN::Meta::Requirements;
 use version 0.88 ();
 use Parse::CPAN::Meta 1.4400 ();
-use List::Util qw/all/;
+use List::Util 1.33 qw/all/;
 
 sub _dclone {
   my $ref = shift;
@@ -255,7 +255,7 @@ sub _downgrade_license {
         return 'unknown';
       }
     }
-    if ( @$element == 1 ) {
+    elsif ( @$element == 1 ) {
       return $license_downgrade_map{lc $element->[0]} || "unknown";
     }
   }
