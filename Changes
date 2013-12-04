@@ -2,6 +2,14 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [FIXED]
+
+  - Improved bad version handling during META conversion
+
+  - When downgrading multiple licenses to version 1.x META formats, if all
+    the licenses are open source, the downgraded license will be
+    "open_source", not "unknown"
+
 2.132830  2013-10-10 16:04:30 America/New_York
 
   [ADDED]
