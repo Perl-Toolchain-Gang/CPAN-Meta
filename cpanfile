@@ -18,11 +18,14 @@ on 'test' => sub {
   requires "File::Spec::Functions" => "0";
   requires "File::Temp" => "0.20";
   requires "IO::Dir" => "0";
-  requires "IO::Handle" => "0";
-  requires "IPC::Open3" => "0";
   requires "Test::More" => "0.88";
   requires "overload" => "0";
   requires "utf8" => "0";
+};
+
+on 'test' => sub {
+  recommends "CPAN::Meta" => "0";
+  recommends "CPAN::Meta::Requirements" => "0";
 };
 
 on 'configure' => sub {
@@ -30,8 +33,20 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Dist::Zilla" => "5.006";
+  requires "Dist::Zilla::Plugin::AutoVersion" => "0";
+  requires "Dist::Zilla::Plugin::MakeMaker" => "0";
+  requires "Dist::Zilla::Plugin::MakeMaker::Highlander" => "0.003";
+  requires "Dist::Zilla::Plugin::OnlyCorePrereqs" => "0";
+  requires "Dist::Zilla::Plugin::Prereqs" => "0";
+  requires "Dist::Zilla::PluginBundle::DAGOLDEN" => "0.053";
+  requires "File::Spec" => "0";
+  requires "File::Temp" => "0";
+  requires "IO::Handle" => "0";
+  requires "IPC::Open3" => "0";
   requires "Pod::Coverage::TrustPod" => "0";
   requires "Test::CPAN::Meta" => "0";
+  requires "Test::More" => "0";
   requires "Test::Pod" => "1.41";
   requires "Test::Pod::Coverage" => "1.08";
 };
