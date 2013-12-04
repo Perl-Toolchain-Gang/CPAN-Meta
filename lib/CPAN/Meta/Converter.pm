@@ -247,7 +247,6 @@ sub _downgrade_license {
   }
   elsif( ref $element eq 'ARRAY' ) {
     if ( @$element > 1) {
-      $DB::single = 1;
       if ( all { $is_open_source{ $license_downgrade_map{lc $_} || 'unknown' } } @$element ) {
         return 'open_source';
       }
