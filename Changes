@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.133380  2013-12-03 23:01:07 America/New_York
+
   [FIXED]
 
   - Improved bad version handling during META conversion
