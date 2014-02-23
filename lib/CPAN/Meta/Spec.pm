@@ -65,7 +65,7 @@ package CPAN::Meta::Spec;
     keywords => [ qw/ toolchain cpan dual-life / ],
     'meta-spec' => {
       version => '2',
-      url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+      url     => 'https://metacpan.org/pod/CPAN::Meta::Spec',
     },
     generated_by => 'Module::Build version 0.36',
   };
@@ -353,7 +353,7 @@ Example:
 
   'meta-spec' => {
     version => '2',
-    url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+    url     => 'https://metacpan.org/pod/CPAN::Meta::Spec',
   }
 
 (Spec 1.2) [required] {Map}
@@ -391,7 +391,7 @@ Example:
 This field is the name of the distribution.  This is often created by
 taking the "main package" in the distribution and changing C<::> to
 C<->, but the name may be completely unrelated to the packages within
-the distribution.  C.f. L<http://search.cpan.org/dist/libwww-perl/>.
+the distribution.  C.f. L<https://metacpan.org/release/libwww-perl>.
 
 =head3 release_status
 
@@ -645,7 +645,7 @@ Example:
 
 This describes all packages provided by this distribution.  This
 information is used by distribution and automation mechanisms like
-PAUSE, CPAN, and search.cpan.org to build indexes saying in which
+PAUSE, CPAN, search.cpan.org, and metacpan.org to build indexes saying in which
 distribution various packages can be found.
 
 The keys of C<provides> are package names that can be found within
@@ -1075,15 +1075,15 @@ this presents security implications.
 
 CPAN, L<http://www.cpan.org/>
 
-CPAN.pm, L<http://search.cpan.org/dist/CPAN/>
+CPAN.pm, L<https://metacpan.org/release/CPAN>
 
-CPANPLUS, L<http://search.cpan.org/dist/CPANPLUS/>
+CPANPLUS, L<https://metacpan.org/release/CPANPLUS>
 
-ExtUtils::MakeMaker, L<http://search.cpan.org/dist/ExtUtils-MakeMaker/>
+ExtUtils::MakeMaker, L<https://metacpan.org/release/ExtUtils-MakeMaker>
 
-Module::Build, L<http://search.cpan.org/dist/Module-Build/>
+Module::Build, L<https://metacpan.org/release/Module-Build>
 
-Module::Install, L<http://search.cpan.org/dist/Module-Install/>
+Module::Install, L<https://metacpan.org/release/Module-Install>
 
 JSON, L<http://json.org/>
 
