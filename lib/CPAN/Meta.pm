@@ -57,7 +57,7 @@ use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
 use CPAN::Meta::Converter;
 use CPAN::Meta::Validator;
-use Parse::CPAN::Meta 1.4403 ();
+use Parse::CPAN::Meta 1.4414 ();
 
 BEGIN { *_dclone = \&CPAN::Meta::Converter::_dclone }
 
@@ -342,6 +342,29 @@ sub load_json_string {
   my $self;
   eval {
     my $struct = Parse::CPAN::Meta->load_json_string( $json );
+    $self = $class->_new($struct, $options);
+  };
+  croak($@) if $@;
+  return $self;
+}
+
+=method load_string
+
+  my $meta = CPAN::Meta->load_string($string, \%options);
+
+If you don't know if a string contains YAML or JSON, this method will use
+L<Parse::CPAN::Meta> to guess.  In other respects it is identical to
+C<load_file()>.
+
+=cut
+
+sub load_string {
+  my ($class, $string, $options) = @_;
+  $options->{lazy_validation} = 1 unless exists $options->{lazy_validation};
+
+  my $self;
+  eval {
+    my $struct = Parse::CPAN::Meta->load_string( $string );
     $self = $class->_new($struct, $options);
   };
   croak($@) if $@;

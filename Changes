@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [ADDED]
+
+  - Added a 'load_string' method that guesses whether the string
+    is YAML or JSON
+
 2.133380  2013-12-03 23:01:07 America/New_York
 
   [FIXED]
