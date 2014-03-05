@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.140640  2014-03-05 09:07:05-05:00 America/New_York
+
   [FIXED]
 
   - A change to the default meta-spec URL in 2.140630 from search.cpan.org
