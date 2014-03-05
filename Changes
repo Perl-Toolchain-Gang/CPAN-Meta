@@ -2,7 +2,18 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [FIXED]
+
+  - A change to the default meta-spec URL in 2.140630 from search.cpan.org
+    to metacpan.org broke Module::Build and ExtUtils::MakeMaker.  This
+    reverts that change.  Also added the missing change note to the prior
+    version.
+
 2.140630  2014-03-04 15:23:40-05:00 America/New_York
+
+  [CHANGED]
+
+  - Default meta-spec URL points to metacpan.org instead of search.cpan.org
 
   [ADDED]
 
