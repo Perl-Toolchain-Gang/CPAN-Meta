@@ -270,9 +270,13 @@ This field should be set to a true value if the distribution performs
 some dynamic configuration (asking questions, sensing the environment,
 etc.) as part of its configuration.  This field should be set to a false
 value to indicate that prerequisites included in metadata may be
-considered final and valid for static analysis.  Note: when this field is
-true, post-configuration prerequisites may or may not bear any relation
-whatsoever to prerequisites stated in metadata.
+considered final and valid for static analysis.
+
+Note: when this field is true, post-configuration prerequisites are not
+guaranteed to bear any relation whatsoever to those stated in the metadata,
+and relying on them doing so is an error. See also
+L</Prerequisites for dynamically configured distributions> in the implementors'
+notes.
 
 This field explicitly B<does not> indicate whether installation may be
 safely performed without using a Makefile or Build file, as there may be
@@ -1079,6 +1083,28 @@ and version prerequisite C<$prereq>:
 
 If the values of C<$mod> and C<$prereq> have not been scrubbed, however,
 this presents security implications.
+
+=head2 Prerequisites for dynamically configured distributions
+
+When C<dynamic_config> is true, it is an error to presume that the
+prerequisites given in distribution metadata will have any relationship
+whatsoever to the actual prerequisites of the distribution.
+
+In practice, however, one can generally expect such prerequisites to be
+one of two things:
+
+=for :list
+* The minimum prerequisites for the distribution, to which dynamic
+  configuration will only add items
+* Whatever the distribution configured with on the releaser's machine
+  at release time
+
+The second case often turns out to have identical results to the first case,
+albeit only by accident.
+
+As such, consumers may use this data for informational analysis, but
+presenting it to the user as canonical or relying on it as such is
+invariably the height of folly.
 
 =head1 SEE ALSO
 
