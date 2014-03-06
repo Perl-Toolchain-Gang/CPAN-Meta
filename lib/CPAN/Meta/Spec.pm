@@ -270,13 +270,15 @@ This field should be set to a true value if the distribution performs
 some dynamic configuration (asking questions, sensing the environment,
 etc.) as part of its configuration.  This field should be set to a false
 value to indicate that prerequisites included in metadata may be
-considered final and valid for static analysis.
+considered final and valid for static analysis.  Note: when this field is
+true, post-configuration prerequisites may or may not bear any relation
+whatsoever to prerequisites stated in metadata.
 
 This field explicitly B<does not> indicate whether installation may be
 safely performed without using a Makefile or Build file, as there may be
 special files to install or custom installation targets (e.g. for
 dual-life modules that exist on CPAN as well as in the Perl core).  This
-field only defines whether prerequisites are complete as given in the
+field only defines whether or not prerequisites are exactly as given in the
 metadata.
 
 =head3 generated_by
