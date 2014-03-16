@@ -1230,6 +1230,52 @@ my %cleanup = (
   },
 );
 
+# for a given field in a spec version, what fields will it feed
+# into in the *latest* spec (i.e. v2); meta-spec omitted because
+# we always expect a meta-spec to be generated
+my %fragments_generate = (
+  '2' => {
+    'abstract'            =>   'abstract',
+    'author'              =>   'author',
+    'generated_by'        =>   'generated_by',
+    'license'             =>   'license',
+    'name'                =>   'name',
+    'version'             =>   'version',
+    'dynamic_config'      =>   'dynamic_config',
+    'release_status'      =>   'release_status',
+    'keywords'            =>   'keywords',
+    'no_index'            =>   'no_index',
+    'optional_features'   =>   'optional_features',
+    'provides'            =>   'provides',
+    'resources'           =>   'resources',
+    'description'         =>   'description',
+    'prereqs'             =>   'prereqs',
+  },
+  '1.4' => {
+    'abstract'            => 'abstract',
+    'author'              => 'author',
+    'generated_by'        => 'generated_by',
+    'license'             => 'license',
+    'name'                => 'name',
+    'version'             => 'version',
+    'build_requires'      => 'prereqs',
+    'conflicts'           => 'prereqs',
+    'distribution_type'   => 'distribution_type',
+    'dynamic_config'      => 'dynamic_config',
+    'keywords'            => 'keywords',
+    'no_index'            => 'no_index',
+    'optional_features'   => 'optional_features',
+    'provides'            => 'provides',
+    'recommends'          => 'prereqs',
+    'requires'            => 'prereqs',
+    'resources'           => 'resources',
+    'configure_requires'  => 'prereqs',
+  },
+);
+# this is not quite true but will work well enough
+# as 1.4 is a superset of earlier ones
+$fragments_generate{$_} = $fragments_generate{'1.4'} for qw/1.3 1.2 1.1 1.0/;
+
 #--------------------------------------------------------------------------#
 # Code
 #--------------------------------------------------------------------------#
@@ -1242,15 +1288,22 @@ The constructor should be passed a valid metadata structure but invalid
 structures are accepted.  If no meta-spec version is provided, version 1.0 will
 be assumed.
 
+Optionally, you can provide a C<default_version> argument after C<$struct>:
+
+  my $cmc = CPAN::Meta::Converter->new( $struct, default_version => "1.4" );
+
+This is only needed when converting a metadata fragment that does not include a
+C<meta-spec> field.
+
 =cut
 
 sub new {
-  my ($class,$data) = @_;
+  my ($class,$data,%args) = @_;
 
   # create an attributes hash
   my $self = {
     'data'    => $data,
-    'spec'    => _extract_spec_version($data),
+    'spec'    => _extract_spec_version($data, $args{default_version}),
   };
 
   # create the object
@@ -1258,11 +1311,11 @@ sub new {
 }
 
 sub _extract_spec_version {
-    my ($data) = @_;
+    my ($data, $default) = @_;
     my $spec = $data->{'meta-spec'};
 
     # is meta-spec there and valid?
-    return "1.0" unless defined $spec && ref $spec eq 'HASH'; # before meta-spec?
+    return( $default || "1.0" ) unless defined $spec && ref $spec eq 'HASH'; # before meta-spec?
 
     # does the version key look like a valid version?
     my $v = $spec->{version};
@@ -1274,7 +1327,7 @@ sub _extract_spec_version {
     # otherwise, use heuristics: look for 1.x vs 2.0 fields
     return "2" if exists $data->{prereqs};
     return "1.4" if exists $data->{configure_requires};
-    return "1.2"; # when meta-spec was first defined
+    return( $default || "1.2" ); # when meta-spec was first defined
 }
 
 =method convert
@@ -1336,10 +1389,12 @@ sub convert {
 
   if ( $old_version == $new_version ) {
     $converted = _convert( $converted, $cleanup{$old_version}, $old_version );
-    my $cmv = CPAN::Meta::Validator->new( $converted );
-    unless ( $cmv->is_valid ) {
-      my $errs = join("\n", $cmv->errors);
-      die "Failed to clean-up $old_version metadata. Errors:\n$errs\n";
+    unless ( $args->{no_validation} ) {
+      my $cmv = CPAN::Meta::Validator->new( $converted );
+      unless ( $cmv->is_valid ) {
+        my $errs = join("\n", $cmv->errors);
+        die "Failed to clean-up $old_version metadata. Errors:\n$errs\n";
+      }
     }
     return $converted;
   }
@@ -1350,10 +1405,12 @@ sub convert {
       last if $vers[$i+1] < $new_version;
       my $spec_string = "$vers[$i+1]-from-$vers[$i]";
       $converted = _convert( $converted, $down_convert{$spec_string}, $vers[$i+1] );
-      my $cmv = CPAN::Meta::Validator->new( $converted );
-      unless ( $cmv->is_valid ) {
-        my $errs = join("\n", $cmv->errors);
-        die "Failed to downconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+      unless ( $args->{no_validation} ) {
+        my $cmv = CPAN::Meta::Validator->new( $converted );
+        unless ( $cmv->is_valid ) {
+          my $errs = join("\n", $cmv->errors);
+          die "Failed to downconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+        }
       }
     }
     return $converted;
@@ -1365,14 +1422,42 @@ sub convert {
       last if $vers[$i+1] > $new_version;
       my $spec_string = "$vers[$i+1]-from-$vers[$i]";
       $converted = _convert( $converted, $up_convert{$spec_string}, $vers[$i+1] );
-      my $cmv = CPAN::Meta::Validator->new( $converted );
-      unless ( $cmv->is_valid ) {
-        my $errs = join("\n", $cmv->errors);
-        die "Failed to upconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+      unless ( $args->{no_validation} ) {
+        my $cmv = CPAN::Meta::Validator->new( $converted );
+        unless ( $cmv->is_valid ) {
+          my $errs = join("\n", $cmv->errors);
+          die "Failed to upconvert metadata to $vers[$i+1]. Errors:\n$errs\n";
+        }
       }
     }
     return $converted;
   }
+}
+
+=method upgrade_fragment
+
+  my $new_struct = $cmc->upgrade_fragment;
+
+Returns a new hash reference with the metadata converted to the latest version
+of the CPAN Meta Spec.  No validation is done on the result -- you must
+validate after merging fragments into a complete metadata document.
+
+=cut
+
+sub upgrade_fragment {
+  my ($self) = @_;
+  my ($old_version) = $self->{spec};
+  my %expected =
+    map {; $_ => 1 }
+    grep { defined }
+    map { $fragments_generate{$old_version}{$_} }
+    keys %{ $self->{data} };
+  my $converted = $self->convert( version => $HIGHEST, no_validation => 1 );
+  for my $key ( keys %$converted ) {
+    next if $key =~ /^x_/i || $key eq 'meta-spec';
+    delete $converted->{$key} unless $expected{$key};
+  }
+  return $converted;
 }
 
 1;
@@ -1392,3 +1477,4 @@ existing test-file that illustrates the bug or desired feature.
 
 =cut
 
+# vim: ts=2 sts=2 sw=2 et:
