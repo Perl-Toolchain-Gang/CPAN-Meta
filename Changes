@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [ADDED]
+
+  - Added ability for CPAN::Meta::Converter to convert metadata fragments
+    (incomplete portions of a metadata structure)
+
   [DOCUMENTED]
 
   - Clarified language around 'dynamic_config' in the Spec
