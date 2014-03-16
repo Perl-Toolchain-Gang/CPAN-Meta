@@ -684,7 +684,7 @@ sub _resources_1_2 {
   my (undef, undef, $meta) = @_;
   my $resources = $meta->{resources} || {};
   if ( $meta->{license_url} && ! $resources->{license} ) {
-    $resources->{license} = $meta->license_url
+    $resources->{license} = $meta->{license_url}
       if _is_urlish($meta->{license_url});
   }
   return unless keys %$resources;

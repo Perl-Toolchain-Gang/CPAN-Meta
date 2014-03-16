@@ -80,7 +80,68 @@ my @cases = (
             'meta-spec' => $spec2,
         },
     },
-    #>>>
+    {
+        # fields deprecated from older versions
+        label  => "v1.4 prereq stuff -> v2 prereqs",
+        from   => "1.4",
+        to     => "2",
+        input  => {
+            configure_requires => {
+                'File::Spec' => "0.80",
+            },
+            build_requires => {
+                'Scalar::Util' => '1.0',
+            },
+            requires => {
+                'B' => '3.1',
+            },
+            recommends => {
+                'Config' => '4.0',
+            },
+            conflicts => {
+                'File::Temp' => "0.2",
+            },
+        },
+        expect => {
+            'meta-spec' => $spec2,
+            prereqs => {
+                configure => {
+                    requires => {
+                        'File::Spec' => "0.80",
+                    },
+                },
+                build => {
+                    requires => {
+                        'Scalar::Util' => '1.0',
+                    },
+                },
+                runtime => {
+                    conflicts => {
+                        'File::Temp' => "0.2",
+                    },
+                    requires => {
+                        'B' => '3.1',
+                    },
+                    recommends => {
+                        'Config' => '4.0',
+                    },
+                },
+            },
+        },
+    },
+    {
+        label  => "v1.1 license_url: -> v2 license",
+        from   => "1.1",
+        to     => "2",
+        input  => {
+            license_url => 'http://opensource.org/licenses/Artistic-1.0',
+            license => 'perl',
+        },
+        expect => {
+            'meta-spec' => $spec2,
+            license => [ 'perl_5' ],
+        },
+    },
 );
 
 for my $c (@cases) {
