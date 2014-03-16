@@ -7,6 +7,7 @@ use warnings;
 
 use Carp qw/croak/;
 use Scalar::Util qw/blessed/;
+use CPAN::Meta::Converter;
 
 sub _identical {
   my ($left, $right, $path) = @_;
@@ -114,7 +115,7 @@ my %default = (
 
 sub new {
   my ($class, %arguments) = @_;
-  croak 'version required' if not exists $arguments{version};
+  croak 'default version required' if not exists $arguments{default_version};
   my %mapping = %default;
   my %extra = %{ $arguments{extra_mappings} || {} };
   for my $key (keys %extra) {
@@ -126,7 +127,7 @@ sub new {
     }
   }
   return bless {
-    version => $arguments{version},
+    default_version => $arguments{default_version},
     mapping => _coerce_mapping(\%mapping, []),
   }, $class;
 }
@@ -167,7 +168,18 @@ sub merge {
   my ($self, @items) = @_;
   my $current = {};
   for my $next (@items) {
-    $next = $next->as_string_hash if blessed($next);
+    if ( blessed($next) && $next->isa('CPAN::Meta') ) {
+      $next = $next->as_string_hash;
+    }
+    elsif ( ref($next) eq 'HASH' ) {
+      my $cmc = CPAN::Meta::Converter->new(
+        $next, default_version => $self->{default_version}
+      );
+      $next = $cmc->upgrade_fragment;
+    }
+    else {
+      croak "Don't know how to merge '$next'";
+    }
     $current = _merge($current, $next, $self->{mapping}, []);
   }
   return $current;
@@ -179,7 +191,7 @@ sub merge {
 
 =head1 SYNOPSIS
 
- my $merger = CPAN::Meta::Merge->new(version => 2.0);
+ my $merger = CPAN::Meta::Merge->new(default_version => "2");
  my $meta = $merger->merge($base, @additional);
 
 =head1 DESCRIPTION

@@ -10,7 +10,7 @@ my %base = (
 	abstract => 'This is a test',
 	author => ['A.U. Thor'],
 	generated_by => 'Myself',
-	license => [ 'perl' ],
+	license => [ 'perl_5' ],
 	resources => {
 		license => [ 'http://dev.perl.org/licenses/' ],
 	},
@@ -26,6 +26,10 @@ my %base = (
 		Baz => {
 			file => 'lib/Baz.pm',
 		},
+	},
+	'meta-spec' => {
+		url => "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+		version => 2,
 	},
 );
 
@@ -62,7 +66,7 @@ my %first_expected = (
 	abstract => 'This is a test',
 	author => [ 'A.U. Thor', 'I.M. Poster' ],
 	generated_by => 'Myself, Some other guy',
-	license => [ 'bsd', 'perl' ],
+	license => [ 'bsd', 'perl_5' ],
 	resources => {
 		license => [ 'http://dev.perl.org/licenses/', 'http://opensource.org/licenses/bsd-license.php' ],
 	},
@@ -90,9 +94,13 @@ my %first_expected = (
 		},
 	},
 	dynamic_config => 1,
+	'meta-spec' => {
+		url => "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+		version => 2,
+	},
 );
 
-my $merger = CPAN::Meta::Merge->new(version => '2.0');
+my $merger = CPAN::Meta::Merge->new(default_version => '2');
 
 my $first_result = $merger->merge(\%base, \%first);
 
