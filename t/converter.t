@@ -295,4 +295,26 @@ sub _normalize_reqs {
   );
 }
 
+# specific test for upconverting ambiguous conflict declarations
+{
+  my $file = 'ambiguous-conflict.json';
+  my $path = File::Spec->catfile('t','data-test',$file);
+  my $original = Parse::CPAN::Meta->load_file( $path  );
+  ok( $original, "loaded $file" );
+  my $cmc = CPAN::Meta::Converter->new( $original );
+  my $cleaned_up = $cmc->convert( version => "2" );
+  is_deeply(
+      $cleaned_up->{prereqs},
+      {
+          runtime => {
+              conflicts => {
+                  "Data::Dumper" => ">= 1",
+                  "Explicit::Module::Newer" => ">= 2",
+                  "Explicit::Module::Older" => "<= 3",
+              }
+          }
+      },
+      "Data::Dumper : 1  means Data::Dumper >=1 "
+  );
+}
 done_testing;
