@@ -57,7 +57,7 @@ use CPAN::Meta::Feature;
 use CPAN::Meta::Prereqs;
 use CPAN::Meta::Converter;
 use CPAN::Meta::Validator;
-use Parse::CPAN::Meta 1.4414 ();
+use Parse::CPAN::Meta 1.4414 qw( JSON_BACKEND YAML_BACKEND );
 
 BEGIN { *_dclone = \&CPAN::Meta::Converter::_dclone }
 
@@ -604,16 +604,14 @@ sub as_string {
     $struct = $self->as_struct;
   }
 
-  my ($data, $backend);
+  my ($data);
   if ( $version ge '2' ) {
-    $backend = Parse::CPAN::Meta->json_backend();
-    $data = $backend->new->pretty->canonical->encode($struct);
+    $data = JSON_BACKEND->new->pretty->canonical->encode($struct);
   }
   else {
-    $backend = Parse::CPAN::Meta->yaml_backend();
-    $data = eval { no strict 'refs'; &{"$backend\::Dump"}($struct) };
+    $data = eval { no strict 'refs'; &{YAML_BACKEND."\::Dump"}($struct) };
     if ( $@ ) {
-      croak $backend->can('errstr') ? $backend->errstr : $@
+      croak YAML_BACKEND->can('errstr') ? YAML_BACKEND->errstr : $@
     }
   }
 
