@@ -36,6 +36,7 @@ sub _dclone {
   # right thing for typical things that might be there, like version objects,
   # Path::Class objects, etc.
   no warnings 'once';
+  no warnings 'redefine';
   local *UNIVERSAL::TO_JSON = sub { return "$_[0]" };
 
   my $backend = Parse::CPAN::Meta->json_backend();
