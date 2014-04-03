@@ -37,7 +37,7 @@ sub _dclone {
   # Path::Class objects, etc.
   no warnings 'once';
   no warnings 'redefine';
-  local *UNIVERSAL::TO_JSON = sub { return "$_[0]" };
+  local *UNIVERSAL::TO_JSON = sub { "$_[0]" };
 
   my $json = Parse::CPAN::Meta->json_backend()->new
       ->utf8
