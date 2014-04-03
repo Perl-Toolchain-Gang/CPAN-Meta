@@ -39,10 +39,11 @@ sub _dclone {
   no warnings 'redefine';
   local *UNIVERSAL::TO_JSON = sub { return "$_[0]" };
 
-  my $backend = Parse::CPAN::Meta->json_backend();
-  return $backend->new->utf8->decode(
-    $backend->new->utf8->allow_blessed->convert_blessed->encode($ref)
-  );
+  my $json = Parse::CPAN::Meta->json_backend()->new
+      ->utf8
+      ->allow_blessed
+      ->convert_blessed;
+  $json->decode($json->encode($ref))
 }
 
 my %known_specs = (
