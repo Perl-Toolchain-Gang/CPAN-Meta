@@ -17,6 +17,7 @@ on 'test' => sub {
   requires "File::Spec::Functions" => "0";
   requires "File::Temp" => "0.20";
   requires "IO::Dir" => "0";
+  requires "List::Util" => "0";
   requires "Test::More" => "0.88";
   requires "overload" => "0";
   requires "utf8" => "0";
@@ -32,7 +33,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
-  requires "Dist::Zilla" => "5.013";
+  requires "Dist::Zilla" => "5.015";
   requires "Dist::Zilla::Plugin::AutoVersion" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker::Highlander" => "0.003";
