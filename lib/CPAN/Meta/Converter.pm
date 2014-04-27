@@ -26,7 +26,6 @@ use CPAN::Meta::Validator;
 use CPAN::Meta::Requirements;
 use version 0.88 ();
 use Parse::CPAN::Meta 1.4400 ();
-use List::Util 1.33 qw/all/;
 
 sub _dclone {
   my $ref = shift;
@@ -249,11 +248,11 @@ sub _downgrade_license {
   }
   elsif( ref $element eq 'ARRAY' ) {
     if ( @$element > 1) {
-      if ( all { $is_open_source{ $license_downgrade_map{lc $_} || 'unknown' } } @$element ) {
-        return 'open_source';
+      if (grep { !$is_open_source{ $license_downgrade_map{lc $_} || 'unknown' } } @$element) {
+        return 'unknown';
       }
       else {
-        return 'unknown';
+        return 'open_source';
       }
     }
     elsif ( @$element == 1 ) {

@@ -2,7 +2,6 @@ requires "CPAN::Meta::Requirements" => "2.121";
 requires "CPAN::Meta::YAML" => "0.008";
 requires "Carp" => "0";
 requires "JSON::PP" => "2.27200";
-requires "List::Util" => "1.33";
 requires "Parse::CPAN::Meta" => "1.4414";
 requires "Scalar::Util" => "0";
 requires "perl" => "5.008";
