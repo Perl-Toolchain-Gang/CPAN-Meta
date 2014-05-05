@@ -41,7 +41,7 @@ sub _uniq {
 
 sub _set_addition {
   my ($left, $right) = @_;
-  return [ sort +_uniq(@{$left}, @{$right}) ];
+  return [ +_uniq(@{$left}, @{$right}) ];
 }
 
 sub _uniq_map {
