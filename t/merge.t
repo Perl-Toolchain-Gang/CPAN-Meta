@@ -66,7 +66,7 @@ my %first_expected = (
 	abstract => 'This is a test',
 	author => [ 'A.U. Thor', 'I.M. Poster' ],
 	generated_by => 'Myself, Some other guy',
-	license => [ 'bsd', 'perl_5' ],
+	license => [ 'perl_5', 'bsd' ],
 	resources => {
 		license => [ 'http://dev.perl.org/licenses/', 'http://opensource.org/licenses/bsd-license.php' ],
 	},
