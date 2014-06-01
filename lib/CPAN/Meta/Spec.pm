@@ -671,7 +671,8 @@ have a Map with the following valid subkeys:
 
 This field is required.  It must contain a Unix-style relative file path
 from the root of the distribution directory to a file that contains or
-generates the package.
+generates the package.  It may be given as C<META.yml> or C<META.json>
+to claim a package for indexing without needing a C<*.pm>.
 
 =item version
 
