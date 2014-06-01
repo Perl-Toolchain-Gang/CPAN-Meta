@@ -33,7 +33,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
-  requires "Dist::Zilla" => "5.015";
+  requires "Dist::Zilla" => "5";
   requires "Dist::Zilla::Plugin::AutoVersion" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker::Highlander" => "0.003";
