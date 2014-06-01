@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.141520  2014-05-31 23:41:13-04:00 America/New_York
+
   [DOCUMENTED]
 
   - Clarified use of 'file' for the 'provides' field in the Spec
