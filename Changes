@@ -7,6 +7,7 @@ Revision history for CPAN-Meta
   - CPAN::Meta::Merge is a new class for merging two possibly overlapping
     instances of metadata. It will accept both CPAN::Meta objects and
     (possibly incomplete) hashrefs of metadata.
+
 2.141520  2014-05-31 23:41:13-04:00 America/New_York
 
   [DOCUMENTED]
