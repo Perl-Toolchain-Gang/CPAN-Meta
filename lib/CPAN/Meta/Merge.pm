@@ -133,10 +133,10 @@ sub new {
 }
 
 my %coderef_for = (
-  set_addition => \&set_addition,
-  uniq_map     => \&uniq_map,
-  identical    => \&identical,
-  improvize    => \&improvize,
+  set_addition => \&_set_addition,
+  uniq_map     => \&_uniq_map,
+  identical    => \&_identical,
+  improvize    => \&_improvize,
 );
 
 sub _coerce_mapping {
