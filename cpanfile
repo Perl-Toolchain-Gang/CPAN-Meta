@@ -14,21 +14,15 @@ on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";
   requires "File::Basename" => "0";
   requires "File::Spec" => "0";
-  requires "File::Spec::Functions" => "0";
   requires "File::Temp" => "0.20";
   requires "IO::Dir" => "0";
-  requires "List::Util" => "0";
-  requires "Scalar::Util" => "0";
   requires "Test::More" => "0.88";
   requires "overload" => "0";
   requires "utf8" => "0";
-  requires "version" => "0.88";
 };
 
 on 'test' => sub {
-  recommends "CPAN::Meta" => "0";
-  recommends "CPAN::Meta::Prereqs" => "0";
-  recommends "CPAN::Meta::Requirements" => "2.120900";
+  recommends "CPAN::Meta" => "2.120900";
 };
 
 on 'configure' => sub {
