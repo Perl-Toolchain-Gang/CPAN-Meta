@@ -4,7 +4,7 @@ CPAN::Meta::History::Meta_1_1 - Specification for the F<META.yml> file
 
 =head1 DESCRIPTION
 
-This document describes version 1.0 of the F<META.yml> specification.
+This document describes version 1.1 of the F<META.yml> specification.
 
 The F<META.yml> file describes important properties of contributed Perl
 distributions such as the ones found on L<CPAN|http://www.cpan.org>.  It is
