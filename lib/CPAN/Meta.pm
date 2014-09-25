@@ -465,7 +465,8 @@ sub effective_prereqs {
 
 This method returns true if the given file should be indexed.  It decides this
 by checking the C<file> and C<directory> keys in the C<no_index> property of
-the distmeta structure.
+the distmeta structure. Note that neither the version format nor
+C<release_status> are considered.
 
 C<$filename> should be given in unix format.
 
@@ -492,7 +493,8 @@ sub should_index_file {
 
 This method returns true if the given package should be indexed.  It decides
 this by checking the C<package> and C<namespace> keys in the C<no_index>
-property of the distmeta structure.
+property of the distmeta structure. Note that neither the version format nor
+C<release_status> are considered.
 
 =cut
 
