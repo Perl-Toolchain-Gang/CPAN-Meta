@@ -168,7 +168,7 @@ sub merge {
   my $current = {};
   for my $next (@items) {
     if ( blessed($next) && $next->isa('CPAN::Meta') ) {
-      $next = $next->as_string_hash;
+      $next = $next->as_struct;
     }
     elsif ( ref($next) eq 'HASH' ) {
       my $cmc = CPAN::Meta::Converter->new(
