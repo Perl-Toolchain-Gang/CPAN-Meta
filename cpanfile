@@ -31,12 +31,11 @@ on 'configure' => sub {
 
 on 'develop' => sub {
   requires "Dist::Zilla" => "5";
-  requires "Dist::Zilla::Plugin::AutoVersion" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker::Highlander" => "0.003";
   requires "Dist::Zilla::Plugin::OnlyCorePrereqs" => "0.014";
   requires "Dist::Zilla::Plugin::Prereqs" => "0";
-  requires "Dist::Zilla::PluginBundle::DAGOLDEN" => "0.053";
+  requires "Dist::Zilla::PluginBundle::DAGOLDEN" => "0.070";
   requires "File::Spec" => "0";
   requires "File::Temp" => "0";
   requires "IO::Handle" => "0";
