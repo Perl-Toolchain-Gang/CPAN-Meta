@@ -1,3 +1,5 @@
+=for :stopwords Ingy READMEs WTF licensure
+
 =head1 NAME
 
 CPAN::Meta::History::Meta_1_1 - Version 1.1 metadata specification for META.yml

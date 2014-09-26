@@ -1,3 +1,5 @@
+=for :stopwords MailingList RWS subcontext
+
 =head1 NAME
 
 CPAN::Meta::History::Meta_1_2 - Version 1.2 metadata specification for META.yml
@@ -13,7 +15,7 @@ Modifications from the original:
 
 =item *
 
-None
+Various spelling corrections
 
 =back
 
@@ -130,7 +132,7 @@ well (ex. python, ruby).
 
 Some fields require a version specification (ex. L<"requires">,
 L<"recommends">, L<"build_requires">, etc.).  This section details the
-version specications that are currently supported.
+version specifications that are currently supported.
 
 If a single version is listed, then that version is considered to be
 the minimum version supported.
@@ -138,7 +140,7 @@ the minimum version supported.
 If 0 is given as the version number, then any version is supported.
 
 Additionally, for more complicated requirements, the specification
-supports a list of versions, each of which may be optionally preceeded
+supports a list of versions, each of which may be optionally preceded
 by a relational operator.
 
 Supported operators include E<lt> (less than), E<lt>= (less than or
@@ -147,14 +149,14 @@ equal), E<gt> (greater than), E<gt>= (greater than or equal), == (equal), and !=
 
 If a list is given then it is evaluated from left to right so that any
 specifications in the list that conflict with a previous specification
-are overriden by the later.
+are overridden by the later.
 
 Examples:
 
  >= 1.2, != 1.5, < 2.0
 
 Any version from version 1.2 onward, except version 1.5, that also
-preceeds version 2.0.
+precedes version 2.0.
 
 =head1 HEADER
 
@@ -186,7 +188,7 @@ Example:
 (Spec 1.0) [required] {string} The name of the distribution which is often
 created by taking the "main module" in the distribution and changing
 "::" to "-".  Sometimes it's completely different, however, as in the
-case of the libww-perl distribution (see
+case of the libwww-perl distribution (see
 L<http://search.cpan.org/author/GAAS/libwww-perl/>).
 
 =head2 version
@@ -215,7 +217,7 @@ Example:
     - Ken Williams <kwilliams@cpan.org>
 
 (Spec 1.1) [required] {list of strings} A YAML sequence indicating the author(s) of the
-distribution. The prefered form is author-name <email-address>.
+distribution. The preferred form is author-name <email-address>.
 
 =head2 license
 

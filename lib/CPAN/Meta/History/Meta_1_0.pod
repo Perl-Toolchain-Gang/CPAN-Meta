@@ -1,3 +1,5 @@
+=for :stopwords DOAP RDF
+
 =head1 NAME
 
 CPAN::Meta::History::Meta_1_0 - Version 1.0 metadata specification for META.yml
