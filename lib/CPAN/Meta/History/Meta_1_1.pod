@@ -1,6 +1,21 @@
 =head1 NAME
 
-CPAN::Meta::History::Meta_1_1 - Specification for the F<META.yml> file
+CPAN::Meta::History::Meta_1_1 - Version 1.1 metadata specification for META.yml
+
+=head1 PREFACE
+
+This is a historical copy of the version 1.1 specification for F<META.yml>
+files, copyright by Ken Williams.
+
+Modifications from the original:
+
+=over
+
+=item *
+
+Conversion from the original HTML to POD format
+
+=back
 
 =head1 DESCRIPTION
 
