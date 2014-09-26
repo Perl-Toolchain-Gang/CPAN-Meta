@@ -1,8 +1,7 @@
-package CPAN::Meta::Merge;
-
 use strict;
 use warnings;
 
+package CPAN::Meta::Merge;
 # VERSION
 
 use Carp qw/croak/;
