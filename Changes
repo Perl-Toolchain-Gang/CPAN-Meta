@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.142690  2014-09-26 11:06:34-04:00 America/New_York
+
   [DOCUMENTED]
 
   - Clarified that no_index is a list of exclusions, and that indexers
