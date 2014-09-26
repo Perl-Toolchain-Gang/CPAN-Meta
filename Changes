@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [DOCUMENTED]
+
+  - Include allowed values for license field in 1.x historic licenses rather
+    than linking to Module::Build
+
 2.143240  2014-11-20 10:26:30-05:00 America/New_York
 
   [FIXED]
