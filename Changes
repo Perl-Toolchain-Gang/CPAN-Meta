@@ -4,6 +4,10 @@ Revision history for CPAN-Meta
 
 2.142690  2014-09-26 11:06:34-04:00 America/New_York
 
+  [FIXED]
+
+  - Give correct path in nested merges such as resources
+
   [DOCUMENTED]
 
   - Clarified that no_index is a list of exclusions, and that indexers

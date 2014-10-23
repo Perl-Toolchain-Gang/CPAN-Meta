@@ -150,7 +150,7 @@ sub _coerce_mapping {
       my $mapping = _coerce_mapping($value, [ @{$map_path}, $key ]);
       $ret{$key} = sub {
         my ($left, $right, $path) = @_;
-        return _merge($left, $right, $mapping, [ @{$path}, $key ]);
+        return _merge($left, $right, $mapping, [ @{$path} ]);
       };
     }
     elsif ($coderef_for{$value}) {
