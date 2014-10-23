@@ -10,7 +10,7 @@ use CPAN::Meta::Converter;
 
 sub _identical {
   my ($left, $right, $path) = @_;
-  croak "Can't merge attribute " . join '.', @{$path} unless $left eq $right;
+  croak sprintf "Can't merge attribute %s: '%s' does not equal '%s'", join('.', @{$path}), $left, $right unless $left eq $right;
   return $left;
 }
 
