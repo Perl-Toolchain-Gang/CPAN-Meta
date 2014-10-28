@@ -12,6 +12,8 @@ Revision history for CPAN-Meta
 
   - Clarified that no_index is a list of exclusions, and that indexers
     should generally exclude 'inc', 'xt' and 't' as well.
+  - CPAN::Meta::History::Meta_1_0 through 1_4 are added as a permanent
+    record of 1.x versions of the metaspec
 
 2.142060  2014-07-25 13:30:06-04:00 America/New_York
 
