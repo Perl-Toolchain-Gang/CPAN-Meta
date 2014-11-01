@@ -73,6 +73,28 @@ sub _improvize {
   croak sprintf "Can't merge '%s'", join '.', @{$path};
 }
 
+sub _optional_features {
+  my ($left, $right, $path) = @_;
+
+  for my $key (keys %{$right}) {
+    if (not exists $left->{$key}) {
+      $left->{$key} = $right->{$key};
+    }
+    else {
+      Carp::croak "Cannot merge two optional_features named '$key' with different descriptions"
+        if do { no warnings 'uninitialized'; $left->{$key}{description} ne $right->{$key}{description} };
+
+      require CPAN::Meta::Prereqs;
+      $left->{$key}{prereqs} =
+        CPAN::Meta::Prereqs->new($left->{$key}{prereqs})
+          ->with_merged_prereqs(CPAN::Meta::Prereqs->new($right->{$key}{prereqs}))
+          ->as_string_hash;
+    }
+  }
+  return $left;
+}
+
+
 my %default = (
   abstract       => \&_identical,
   author         => \&_set_addition,
@@ -95,7 +117,7 @@ my %default = (
   description       => \&_identical,
   keywords          => \&_set_addition,
   no_index          => { map { ($_ => \&_set_addition) } qw/file directory package namespace/ },
-  optional_features => \&_uniq_map,
+  optional_features => \&_optional_features,
   prereqs           => sub {
     require CPAN::Meta::Prereqs;
     my ($left, $right) = map { CPAN::Meta::Prereqs->new($_) } @_[0,1];
