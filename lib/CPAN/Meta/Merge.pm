@@ -81,8 +81,16 @@ sub _optional_features {
       $left->{$key} = $right->{$key};
     }
     else {
-      Carp::croak "Cannot merge two optional_features named '$key' with different descriptions"
-        if do { no warnings 'uninitialized'; $left->{$key}{description} ne $right->{$key}{description} };
+      for my $subkey (keys %{ $right->{$key} }) {
+        next if $subkey eq 'prereqs';
+        if (not exists $left->{$key}{$subkey}) {
+          $left->{$key}{$subkey} = $right->{$key}{$subkey};
+        }
+        else {
+          Carp::croak "Cannot merge two optional_features named '$key' with different '$subkey' values"
+            if do { no warnings 'uninitialized'; $left->{$key}{$subkey} ne $right->{$key}{$subkey} };
+        }
+      }
 
       require CPAN::Meta::Prereqs;
       $left->{$key}{prereqs} =

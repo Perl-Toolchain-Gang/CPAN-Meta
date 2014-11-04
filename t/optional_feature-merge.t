@@ -37,6 +37,7 @@ my $fragment1 = {
 	'optional_features' => {
 		'FeatureName' => {
 			'description' => 'desc',
+			'x_default' => 1,
 			'prereqs' => { 'runtime' => { 'requires' => { 'A' => '0' } } }
 		}
 	}
@@ -71,6 +72,7 @@ is_deeply(
 		'optional_features' => {
 			'FeatureName' => {
 				'description' => 'desc',
+				'x_default' => 1,
 				'prereqs' => {
 					'runtime' => { 'requires' => { 'A' => '0' } },
 					'test' => { 'requires' => { 'B' => '0' } },
@@ -90,11 +92,25 @@ my $fragment3 = {
 	}
 };
 
-my $failure = eval { $merger->merge($meta1, $fragment3) };
-is($failure, undef, 'Trying to merge optional_features with same feature name and different descriptions gives an exception');
-like $@, qr/^Cannot merge two optional_features named 'FeatureName' with different descriptions/, 'Exception looks right';
+my $result = eval { $merger->merge($meta1, $fragment3) };
+is($result, undef, 'Trying to merge optional_features with same feature name and different descriptions gives an exception');
+like $@, qr/^Cannot merge two optional_features named 'FeatureName' with different 'description' values/, 'Exception looks right';
 
 my $fragment4 = {
+	'optional_features' => {
+		'FeatureName' => {
+			'description' => 'desc',
+			'x_default' => 0,
+			'prereqs' => { 'test' => { 'requires' => { 'B' => '0' } } }
+		}
+	}
+};
+
+$result = eval { $merger->merge($meta1, $fragment4) };
+is($result, undef, 'Trying to merge optional_features with same feature name and differences in other keys gives an exception');
+like $@, qr/^Cannot merge two optional_features named 'FeatureName' with different 'x_default' values/, 'Exception looks right';
+
+my $fragment5 = {
 	'optional_features' => {
 		'Another FeatureName' => {
 			'description' => 'desc',
@@ -103,14 +119,15 @@ my $fragment4 = {
 	}
 };
 
-my $meta4 = $merger->merge($meta1, $fragment4);
+my $meta5 = $merger->merge($meta1, $fragment5);
 is_deeply(
-	$meta4,
+	$meta5,
 	{
 		%base,
 		'optional_features' => {
 			'FeatureName' => {
 				'description' => 'desc',
+				'x_default' => 1,
 				'prereqs' => { 'runtime' => { 'requires' => { 'A' => '0' } } },
 			},
 			'Another FeatureName' => {
