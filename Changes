@@ -6,6 +6,9 @@ Revision history for CPAN-Meta
 
   - Give correct path in nested merges such as resources
 
+  - Removed strings test that should have been removed when
+    CPAN::Meta::Requirements was removed to a separate dist
+
 2.142690  2014-09-26 11:06:34-04:00 America/New_York
 
   [FIXED]
