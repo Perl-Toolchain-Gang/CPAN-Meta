@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.143240  2014-11-20 10:26:30-05:00 America/New_York
+
   [FIXED]
 
   - Give correct path in nested merges such as resources
