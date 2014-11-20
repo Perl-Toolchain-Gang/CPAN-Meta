@@ -18,6 +18,7 @@ on 'test' => sub {
   requires "IO::Dir" => "0";
   requires "Test::More" => "0.88";
   requires "overload" => "0";
+  requires "perl" => "5.008";
   requires "utf8" => "0";
 };
 
@@ -27,10 +28,12 @@ on 'test' => sub {
 
 on 'configure' => sub {
   requires "ExtUtils::MakeMaker" => "6.17";
+  requires "perl" => "5.006";
 };
 
 on 'develop' => sub {
   requires "Dist::Zilla" => "5";
+  requires "Dist::Zilla::Plugin::Encoding" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker::Highlander" => "0.003";
   requires "Dist::Zilla::Plugin::OnlyCorePrereqs" => "0.014";
