@@ -319,11 +319,11 @@ sub _no_index_1_2 {
 
   # common mistake: files -> file
   if ( exists $no_index->{files} ) {
-    $no_index->{file} = delete $no_index->{file};
+    $no_index->{file} = delete $no_index->{files};
   }
   # common mistake: modules -> module
   if ( exists $no_index->{modules} ) {
-    $no_index->{module} = delete $no_index->{module};
+    $no_index->{module} = delete $no_index->{modules};
   }
   return _convert($no_index, $no_index_spec_1_2);
 }
@@ -347,11 +347,11 @@ sub _no_index_directory {
   }
   # common mistake: files -> file
   if ( exists $element->{files} ) {
-    $element->{file} = delete $element->{file};
+    $element->{file} = delete $element->{files};
   }
   # common mistake: modules -> module
   if ( exists $element->{modules} ) {
-    $element->{module} = delete $element->{module};
+    $element->{module} = delete $element->{modules};
   }
   my $spec = $version == 2 ? $no_index_spec_2 : $no_index_spec_1_3;
   return _convert($element, $spec);
