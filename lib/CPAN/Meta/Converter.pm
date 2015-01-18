@@ -42,7 +42,7 @@ BEGIN {
 # Perl 5.10.0 didn't have "is_qv" in version.pm
 *_is_qv = version->can('is_qv') ? sub { $_[0]->is_qv } : sub { exists $_[0]->{qv} };
 
-sub _dclone {
+sub _dclone_old {
   my $ref = shift;
 
   # if an object is in the data structure and doesn't specify how to
@@ -58,6 +58,38 @@ sub _dclone {
       ->allow_blessed
       ->convert_blessed;
   $json->decode($json->encode($ref))
+}
+
+our $DCLONE_MAXDEPTH = 1024;
+our $_CLONE_DEPTH;
+
+sub _dclone_pp {
+  my ( $ref  ) = @_;
+  return $ref unless my $reftype = ref $ref;
+
+  local $_CLONE_DEPTH = defined $_CLONE_DEPTH ? $_CLONE_DEPTH - 1 : $DCLONE_MAXDEPTH;
+  die "Depth Limit $DCLONE_MAXDEPTH Exceeded" if $_CLONE_DEPTH == 0;
+
+  return [ map { _dclone_pp( $_ ) } @{$ref} ] if 'ARRAY' eq $reftype;
+  return { map { $_ => _dclone_pp( $ref->{$_} ) } keys %{$ref} } if 'HASH' eq $reftype;
+
+  if ( 'SCALAR' eq $reftype ) {
+    my $new = _dclone_pp(${$ref});
+    return \$new;
+  }
+  if ( 'CPAN::Meta' eq $reftype ) {
+    return $ref->TO_JSON;
+  }
+  # Just stringify everything else
+  return "$ref";
+}
+
+sub _dclone {
+  if ( $ENV{CPAN_META_CONV} || q[] eq 'JSON'  ) {
+    return _dclone_old(@_)
+  } else {
+    return _dclone_pp(@_)
+  }
 }
 
 my %known_specs = (
