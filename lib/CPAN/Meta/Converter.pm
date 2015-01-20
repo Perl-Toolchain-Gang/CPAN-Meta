@@ -378,7 +378,7 @@ sub _clean_version {
   # XXX check defined $v and not just $v because version objects leak memory
   # in boolean context -- dagolden, 2012-02-03
   if ( defined $v ) {
-    return _is_qv($v) ? $v->normal : $element;
+    return _is_qv($v) ? $v->stringify : $element;
   }
   else {
     return 0;
