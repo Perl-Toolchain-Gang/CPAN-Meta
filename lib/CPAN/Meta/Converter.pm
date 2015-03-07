@@ -2,7 +2,8 @@ use 5.006;
 use strict;
 use warnings;
 package CPAN::Meta::Converter;
-# VERSION
+
+our $VERSION = '2.143241';
 
 =head1 SYNOPSIS
 

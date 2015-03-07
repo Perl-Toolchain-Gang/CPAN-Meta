@@ -3,7 +3,8 @@ use 5.006;
 use strict;
 use warnings;
 package CPAN::Meta::History;
-# VERSION
+
+our $VERSION = '2.143241';
 
 1;
 

@@ -2,7 +2,8 @@ use 5.006;
 use strict;
 use warnings;
 package CPAN::Meta::Feature;
-# VERSION
+
+our $VERSION = '2.143241';
 
 use CPAN::Meta::Prereqs;
 
