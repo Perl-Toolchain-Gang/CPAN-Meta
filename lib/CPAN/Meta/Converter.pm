@@ -1462,6 +1462,8 @@ Returns a new hash reference with the metadata converted to the latest version
 of the CPAN Meta Spec.  No validation is done on the result -- you must
 validate after merging fragments into a complete metadata document.
 
+Available since version 2.141170.
+
 =cut
 
 sub upgrade_fragment {
