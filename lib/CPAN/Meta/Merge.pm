@@ -6,7 +6,7 @@ package CPAN::Meta::Merge;
 
 use Carp qw/croak/;
 use Scalar::Util qw/blessed/;
-use CPAN::Meta::Converter;
+use CPAN::Meta::Converter 2.141170;
 
 sub _identical {
   my ($left, $right, $path) = @_;
