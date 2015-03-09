@@ -33,11 +33,13 @@ on 'configure' => sub {
 
 on 'develop' => sub {
   requires "Dist::Zilla" => "5";
+  requires "Dist::Zilla::Plugin::BumpVersionAfterRelease" => "0";
   requires "Dist::Zilla::Plugin::Encoding" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker::Highlander" => "0.003";
   requires "Dist::Zilla::Plugin::OnlyCorePrereqs" => "0.014";
   requires "Dist::Zilla::Plugin::Prereqs" => "0";
+  requires "Dist::Zilla::Plugin::RewriteVersion" => "0";
   requires "Dist::Zilla::Plugin::SurgicalPodWeaver" => "0.0021";
   requires "Dist::Zilla::PluginBundle::DAGOLDEN" => "0.070";
   requires "File::Spec" => "0";
@@ -50,4 +52,5 @@ on 'develop' => sub {
   requires "Test::Pod" => "1.41";
   requires "Test::Pod::Coverage" => "1.08";
   requires "Test::Spelling" => "0.12";
+  requires "Test::Version" => "1";
 };
