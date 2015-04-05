@@ -116,7 +116,7 @@ like $@, qr/^Can't merge attribute abstract/, 'Exception looks right';
 is(
     eval { $merger->merge(\%base, { provides => { Baz => { file => 'Baz.pm' } } }) },
     undef,
-    'Trying to merge different author gives an exception',
+    'Trying to merge different provides.$module.file gives an exception',
 );
 like $@, qr/^Duplication of element provides\.Baz /, 'Exception looks right';
 
