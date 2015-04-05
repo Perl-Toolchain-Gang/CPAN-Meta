@@ -9,9 +9,18 @@ use Carp qw/croak/;
 use Scalar::Util qw/blessed/;
 use CPAN::Meta::Converter 2.141170;
 
+sub _is_identical {
+  my ($left, $right) = @_;
+  return
+    (not defined $left and not defined $right)
+    # if either of these are references, we compare the serialized value
+    || (defined $left and defined $right and $left eq $right);
+}
+
 sub _identical {
   my ($left, $right, $path) = @_;
-  croak sprintf "Can't merge attribute %s: '%s' does not equal '%s'", join('.', @{$path}), $left, $right unless $left eq $right;
+  croak sprintf "Can't merge attribute %s: '%s' does not equal '%s'", join('.', @{$path}), $left, $right
+    unless _is_identical($left, $right);
   return $left;
 }
 
