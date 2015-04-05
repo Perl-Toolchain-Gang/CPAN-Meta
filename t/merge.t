@@ -100,6 +100,34 @@ my %first_expected = (
 		version => 2,
 	},
 );
+my %provides_merge_expected = (
+	abstract => 'This is a test',
+	author => ['A.U. Thor'],
+	generated_by => 'Myself',
+	license => [ 'perl_5' ],
+	resources => {
+		license => [ 'http://dev.perl.org/licenses/' ],
+		bugtracker => { web => 'https://rt.cpan.org/Dist/Display.html?Foo-Bar' },
+	},
+	prereqs => {
+		runtime => {
+			requires => {
+				Foo => '0',
+			},
+		},
+	},
+	dynamic_config => 0,
+	provides => {
+		Baz => {
+			file => 'lib/Baz.pm',
+			version => '0.001',         # same as %base, but for this extra key
+		},
+	},
+	'meta-spec' => {
+		url => "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+		version => 2,
+	},
+);
 
 my $merger = CPAN::Meta::Merge->new(default_version => '2');
 
@@ -127,7 +155,15 @@ is(
     undef,
     'Trying to merge different provides.$module.file gives an exception',
 );
-like $@, qr/^Duplication of element provides\.Baz /, 'Exception looks right';
+like $@, qr/^Duplication of element provides\.Baz\.file /, 'Exception looks right';
+
+my $provides_result = $merger->merge(\%base, { provides => { Baz => { file => 'lib/Baz.pm', version => '0.001' } } });
+is_deeply(
+	$provides_result,
+	\%provides_merge_expected,
+	'Trying to merge a new key for provides.$module is permitted; identical values are preserved',
+);
+
 
 # issue 67
 @base{qw/name version release_status/} = qw/Foo-Bar 0.01 testing/;

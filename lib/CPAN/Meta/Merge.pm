@@ -59,6 +59,13 @@ sub _uniq_map {
     if (not exists $left->{$key}) {
       $left->{$key} = $right->{$key};
     }
+    # identical strings or references are merged identically
+    elsif (_is_identical($left->{$key}, $right->{$key})) {
+      1; # do nothing - keep left
+    }
+    elsif (ref $left->{$key} eq 'HASH' and ref $right->{$key} eq 'HASH') {
+      $left->{$key} = _uniq_map($left->{$key}, $right->{$key}, [ @{$path}, $key ]);
+    }
     else {
       croak 'Duplication of element ' . join '.', @{$path}, $key;
     }
