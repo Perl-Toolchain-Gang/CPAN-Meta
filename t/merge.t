@@ -12,6 +12,7 @@ my %base = (
 	license => [ 'perl_5' ],
 	resources => {
 		license => [ 'http://dev.perl.org/licenses/' ],
+                bugtracker => { web => 'https://rt.cpan.org/Dist/Display.html?Foo-Bar' },
 	},
 	prereqs => {
 		runtime => {
@@ -68,6 +69,7 @@ my %first_expected = (
 	license => [ 'perl_5', 'bsd' ],
 	resources => {
 		license => [ 'http://dev.perl.org/licenses/', 'http://opensource.org/licenses/bsd-license.php' ],
+                bugtracker => { web => 'https://rt.cpan.org/Dist/Display.html?Foo-Bar' },
 	},
 	prereqs => {
 		runtime => {
@@ -112,6 +114,13 @@ is(
     'Trying to merge different author gives an exception',
 );
 like $@, qr/^Can't merge attribute abstract/, 'Exception looks right';
+
+is(
+    eval { $merger->merge(\%base, { resources => { bugtracker => { web => 'http://foo.com' } } } ) },
+    undef,
+    'Trying to merge a different bugtracker URL gives an exception',
+);
+like $@, qr/^Duplication of element resources\.bugtracker\.web /, 'Exception looks right';
 
 is(
     eval { $merger->merge(\%base, { provides => { Baz => { file => 'Baz.pm' } } }) },
