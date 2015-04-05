@@ -1,6 +1,5 @@
 use strict;
 use warnings;
-# vim: set ts=4 sw=4 noet nolist :
 
 use Test::More;
 use CPAN::Meta;
@@ -138,3 +137,4 @@ is_deeply(
 );
 
 done_testing;
+# vim: ts=4 sts=4 sw=4 noet :

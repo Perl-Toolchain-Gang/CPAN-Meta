@@ -80,4 +80,4 @@ existing test-file that illustrates the bug or desired feature.
 
 =cut
 
-
+# vim: ts=2 sts=2 sw=2 et :

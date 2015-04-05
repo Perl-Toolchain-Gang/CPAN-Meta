@@ -106,3 +106,4 @@ my $string = do { open my $fh, '<', 't/data-test/META-2.meta'; local $/; <$fh> }
 ok( $loaded = CPAN::Meta->load_string($string), 'load META-2.meta from string' );
 
 done_testing;
+# vim: ts=2 sts=2 sw=2 et :

@@ -89,3 +89,4 @@ $clone->requirements_for(qw(develop suggests))->add_minimum(Foo => 1);
 pass('...and we can add stuff to it');
 
 done_testing;
+# vim: ts=2 sts=2 sw=2 et :

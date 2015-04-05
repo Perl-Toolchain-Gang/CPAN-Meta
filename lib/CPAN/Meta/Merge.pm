@@ -237,3 +237,7 @@ that allows one to add additional merging functions for specific elements.
 
 Merge all C<@fragments> together. It will accept both CPAN::Meta objects and
 (possibly incomplete) hashrefs of metadata.
+
+=cut
+
+# vim: ts=2 sts=2 sw=2 et :
