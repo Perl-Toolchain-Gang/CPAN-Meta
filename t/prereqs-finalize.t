@@ -9,9 +9,7 @@ delete $ENV{$_} for qw/PERL_JSON_BACKEND PERL_YAML_BACKEND/; # use defaults
 sub dies_ok (&@) {
   my ($code, $qr, $comment) = @_;
 
-  my $lived = eval { $code->(); 1 };
-
-  if ($lived) {
+  if (eval { $code->(); 1 }) {
     fail("$comment: did not die");
   } else {
     like($@, $qr, $comment);
