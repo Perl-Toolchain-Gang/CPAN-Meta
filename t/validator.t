@@ -36,6 +36,7 @@ delete $ENV{$_} for qw/PERL_JSON_BACKEND PERL_YAML_BACKEND/; # use defaults
     my $meta = Parse::CPAN::Meta->load_file( File::Spec->catfile($f) );
     my $cmv = CPAN::Meta::Validator->new({%$meta});
     ok( ! $cmv->is_valid, "$f shouldn't validate" );
+    note 'validation error: ', $_ foreach $cmv->errors;
   }
 }
 
