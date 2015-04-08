@@ -393,6 +393,18 @@ sub _bad_version_hook {
   return defined($vobj) ? $vobj : version->new(0); # or give up
 }
 
+sub _version_map_concise {
+  my ( $element ) = @_;
+  return unless defined $element;
+  my $hash = _version_map( $element );
+  return unless $hash;
+  for my $module ( keys %{$hash} ) {
+      next unless version::is_lax($hash->{$module});
+      $hash->{$module} = '>= ' . $hash->{$module};
+  }
+  return $hash;
+}
+
 sub _version_map {
   my ($element) = @_;
   return unless defined $element;
@@ -455,7 +467,7 @@ my $relation_spec = {
   requires   => \&_version_map,
   recommends => \&_version_map,
   suggests   => \&_version_map,
-  conflicts  => \&_version_map,
+  conflicts  => \&_version_map_concise,
   ':custom'  => \&_prefix_custom,
 };
 
