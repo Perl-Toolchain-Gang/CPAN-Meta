@@ -294,4 +294,14 @@ sub _normalize_reqs {
   );
 }
 
+# specific test for preserving release_status on upconversion
+{
+  my $path = File::Spec->catfile('t','data-test','preserve-release-status.yml');
+  my $original = Parse::CPAN::Meta->load_file( $path  );
+  ok( $original, "loaded META-2.json" );
+  my $cmc = CPAN::Meta::Converter->new( $original );
+  my $cleaned_up = $cmc->convert( version => "2" );
+  is( $cleaned_up->{release_status}, 'unstable', "release_status preserved" );
+}
+
 done_testing;

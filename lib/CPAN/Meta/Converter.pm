@@ -803,7 +803,7 @@ my %up_convert = (
     # CHANGED TO MANDATORY
     'dynamic_config'      => \&_keep_or_one,
     # ADDED MANDATORY
-    'release_status'      => \&_release_status_from_version,
+    'release_status'      => \&_release_status,
     # PRIOR OPTIONAL
     'keywords'            => \&_keep,
     'no_index'            => \&_no_index_directory,
