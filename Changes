@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.150002  2015-04-19 01:00:10+02:00 Europe/Berlin (TRIAL RELEASE)
+
   [CHANGED]
 
   - Metadata merging now does deep hash merging as long as keys
