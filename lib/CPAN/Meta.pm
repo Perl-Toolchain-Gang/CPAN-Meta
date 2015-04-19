@@ -591,6 +591,10 @@ JSON.  For C<version> less than 2, the string will be serialized as YAML.  In
 both cases, the same rules are followed as in the C<save()> method for choosing
 a serialization backend.
 
+The serialized structure will include a C<x_serialization_backend> entry giving
+the package and version used to serialize.  Any existing key in the given
+C<$meta> object will be clobbered.
+
 =cut
 
 sub as_string {
@@ -610,10 +614,14 @@ sub as_string {
   my ($data, $backend);
   if ( $version ge '2' ) {
     $backend = Parse::CPAN::Meta->json_backend();
+    local $struct->{x_serialization_backend} = sprintf '%s version %s',
+      $backend, $backend->VERSION;
     $data = $backend->new->pretty->canonical->encode($struct);
   }
   else {
     $backend = Parse::CPAN::Meta->yaml_backend();
+    local $struct->{x_serialization_backend} = sprintf '%s version %s',
+      $backend, $backend->VERSION;
     $data = eval { no strict 'refs'; &{"$backend\::Dump"}($struct) };
     if ( $@ ) {
       croak $backend->can('errstr') ? $backend->errstr : $@
