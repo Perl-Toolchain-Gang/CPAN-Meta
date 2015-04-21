@@ -388,6 +388,8 @@ sub _clean_version {
 
 sub _bad_version_hook {
   my ($v) = @_;
+  $v =~ s{^\s*}{};
+  $v =~ s{\s*$}{};
   $v =~ s{[a-z]+$}{}; # strip trailing alphabetics
   my $vobj = eval { version->new($v) };
   return defined($vobj) ? $vobj : version->new(0); # or give up
