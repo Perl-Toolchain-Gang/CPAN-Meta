@@ -83,6 +83,16 @@ ok( -f $metafile, "save meta to file" );
 ok( my $loaded = Parse::CPAN::Meta->load_file($metafile), 'load saved file' );
 is($loaded->{name},     'Module-Build', 'name correct');
 
+like(
+  $loaded->{x_serialization_backend},
+  qr/\AJSON::PP version [0-9]/,
+  "x_serialization_backend",
+);
+
+ok(
+  ! exists $meta->{x_serialization_backend},
+  "we didn't leak x_serialization_backend up into the saved struct",
+);
 
 ok( $loaded = Parse::CPAN::Meta->load_file('t/data-test/META-1_4.yml'), 'load META-1.4' );
 is($loaded->{name},     'Module-Build', 'name correct');
@@ -97,6 +107,17 @@ ok( -f $metayml, "save meta to META.yml with conversion" );
 ok( $loaded = Parse::CPAN::Meta->load_file($metayml), 'load saved file' );
 is( $loaded->{name},     'Module-Build', 'name correct');
 is( $loaded->{requires}{perl}, "5.006", 'prereq correct' );
+
+like(
+  $loaded->{x_serialization_backend},
+  qr/\ACPAN::Meta::YAML version [0-9]/,
+  "x_serialization_backend",
+);
+
+ok(
+  ! exists $meta->{x_serialization_backend},
+  "we didn't leak x_serialization_backend up into the saved struct",
+);
 
 # file without suffix
 
