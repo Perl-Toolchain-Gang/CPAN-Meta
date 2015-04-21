@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.150003  2015-04-21 19:41:15-04:00 America/New_York (TRIAL RELEASE)
+
   [CHANGED]
 
   - Serialized CPAN::Meta objects now include a x_serialization_backend
