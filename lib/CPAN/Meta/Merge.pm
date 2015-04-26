@@ -249,10 +249,60 @@ argument, C<version>, declaring the version of the meta-spec that must be
 used for the merge. It can optionally take an C<extra_mappings> argument
 that allows one to add additional merging functions for specific elements.
 
+The C<extra_mappings> arguments takes a hash ref with the same type of
+structure as described in L<CPAN::Meta::Spec>, except with its values as
+one of the L<defined merge strategies|/"MERGE STRATEGIES"> or a code ref
+to a merging function.
+
+  my $merger = CPAN::Meta::Merge->new(
+      default_version => '2',
+      extra_mappings => {
+          'optional_features' => \&custom_merge_function,
+          'x_custom' => 'set_addition',
+          'x_meta_meta' => {
+              name => 'identical',
+              tags => 'set_addition',
+          }
+      }
+  );
+
+
 =method merge(@fragments)
 
 Merge all C<@fragments> together. It will accept both CPAN::Meta objects and
 (possibly incomplete) hashrefs of metadata.
+
+=head1 MERGE STRATEGIES
+
+C<merge> uses various strategies to combine different elements of the CPAN::Meta objects.  The following strategies can be used with the extra_mappings argument of C<new>:
+
+=over
+
+=item identical
+
+The elements must be identical
+
+=item set_addition
+
+The union of two array refs
+
+  [ a, b ] U [ a, c]  = [ a, b, c ]
+
+=item uniq_map
+
+Key value pairs from the right hash are merged to the left hash.  Key
+collisions are only allowed if their values are the same.  This merge
+function will recurse into nested hash refs following the same merge
+rules.
+
+=item improvize
+
+This merge strategy will try to pick the appropriate predefined strategy
+based on what element type.  Array refs will try to use the
+C<set_addition> strategy,  Hash refs will try to use the C<uniq_map>
+strategy, and everything else will try the C<identical> strategy.
+
+=back
 
 =cut
 
