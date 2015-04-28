@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [DOCUMENTED]
+
+  - Noted explicitly that historical META spec files are licensed under
+    the same terms as Perl
+
 2.150003  2015-04-21 19:41:15-04:00 America/New_York (TRIAL RELEASE)
 
   [CHANGED]
