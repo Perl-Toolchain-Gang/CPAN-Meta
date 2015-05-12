@@ -163,7 +163,7 @@ sub with_merged_prereqs {
 
     my $new_reqs = $prereqs->merged_requirements( \@phases, \@types );
     my $new_reqs = $prereqs->merged_requirements( \@phases );
-    my $new_reqs = $preerqs->merged_requirements();
+    my $new_reqs = $prereqs->merged_requirements();
 
 This method joins together all requirements across a number of phases
 and types into a new L<CPAN::Meta::Requirements> object.  If arguments
