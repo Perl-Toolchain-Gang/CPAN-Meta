@@ -34,6 +34,7 @@ my @files = sort grep { /^\w/ } $data_dir->read;
 #use Data::Dumper;
 
 for my $f ( reverse sort @files ) {
+  note '';
   my $path = File::Spec->catfile('t','data-test',$f);
   my $original = Parse::CPAN::Meta->load_file( $path  );
   ok( $original, "loaded $f" );
