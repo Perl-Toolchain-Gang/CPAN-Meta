@@ -2,6 +2,12 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [ADDED]
+
+  - Added ability for CPAN::Meta::as_string to mix and match meta spec
+    versions and serialization formats (e.g. JSON and version 1.4, YAML and
+    version 2)
+
   [DOCUMENTED]
 
   - Noted explicitly that historical META spec files are licensed under

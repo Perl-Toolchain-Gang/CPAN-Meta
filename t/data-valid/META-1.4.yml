@@ -8,7 +8,7 @@ author:
 build_requires:
   Test::More: '0'
 dynamic_config: 1
-generated_by: 'Module::Build version 0.36, CPAN::Meta::Converter version $VERSION'
+generated_by: 'Module::Build version 0.36, CPAN::Meta::Converter version __VERSION__'
 keywords:
   - toolchain
   - cpan
@@ -46,4 +46,4 @@ resources:
   license: http://dev.perl.org/licenses/
 version: '0.36'
 x_authority: cpan:FLORA
-x_serialization_backend: 'CPAN::Meta::YAML version 0.015'
+x_serialization_backend: '__SERIALIZATION_BACKEND__'

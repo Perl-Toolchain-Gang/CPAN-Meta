@@ -245,7 +245,13 @@ sub read_file {
   open my $fh, '<', $filename;
   local $/;
   my $string = <$fh>;
-  $string =~ s/\$VERSION/$CPAN::Meta::VERSION/g;
+  $string =~ s/__VERSION__/$CPAN::Meta::VERSION/g;
+  my $backend =
+      $filename =~ /json$/ ? Parse::CPAN::Meta->json_backend()
+    : $filename =~ /yml$/ ? Parse::CPAN::Meta->yaml_backend()
+    : die 'unknown backend?!';
+  my $backend_string = sprintf '%s version %s', $backend, $backend->VERSION;
+  $string =~ s/__SERIALIZATION_BACKEND__/$backend_string/;
   $string;
 }
 
@@ -265,6 +271,18 @@ is(
   $meta->as_string({ version => 1.4 }),
   read_file('t/data-valid/META-1.4.yml'),
   'as_string using version 1.4 defaults to YAML',
+);
+
+is(
+  $meta->as_string({ version => 2, format => 'YAML' }),
+  read_file('t/data-valid/META-2.yml'),
+  'as_string can serialize meta 2 to YAML',
+);
+
+is(
+  $meta->as_string({ version => 1.4, format => 'JSON' }),
+  read_file('t/data-valid/META-1.4.json'),
+  'as_string can down-convert to 1.4 and still serialize to JSON',
 );
 
 done_testing;
