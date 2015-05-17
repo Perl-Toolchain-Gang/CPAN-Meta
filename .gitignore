@@ -1,2 +1,8 @@
 /.build
 /CPAN-Meta-*
+/MYMETA.*
+/MYMETA.yml
+/Makefile
+/Makefile.old
+/blib/
+/pm_to_blib
