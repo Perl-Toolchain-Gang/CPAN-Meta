@@ -239,5 +239,33 @@ $chk_feature->($features[0]);
 
 $chk_feature->( $meta->feature('domination') );
 
+
+sub read_file {
+  my $filename = shift;
+  open my $fh, '<', $filename;
+  local $/;
+  my $string = <$fh>;
+  $string =~ s/\$VERSION/$CPAN::Meta::VERSION/g;
+  $string;
+}
+
+is(
+  $meta->as_string(),
+  read_file('t/data-valid/META-2.json'),
+  'as_string with no arguments defaults to version 2 and JSON',
+);
+
+is(
+  $meta->as_string({ version => 2 }),
+  read_file('t/data-valid/META-2.json'),
+  'as_string using version 2 defaults to JSON',
+);
+
+is(
+  $meta->as_string({ version => 1.4 }),
+  read_file('t/data-valid/META-1.4.yml'),
+  'as_string using version 1.4 defaults to YAML',
+);
+
 done_testing;
 # vim: ts=2 sts=2 sw=2 et :
