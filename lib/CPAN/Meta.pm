@@ -586,8 +586,10 @@ example:
 
   my $string = $meta->as_string( {version => "1.4"} );
 
-For C<version> greater than or equal to 2, the string will be serialized as
-JSON.  For C<version> less than 2, the string will be serialized as YAML.  In
+If the hashref contains a C<format> argument, that data format is used: valid
+choices are C<JSON> and C<YAML>. If C<format> is not provided,
+for C<version> greater than or equal to 2, the string will be serialized as
+JSON, and for C<version> less than 2, the string will be serialized as YAML.  In
 both cases, the same rules are followed as in the C<save()> method for choosing
 a serialization backend.
 
@@ -601,6 +603,8 @@ sub as_string {
   my ($self, $options) = @_;
 
   my $version = $options->{version} || '2';
+  my $format = $options->{format};
+  croak "unrecognized format: $format" if $format and $format ne 'JSON' and $format ne 'YAML';
 
   my $struct;
   if ( $self->meta_spec_version ne $version ) {
@@ -612,7 +616,7 @@ sub as_string {
   }
 
   my ($data, $backend);
-  if ( $version ge '2' ) {
+  if ( (not $format and $version ge '2') or ($format and $format eq 'JSON') ) {
     $backend = Parse::CPAN::Meta->json_backend();
     local $struct->{x_serialization_backend} = sprintf '%s version %s',
       $backend, $backend->VERSION;

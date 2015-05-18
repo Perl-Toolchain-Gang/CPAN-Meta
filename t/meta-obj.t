@@ -3,7 +3,7 @@ use warnings;
 use Test::More 0.88;
 
 use CPAN::Meta;
-
+use Storable qw(dclone);
 use Scalar::Util qw(blessed);
 
 delete $ENV{$_} for qw/PERL_JSON_BACKEND PERL_YAML_BACKEND/; # use defaults
@@ -74,7 +74,7 @@ my $distmeta = {
   X_deep => { deep => 'structure' },
 };
 
-my $meta = CPAN::Meta->new($distmeta);
+my $meta = CPAN::Meta->new(dclone $distmeta);
 
 is(
   blessed($meta->as_struct),
@@ -238,6 +238,52 @@ is(@features, 1, "we got one feature");
 $chk_feature->($features[0]);
 
 $chk_feature->( $meta->feature('domination') );
+
+
+sub read_file {
+  my $filename = shift;
+  open my $fh, '<', $filename;
+  local $/;
+  my $string = <$fh>;
+  $string =~ s/__VERSION__/$CPAN::Meta::VERSION/g;
+  my $backend =
+      $filename =~ /json$/ ? Parse::CPAN::Meta->json_backend()
+    : $filename =~ /yml$/ ? Parse::CPAN::Meta->yaml_backend()
+    : die 'unknown backend?!';
+  my $backend_string = sprintf '%s version %s', $backend, $backend->VERSION;
+  $string =~ s/__SERIALIZATION_BACKEND__/$backend_string/;
+  $string;
+}
+
+is(
+  $meta->as_string(),
+  read_file('t/data-valid/META-2.json'),
+  'as_string with no arguments defaults to version 2 and JSON',
+);
+
+is(
+  $meta->as_string({ version => 2 }),
+  read_file('t/data-valid/META-2.json'),
+  'as_string using version 2 defaults to JSON',
+);
+
+is(
+  $meta->as_string({ version => 1.4 }),
+  read_file('t/data-valid/META-1.4.yml'),
+  'as_string using version 1.4 defaults to YAML',
+);
+
+is(
+  $meta->as_string({ version => 2, format => 'YAML' }),
+  read_file('t/data-valid/META-2.yml'),
+  'as_string can serialize meta 2 to YAML',
+);
+
+is(
+  $meta->as_string({ version => 1.4, format => 'JSON' }),
+  read_file('t/data-valid/META-1.4.json'),
+  'as_string can down-convert to 1.4 and still serialize to JSON',
+);
 
 done_testing;
 # vim: ts=2 sts=2 sw=2 et :
