@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.150004  2015-05-19 11:25:53-04:00 America/New_York (TRIAL RELEASE)
+
   [DOCUMENTED]
 
   - Noted explicitly that historical META spec files are licensed under
