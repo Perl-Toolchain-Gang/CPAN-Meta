@@ -141,7 +141,7 @@
    "x_authority" : "cpan:FLORA",
    "x_authority_from_module" : "Dist::Zilla::Plugin::Test::EOL",
    "x_contributors" : [
-      "Olivier Mengué <dolmen@cpan.org>",
+      "Olivier Mengue <dolmen@cpan.org>",
       "Shlomi Fish <shlomif@shlomifish.org>"
    ],
    "x_permissions_from_module" : "Dist::Zilla::Plugin::Test::EOL"
