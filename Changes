@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [TESTING]
+
+  - Changed some test data from UTF-8 to ASCII
+
 2.150004  2015-05-19 11:25:53-04:00 America/New_York (TRIAL RELEASE)
 
   [DOCUMENTED]
