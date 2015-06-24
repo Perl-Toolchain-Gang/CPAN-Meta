@@ -1140,6 +1140,7 @@ indexing anything in the first place - just use that.
 * L<ExtUtils::MakeMaker>
 * L<Module::Build>
 * L<Module::Install>
+* L<CPAN::Meta::History::Meta_1_4>
 
 =head1 HISTORY
 
