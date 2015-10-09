@@ -409,7 +409,7 @@ cases, is) used by distribution and automation mechanisms like PAUSE,
 CPAN, and search.cpan.org to build indexes saying in which
 distribution various packages can be found.
 
-When using tools like C<Module::Build> that can generate the
+When using tools like L<Module::Build> that can generate the
 C<provides> mapping for your distribution automatically, make sure you
 examine what it generates to make sure it makes sense - indexers will
 usually trust the C<provides> field if it's present, rather than
@@ -439,7 +439,7 @@ directories, packages, and namespaces that are private
 and indexing tools.  This is useful when no C<provides> field is
 present.
 
-For example, C<search.cpan.org> excludes items listed in C<no_index>
+For example, L<http://search.cpan.org/> excludes items listed in C<no_index>
 when searching for POD, meaning files in these directories will not
 converted to HTML and made public - which is useful if you have
 example or test PODs that you don't want the search engine to go
@@ -561,23 +561,23 @@ together using commas.  The specification C<E<gt>= 1.2, != 1.5, E<lt>
 
 =head1 SEE ALSO
 
-CPAN, L<http://www.cpan.org/>
+L<CPAN|http://www.cpan.org/>
 
-CPAN.pm, L<http://search.cpan.org/dist/CPAN/>
+L<CPAN.pm|CPAN>
 
-CPANPLUS, L<http://search.cpan.org/dist/CPANPLUS/>
+L<CPANPLUS>
 
-Data::Dumper, L<http://search.cpan.org/dist/Data-Dumper/>
+L<Data::Dumper>
 
-ExtUtils::MakeMaker, L<http://search.cpan.org/dist/ExtUtils-MakeMaker/>
+L<ExtUtils::MakeMaker>
 
-Module::Build, L<http://search.cpan.org/dist/Module-Build/>
+L<Module::Build>
 
-Module::Install, L<http://search.cpan.org/dist/Module-Install/>
+L<Module::Install>
 
-XML, L<http://www.w3.org/XML/>
+L<XML|http://www.w3.org/XML/>
 
-YAML, L<http://www.yaml.org/>
+L<YAML|http://www.yaml.org/>
 
 =head1 HISTORY
 

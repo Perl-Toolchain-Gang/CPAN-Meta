@@ -412,7 +412,7 @@ cases, is) used by distribution and automation mechanisms like PAUSE,
 CPAN, and search.cpan.org to build indexes saying in which
 distribution various packages can be found.
 
-When using tools like C<Module::Build> that can generate the
+When using tools like L<Module::Build> that can generate the
 C<provides> mapping for your distribution automatically, make sure you
 examine what it generates to make sure it makes sense - indexers will
 usually trust the C<provides> field if it's present, rather than
@@ -532,23 +532,23 @@ tool. RWS]
 
 =head1 SEE ALSO
 
-CPAN, L<http://www.cpan.org/>
+L<CPAN|http://www.cpan.org/>
 
-CPAN.pm, L<http://search.cpan.org/author/ANDK/CPAN/>
+L<CPAN.pm|CPAN>
 
-CPANPLUS, L<http://search.cpan.org/author/KANE/CPANPLUS/>
+L<CPANPLUS>
 
-Data::Dumper, L<http://search.cpan.org/author/ILYAM/Data-Dumper/>
+L<Data::Dumper>
 
-ExtUtils::MakeMaker, L<http://search.cpan.org/author/MSCHWERN/ExtUtils-MakeMaker/>
+L<ExtUtils::MakeMaker>
 
-Module::Build, L<http://search.cpan.org/author/KWILLIAMS/Module-Build/>
+L<Module::Build>
 
-Module::Install, L<http://search.cpan.org/author/KWILLIAMS/Module-Install/>
+L<Module::Install>
 
-XML, L<http://www.w3.org/XML/>
+L<XML|http://www.w3.org/XML/>
 
-YAML, L<http://www.yaml.org/>
+L<YAML|http://www.yaml.org/>
 
 =head1 HISTORY
 
