@@ -124,17 +124,17 @@ XML or Data::Dumper:
 
 =over 4
 
-=item Module::Build design plans
+=item *
 
-L<http://nntp.x.perl.org/group/perl.makemaker/406>
+L<Module::Build design plans|http://www.nntp.perl.org/group/perl.makemaker/2002/04/msg407.html>
 
-=item Not keen on YAML
+=item *
 
-L<http://nntp.x.perl.org/group/perl.module-authors/1353>
+L<Not keen on YAML|http://www.nntp.perl.org/group/perl.module-authors/2003/11/msg1353.html>
 
-=item META Concerns
+=item *
 
-L<http://nntp.x.perl.org/group/perl.module-authors/1385>
+L<META Concerns|http://www.nntp.perl.org/group/perl.module-authors/2003/11/msg1385.html>
 
 =back
 
