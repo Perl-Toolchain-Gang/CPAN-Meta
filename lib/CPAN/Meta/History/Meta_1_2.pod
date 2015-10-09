@@ -131,8 +131,8 @@ well (ex. python, ruby).
 
 =head1 VERSION SPECIFICATIONS
 
-Some fields require a version specification (ex. L<"requires">,
-L<"recommends">, L<"build_requires">, etc.).  This section details the
+Some fields require a version specification (ex. L</requires>,
+L</recommends>, L</build_requires>, etc.).  This section details the
 version specifications that are currently supported.
 
 If a single version is listed, then that version is considered to be
@@ -337,9 +337,9 @@ Example:
 
 I<(Spec 1.1) [optional] {map} A YAML sequence of names for optional features
 which are made available when its requirements are met. For each
-feature a description is provided along with any of L<"requires">,
-L<"build_requires">, L<"conflicts">, L<"requires_packages">,
-L<"requires_os">, and L<"excludes_os"> which have the same meaning in
+feature a description is provided along with any of L</requires>,
+L</build_requires>, L</conflicts>, C<requires_packages>,
+C<requires_os>, and C<excludes_os> which have the same meaning in
 this subcontext as described elsewhere in this document.>
 
 =head2 build_requires
@@ -390,7 +390,7 @@ If this field is omitted, it defaults to 1 (true).
 =head2 private
 
 I<(Deprecated)> (Spec 1.0) [optional] {map} This field has been renamed to
-L</"no_index">.  See below.
+L</no_index>.  See below.
 
 =head2 provides
 
@@ -570,7 +570,7 @@ Created version 1.0 of this document.
 
 =item *
 
-Added the L</"dynamic_config"> field, which was missing from the initial
+Added the L</dynamic_config> field, which was missing from the initial
 version.
 
 =back
@@ -590,12 +590,12 @@ L<http://nntp.x.perl.org/group/> site.
 
 =item *
 
-Added and deprecated the L<"private"> field.
+Added and deprecated the L</private> field.
 
 =item *
 
-Added L<"abstract">, L<"configure">, L<"requires_packages">,
-L<"requires_os">, L<"excludes_os">, and L<"no_index"> fields.
+Added L</abstract>, C<configure>, C<requires_packages>,
+C<requires_os>, C<excludes_os>, and L</no_index> fields.
 
 =item *
 
@@ -609,15 +609,15 @@ Bumped version.
 
 =item *
 
-Added L<"generation">, L<"authored_by"> fields.
+Added C<generation>, C<authored_by> fields.
 
 =item *
 
-Add alternative proposal to the L<"recommends"> field.
+Add alternative proposal to the L</recommends> field.
 
 =item *
 
-Add proposal for a L<"requires_build_tools"> field.
+Add proposal for a C<requires_build_tools> field.
 
 =back
 
@@ -631,7 +631,7 @@ Added link to latest version of this specification on CPAN.
 
 =item *
 
-Added section L<"VERSION SPECIFICATIONS">.
+Added section L</"VERSION SPECIFICATIONS">.
 
 =item *
 
@@ -639,7 +639,7 @@ Chang name from Module::Build::META-spec to CPAN::META::Specification.
 
 =item *
 
-Add proposal for L<"auto_regenerate"> field.
+Add proposal for C<auto_regenerate> field.
 
 =back
 
@@ -649,15 +649,15 @@ Add proposal for L<"auto_regenerate"> field.
 
 =item *
 
-Add L<"index"> field as a compliment to L<"no_index">
+Add C<index> field as a compliment to L</no_index>
 
 =item *
 
-Add L<"keywords"> field as a means to aid searching distributions.
+Add L</keywords> field as a means to aid searching distributions.
 
 =item *
 
-Add L<"TERMINOLOGY"> section to explain certain terms that may be
+Add L</TERMINOLOGY> section to explain certain terms that may be
 ambiguous.
 
 =back
@@ -675,7 +675,7 @@ more like records of brainstorming.
 
 =item *
 
-Changed C<authored_by> to C<author>, since that's always been what
+Changed C<authored_by> to L</author>, since that's always been what
 it's actually called in actual F<META.yml> files.
 
 =item *
@@ -685,12 +685,12 @@ operators.
 
 =item *
 
-Noted that the C<distribution_type> field is basically meaningless,
+Noted that the L</distribution_type> field is basically meaningless,
 and shouldn't really be used.
 
 =item *
 
-Clarified C<dynamic_config> a bit.
+Clarified L</dynamic_config> a bit.
 
 =back
 
