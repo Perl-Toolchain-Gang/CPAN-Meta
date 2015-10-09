@@ -113,12 +113,12 @@ version 1 or the Artistic version 1 license.
 
 =item gpl
 
-The distribution is distributed under the terms of the Gnu General Public
+The distribution is distributed under the terms of the GNU General Public
 License version 2 (L<http://opensource.org/licenses/GPL-2.0>).
 
 =item lgpl
 
-The distribution is distributed under the terms of the Gnu Lesser General
+The distribution is distributed under the terms of the GNU Lesser General
 Public License version 2 (L<http://opensource.org/licenses/LGPL-2.1>).
 
 =item artistic
