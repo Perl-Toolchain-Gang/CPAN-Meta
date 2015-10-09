@@ -21,7 +21,8 @@ Various spelling corrections
 =item *
 
 Include list of valid licenses from L<Module::Build> 0.2807 rather than
-linking to the module.
+linking to the module, with minor updates to text and links to reflect
+versions at the time of publication.
 
 =back
 
@@ -235,39 +236,40 @@ Must be one of the following licenses:
 
 =item apache
 
-The distribution is licensed under the Apache Software License
-(L<http://opensource.org/licenses/apachepl.php>).
+The distribution is licensed under the Apache Software License version 1.1
+(L<http://opensource.org/licenses/Apache-1.1>).
 
 =item artistic
 
-The distribution is licensed under the Artistic License, as specified by the
-Artistic file in the standard perl distribution.
+The distribution is licensed under the Artistic License version 1, as specified
+by the Artistic file in the standard perl distribution
+(L<http://opensource.org/licenses/Artistic-Perl-1.0>).
 
 =item bsd
 
-The distribution is licensed under the BSD License
-(L<http://www.opensource.org/licenses/bsd-license.php>).
+The distribution is licensed under the BSD 3-Clause License
+(L<http://opensource.org/licenses/BSD-3-Clause>).
 
 =item gpl
 
-The distribution is licensed under the terms of the Gnu General Public License
-(L<http://www.opensource.org/licenses/gpl-license.php>).
+The distribution is distributed under the terms of the Gnu General Public
+License version 2 (L<http://opensource.org/licenses/GPL-2.0>).
 
 =item lgpl
 
-The distribution is licensed under the terms of the Gnu Lesser General Public
-License (L<http://www.opensource.org/licenses/lgpl-license.php>).
+The distribution is distributed under the terms of the Gnu Lesser General
+Public License version 2 (L<http://opensource.org/licenses/LGPL-2.1>).
 
 =item mit
 
 The distribution is licensed under the MIT License
-(L<http://opensource.org/licenses/mit-license.php>).
+(L<http://opensource.org/licenses/MIT>).
 
 =item mozilla
 
 The distribution is licensed under the Mozilla Public License.
-(L<http://opensource.org/licenses/mozilla1.0.php> or
-L<http://opensource.org/licenses/mozilla1.1.php>)
+(L<http://opensource.org/licenses/MPL-1.0> or
+L<http://opensource.org/licenses/MPL-1.1>)
 
 =item open_source
 

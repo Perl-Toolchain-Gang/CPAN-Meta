@@ -21,7 +21,8 @@ Conversion from the original HTML to POD format
 =item *
 
 Include list of valid licenses from L<Module::Build> 0.17 rather than
-linking to the module.
+linking to the module, with minor updates to text and links to reflect
+versions at the time of publication.
 
 =back
 
@@ -87,28 +88,29 @@ Must be one of the following licenses:
 
 The distribution may be copied and redistributed under the same terms as perl
 itself (this is by far the most common licensing option for modules on CPAN).
-This is a dual license, in which the user may choose between either the GPL or
-the Artistic license.
+This is a dual license, in which the user may choose between either the GPL
+version 1 or the Artistic version 1 license.
 
 =item gpl
 
 The distribution is distributed under the terms of the Gnu General Public
-License (L<http://www.opensource.org/licenses/gpl-license.php>).
+License version 2 (L<http://opensource.org/licenses/GPL-2.0>).
 
 =item lgpl
 
 The distribution is distributed under the terms of the Gnu Lesser General
-Public License (L<http://www.opensource.org/licenses/lgpl-license.php>).
+Public License version 2 (L<http://opensource.org/licenses/LGPL-2.1>).
 
 =item artistic
 
-The distribution is licensed under the Artistic License, as specified by the
-Artistic file in the standard perl distribution.
+The distribution is licensed under the Artistic License version 1, as specified
+by the Artistic file in the standard perl distribution
+(L<http://opensource.org/licenses/Artistic-Perl-1.0>).
 
 =item bsd
 
-The distribution is licensed under the BSD License
-(L<http://www.opensource.org/licenses/bsd-license.php>).
+The distribution is licensed under the BSD 3-Clause License
+(L<http://opensource.org/licenses/BSD-3-Clause>).
 
 =item open_source
 
@@ -118,7 +120,7 @@ license listed at L<http://www.opensource.org/licenses/>.
 =item unrestricted
 
 The distribution is licensed under a license that is B<not> approved by
-L<www.opensource.org|http://www.opensource.org> but that allows distribution
+L<www.opensource.org|http://www.opensource.org/> but that allows distribution
 without restrictions.
 
 =item restrictive
