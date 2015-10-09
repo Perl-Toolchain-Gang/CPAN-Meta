@@ -24,6 +24,10 @@ Include list of valid licenses from L<Module::Build> 0.2805 rather than
 linking to the module, with minor updates to text and links to reflect
 versions at the time of publication.
 
+=item *
+
+Fixed some dead links to point to active resources.
+
 =back
 
 =head1 SYNOPSIS
