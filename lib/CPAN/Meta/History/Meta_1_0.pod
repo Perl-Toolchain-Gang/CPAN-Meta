@@ -148,7 +148,8 @@ Example:
 A YAML L<mapping|http://www.yaml.org/spec/#.-syntax-mapping-Mapping->
 indicating the Perl modules this distribution requires for proper
 operation.  The keys are the module names, and the values are version
-specifications as described in the L<Module::Build|documentation for Module::Build's "requires" parameter>.
+specifications as described in the
+L<documentation for Module::Build's "requires" parameter|Module::Build::API/requires>.
 
 I<Note: the exact nature of the fancy specifications like
 C<< ">= 1.2, != 1.5, < 2.0" >> is subject to
@@ -202,7 +203,7 @@ sensing the environment, etc.) as part of its build/install process.
 
 Currently L<Module::Build> doesn't actually do anything with
 this flag - it's probably going to be up to higher-level tools like
-L<CPAN|CPAN.pm> to do something useful with it.  It can potentially
+L<CPAN.pm|CPAN> to do something useful with it.  It can potentially
 bring lots of security, packaging, and convenience improvements.
 
 =item generated_by
