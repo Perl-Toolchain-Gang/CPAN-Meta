@@ -1,6 +1,7 @@
 /.build
-/CPAN-Meta-*
-/MYMETA.*
+/CPAN-Meta-*/
+/CPAN-Meta-*.tar.gz
+/MYMETA.json
 /MYMETA.yml
 /Makefile
 /Makefile.old
