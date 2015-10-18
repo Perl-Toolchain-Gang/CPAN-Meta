@@ -333,7 +333,7 @@ sub _no_index_directory {
   my ($element, $key, $meta, $version) = @_;
   return unless $element;
 
-  # cleanup wrong format
+  # clean up wrong format
   if ( ! ref $element ) {
     my $item = $element;
     $element = { directory => [ $item ], file => [ $item ] };
@@ -421,7 +421,7 @@ sub _version_map {
   }
   elsif ( ref $element eq 'ARRAY' ) {
     my $hashref = { map { $_ => 0 } @$element };
-    return _version_map($hashref); # cleanup any weird stuff
+    return _version_map($hashref); # clean up any weird stuff
   }
   elsif ( ref $element eq '' && length $element ) {
     return { $element => 0 }
