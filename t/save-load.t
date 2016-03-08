@@ -5,8 +5,11 @@ use Test::More 0.88;
 use CPAN::Meta;
 use File::Temp 0.20 ();
 use Parse::CPAN::Meta 1.4400;
+use Config;
 
 delete $ENV{$_} for qw/PERL_JSON_BACKEND PERL_YAML_BACKEND/; # use defaults
+my $jsonbackend = $Config{usecperl} ? 'Cpanel::JSON::XS' : 'JSON::PP';
+my $yamlbackend = $Config{usecperl} ? 'YAML::XS' : 'CPAN::Meta::YAML';
 
 my $distmeta = {
   name     => 'Module-Build',
@@ -85,7 +88,7 @@ is($loaded->{name},     'Module-Build', 'name correct');
 
 like(
   $loaded->{x_serialization_backend},
-  qr/\AJSON::PP version [0-9]/,
+  qr/\A$jsonbackend version [0-9]/,
   "x_serialization_backend",
 );
 
@@ -110,7 +113,7 @@ is( $loaded->{requires}{perl}, "5.006", 'prereq correct' );
 
 like(
   $loaded->{x_serialization_backend},
-  qr/\ACPAN::Meta::YAML version [0-9]/,
+  qr/\A$yamlbackend version [0-9]/,
   "x_serialization_backend",
 );
 

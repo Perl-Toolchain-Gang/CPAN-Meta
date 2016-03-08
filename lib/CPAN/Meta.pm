@@ -380,17 +380,29 @@ Serializes the object as JSON and writes it to the given file.  The only valid
 option is C<version>, which defaults to '2'. On Perl 5.8.1 or later, the file
 is saved with UTF-8 encoding.
 
-For C<version> 2 (or higher), the filename should end in '.json'.  L<JSON::PP>
-is the default JSON backend. Using another JSON backend requires L<JSON> 2.5 or
-later and you must set the C<$ENV{PERL_JSON_BACKEND}> to a supported alternate
-backend like L<JSON::XS>.
+For C<version> 2 (or higher), the filename should end in '.json'.
+C<Parse::CPAN::Meta->json_backend> defines the default JSON
+backend. Using another JSON backend requires L<JSON> 2.5 or later and
+you must set the C<$ENV{PERL_JSON_BACKEND}> to a supported alternate
+backend like L<Cpanel::JSON::XS>, L<JSON::XS>, L<JSON::Syck>.
+L<JSON>, L<JSON::MaybeXS> or L<JSON::Any>. See L<Parse::CPAN::Meta>.
 
 For C<version> less than 2, the filename should end in '.yml'.
-L<CPAN::Meta::Converter> is used to generate an older metadata structure, which
-is serialized to YAML.  CPAN::Meta::YAML is the default YAML backend.  You may
-set the C<$ENV{PERL_YAML_BACKEND}> to a supported alternative backend, though
-this is not recommended due to subtle incompatibilities between YAML parsers on
-CPAN.
+L<CPAN::Meta::Converter> is used to generate an older metadata
+structure, which is serialized to YAML.
+C<Parse::CPAN::Meta->yaml_backend> defines the default YAML
+backend.  You may set the C<$ENV{PERL_YAML_BACKEND}> to a supported
+alternative backend, though this is not recommended due to subtle
+incompatibilities between YAML parsers on CPAN.  See L<Parse::CPAN::Meta>.
+
+L<YAML> and L<YAML::XS> have severe limitations. Files written by
+L<YAML::XS> before version 0.70 cannot be read by YAML, which is the
+default yaml reader for CPAN.  Both are strict, which makes it failing
+fixable yaml data tests.  L<YAML::Syck> is fast and passes all the
+tests, but doesn't implement the latest YAML 1.2
+specification. L<YAML::Tiny> passes all tests, but is slow.
+L<CPAN::Meta::YAML> the default parser in perl5 core is based on
+C<YAML::Tiny>.
 
 =cut
 
@@ -443,7 +455,7 @@ sub meta_spec_version {
 This method returns a L<CPAN::Meta::Prereqs> object describing all the
 prereqs for the distribution.  If an arrayref of feature identifiers is given,
 the prereqs for the identified features are merged together with the
-distribution's core prereqs before the CPAN::Meta::Prereqs object is returned.
+distribution's core prereqs before the C<CPAN::Meta::Prereqs> object is returned.
 
 =cut
 
