@@ -6,7 +6,8 @@ use CPAN::Meta;
 use File::Temp 0.20 ();
 use Parse::CPAN::Meta 1.4400;
 
-delete $ENV{$_} for qw/PERL_JSON_BACKEND PERL_YAML_BACKEND/; # use defaults
+# use defaults
+delete $ENV{$_} for qw/PERL_JSON_BACKEND PERL_YAML_BACKEND CPAN_META_JSON_BACKEND CPAN_META_JSON_DECODER/;
 
 my $distmeta = {
   name     => 'Module-Build',
