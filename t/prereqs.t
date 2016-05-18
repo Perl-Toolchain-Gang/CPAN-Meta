@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
+use Config;
 
 use CPAN::Meta::Prereqs;
 
@@ -37,6 +38,11 @@ my $prereq_struct = {
   }
 };
 
+if ($Config{usecperl}) {
+  $prereq_struct->{runtime}->{requires}->{$_} = 0
+    for qw(strict XSLoader attributes);
+}
+
 my $prereq = CPAN::Meta::Prereqs->new($prereq_struct);
 
 isa_ok($prereq, 'CPAN::Meta::Prereqs');
@@ -46,11 +52,15 @@ is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
 {
   my $req = $prereq->requirements_for(qw(runtime requires));
   my @req_mod = $req->required_modules;
+  my @test_reqs = ('Cwd');
+  push @test_reqs, qw(strict XSLoader attributes) if $Config{usecperl};
 
-  ok(
-    (grep { 'Cwd' eq $_ } @req_mod),
-    "we got the runtime requirements",
-  );
+  for my $m (@test_reqs) {
+    ok(
+       (grep { $m eq $_ } @req_mod),
+       "got the $m runtime requires",
+      );
+  }
 
   ok(
     (! grep { 'YAML' eq $_ } @req_mod),
@@ -71,10 +81,12 @@ is_deeply($prereq->as_string_hash, $prereq_struct, "round-trip okay");
 
   my @req_mod = $merged->required_modules;
 
-  ok(
-    (grep { 'Cwd' eq $_ } @req_mod),
-    "we got the runtime requirements",
-  );
+  for my $m (qw(Cwd)) {
+    ok(
+       (grep { $m eq $_ } @req_mod),
+       "got the $m runtime requires",
+      );
+  }
 
   ok(
     (grep { 'YAML' eq $_ } @req_mod),
