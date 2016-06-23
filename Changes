@@ -7,6 +7,10 @@ Revision history for CPAN-Meta
   - CPAN::Meta::Prereqs now fully accepts phases and types starting with 'x_'.
     New 'phases' and 'types_in' interfaces have been added.
 
+  [SPEC]
+
+  - Clarifies acceptable values for booleans
+
 2.150005  2015-06-09 19:08:44-06:00 America/Denver
 
   [TESTING]

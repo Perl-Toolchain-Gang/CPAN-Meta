@@ -142,7 +142,8 @@ constraints on the values of a data element.
 =head2 Boolean
 
 A I<Boolean> is used to provide a true or false value.  It B<must> be
-represented as a defined value.
+represented as a defined value that is either "1" or "0" or stringifies
+to those values.
 
 =head2 String
 
