@@ -73,7 +73,7 @@ sub _uniq_map {
   return $left;
 }
 
-sub _improvize {
+sub _improvise {
   my ($left, $right, $path) = @_;
   my ($name) = reverse @{$path};
   if ($name =~ /^x_/) {
@@ -154,9 +154,9 @@ my %default = (
     homepage   => \&_identical,
     bugtracker => \&_uniq_map,
     repository => \&_uniq_map,
-    ':default' => \&_improvize,
+    ':default' => \&_improvise,
   },
-  ':default' => \&_improvize,
+  ':default' => \&_improvise,
 );
 
 sub new {
@@ -182,7 +182,8 @@ my %coderef_for = (
   set_addition => \&_set_addition,
   uniq_map     => \&_uniq_map,
   identical    => \&_identical,
-  improvize    => \&_improvize,
+  improvise    => \&_improvise,
+  improvize    => \&_improvise, # [sic] for backwards compatibility
 );
 
 sub _coerce_mapping {
@@ -295,7 +296,7 @@ collisions are only allowed if their values are the same.  This merge
 function will recurse into nested hash refs following the same merge
 rules.
 
-=item improvize
+=item improvise
 
 This merge strategy will try to pick the appropriate predefined strategy
 based on what element type.  Array refs will try to use the
