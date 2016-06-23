@@ -15,6 +15,9 @@ Revision history for CPAN-Meta
   - The 'extra_mappings' feature for meta merging is now tested and
     documented.
 
+  - During tests, delete new environment variables added by
+    Parse::CPAN::Meta 1.4418
+
   [SPEC]
 
   - Clarifies acceptable values for booleans
