@@ -43,22 +43,36 @@ BEGIN {
 # Perl 5.10.0 didn't have "is_qv" in version.pm
 *_is_qv = version->can('is_qv') ? sub { $_[0]->is_qv } : sub { exists $_[0]->{qv} };
 
+# We limit cloning to a maximum depth to bail out on circular data
+# structures.  While actual cycle detection might be technically better,
+# we expect circularity in META data structures to be rare and generally
+# the result of user error.  Therefore, a depth counter is lower overhead.
+our $DCLONE_MAXDEPTH = 1024;
+our $_CLONE_DEPTH;
+
 sub _dclone {
-  my $ref = shift;
+  my ( $ref  ) = @_;
+  return $ref unless my $reftype = ref $ref;
 
-  # if an object is in the data structure and doesn't specify how to
-  # turn itself into JSON, we just stringify the object.  That does the
-  # right thing for typical things that might be there, like version objects,
-  # Path::Class objects, etc.
-  no warnings 'once';
-  no warnings 'redefine';
-  local *UNIVERSAL::TO_JSON = sub { "$_[0]" };
+  local $_CLONE_DEPTH = defined $_CLONE_DEPTH ? $_CLONE_DEPTH - 1 : $DCLONE_MAXDEPTH;
+  die "Depth Limit $DCLONE_MAXDEPTH Exceeded" if $_CLONE_DEPTH == 0;
 
-  my $json = Parse::CPAN::Meta->json_backend()->new
-      ->utf8
-      ->allow_blessed
-      ->convert_blessed;
-  $json->decode($json->encode($ref))
+  return [ map { _dclone( $_ ) } @{$ref} ] if 'ARRAY' eq $reftype;
+  return { map { $_ => _dclone( $ref->{$_} ) } keys %{$ref} } if 'HASH' eq $reftype;
+
+  if ( 'SCALAR' eq $reftype ) {
+    my $new = _dclone(${$ref});
+    return \$new;
+  }
+
+  # We can't know if TO_JSON gives us cloned data, so refs must recurse
+  if ( $ref->can('TO_JSON') ) {
+    my $data = $ref->TO_JSON;
+    return ref $data ? _dclone( $ref->TO_JSON ) : $data;
+  }
+
+  # Just stringify everything else
+  return "$ref";
 }
 
 my %known_specs = (
