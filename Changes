@@ -7,9 +7,19 @@ Revision history for CPAN-Meta
   - CPAN::Meta::Prereqs now fully accepts phases and types starting with 'x_'.
     New 'phases' and 'types_in' interfaces have been added.
 
+  - No longer relies on JSON backend for data structure cloning. This is
+    much faster than using JSON::PP.
+
+  [TESTS]
+
+  - The 'extra_mappings' feature for meta merging is now tested and
+    documented.
+
   [SPEC]
 
   - Clarifies acceptable values for booleans
+
+  - Cleaned up text and links of historical specs.
 
 2.150005  2015-06-09 19:08:44-06:00 America/Denver
 
