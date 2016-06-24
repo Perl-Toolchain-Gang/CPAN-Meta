@@ -4,7 +4,7 @@ use strict;
 use warnings;
 package CPAN::Meta::History;
 
-our $VERSION = '2.150006';
+our $VERSION = '2.150007';
 
 1;
 
