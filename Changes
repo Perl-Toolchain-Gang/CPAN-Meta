@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [ADDED]
+
+  - Merged Parse::CPAN::Meta 1.4420 into this distribution
+
 2.150007  2016-06-28 03:48:16-04:00 America/New_York (TRIAL RELEASE)
 
   [FIXED]
