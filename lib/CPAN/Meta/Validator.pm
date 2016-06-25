@@ -669,8 +669,8 @@ are both valid. A leading 'v' like 'v1.2.3' is also valid.
 
 boolean($self,$key,$value)
 
-Validates for a boolean value. Currently these values are '1', '0', 'true',
-'false', however the latter 2 may be removed.
+Validates for a boolean value: a defined value that is either "1" or "0" or
+stringifies to those values.
 
 =item *
 
@@ -833,7 +833,7 @@ sub version {
 sub boolean {
     my ($self,$key,$value) = @_;
     if(defined $value) {
-        return 1    if($value =~ /^(0|1|true|false)$/);
+        return 1    if($value =~ /^(0|1)$/);
     } else {
         $value = '<undef>';
     }
