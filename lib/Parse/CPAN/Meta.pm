@@ -3,7 +3,7 @@ use strict;
 package Parse::CPAN::Meta;
 # ABSTRACT: Parse META.yml and META.json CPAN metadata files
 
-our $VERSION = '2.150007';
+our $VERSION = '2.150009';
 
 use Exporter;
 use Carp 'croak';
