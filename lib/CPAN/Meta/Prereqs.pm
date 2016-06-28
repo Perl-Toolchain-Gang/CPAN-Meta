@@ -3,7 +3,7 @@ use strict;
 use warnings;
 package CPAN::Meta::Prereqs;
 
-our $VERSION = '2.150007';
+our $VERSION = '2.150008';
 
 =head1 DESCRIPTION
 

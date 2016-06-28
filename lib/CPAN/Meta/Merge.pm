@@ -3,7 +3,7 @@ use warnings;
 
 package CPAN::Meta::Merge;
 
-our $VERSION = '2.150007';
+our $VERSION = '2.150008';
 
 use Carp qw/croak/;
 use Scalar::Util qw/blessed/;

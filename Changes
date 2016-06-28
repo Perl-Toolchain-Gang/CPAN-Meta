@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.150007  2016-06-28 03:48:16-04:00 America/New_York (TRIAL RELEASE)
+
   [FIXED]
 
   - The cloning routine would raise an error on expected types when it
