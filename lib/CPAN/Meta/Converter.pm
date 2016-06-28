@@ -66,9 +66,9 @@ sub _dclone {
   }
 
   # We can't know if TO_JSON gives us cloned data, so refs must recurse
-  if ( $ref->can('TO_JSON') ) {
+  if ( eval { $ref->can('TO_JSON') } ) {
     my $data = $ref->TO_JSON;
-    return ref $data ? _dclone( $ref->TO_JSON ) : $data;
+    return ref $data ? _dclone( $data ) : $data;
   }
 
   # Just stringify everything else
