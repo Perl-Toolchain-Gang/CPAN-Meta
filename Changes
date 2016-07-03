@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [CHANGED]
+
+  - Added "use warnings" to Parse::CPAN::Meta
+
 2.150009  2016-07-02 21:07:49-04:00 America/New_York (TRIAL RELEASE)
 
   [FIXED]
