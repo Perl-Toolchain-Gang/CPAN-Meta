@@ -1,5 +1,6 @@
 use 5.008001;
 use strict;
+use warnings;
 package Parse::CPAN::Meta;
 # ABSTRACT: Parse META.yml and META.json CPAN metadata files
 
