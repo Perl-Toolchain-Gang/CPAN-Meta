@@ -8,7 +8,7 @@ use strict;
 use warnings;
 package CPAN::Meta::Spec;
 
-our $VERSION = '2.150009';
+our $VERSION = '2.150010';
 
 1;
 
