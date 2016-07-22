@@ -2,6 +2,11 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [FIXED]
+
+  - the YAML and JSON backend variables are ignored when building/testing the
+    perl core itself, where non-core backends are not yet installed.
+
   [CHANGED]
 
   - Added "use warnings" to Parse::CPAN::Meta

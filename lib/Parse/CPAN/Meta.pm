@@ -60,7 +60,7 @@ sub load_json_string {
 }
 
 sub yaml_backend {
-  if (! defined $ENV{PERL_YAML_BACKEND} ) {
+  if ($ENV{PERL_CORE} or not defined $ENV{PERL_YAML_BACKEND} ) {
     _can_load( 'CPAN::Meta::YAML', 0.011 )
       or croak "CPAN::Meta::YAML 0.011 is not available\n";
     return "CPAN::Meta::YAML";
@@ -76,6 +76,11 @@ sub yaml_backend {
 }
 
 sub json_decoder {
+  if ($ENV{PERL_CORE}) {
+    _can_load( 'JSON::PP' => 2.27300 )
+      or croak "JSON::PP 2.27300 is not available\n";
+    return 'JSON::PP';
+  }
   if (my $decoder = $ENV{CPAN_META_JSON_DECODER}) {
     _can_load( $decoder )
       or croak "Could not load CPAN_META_JSON_DECODER '$decoder'\n";
@@ -87,6 +92,11 @@ sub json_decoder {
 }
 
 sub json_backend {
+  if ($ENV{PERL_CORE}) {
+    _can_load( 'JSON::PP' => 2.27300 )
+      or croak "JSON::PP 2.27300 is not available\n";
+    return 'JSON::PP';
+  }
   if (my $backend = $ENV{CPAN_META_JSON_BACKEND}) {
     _can_load( $backend )
       or croak "Could not load CPAN_META_JSON_BACKEND '$backend'\n";
