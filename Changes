@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.150010  2016-08-18 12:10:08-04:00 America/New_York
+
   [FIXED]
 
   - the YAML and JSON backend variables are ignored when building/testing the

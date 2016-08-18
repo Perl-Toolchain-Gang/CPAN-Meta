@@ -3,7 +3,7 @@ use strict;
 use warnings;
 package CPAN::Meta::Converter;
 
-our $VERSION = '2.150010';
+our $VERSION = '2.150011';
 
 =head1 SYNOPSIS
 
