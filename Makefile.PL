@@ -87,6 +87,9 @@ unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
 
+$WriteMakefileArgs{INSTALLDIRS} = 'perl'
+    if "$]" >= 5.010001 && "$]" <= 5.011000;
+
 # Added by Dist::Zilla::Plugin::MakeMaker::Highlander
 if ( $] < 5.012
   && ! $ENV{PERL_NO_HIGHLANDER}
@@ -95,8 +98,5 @@ if ( $] < 5.012
 ) {
     $WriteMakefileArgs{UNINST} = 1;
 }
-
-$WriteMakefileArgs{INSTALLDIRS} = 'perl'
-    if $] >= 5.010001 && $] <= 5.011000;
 
 WriteMakefile(%WriteMakefileArgs);
