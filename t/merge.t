@@ -224,5 +224,10 @@ like $@, qr/does not start with/, 'Exception looks right';
 my $base_obj = CPAN::Meta->create(\%base);
 ok my $first_result_obj = $merger->merge($base_obj, \%first), 'merging CPAN::Meta objects succeeds';
 
+# issue 67
+@base{qw/name version release_status/} = qw/Foo-Bar 0.01 testing/;
+my $base_obj = CPAN::Meta->create(\%base);
+ok my $first_result_obj = $merger->merge($base_obj, \%first), 'merging CPAN::Meta objects succeeds';
+
 done_testing();
 # vim: ts=4 sts=4 sw=4 tw=78 noet :
