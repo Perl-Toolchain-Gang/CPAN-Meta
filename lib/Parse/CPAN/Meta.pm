@@ -132,8 +132,13 @@ sub _can_load {
   $file .= ".pm";
   return 1 if $INC{$file};
   return 0 if exists $INC{$file}; # prior load failed
+
+  # Optional modules must not be loaded from '.' (CVE-2016-1238)
+  local @INC = @INC;
+  pop @INC if $INC[-1] eq '.';
   eval { require $file; 1 }
     or return 0;
+
   if ( defined $version ) {
     eval { $module->VERSION($version); 1 }
       or return 0;
