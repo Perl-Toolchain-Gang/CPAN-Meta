@@ -127,7 +127,8 @@ serializes into a bytestream and/or writes it to disk.
 
 =item must, should, may, etc.
 
-These terms are interpreted as described in IETF RFC 2119.
+These terms are interpreted as described in
+L<IETF RFC 2119|https://www.ietf.org/rfc/rfc2119.txt>.
 
 =back
 
