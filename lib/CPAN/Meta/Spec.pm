@@ -1080,16 +1080,25 @@ ordinary comparison operators.  For example:
   }
 
 If the only comparison needed is whether an installed module is of a
-sufficiently high version, a direct test may be done using the string
-form of C<eval> and the C<use> function.  For example, for module C<$mod>
-and version prerequisite C<$prereq>:
+sufficiently high version, a direct test may be done using the C<VERSION>
+method.  For example, for module C<$mod> and version prerequisite
+C<$prereq>:
 
-  if ( eval "use $mod $prereq (); 1" ) {
+  use Module::Load 'load';
+  if ( $mod =~ m/\A[\w:']+\z/a and eval { load $mod; $mod->VERSION($prereq); 1 } ) {
     print "Module $mod version is OK.\n";
   }
 
-If the values of C<$mod> and C<$prereq> have not been scrubbed, however,
-this presents security implications.
+The regexp checks that C<$mod> only includes characters legal for module
+names before passing it to L<Module::Load/load>, which also accepts file
+paths that may escape C<@INC>.  Alternatively, if L<Module::Runtime> is
+installed, the C<use_module> function can load the module and perform the
+version check at the same time, and does not accept file paths:
+
+  use Module::Runtime 'use_module';
+  if ( eval { use_module $mod, $prereq; 1 } ) {
+    print "Module $mod version is OK.\n";
+  }
 
 =head2 Prerequisites for dynamically configured distributions
 
