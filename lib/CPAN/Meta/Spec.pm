@@ -1062,7 +1062,7 @@ other methods for locating a module in C<@INC>.
 
 If only a filename is available, the following approach may be used:
 
-  # via Module::Build
+  # via Module::Metadata
   my $info = Module::Metadata->new_from_file($file);
   my $version = $info->version;
 
