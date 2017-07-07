@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [CHANGED]
+
+  - Improved example of testing a minimum prerequisite version of a module.
+
 2.150010  2016-08-18 12:10:08-04:00 America/New_York
 
   [FIXED]
