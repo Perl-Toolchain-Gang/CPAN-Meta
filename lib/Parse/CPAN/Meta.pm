@@ -17,28 +17,46 @@ sub load_file {
 
   my $meta = _slurp($filename);
 
-  if ($filename =~ /\.ya?ml$/) {
-    return $class->load_yaml_string($meta);
-  }
-  elsif ($filename =~ /\.json$/) {
-    return $class->load_json_string($meta);
-  }
-  else {
-    $class->load_string($meta); # try to detect yaml/json
-  }
+  return $class->load_yaml_string($meta) if $class->yaml_content($meta);
+  return $class->load_json_string($meta) if $class->json_content($meta);
+  return $class->load_yaml_string($meta) if $class->yaml_filename($filename);
+  return $class->load_json_string($meta) if $class->json_filename($filename);
+
+  # maybe doc-marker-free YAML
+  return $class->load_yaml_string($meta);
 }
 
 sub load_string {
   my ($class, $string) = @_;
-  if ( $string =~ /^---/ ) { # looks like YAML
-    return $class->load_yaml_string($string);
-  }
-  elsif ( $string =~ /^\s*\{/ ) { # looks like JSON
-    return $class->load_json_string($string);
-  }
-  else { # maybe doc-marker-free YAML
-    return $class->load_yaml_string($string);
-  }
+  return $class->load_yaml_string($string) if $class->yaml_content($string); # looks like YAML
+  return $class->load_json_string($string) if $class->json_content($string); # looks like JSON
+
+  # maybe doc-marker-free YAML
+  return $class->load_yaml_string($string);
+}
+
+sub yaml_content {
+  my ($class, $content) = @_;
+  return 0 unless $content;
+  return 1 if ( $content =~ /^---/ ); # Looks like YAML
+}
+
+sub yaml_filename {
+  my ($class, $filename) = @_;
+  return 0 unless defined $filename;
+  return 1 if ($filename =~ /\.ya?ml$/); # Named for YAML
+}
+
+sub json_content {
+  my ($class, $content) = @_;
+  return 0 unless $content;
+  return 1 if ( $content =~ /^\s*\{/ ); # Looks like JSON
+}
+
+sub json_filename {
+  my ($class, $filename) = @_;
+  return 0 unless defined $filename;
+  return 1 if ($filename =~ /\.json$/); # Named for JSON
 }
 
 sub load_yaml_string {
