@@ -876,6 +876,7 @@ my %v2_licenses = map { $_ => 1 } qw(
   mit
   mozilla_1_0
   mozilla_1_1
+  mozilla_2_0
   openssl
   perl_5
   qpl_1_0
