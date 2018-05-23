@@ -661,8 +661,8 @@ Example:
 
 This describes all packages provided by this distribution.  This
 information is used by distribution and automation mechanisms like
-PAUSE, CPAN, metacpan.org and search.cpan.org to build indexes saying in
-which distribution various packages can be found.
+PAUSE, CPAN, and metacpan.org to build indexes saying in which
+distribution various packages can be found.
 
 The keys of C<provides> are package names that can be found within
 the distribution.  If a package name key is provided, it must
