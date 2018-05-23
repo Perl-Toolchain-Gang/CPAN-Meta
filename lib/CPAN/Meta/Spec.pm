@@ -387,11 +387,8 @@ This is a I<URL> of the metadata specification document corresponding to
 the given version.  This is strictly for human-consumption and should
 not impact the interpretation of the document.
 
-For the version 2 spec, either of these are recommended:
-
-=for :list
-* C<https://metacpan.org/pod/CPAN::Meta::Spec>
-* C<https://metacpan.org/pod/CPAN::Meta::Spec>
+For the version 2 spec, C<https://metacpan.org/pod/CPAN::Meta::Spec>
+is recommended.
 
 =back
 
