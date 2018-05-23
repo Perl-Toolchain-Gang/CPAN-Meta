@@ -362,7 +362,7 @@ Example:
 
   'meta-spec' => {
     version => '2',
-    url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+    url     => 'https://metacpan.org/pod/CPAN::Meta::Spec',
   }
 
 (Spec 1.2) [required] {Map}
@@ -391,7 +391,7 @@ For the version 2 spec, either of these are recommended:
 
 =for :list
 * C<https://metacpan.org/pod/CPAN::Meta::Spec>
-* C<http://search.cpan.org/perldoc?CPAN::Meta::Spec>
+* C<https://metacpan.org/pod/CPAN::Meta::Spec>
 
 =back
 
