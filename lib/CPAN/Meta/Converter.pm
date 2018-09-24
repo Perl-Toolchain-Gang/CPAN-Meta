@@ -154,6 +154,7 @@ my @open_source = (
   'gpl',
   'mit',
   'mozilla',
+  'mozilla_2',
   'open_source',
 );
 
@@ -200,6 +201,7 @@ my @valid_licenses_2 = qw(
   mit
   mozilla_1_0
   mozilla_1_1
+  mozilla_2_0
   openssl
   perl_5
   qpl_1_0
@@ -259,6 +261,7 @@ my %license_downgrade_map = qw(
   mit               mit
   mozilla_1_0       mozilla
   mozilla_1_1       mozilla
+  mozilla_2_0       mozilla_2
   openssl           open_source
   perl_5            perl
   qpl_1_0           open_source
