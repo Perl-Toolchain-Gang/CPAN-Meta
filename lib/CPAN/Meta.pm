@@ -398,7 +398,7 @@ sub save {
   my ($self, $file, $options) = @_;
 
   my $version = $options->{version} || '2';
-  my $layer = $] ge '5.008001' ? ':utf8' : '';
+  my $layer = "$]" >= 5.008001 ? ':utf8' : '';
 
   if ( $version ge '2' ) {
     carp "'$file' should end in '.json'"
