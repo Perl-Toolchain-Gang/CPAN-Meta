@@ -5,6 +5,8 @@ Revision history for CPAN-Meta
   [CHANGED]
 
   - Improved example of testing a minimum prerequisite version of a module.
+  - Remove some code meant to handle running on pre-v5.8 perl, even though v5.8
+    was already a requirement
 
 2.150010  2016-08-18 12:10:08-04:00 America/New_York
 
