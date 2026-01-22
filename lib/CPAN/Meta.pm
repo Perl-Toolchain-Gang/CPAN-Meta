@@ -409,7 +409,7 @@ sub save {
   }
 
   my $data = $self->as_string( $options );
-  open my $fh, '>:utf8', $file
+  open my $fh, '>:encoding(UTF-8)', $file
     or die "Error opening '$file' for writing: $!\n";
 
   print {$fh} $data;
