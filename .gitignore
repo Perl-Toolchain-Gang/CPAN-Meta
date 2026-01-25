@@ -1,4 +1,5 @@
 /.build
+/.tags
 /CPAN-Meta-*/
 /CPAN-Meta-*.tar.gz
 /MYMETA.json
