@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [CHANGED]
+
+  - Only distribution metadata
+
 2.150011  2026-01-22 15:50:29-05:00 America/New_York
 
   [CHANGED]
