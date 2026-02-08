@@ -10,6 +10,11 @@ delete $ENV{PERL_JSON_BACKEND};
 delete $ENV{CPAN_META_JSON_BACKEND};
 delete $ENV{CPAN_META_JSON_DECODER};
 
+my $dummy_req = CPAN::Meta::Requirements->new;
+$dummy_req->add_minimum(Dummy => 0);
+$dummy_req->add_exclusion(Dummy => 7);
+my $zero_optimized = ($dummy_req->requirements_for_module('Dummy') eq '!= 7');
+
 my %base = (
 	abstract => 'This is a test',
 	author => ['A.U. Thor'],
@@ -79,7 +84,7 @@ my %first_expected = (
 	prereqs => {
 		runtime => {
 			requires => {
-				Foo => '>= 0, < 1',
+				Foo => $zero_optimized ? '< 1' : '>= 0, < 1',
 			},
 			recommends => {
 				Bar => '3.14',
