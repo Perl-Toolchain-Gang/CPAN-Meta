@@ -7,8 +7,7 @@ our $VERSION = '2.150014';
 
 =head1 SYNOPSIS
 
-  my $struct = decode_json_file('META.json');
-
+  my $struct = Parse::CPAN::Meta->load_file('META.json');
   my $cmv = CPAN::Meta::Validator->new( $struct );
 
   unless ( $cmv->is_valid ) {
