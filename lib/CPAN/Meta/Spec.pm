@@ -362,7 +362,7 @@ Example:
 
   'meta-spec' => {
     version => '2',
-    url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+    url     => 'https://metacpan.org/pod/CPAN::Meta::Spec',
   }
 
 (Spec 1.2) [required] {Map}
@@ -387,11 +387,8 @@ This is a I<URL> of the metadata specification document corresponding to
 the given version.  This is strictly for human-consumption and should
 not impact the interpretation of the document.
 
-For the version 2 spec, either of these are recommended:
-
-=for :list
-* C<https://metacpan.org/pod/CPAN::Meta::Spec>
-* C<http://search.cpan.org/perldoc?CPAN::Meta::Spec>
+For the version 2 spec, C<https://metacpan.org/pod/CPAN::Meta::Spec>
+is recommended.
 
 =back
 
@@ -664,8 +661,8 @@ Example:
 
 This describes all packages provided by this distribution.  This
 information is used by distribution and automation mechanisms like
-PAUSE, CPAN, metacpan.org and search.cpan.org to build indexes saying in
-which distribution various packages can be found.
+PAUSE, CPAN, and metacpan.org to build indexes saying in which
+distribution various packages can be found.
 
 The keys of C<provides> are package names that can be found within
 the distribution.  If a package name key is provided, it must

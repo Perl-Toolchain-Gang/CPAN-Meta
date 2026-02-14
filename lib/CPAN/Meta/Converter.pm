@@ -76,7 +76,7 @@ sub _dclone {
 }
 
 my %known_specs = (
-    '2'   => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+    '2'   => 'https://metacpan.org/pod/CPAN::Meta::Spec',
     '1.4' => 'http://module-build.sourceforge.net/META-spec-v1.4.html',
     '1.3' => 'http://module-build.sourceforge.net/META-spec-v1.3.html',
     '1.2' => 'http://module-build.sourceforge.net/META-spec-v1.2.html',
