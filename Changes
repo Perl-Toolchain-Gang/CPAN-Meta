@@ -2,6 +2,10 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+  [FIXED]
+
+  - Fix an incompatibility with newer CPAN::Meta::Requirements
+
 2.150012  2026-01-25 16:20:37-05:00 America/New_York
 
   [CHANGED]
