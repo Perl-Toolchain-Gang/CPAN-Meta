@@ -589,7 +589,7 @@ Add proposal for L<"auto_regenerate"> field.
 
 =item *
 
-Add L<"index"> field as a compliment to L<"no_index">
+Add L<"index"> field as a complement to L<"no_index">
 
 =item *
 
