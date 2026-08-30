@@ -4,7 +4,7 @@ use warnings;
 package Parse::CPAN::Meta;
 # ABSTRACT: Parse META.yml and META.json CPAN metadata files
 
-our $VERSION = '2.150014';
+our $VERSION = '2.150015';
 
 use Exporter;
 use Carp 'croak';

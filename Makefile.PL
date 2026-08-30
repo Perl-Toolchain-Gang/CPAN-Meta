@@ -44,7 +44,7 @@ my %WriteMakefileArgs = (
     "utf8" => 0,
     "vars" => 0
   },
-  "VERSION" => "2.150014",
+  "VERSION" => "2.150015",
   "test" => {
     "TESTS" => "t/*.t t/parse-cpan-meta/*.t"
   }
