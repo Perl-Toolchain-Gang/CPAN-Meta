@@ -5,6 +5,7 @@ Revision history for CPAN-Meta
   [FIXED]
 
   - bump prereq for CPAN::Meta::Requirements to fix a test (#154)
+  - no longer normalizing alpha versions in provides hash (#139)
 
 2.150014  2026-08-30 23:32:51Z
 
