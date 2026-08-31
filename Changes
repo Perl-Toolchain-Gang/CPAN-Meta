@@ -2,6 +2,8 @@ Revision history for CPAN-Meta
 
 {{$NEXT}}
 
+2.150015  2026-08-31 16:54:04Z
+
   [FIXED]
 
   - bump prereq for CPAN::Meta::Requirements to fix a test (#154)

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 package CPAN::Meta::Validator;
 
-our $VERSION = '2.150015';
+our $VERSION = '2.150016';
 
 =head1 SYNOPSIS
 
