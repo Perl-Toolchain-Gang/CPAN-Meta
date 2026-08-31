@@ -11,7 +11,7 @@ delete $ENV{CPAN_META_JSON_DECODER};
 
 my $spec2 = {
     version => '2',
-    url => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+    url => 'https://metacpan.org/pod/CPAN::Meta::Spec',
 };
 
 my @cases = (

@@ -33,7 +33,7 @@ my %base = (
 		},
 	},
 	'meta-spec' => {
-		url => "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+		url => "https://metacpan.org/pod/CPAN::Meta::Spec",
 		version => 2,
 	},
 );
@@ -101,7 +101,7 @@ my %first_expected = (
 	},
 	dynamic_config => 1,
 	'meta-spec' => {
-		url => "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+		url => "https://metacpan.org/pod/CPAN::Meta::Spec",
 		version => 2,
 	},
 );
@@ -129,7 +129,7 @@ my %provides_merge_expected = (
 		},
 	},
 	'meta-spec' => {
-		url => "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+		url => "https://metacpan.org/pod/CPAN::Meta::Spec",
 		version => 2,
 	},
 );
