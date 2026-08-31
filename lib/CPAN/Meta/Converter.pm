@@ -23,7 +23,7 @@ optional fields.)
 =cut
 
 use CPAN::Meta::Validator;
-use CPAN::Meta::Requirements;
+use CPAN::Meta::Requirements 2.145;
 use Parse::CPAN::Meta 1.4400 ();
 
 # To help ExtUtils::MakeMaker bootstrap CPAN::Meta::Requirements on perls
